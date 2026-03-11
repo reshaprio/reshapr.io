@@ -38,7 +38,7 @@ function HomepageHeader() {
         <div className={styles.heroGrid}>
           <div className={styles.heroContent}>
             <Heading as="h1" className={styles.heroTitle}>
-              The open Psource, no-code MCP Server for AI-Native API Access
+              The open source, no-code MCP Server for AI-Native API Access
             </Heading>
             <p className={styles.heroSubtitle}>
               Build a uniform API value chain for AI agents with secure, no-code
