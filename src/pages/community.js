@@ -33,7 +33,7 @@ const channels = [
     title: 'Discord',
     description:
       'Join real-time discussions with maintainers and users to share ideas, ask questions, and get support.',
-    href: 'https://discord.gg/F34dS8DcnS',
+    href: 'https://discord.gg/KyDUdam34h',
     cta: 'Join us on Discord',
     icon: 'discord',
   },
@@ -73,7 +73,6 @@ export default function CommunityPage() {
         <section className={styles.heroSection}>
           <div className="container">
             <div className={styles.heroCard}>
-              <p className={styles.eyebrow}>Community</p>
               <Heading as="h1" className={styles.title}>
                 For The Community, By The Community
               </Heading>
@@ -130,7 +129,7 @@ export default function CommunityPage() {
                 <div className={styles.actions}>
                   <Link
                     className="button button--primary button--lg"
-                    href="https://discord.gg/F34dS8DcnS"
+                    href="https://discord.gg/KyDUdam34h"
                     target="_blank"
                     rel="noopener noreferrer">
                     Join us on Discord

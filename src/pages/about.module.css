@@ -7,13 +7,13 @@
 }
 
 .foundersHeader {
-  max-width: 960px;
-  margin: 0 auto 0.9rem;
+  max-width: var(--ifm-container-width);
+  margin: 0 auto 1.2rem;
 }
 
 .heroCard {
-  max-width: 960px;
-  margin: 0 auto 2rem;
+  max-width: var(--ifm-container-width);
+  margin: 0 auto 5rem;
   padding: 0;
   background: transparent;
   border: 0;
@@ -26,7 +26,7 @@
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ifm-color-primary);
+  color: var(--ifm-font-color-base);
 }
 
 .title {
@@ -40,14 +40,14 @@
   margin: 0 0 1rem;
   font-size: 1.05rem;
   line-height: 1.65;
-  color: var(--ifm-color-emphasis-800);
+  color: var(--ifm-font-color-base);
 }
 
 .body {
   margin: 0 0 1rem;
   font-size: 1.05rem;
   line-height: 1.72;
-  color: var(--ifm-color-emphasis-700);
+  color: var(--ifm-font-color-base);
 }
 
 .body:last-child {
@@ -56,7 +56,7 @@
 
 .foundersGrid {
   margin: 0 auto 1.5rem;
-  max-width: 960px;
+  max-width: var(--ifm-container-width);
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0;
@@ -96,7 +96,7 @@
 
 .founderRole {
   margin: 0.5rem 0 0;
-  color: var(--ifm-color-emphasis-700);
+  color: var(--ifm-font-color-base);
   line-height: 1.5;
 }
 
@@ -112,13 +112,13 @@
   border: 0;
   padding: 0;
   font-size: 0.85rem;
-  color: var(--ifm-color-emphasis-700);
+  color: var(--ifm-font-color-base);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 .socialLink:hover {
-  color: var(--ifm-color-primary);
+  color: var(--ifm-font-color-secondary);
 }
 
 @media (max-width: 996px) {

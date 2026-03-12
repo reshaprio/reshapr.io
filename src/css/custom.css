@@ -436,6 +436,9 @@ img.navbar__logo {
   /* keep your custom height */
   --ifm-navbar-height: 120px;
 
+  /* Wide layout for all pages */
+  --ifm-container-width: 1400px;
+
   /* IMPORTANT: remove Infima's vertical padding */
   --ifm-navbar-padding-vertical: 0px;
 }
@@ -673,7 +676,7 @@ img.navbar__logo {
 .theme-blog-post-page main .container,
 .theme-blog-tags-list-page main .container,
 .theme-blog-authors-list-page main .container {
-  max-width: 960px;
+  max-width: var(--ifm-container-width);
 }
 
 .theme-blog-list-page article {
@@ -693,7 +696,7 @@ img.navbar__logo {
 
 .theme-blog-list-page article p {
   margin-bottom: 0.7rem;
-  color: var(--ifm-color-emphasis-700);
+  color: var(--ifm-font-color-base);
 }
 
 .theme-blog-post-page article {
@@ -750,7 +753,7 @@ img.navbar__logo {
 
 .theme-doc-page .theme-doc-markdown.markdown p,
 .theme-doc-page .theme-doc-markdown.markdown li {
-  color: var(--ifm-color-emphasis-700);
+  color: var(--ifm-font-color-base);
 }
 
 .theme-doc-page .pagination-nav {

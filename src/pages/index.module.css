@@ -28,7 +28,7 @@
 .heroSubtitle {
   max-width: 680px;
   margin: 0;
-  color: var(--ifm-color-emphasis-700);
+  color: var(--ifm-font-color-base);
   font-size: 1.2rem;
   line-height: 1.55;
 }
@@ -85,17 +85,17 @@
 }
 
 .section {
-  padding: 2.5rem 0;
+  padding: 5rem 0;
 }
 
 .sectionAlt {
-  padding: 2.5rem 0;
+  padding: 5rem 0;
 }
 
 .section > :global(.container),
 .sectionAlt > :global(.container),
 .ctaSection > :global(.container) {
-  max-width: 960px;
+  max-width: var(--ifm-container-width);
 }
 
 .section h2,
@@ -121,7 +121,7 @@
 }
 
 .sectionHeader p {
-  color: var(--ifm-color-emphasis-700);
+  color: var(--ifm-font-color-base);
   margin-bottom: 0;
 }
 
@@ -145,7 +145,7 @@
 
 .featureCard p {
   margin: 0;
-  color: var(--ifm-color-emphasis-700);
+  color: var(--ifm-font-color-base);
 }
 
 .panel {
@@ -160,7 +160,7 @@
 }
 
 .panel p {
-  color: var(--ifm-color-emphasis-700);
+  color: var(--ifm-font-color-base);
   margin-bottom: 0;
 }
 
@@ -174,7 +174,7 @@
   margin-bottom: 0.7rem;
   padding-left: 1.4rem;
   position: relative;
-  color: var(--ifm-color-emphasis-700);
+  color: var(--ifm-font-color-base);
 }
 
 .checkList li::before {
@@ -182,12 +182,12 @@
   position: absolute;
   left: 0;
   top: 0;
-  color: var(--ifm-color-primary);
+  color: var(--ifm-font-color-base);
   font-weight: 700;
 }
 
 .ctaSection {
-  padding: 2.5rem 0;
+  padding: 5rem 0;
 }
 
 .ctaCard {
@@ -199,7 +199,7 @@
 }
 
 .ctaCard p {
-  color: var(--ifm-color-emphasis-700);
+  color: var(--ifm-font-color-base);
   max-width: 740px;
   margin-bottom: 0;
 }

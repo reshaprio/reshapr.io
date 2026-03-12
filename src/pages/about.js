@@ -34,7 +34,6 @@ export default function AboutPage() {
         <section className={styles.heroSection}>
           <div className="container">
             <div className={styles.heroCard}>
-              <p className={styles.eyebrow}>About reShapr</p>
               <Heading as="h1" className={styles.title}>
                 Making Enterprise APIs AI-Ready
               </Heading>

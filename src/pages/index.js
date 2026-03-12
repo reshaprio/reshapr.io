@@ -45,8 +45,8 @@ function HomepageHeader() {
               endpoint translation across your existing API services.
             </p>
             <div className={styles.buttons}>
-              <Link className="button button--primary button--lg" to="/docs/reshapr/why-reshapr">
-                Get Started
+              <Link className="button button--primary button--lg" to="https://try.reshapr.io/">
+                Try it!
               </Link>
               <Link
                 className="button button--secondary button--lg"

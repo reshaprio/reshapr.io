@@ -39,7 +39,7 @@ const socials = [
   },
   {
     label: 'Discord',
-    href: 'https://discord.gg/F34dS8DcnS',
+    href: 'https://discord.gg/KyDUdam34h',
     Icon: FaDiscord,
   },
 ];

@@ -7,8 +7,6 @@
 
 .topSection {
   padding: 1.8rem 0;
-  border-bottom: 1px solid
-    color-mix(in srgb, var(--ifm-color-emphasis-300) 45%, transparent);
 }
 
 .topGrid {
@@ -26,7 +24,7 @@
 }
 
 .navLink {
-  color: var(--ifm-color-emphasis-700);
+  color: var(--ifm-font-color-base);
   text-decoration: none;
   font-size: var(--reshapr-nav-footer-font-size);
   font-weight: 500;
@@ -34,7 +32,7 @@
 }
 
 .navLink:hover {
-  color: var(--ifm-color-primary);
+  color: var(--ifm-font-color-secondary);
   text-decoration: none;
 }
 
@@ -50,7 +48,7 @@
   height: 38px;
   border-radius: 999px;
   border: 1px solid var(--ifm-color-emphasis-300);
-  color: var(--ifm-color-emphasis-700);
+  color: var(--ifm-font-color-base);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -59,9 +57,9 @@
 }
 
 .socialLink:hover {
-  color: var(--ifm-color-primary);
-  border-color: var(--ifm-color-primary-light);
-  background: color-mix(in srgb, var(--ifm-color-primary) 12%, transparent);
+  color: var(--ifm-font-color-secondary);
+  border-color: var(--ifm-font-color-secondary);
+  background: color-mix(in srgb, var(--ifm-font-color-base) 8%, transparent);
   text-decoration: none;
 }
 
@@ -72,7 +70,7 @@
 .copy {
   margin: 0.12rem 0;
   text-align: center;
-  color: var(--ifm-color-emphasis-700);
+  color: var(--ifm-font-color-base);
   font-size: var(--reshapr-nav-footer-font-size);
   font-weight: 500;
   line-height: 1.5;

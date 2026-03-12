@@ -108,8 +108,8 @@ const config = {
             position: 'left',
           },
           {
-            href: 'https://try.reshapr.io/',
-            label: 'Try it!',
+            href: '/docs/reshapr/why-reshapr',
+            label: 'Get Started',
             position: 'right',
             className: 'navbar-try-button',
           },
