@@ -64,7 +64,6 @@
 .channelCard {
   border-radius: 0;
   border: 0;
-  border-top: 1px solid var(--ifm-color-emphasis-200);
   background: transparent;
   box-shadow: none;
   padding: 1rem 0;
@@ -139,7 +138,6 @@
 .panel {
   border-radius: 0;
   border: 0;
-  border-top: 1px solid var(--ifm-color-emphasis-200);
   background: transparent;
   box-shadow: none;
   padding: 1.2rem 0 0;

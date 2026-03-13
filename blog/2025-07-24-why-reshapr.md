@@ -9,6 +9,8 @@ source_url: "https://reshaprio.medium.com/why-reshapr-db9788cd9062"
 
 <!-- markdownlint-disable MD001 MD026 MD030 MD045 -->
 
+* * *
+
 ![Why reShapr?](/img/blog/why-reshapr-hero.png)
 
 ## **Why Enterprises Shouldn’t Build MCP Servers from Scratch, and What to Do Instead**

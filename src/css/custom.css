@@ -57,6 +57,7 @@
   --ifm-color-emphasis-900: var(--palette-ink);
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: color-mix(in srgb, var(--palette-ink) 10%, transparent);
+  --ifm-hr-background-color: #d0d0d0;
 }
 
 html,
@@ -126,6 +127,7 @@ body,
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
+  --ifm-hr-background-color: #3a3a3a;
   --ifm-color-primary: var(--palette-deep);
   --ifm-color-primary-dark: var(--palette-mid);
   --ifm-color-primary-darker: var(--palette-deep);
@@ -682,7 +684,6 @@ img.navbar__logo {
 .theme-blog-list-page article {
   margin: 0;
   padding: 1.2rem 0;
-  border-top: 1px solid var(--ifm-color-emphasis-200);
   border-radius: 0;
   background: transparent;
   box-shadow: none;
@@ -702,7 +703,6 @@ img.navbar__logo {
 .theme-blog-post-page article {
   margin: 0;
   padding-top: 1.2rem;
-  border-top: 1px solid var(--ifm-color-emphasis-200);
 }
 
 .theme-blog-post-page article header h1 {

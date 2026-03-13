@@ -64,10 +64,6 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className={styles.foundersHeader}>
-              <p className={styles.eyebrow}>Co-founders</p>
-            </div>
-
             <div className={styles.foundersGrid}>
               {founders.map((founder) => (
                 <article key={founder.name} className={styles.founderCard}>

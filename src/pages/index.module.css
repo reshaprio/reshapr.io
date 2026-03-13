@@ -127,20 +127,40 @@
 
 .featureGrid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 0;
+  max-width: 640px;
+  margin: 0 auto;
 }
 
 .featureCard {
   border-radius: 0;
-  padding: 1rem 0;
+  padding: 1.5rem 0;
   border: 0;
-  border-top: 1px solid var(--ifm-color-emphasis-200);
   background: transparent;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+}
+
+.featureIcon {
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--ifm-color-primary) 10%, transparent);
+  color: var(--ifm-color-primary);
+}
+
+.featureBody {
+  flex: 1 1 auto;
 }
 
 .featureCard h3 {
-  margin-bottom: 0.65rem;
+  margin-bottom: 0.45rem;
 }
 
 .featureCard p {
@@ -151,12 +171,11 @@
 .panel {
   border-radius: 0;
   border: 0;
-  border-top: 1px solid var(--ifm-color-emphasis-200);
-  padding: 1.2rem 0 0;
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: 1.2fr 1fr;
+  padding: 0;
   background: transparent;
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .panel p {
@@ -192,15 +211,17 @@
 
 .ctaCard {
   border-radius: 0;
-  padding: 1.2rem 0 0;
+  padding: 0;
   border: 0;
-  border-top: 1px solid var(--ifm-color-emphasis-200);
   background: transparent;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 2rem;
 }
 
 .ctaCard p {
   color: var(--ifm-font-color-base);
-  max-width: 740px;
   margin-bottom: 0;
 }
 
@@ -281,5 +302,10 @@
 
   .panel {
     grid-template-columns: 1fr;
+  }
+
+  .ctaCard {
+    grid-template-columns: 1fr;
+    text-align: center;
   }
 }
