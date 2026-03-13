@@ -108,16 +108,10 @@ const config = {
             position: 'left',
           },
           {
-            href: '/docs/reshapr/why-reshapr',
-            label: 'Get Started',
-            position: 'right',
-            className: 'navbar-try-button',
-          },
-          {
             type: 'html',
             position: 'right',
             value:
-              '<a class="navbar-github-link" href="https://github.com/reshaprio/reshapr.io" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository reshaprio/reshapr.io">GitHub</a>',
+              '<a class="navbar-github-link" href="https://github.com/reshaprio/reshapr" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository reshaprio/reshapr">GitHub</a>',
           },
         ],
       },

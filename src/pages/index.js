@@ -50,10 +50,10 @@ function HomepageHeader() {
               </Link>
               <Link
                 className="button button--secondary button--lg"
-                href="https://github.com/reshaprio/reshapr.io"
+                href="/docs/reshapr/why-reshapr"
                 target="_blank"
                 rel="noopener noreferrer">
-                Explore on GitHub
+                Get Started
               </Link>
             </div>
           </div>

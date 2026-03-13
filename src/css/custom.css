@@ -126,22 +126,22 @@ body,
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: var(--palette-accent);
-  --ifm-color-primary-dark: var(--palette-soft);
-  --ifm-color-primary-darker: var(--palette-mid);
-  --ifm-color-primary-darkest: var(--palette-deep);
-  --ifm-color-primary-light: var(--palette-accent);
-  --ifm-color-primary-lighter: var(--palette-white);
-  --ifm-color-primary-lightest: var(--palette-white);
+  --ifm-color-primary: var(--palette-deep);
+  --ifm-color-primary-dark: var(--palette-mid);
+  --ifm-color-primary-darker: var(--palette-deep);
+  --ifm-color-primary-darkest: var(--palette-ink);
+  --ifm-color-primary-light: var(--palette-soft);
+  --ifm-color-primary-lighter: var(--palette-accent);
+  --ifm-color-primary-lightest: var(--palette-accent);
   --ifm-background-color: var(--palette-ink);
   --ifm-background-surface-color: var(--palette-ink);
   --ifm-navbar-background-color: var(--palette-ink);
   --ifm-font-color-base: var(--palette-bg);
   --ifm-heading-color: var(--palette-white);
   --ifm-font-color-secondary: var(--palette-border);
-  --ifm-link-color: var(--palette-accent);
+  --ifm-link-color: var(--palette-soft);
   --ifm-link-hover-color: var(--palette-white);
-  --ifm-menu-color-background-active: color-mix(in srgb, var(--palette-accent) 20%, var(--palette-ink));
+  --ifm-menu-color-background-active: color-mix(in srgb, var(--palette-deep) 25%, var(--palette-ink));
   --ifm-menu-color-background-hover: color-mix(in srgb, var(--palette-soft) 24%, var(--palette-ink));
   --ifm-toc-border-color: color-mix(in srgb, var(--palette-mid) 58%, var(--palette-deep));
   --ifm-table-border-color: color-mix(in srgb, var(--palette-mid) 58%, var(--palette-deep));
