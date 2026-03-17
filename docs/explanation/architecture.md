@@ -42,4 +42,3 @@ See also:
 - [Security Options and Secrets](./security-model.md)
 - [Cloud Options and Plans](../reference/cloud-plans.md)
 - [Hybrid Deployment](../how-to-guides/deploy-hybrid-gateway.md)
-- [On-Premises Deployment](../reference/on-premises-deployment.md)
