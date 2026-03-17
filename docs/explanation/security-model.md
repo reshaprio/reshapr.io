@@ -43,4 +43,4 @@ reShapr also supports **Elicitation-based backend secret**. [Elicitations](https
 
 MCP Endpoint security options and backend secret are not exclusive, and they’d rather be combined to secure the transmission chain from end to end. To achieve fully secure and authorized usage of your MCP Endpoint provided by reShapr, we recommend considering OAuth2 + Elicitation-based backend Secret when you configure your [S](services-and-artifacts.md)ervice for exposure on a reShapr gateway.
 
-[Back to Home](../index.md)
+[Back to Home](../index.mdx)

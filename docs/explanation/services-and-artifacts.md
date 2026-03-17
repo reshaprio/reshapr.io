@@ -17,4 +17,4 @@ As Services are versioned in reShapr, the direct consequence is that reShapr wil
 
 Updating a Service in reShapr is a trivial process ; it simply means re-importing its reference artifacts. If its service name and version are already present in reShapr, the definition will be updated. If not, a new Service entry will be created and attached to your account.
 
-[Back to Home](../index.md)
+[Back to Home](../index.mdx)

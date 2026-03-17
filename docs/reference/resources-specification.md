@@ -79,4 +79,4 @@ To fetch its resource content, a `resourceTemplate` **will reuse [the backend en
 
 As an example, imagine that you have configured your backend endpoint URL to be [https://api.acme.com](https://api.came.com). When asking for a resource with `path=resources/doc.md` , then your reShapr MCP Server will actually try to fetch the [https://api.acme.com/project/src/resources/doc.md?mode=raw](https://api.acme.com/project/src/resources/doc.md?mode=raw) URL to get its content. Depending on the received content (text or binary), the reShapr endpoint will use the correct encoding to allow your agent or host application to correctly interpret this content.
 
-[Back to Home](../index.md)
+[Back to Home](../index.mdx)

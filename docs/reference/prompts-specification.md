@@ -41,4 +41,4 @@ A `Prompts` artifact follows some simple rules:
 
 In the case of prompt using `arguments`, the `result` value **can** be expressed using `${}` expressions that will be replaced by user provided values. Typically in our example, if user is looking for a pet named **Rusty**, the prompt will be generated with `Rusty` in the place of the `${name}` placeholder.
 
-[Back to Home](../index.md)
+[Back to Home](../index.mdx)

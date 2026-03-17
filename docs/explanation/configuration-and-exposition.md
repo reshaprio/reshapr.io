@@ -21,4 +21,4 @@ Creating a Configuration Plan is not enough for your MCP Server to be ready and 
 
 Creating an exposition is a simple operation that just associate a Configuration Plan to a Gateway Group - a logical representation of gateways actually running MCP Servers. Check our next [Gateway Group & Gateway](gateway-groups-and-gateways.md) section if you want to learn more. 
 
-[Back to Home](../index.md)
+[Back to Home](../index.mdx)

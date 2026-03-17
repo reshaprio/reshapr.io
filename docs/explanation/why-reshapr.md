@@ -33,4 +33,4 @@ Rather than building an MCP server from scratch, you can use reShapr to **insta
 - **No** vendor lock-in
 </aside>
 
-[Back to Home](../index.md)
+[Back to Home](../index.mdx)

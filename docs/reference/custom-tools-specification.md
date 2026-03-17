@@ -61,4 +61,4 @@ A `CustomTools` artifact follows some simple rules:
 
 In the case of custom tools using `arguments`, the value **can** be expressed using `${}` expressions that will be replaced by input values. Typically in our example, the MCP client will send a `user` value as input and this value will be used n the place of the `${user}` placeholder when invoking the original tool.
 
-[Back to Home](../index.md)
+[Back to Home](../index.mdx)

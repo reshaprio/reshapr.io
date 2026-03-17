@@ -46,4 +46,4 @@ Want to get all the features in a nutshell? This is where you can find all of th
 
 **For more details, check out the reShapr [blog](https://reshaprio.medium.com/) posts and [demos](https://www.youtube.com/@reShapr).**
 
-[Back to Home](../index.md)
+[Back to Home](../index.mdx)

@@ -165,4 +165,4 @@ reshapr expo create --configuration 0P5GDHQHB1MZS --gateway-group 0P58T3XKK1MEQ
 
 You should then see some logs on the Gateway side that receive information about your MCP Server to expose.
 
-[Back to Home](../index.md)
+[Back to Home](../index.mdx)

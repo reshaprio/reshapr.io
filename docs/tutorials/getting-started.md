@@ -246,4 +246,4 @@ Easy, No?
 
 🎉 Congrats! You deployed an MCP Endpoint with just one CLI command! Check the `Endpoints` information just above (`mcp.beta.reshapr.io/mcp/<organization>/Open-Meteo+APIs/1.0`): you can use this endpoint with `https://` prefix in your favorite MCP Client to access your new MCP Server!
 
-[Back to Home](../index.md)
+[Back to Home](../index.mdx)
