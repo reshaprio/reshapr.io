@@ -88,6 +88,14 @@ export default function Footer() {
           </p>
         </div>
       </div>
+      <img
+        referrerPolicy="no-referrer-when-downgrade"
+        src="https://static.scarf.sh/a.png?x-pxid=273f1769-ba93-418d-b4fc-6b683cd7c6c2"
+        alt=""
+        width={1}
+        height={1}
+        style={{position: 'absolute', left: '-9999px'}}
+      />
     </footer>
   );
 }
