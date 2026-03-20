@@ -107,7 +107,7 @@ const config = {
       // Replace with your project's social card
       image: 'img/reshapr-social-card.svg',
       colorMode: {
-        respectPrefersColorScheme: true,
+        respectPrefersColorScheme: false,
       },
       navbar: {
         logo: {
