@@ -119,7 +119,7 @@ const config = {
           {to: '/', label: 'Home', position: 'left', className: 'navbar-home-link'},
           {to: '/about', label: 'About', position: 'left'},
           {
-            to: '/docs/explanation/why-reshapr',
+            to: '/docs/overview/why-reshapr',
             position: 'left',
             label: 'Docs',
           },
@@ -155,7 +155,7 @@ const config = {
             items: [
               {
                 label: 'reShapr Docs',
-                to: '/docs/explanation/why-reshapr',
+                to: '/docs/overview/why-reshapr',
               },
             ],
           },

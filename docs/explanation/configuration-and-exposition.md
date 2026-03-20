@@ -17,7 +17,7 @@ A reShapr Service can have multiple Configuration Plans that matches with differ
 
 </aside>
 
-Creating a Configuration Plan is not enough for your MCP Server to be ready and usable by your MCP Client. In order to do, you must expose - ie **create an Exposition** - of your Configuration Plan. This last step before consuming a reShapr MCP Server endpoint is a simple declaration that allows you to target a reShapr Gateway. As introduced in[Why reShapr?](why-reshapr.md), reShapr allows deployment on different types and locations of Gateways depending on your subscription plan.
+Creating a Configuration Plan is not enough for your MCP Server to be ready and usable by your MCP Client. In order to do, you must expose - ie **create an Exposition** - of your Configuration Plan. This last step before consuming a reShapr MCP Server endpoint is a simple declaration that allows you to target a reShapr Gateway. As introduced in[Why reShapr?](../overview/why-reshapr.md), reShapr allows deployment on different types and locations of Gateways depending on your subscription plan.
 
 Creating an exposition is a simple operation that just associate a Configuration Plan to a Gateway Group - a logical representation of gateways actually running MCP Servers. Check our next [Gateway Group & Gateway](gateway-groups-and-gateways.md) section if you want to learn more. 
 

@@ -7,7 +7,7 @@ In a nutshell, the security options we’ll expose just after will encompass two
 - The access of the MCP Endpoint exposed by a reShapr gateway itself,
 - The access of the backend API used by the reShapr gateway once MCP endpoint access is safe.
 
-![Capture d'écran 2025-09-11 à 13.29.20.png](security-model/Capture_decran_2025-09-11_a_13.29.20.png)
+![Security Model](/img/docs/security-model.png)
 
 ### MCP Endpoint access
 

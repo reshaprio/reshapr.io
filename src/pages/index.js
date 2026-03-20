@@ -70,7 +70,7 @@ function HomepageHeader() {
               </Link>
               <Link
                 className="button button--secondary button--lg"
-                href="/docs/explanation/why-reshapr"
+                href="/docs/overview/why-reshapr"
                 target="_blank"
                 rel="noopener noreferrer">
                 Get Started
@@ -139,7 +139,7 @@ function HomepageMain() {
               </Link>
               <Link
                 className="button button--secondary button--lg"
-                to="/docs/explanation/architecture">
+                to="/docs/overview/how-it-works">
                 How It Works
               </Link>
             </div>
