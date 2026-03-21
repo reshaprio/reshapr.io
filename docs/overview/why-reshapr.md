@@ -1,6 +1,6 @@
 # Why reShapr?
 
-Hey hey… wondering why we built reShapr? 🤔 Check out [our blog post](https://reshaprio.medium.com/why-reshapr-db9788cd9062) on that topic!
+Hey hey… wondering why we built reShapr? 🤔 Check out [our blog post](/blog/2025/07/24/why-reshapr) on that topic!
 
 ***Building Your Own MCP Server Is a Trap!***
 
