@@ -1,3 +1,5 @@
+import ThemedImage from '@theme/ThemedImage';
+
 # Security options & Secrets
 
 Security of MCP endpoints is a hot topic and let’s face it: a fast moving one! For that, reShapr has been designed to be flexible and allow many different security options. It has been implemented to allow evolution following the emerging best practices. 
@@ -7,7 +9,13 @@ In a nutshell, the security options we’ll expose just after will encompass two
 - The access of the MCP Endpoint exposed by a reShapr gateway itself,
 - The access of the backend API used by the reShapr gateway once MCP endpoint access is safe.
 
-![Security Model](/img/docs/security-model.png)
+<ThemedImage
+  alt="Security Model"
+  sources={{
+    light: '/img/docs/security-model-light.svg',
+    dark: '/img/docs/security-model-dark.svg',
+  }}
+/>
 
 ### MCP Endpoint access
 
