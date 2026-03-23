@@ -17,6 +17,11 @@
 const sidebars = {
   tutorialSidebar: [
     {
+      type: 'doc',
+      id: 'index',
+      label: 'Docs Home',
+    },
+    {
       type: 'category',
       label: 'Overview',
       className: 'sidebar-icon-overview',

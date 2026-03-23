@@ -1,0 +1,111 @@
+.topBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: var(--reshapr-space-3) var(--reshapr-space-4);
+  margin-bottom: var(--reshapr-space-6);
+  padding: 0.5rem 0.65rem 0.55rem;
+  border-radius: 12px;
+  border: 1px solid var(--reshapr-doc-divider);
+  background: var(--reshapr-doc-content-surface);
+  box-shadow: var(--reshapr-doc-card-shadow);
+  min-height: 2.75rem;
+}
+
+.subnav {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.tabRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--reshapr-space-2);
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 0.42rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ifm-font-color-base);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.tab:hover {
+  border-color: color-mix(in srgb, var(--ifm-color-primary) 28%, var(--reshapr-doc-divider));
+  background: color-mix(in srgb, var(--palette-ink) 3%, transparent);
+  color: var(--ifm-color-primary);
+}
+
+.tabActive {
+  border-color: color-mix(in srgb, var(--ifm-color-primary) 40%, var(--reshapr-doc-divider));
+  background: color-mix(in srgb, var(--ifm-color-primary) 8%, var(--reshapr-doc-content-surface));
+  color: var(--ifm-color-primary-darker);
+}
+
+[data-theme='dark'] .topBar {
+  border-color: var(--ifm-color-emphasis-300);
+  background: var(--ifm-background-color);
+}
+
+[data-theme='dark'] .tab:hover {
+  border-color: var(--ifm-color-primary-light);
+  background: color-mix(in srgb, var(--ifm-color-primary) 6%, transparent);
+}
+
+[data-theme='dark'] .tabActive {
+  border-color: var(--ifm-color-primary);
+  background: color-mix(in srgb, var(--ifm-color-primary) 14%, transparent);
+  color: var(--ifm-color-primary-lighter);
+}
+
+@media (max-width: 996px) {
+  .topBar {
+    padding-inline: max(0.45rem, env(safe-area-inset-left, 0px))
+      max(0.45rem, env(safe-area-inset-right, 0px));
+  }
+
+  .tabRow {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 2px;
+    margin-inline: -0.05rem;
+    padding-inline: 0.05rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    touch-action: pan-x;
+    overscroll-behavior-x: contain;
+  }
+
+  .tab {
+    flex: 0 0 auto;
+  }
+}
+
+@media (max-width: 380px) {
+  .tab {
+    padding-inline: 0.55rem;
+    font-size: 0.78rem;
+  }
+}
+
+@media (min-width: 997px) {
+  .tabRow {
+    flex-wrap: wrap;
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.tutorialSidebar.category.Overview": {
+    "message": "Overview",
+    "description": "The label for category 'Overview' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.Tutorials": {
+    "message": "Tutorials",
+    "description": "The label for category 'Tutorials' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.How-to Guides": {
+    "message": "How-to Guides",
+    "description": "The label for category 'How-to Guides' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.Explanation": {
+    "message": "Explanation",
+    "description": "The label for category 'Explanation' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.Reference": {
+    "message": "Reference",
+    "description": "The label for category 'Reference' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.doc.Why reShapr?": {
+    "message": "Why reShapr?",
+    "description": "The label for the doc item 'Why reShapr?' in sidebar 'tutorialSidebar', linking to the doc overview/why-reshapr"
+  },
+  "sidebar.tutorialSidebar.doc.How It Works": {
+    "message": "How It Works",
+    "description": "The label for the doc item 'How It Works' in sidebar 'tutorialSidebar', linking to the doc overview/how-it-works"
+  },
+  "sidebar.tutorialSidebar.doc.Try reShapr online": {
+    "message": "Try reShapr online",
+    "description": "The label for the doc item 'Try reShapr online' in sidebar 'tutorialSidebar', linking to the doc tutorials/try-reshapr-online"
+  },
+  "sidebar.tutorialSidebar.doc.Getting Started with CLI": {
+    "message": "Getting Started with CLI",
+    "description": "The label for the doc item 'Getting Started with CLI' in sidebar 'tutorialSidebar', linking to the doc tutorials/getting-started"
+  },
+  "sidebar.tutorialSidebar.doc.Docker Compose": {
+    "message": "Docker Compose",
+    "description": "The label for the doc item 'Docker Compose' in sidebar 'tutorialSidebar', linking to the doc tutorials/docker-compose"
+  },
+  "sidebar.tutorialSidebar.doc.Helm Charts": {
+    "message": "Helm Charts",
+    "description": "The label for the doc item 'Helm Charts' in sidebar 'tutorialSidebar', linking to the doc tutorials/helm-charts"
+  },
+  "sidebar.tutorialSidebar.doc.Deploy a Hybrid Gateway": {
+    "message": "Deploy a Hybrid Gateway",
+    "description": "The label for the doc item 'Deploy a Hybrid Gateway' in sidebar 'tutorialSidebar', linking to the doc how-to-guides/deploy-hybrid-gateway"
+  },
+  "sidebar.tutorialSidebar.doc.Services and Artifacts": {
+    "message": "Services and Artifacts",
+    "description": "The label for the doc item 'Services and Artifacts' in sidebar 'tutorialSidebar', linking to the doc explanation/services-and-artifacts"
+  },
+  "sidebar.tutorialSidebar.doc.Configuration and Exposition": {
+    "message": "Configuration and Exposition",
+    "description": "The label for the doc item 'Configuration and Exposition' in sidebar 'tutorialSidebar', linking to the doc explanation/configuration-and-exposition"
+  },
+  "sidebar.tutorialSidebar.doc.Gateway Groups and Gateways": {
+    "message": "Gateway Groups and Gateways",
+    "description": "The label for the doc item 'Gateway Groups and Gateways' in sidebar 'tutorialSidebar', linking to the doc explanation/gateway-groups-and-gateways"
+  },
+  "sidebar.tutorialSidebar.doc.Security Model": {
+    "message": "Security Model",
+    "description": "The label for the doc item 'Security Model' in sidebar 'tutorialSidebar', linking to the doc explanation/security-model"
+  },
+  "sidebar.tutorialSidebar.doc.Features Overview": {
+    "message": "Features Overview",
+    "description": "The label for the doc item 'Features Overview' in sidebar 'tutorialSidebar', linking to the doc reference/features"
+  },
+  "sidebar.tutorialSidebar.doc.CLI Commands": {
+    "message": "CLI Commands",
+    "description": "The label for the doc item 'CLI Commands' in sidebar 'tutorialSidebar', linking to the doc reference/cli-commands"
+  },
+  "sidebar.tutorialSidebar.doc.Prompts Specification": {
+    "message": "Prompts Specification",
+    "description": "The label for the doc item 'Prompts Specification' in sidebar 'tutorialSidebar', linking to the doc reference/prompts-specification"
+  },
+  "sidebar.tutorialSidebar.doc.Custom Tools Specification": {
+    "message": "Custom Tools Specification",
+    "description": "The label for the doc item 'Custom Tools Specification' in sidebar 'tutorialSidebar', linking to the doc reference/custom-tools-specification"
+  },
+  "sidebar.tutorialSidebar.doc.Resources Specification": {
+    "message": "Resources Specification",
+    "description": "The label for the doc item 'Resources Specification' in sidebar 'tutorialSidebar', linking to the doc reference/resources-specification"
+  },
+  "sidebar.tutorialSidebar.doc.Cloud Options and Plans": {
+    "message": "Cloud Options and Plans",
+    "description": "The label for the doc item 'Cloud Options and Plans' in sidebar 'tutorialSidebar', linking to the doc reference/cloud-plans"
+  },
+  "sidebar.tutorialSidebar.doc.Demos": {
+    "message": "Demos",
+    "description": "The label for the doc item 'Demos' in sidebar 'tutorialSidebar', linking to the doc demos"
+  }
+}
