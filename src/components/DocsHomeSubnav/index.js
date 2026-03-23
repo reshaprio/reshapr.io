@@ -52,7 +52,7 @@ export default function DocsHomeSubnav() {
     },
     {
       label: 'Explanation',
-      to: '/docs/explanation/why-reshapr',
+      to: '/docs/overview/why-reshapr',
       active: onExplanation,
     },
     {

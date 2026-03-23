@@ -13,7 +13,7 @@
   },
   "link.item.label.reShapr Docs": {
     "message": "reShapr Docs",
-    "description": "The label of footer link with label=reShapr Docs linking to /docs/explanation/why-reshapr"
+    "description": "The label of footer link with label=reShapr Docs linking to /docs/overview/why-reshapr"
   },
   "link.item.label.LinkedIn": {
     "message": "LinkedIn",

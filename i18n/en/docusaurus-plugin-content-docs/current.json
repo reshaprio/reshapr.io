@@ -25,11 +25,11 @@
   },
   "sidebar.tutorialSidebar.doc.Why reShapr?": {
     "message": "Why reShapr?",
-    "description": "The label for the doc item 'Why reShapr?' in sidebar 'tutorialSidebar', linking to the doc explanation/why-reshapr"
+    "description": "The label for the doc item 'Why reShapr?' in sidebar 'tutorialSidebar', linking to the doc overview/why-reshapr"
   },
   "sidebar.tutorialSidebar.doc.How It Works": {
     "message": "How It Works",
-    "description": "The label for the doc item 'How It Works' in sidebar 'tutorialSidebar', linking to the doc explanation/architecture"
+    "description": "The label for the doc item 'How It Works' in sidebar 'tutorialSidebar', linking to the doc overview/how-it-works"
   },
   "sidebar.tutorialSidebar.doc.Try reShapr online": {
     "message": "Try reShapr online",

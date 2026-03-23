@@ -172,7 +172,7 @@ export default function CommunityPage() {
                       rel="noopener noreferrer">
                       Open Issues
                     </Link>
-                    <Link className="button button--secondary button--lg" to="/docs/explanation/why-reshapr">
+                    <Link className="button button--secondary button--lg" to="/docs/overview/why-reshapr">
                       Read The Docs
                     </Link>
                     <Link className="button button--secondary button--lg" to="/blog">

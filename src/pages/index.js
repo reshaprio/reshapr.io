@@ -144,7 +144,7 @@ function HomepageHeader() {
                   whileTap={reduceMotion ? undefined : {scale: 0.997}}>
                   <Link
                     className="button button--secondary button--lg"
-                    to="/docs/explanation/why-reshapr">
+                    to="/docs/overview/why-reshapr">
                     View Docs
                   </Link>
                 </m.div>
