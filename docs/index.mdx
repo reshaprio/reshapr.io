@@ -1,9 +1,95 @@
 ---
+title: Docs Home
+description: Welcome to reShapr documentation — guides, tutorials, and reference for no-code MCP servers and AI-native API access.
 slug: /
-title: reShapr Documentation
 hide_table_of_contents: true
 ---
 
-import {Redirect} from '@docusaurus/router';
+import DocCardList from '@theme/DocCardList';
+import DocsHomeHero from '@site/src/components/DocsHomeHero';
 
-<Redirect to="/docs/explanation/why-reshapr" />
+<DocsHomeHero>
+
+# Welcome to reShapr docs
+
+reShapr turns your existing APIs into **secure MCP endpoints** without rebuilding backends. Use these pages to install the CLI, learn the model, and ship faster.
+
+</DocsHomeHero>
+
+<div className="docs-home-root">
+
+## Start here
+
+<DocCardList
+  items={[
+    {
+      type: 'link',
+      label: 'Why reShapr?',
+      href: '/docs/explanation/why-reshapr',
+      docId: 'explanation/why-reshapr',
+      description:
+        'Motivation, pitfalls of DIY MCP servers, and how reShapr fits your stack.',
+    },
+    {
+      type: 'link',
+      label: 'Getting Started with CLI',
+      href: '/docs/tutorials/getting-started',
+      docId: 'tutorials/getting-started',
+      description:
+        'Install reshapr-cli, verify the tool, and run your first flows.',
+    },
+    {
+      type: 'link',
+      label: 'How It Works',
+      href: '/docs/explanation/architecture',
+      docId: 'explanation/architecture',
+      description:
+        'Architecture overview — gateways, artifacts, and how translation fits together.',
+    },
+    {
+      type: 'link',
+      label: 'Try reShapr online',
+      href: '/docs/tutorials/try-reshapr-online',
+      docId: 'tutorials/try-reshapr-online',
+      description:
+        'Explore the product in the browser before you deploy locally.',
+    },
+  ]}
+/>
+
+## Explore
+
+<DocCardList
+  items={[
+    {
+      type: 'link',
+      label: 'Demos',
+      href: '/docs/demos',
+      docId: 'demos',
+      description: 'Video walkthroughs and example scenarios.',
+    },
+    {
+      type: 'link',
+      label: 'Features overview',
+      href: '/docs/reference/features',
+      docId: 'reference/features',
+      description: 'Capability matrix and product features at a glance.',
+    },
+    {
+      type: 'link',
+      label: 'Security model',
+      href: '/docs/explanation/security-model',
+      docId: 'explanation/security-model',
+      description: 'How credentials, policies, and exposure are handled.',
+    },
+    {
+      type: 'link',
+      label: 'CLI commands',
+      href: '/docs/reference/cli-commands',
+      docId: 'reference/cli-commands',
+      description: 'Reference for reshapr CLI commands and options.',
+    },
+  ]}
+/>
+
+</div>

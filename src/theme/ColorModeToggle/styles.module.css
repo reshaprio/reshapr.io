@@ -1,0 +1,125 @@
+/**
+ * Light / dark pill: sliding thumb + edge icons (no system segment).
+ * Thumb diameter < inner track height so it never clips the pill (see navbar clean-btn override).
+ */
+
+.wrapper {
+  --reshapr-toggle-thumb: 1.375rem; /* 22px — fits inside padded track */
+  --reshapr-toggle-icon: 14px;
+
+  position: relative;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.375rem;
+  min-width: 3.375rem;
+  height: calc(var(--reshapr-toggle-thumb) + 10px);
+  min-height: calc(var(--reshapr-toggle-thumb) + 10px);
+  max-height: calc(var(--reshapr-toggle-thumb) + 10px);
+  padding: 3px;
+  border-radius: 999px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: color-mix(in srgb, var(--ifm-color-emphasis-500) 7%, var(--palette-white));
+  flex-shrink: 0;
+  overflow: hidden;
+  z-index: 20;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.wrapper:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.wrapper:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+.track {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  isolation: isolate;
+}
+
+.thumb {
+  position: absolute;
+  width: var(--reshapr-toggle-thumb);
+  height: var(--reshapr-toggle-thumb);
+  box-sizing: border-box;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  background: var(--palette-white);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.05),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.iconRow {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 0.2rem;
+  pointer-events: none;
+}
+
+.iconHint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  opacity: 0.38;
+  transition: opacity 0.2s ease;
+}
+
+.iconHintActive {
+  opacity: 0.92;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.icon :global(svg) {
+  display: block;
+  width: var(--reshapr-toggle-icon);
+  height: var(--reshapr-toggle-icon);
+}
+
+@media (max-width: 996px) {
+  .wrapper {
+    --reshapr-toggle-thumb: 1.25rem;
+    --reshapr-toggle-icon: 13px;
+    width: 3.125rem;
+    min-width: 3.125rem;
+  }
+}
+
+[data-theme='dark'] .wrapper {
+  border-color: color-mix(in srgb, var(--ifm-color-emphasis-300) 85%, transparent);
+  background: color-mix(in srgb, var(--ifm-color-emphasis-100) 70%, transparent);
+}
+
+[data-theme='dark'] .iconHint {
+  color: var(--ifm-color-emphasis-800);
+}
+
+[data-theme='dark'] .thumb {
+  background: color-mix(in srgb, var(--ifm-color-emphasis-200) 55%, var(--ifm-background-color));
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 2px 8px rgba(0, 0, 0, 0.35);
+}

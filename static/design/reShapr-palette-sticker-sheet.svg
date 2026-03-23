@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="640" viewBox="0 0 920 640" fill="none">
+  <title>reShapr color palette  sticker sheet</title>
+  <desc>Design tokens from src/css/custom.css  import into Figma to visualize and iterate.</desc>
+
+  <!-- Page background -->
+  <rect width="920" height="640" fill="#f0f2f1"/>
+
+  <!-- Sheet card -->
+  <rect x="24" y="24" width="872" height="592" rx="16" fill="#ffffff" stroke="#ececec" stroke-width="1"/>
+
+  <!-- Title -->
+  <text x="56" y="72" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="700" fill="#090909">reShapr palette</text>
+  <text x="56" y="98" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="400" fill="#666666">IBM Teal scale (IDL v2.1) ù reshapr.io custom.css</text>
+
+  <!-- Sticker: ink -->
+  <g filter="url(#shadow)">
+    <rect x="56" y="124" width="160" height="88" rx="12" fill="#090909"/>
+  </g>
+  <text x="72" y="200" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="600" fill="#ffffff">palette-ink</text>
+  <text x="72" y="216" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#cccccc">#090909</text>
+
+  <!-- deep Teal 70 -->
+  <g filter="url(#shadow)">
+    <rect x="232" y="124" width="160" height="88" rx="12" fill="#005d5d"/>
+  </g>
+  <text x="248" y="192" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="500" fill="#b8e8e6">Teal 70</text>
+  <text x="248" y="208" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="600" fill="#ffffff">palette-deep</text>
+  <text x="248" y="224" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#d4f5f4">#005d5d</text>
+
+  <!-- mid Teal 60 -->
+  <g filter="url(#shadow)">
+    <rect x="408" y="124" width="160" height="88" rx="12" fill="#007d79"/>
+  </g>
+  <text x="424" y="192" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="500" fill="#b8f0ee">Teal 60</text>
+  <text x="424" y="208" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="600" fill="#ffffff">palette-mid</text>
+  <text x="424" y="224" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#e0faf8">#007d79</text>
+
+  <!-- soft Teal 50 -->
+  <g filter="url(#shadow)">
+    <rect x="584" y="124" width="160" height="88" rx="12" fill="#009d9a"/>
+  </g>
+  <text x="600" y="192" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="500" fill="#e0fffd">Teal 50</text>
+  <text x="600" y="208" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="600" fill="#ffffff">palette-soft</text>
+  <text x="600" y="224" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#f0fffe">#009d9a</text>
+
+  <!-- accent Teal 40 -->
+  <g filter="url(#shadow)">
+    <rect x="760" y="124" width="120" height="88" rx="12" fill="#08bdba"/>
+  </g>
+  <text x="776" y="180" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="500" fill="#004144">Teal 40</text>
+  <text x="776" y="196" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="600" fill="#081a1c">palette-accent</text>
+  <text x="776" y="212" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#005d5d">#08bdba</text>
+
+  <!-- row 2 -->
+  <!-- muted -->
+  <g filter="url(#shadow)">
+    <rect x="56" y="252" width="160" height="88" rx="12" fill="#9ca6a3"/>
+  </g>
+  <text x="72" y="328" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="600" fill="#ffffff">palette-muted</text>
+  <text x="72" y="344" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#f2f4f3">#9ca6a3</text>
+
+  <!-- border -->
+  <g filter="url(#shadow)">
+    <rect x="232" y="252" width="160" height="88" rx="12" fill="#ececec" stroke="#d8d8d8" stroke-width="1"/>
+  </g>
+  <text x="248" y="328" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="600" fill="#090909">palette-border</text>
+  <text x="248" y="344" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#444444">#ececec</text>
+
+  <!-- bg (Teal-tinted) -->
+  <g filter="url(#shadow)">
+    <rect x="408" y="252" width="160" height="88" rx="12" fill="#f4fcfc" stroke="#ececec" stroke-width="1"/>
+  </g>
+  <text x="424" y="320" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="500" fill="#666666">near Teal 10</text>
+  <text x="424" y="336" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="600" fill="#090909">palette-bg</text>
+  <text x="424" y="352" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#444444">#f4fcfc</text>
+
+  <!-- white -->
+  <g filter="url(#shadow)">
+    <rect x="584" y="252" width="160" height="88" rx="12" fill="#ffffff" stroke="#ececec" stroke-width="1"/>
+  </g>
+  <text x="600" y="328" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="600" fill="#090909">palette-white</text>
+  <text x="600" y="344" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#444444">#ffffff</text>
+
+  <!-- gray -->
+  <g filter="url(#shadow)">
+    <rect x="760" y="252" width="120" height="88" rx="12" fill="#666666"/>
+  </g>
+  <text x="776" y="328" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="600" fill="#ffffff">palette-gray</text>
+  <text x="776" y="344" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#e0e0e0">#666666</text>
+
+  <!-- row 3: extra token -->
+  <g filter="url(#shadow)">
+    <rect x="56" y="380" width="160" height="88" rx="12" fill="#d0d0d0"/>
+  </g>
+  <text x="72" y="456" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="600" fill="#090909">ifm-hr (light)</text>
+  <text x="72" y="472" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#333333">#d0d0d0</text>
+
+  <!-- Dark mode note block -->
+  <rect x="232" y="380" width="648" height="120" rx="12" fill="#090909"/>
+  <text x="256" y="418" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="12" font-weight="600" fill="#f4fcfc">Dark mode</text>
+  <text x="256" y="442" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#9ca6a3">IBM Teal for primary; surfaces use palette-ink (#090909). Body text uses palette-bg / headings palette-white.</text>
+  <text x="256" y="464" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#9ca6a3">Links: palette-soft, hover palette-white. See [data-theme='dark'] in custom.css.</text>
+
+  <!-- Footer hint -->
+  <text x="56" y="548" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#666666">Figma: Place image or drag SVG onto canvas. Ungroup to edit fills.</text>
+
+  <defs>
+    <filter id="shadow" x="-2" y="-2" width="170" height="98" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="2"/>
+      <feGaussianBlur stdDeviation="3"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+    </filter>
+  </defs>
+</svg>
