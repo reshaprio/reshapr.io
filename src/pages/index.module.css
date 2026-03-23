@@ -1,5 +1,6 @@
 .heroBanner {
   padding: var(--reshapr-landing-pad-y) 0;
+  background: var(--reshapr-lp-hero);
 }
 
 .heroGrid {
@@ -223,10 +224,12 @@
 
 .section {
   padding: var(--reshapr-landing-section-y) 0;
+  background: var(--reshapr-lp-band);
 }
 
 .sectionAlt {
   padding: var(--reshapr-landing-section-y) 0;
+  background: var(--reshapr-lp-panel-grey);
 }
 
 .section h2,
@@ -379,6 +382,7 @@
 
 .ctaSection {
   padding: var(--reshapr-landing-section-y) 0;
+  background: transparent;
 }
 
 .ctaCard {

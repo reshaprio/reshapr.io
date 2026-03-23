@@ -6,11 +6,22 @@
   --reshapr-landing-section-y: 7.5rem; /* 120px — vertical padding per main LP section */
   --reshapr-landing-gap: 2.5rem; /* 40px — matches --reshapr-space-10 */
   --reshapr-lp-check-gap: 2rem; /* 32px between checklist rows */
+  --reshapr-lp-hero: var(--ifm-background-color);
+  --reshapr-lp-band: color-mix(in srgb, var(--ifm-background-surface-color) 32%, var(--ifm-background-color));
+  --reshapr-lp-panel-grey: color-mix(in srgb, var(--ifm-color-emphasis-100) 60%, var(--ifm-background-color));
+  --reshapr-lp-cta: var(--ifm-background-surface-color);
   background: var(--ifm-background-color);
   display: flex;
   flex-direction: column;
   align-items: stretch;
   overflow-x: clip;
+}
+
+[data-theme='dark'] .landingFrame {
+  --reshapr-lp-hero: var(--ifm-background-color);
+  --reshapr-lp-band: color-mix(in srgb, var(--ifm-background-surface-color) 42%, var(--ifm-background-color));
+  --reshapr-lp-panel-grey: color-mix(in srgb, var(--ifm-color-emphasis-200) 62%, var(--ifm-background-color));
+  --reshapr-lp-cta: color-mix(in srgb, var(--ifm-background-surface-color) 68%, var(--ifm-background-color));
 }
 
 .landingFrame :global(.container) {
