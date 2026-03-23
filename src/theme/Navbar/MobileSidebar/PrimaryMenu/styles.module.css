@@ -1,0 +1,16 @@
+.sidebarFooter {
+  padding: var(--reshapr-space-5) var(--reshapr-space-4) var(--reshapr-space-4);
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.colorModeToggle {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 44px;
+  align-items: center;
+}
+
+[data-theme='dark'] .sidebarFooter {
+  border-top-color: var(--ifm-color-emphasis-300);
+}

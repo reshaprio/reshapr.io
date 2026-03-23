@@ -1,7 +1,5 @@
 import React from 'react';
-import {FaDiscord, FaLinkedinIn, FaYoutube} from 'react-icons/fa';
-import {FaXTwitter} from 'react-icons/fa6';
-import {SiBluesky} from 'react-icons/si';
+import {BrandSocialIcon} from '@site/src/components/BrandSocialIcons';
 import styles from './styles.module.css';
 
 const footerLinks = [
@@ -17,31 +15,11 @@ const footerLinks = [
 ];
 
 const socials = [
-  {
-    label: 'LinkedIn',
-    href: 'https://www.linkedin.com/company/reshapr',
-    Icon: FaLinkedinIn,
-  },
-  {
-    label: 'X',
-    href: 'https://x.com/reshaprio',
-    Icon: FaXTwitter,
-  },
-  {
-    label: 'Bluesky',
-    href: 'https://bsky.app/profile/reshapr.io',
-    Icon: SiBluesky,
-  },
-  {
-    label: 'YouTube',
-    href: 'https://www.youtube.com/@reShaprio',
-    Icon: FaYoutube,
-  },
-  {
-    label: 'Discord',
-    href: 'https://discord.gg/KyDUdam34h',
-    Icon: FaDiscord,
-  },
+  {label: 'LinkedIn', href: 'https://www.linkedin.com/company/reshapr', icon: 'linkedin'},
+  {label: 'X', href: 'https://x.com/reshaprio', icon: 'x'},
+  {label: 'Bluesky', href: 'https://bsky.app/profile/reshapr.io', icon: 'bluesky'},
+  {label: 'YouTube', href: 'https://www.youtube.com/@reShaprio', icon: 'youtube'},
+  {label: 'Discord', href: 'https://discord.gg/KyDUdam34h', icon: 'discord'},
 ];
 
 export default function Footer() {
@@ -64,7 +42,7 @@ export default function Footer() {
             </nav>
 
             <div className={styles.socials}>
-              {socials.map(({label, href, Icon}) => (
+              {socials.map(({label, href, icon}) => (
                 <a
                   key={label}
                   href={href}
@@ -72,7 +50,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   aria-label={label}
                   className={styles.socialLink}>
-                  <Icon size={18} />
+                  <BrandSocialIcon name={icon} />
                 </a>
               ))}
             </div>

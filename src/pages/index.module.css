@@ -1,28 +1,79 @@
+/* Figma landing frame: 1440 fixed artboard, 120/60 padding, 40px vertical gap, clip */
+.landingFrame {
+  --reshapr-landing-max: 1440px;
+  --reshapr-landing-pad-x: 7.5rem; /* 120px */
+  --reshapr-landing-pad-y: 3.75rem; /* 60px — hero top/bottom */
+  --reshapr-landing-section-y: 7.5rem; /* 120px — vertical padding per main LP section */
+  --reshapr-landing-gap: 2.5rem; /* 40px — matches --reshapr-space-10 */
+  --reshapr-lp-check-gap: 2rem; /* 32px between checklist rows */
+  /* One canvas per theme — same as global --ifm-background-color (no alternating bands) */
+  background: var(--ifm-background-color);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  overflow-x: clip;
+}
+
+.landingFrame :global(.container) {
+  box-sizing: border-box;
+  max-width: var(--reshapr-landing-max);
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--reshapr-landing-pad-x);
+  padding-right: var(--reshapr-landing-pad-x);
+}
+
 .heroBanner {
-  padding: 3.5rem 0 2.5rem;
-  background: var(--ifm-background-surface-color);
+  padding: var(--reshapr-landing-pad-y) 0;
 }
 
 .heroGrid {
   display: grid;
-  gap: 2rem;
+  gap: var(--reshapr-landing-gap);
   align-items: stretch;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
 }
 
 .heroContent {
+  position: relative;
   min-height: 560px;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
+.heroMotionStack {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--reshapr-landing-gap);
+  width: 100%;
+}
+
+.heroButtonLift {
+  display: inline-flex;
+  border-radius: var(--ifm-button-border-radius);
+}
+
+/* Primary CTA: shadow on hover via CSS (avoid animating box-shadow in Motion) */
+.heroButtonLiftPrimary:hover {
+  box-shadow: 0 4px 18px rgba(0, 93, 93, 0.12);
+}
+
+.heroButtonLiftPrimary:active {
+  box-shadow: 0 2px 10px rgba(0, 93, 93, 0.1);
+}
+
 .heroTitle {
   max-width: 720px;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
+  color: var(--ifm-font-color-base);
   font-size: clamp(2.3rem, 1.5rem + 3vw, 4.3rem);
   line-height: 1.08;
   letter-spacing: -0.02em;
+  font-weight: 650;
 }
 
 .heroSubtitle {
@@ -37,9 +88,110 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 0.8rem;
+  gap: var(--reshapr-space-3);
   flex-wrap: wrap;
-  margin-top: 1.8rem;
+  margin-top: 0;
+}
+
+/* Install command + copy (Lucide); used in bottom CTA beside CLI Quickstart */
+.cliQuickstart {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: min(100%, 26rem);
+}
+
+.ctaLead {
+  max-width: 40rem;
+  margin-inline: auto;
+}
+
+.ctaLead h2 {
+  margin-bottom: var(--reshapr-space-4);
+}
+
+.ctaLead p {
+  margin: 0;
+}
+
+.ctaCliRow {
+  --reshapr-cta-cli-height: 2.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--reshapr-landing-gap) var(--reshapr-space-4);
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+.cliBar {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--reshapr-cta-cli-height);
+  padding: 0 0.75rem 0 1rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--ifm-background-color) 50%, var(--ifm-background-surface-color));
+}
+
+[data-theme='dark'] .cliBar {
+  border-color: var(--ifm-color-emphasis-300);
+  background: color-mix(in srgb, var(--ifm-color-emphasis-100) 75%, transparent);
+}
+
+.cliCode {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--ifm-font-color-base);
+}
+
+.cliPrompt {
+  flex-shrink: 0;
+  color: var(--ifm-color-primary);
+  font-weight: 600;
+}
+
+.cliCommand {
+  word-break: break-all;
+}
+
+.cliCopyBtn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.32rem;
+  margin: 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ifm-font-color-secondary);
+  cursor: pointer;
+  line-height: 0;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.cliCopyBtn:hover {
+  color: var(--ifm-color-primary);
+  background: color-mix(in srgb, var(--ifm-font-color-base) 6%, transparent);
 }
 
 .heroImageWrap {
@@ -49,6 +201,17 @@
   min-height: 560px;
   position: relative;
   isolation: isolate;
+}
+
+/* Desktop: fill hero column height; aspect-ratio comes from VideoWithPlaceholder on narrow */
+@media screen and (min-width: 997px) {
+  .heroImageWrap .heroVideoRoot {
+    aspect-ratio: unset;
+    flex: 1 1 auto;
+    align-self: stretch;
+    width: 100%;
+    min-height: 560px;
+  }
 }
 
 .heroImage {
@@ -69,33 +232,27 @@
   background:
     linear-gradient(
       to right,
-      var(--ifm-background-surface-color) 0%,
+      var(--ifm-background-color) 0%,
       transparent 14%,
       transparent 86%,
-      var(--ifm-background-surface-color) 100%
+      var(--ifm-background-color) 100%
     ),
     linear-gradient(
       to bottom,
-      var(--ifm-background-surface-color) 0%,
+      var(--ifm-background-color) 0%,
       transparent 18%,
       transparent 82%,
-      var(--ifm-background-surface-color) 100%
+      var(--ifm-background-color) 100%
     );
   z-index: 2;
 }
 
 .section {
-  padding: 5rem 0;
+  padding: var(--reshapr-landing-section-y) 0;
 }
 
 .sectionAlt {
-  padding: 5rem 0;
-}
-
-.section > :global(.container),
-.sectionAlt > :global(.container),
-.ctaSection > :global(.container) {
-  max-width: var(--ifm-container-width);
+  padding: var(--reshapr-landing-section-y) 0;
 }
 
 .section h2,
@@ -103,7 +260,7 @@
 .ctaSection h2 {
   font-size: clamp(1.9rem, 1.6rem + 0.7vw, 2.35rem);
   line-height: 1.2;
-  margin-bottom: 0.85rem;
+  margin-bottom: var(--reshapr-space-4);
 }
 
 .section p,
@@ -116,7 +273,7 @@
 
 .sectionHeader {
   max-width: 760px;
-  margin: 0 auto 1.6rem;
+  margin: 0 auto var(--reshapr-landing-gap);
   text-align: center;
 }
 
@@ -128,19 +285,32 @@
 .featureGrid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0;
-  max-width: 640px;
+  gap: var(--reshapr-landing-gap) 0;
+  max-width: 1100px;
   margin: 0 auto;
+}
+
+@media screen and (min-width: 997px) {
+  .featureGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--reshapr-landing-gap) var(--reshapr-space-10);
+    align-items: start;
+  }
+
+  .featureCard {
+    flex-direction: column;
+    padding: var(--reshapr-space-5) 0;
+  }
 }
 
 .featureCard {
   border-radius: 0;
-  padding: 1.5rem 0;
+  padding: var(--reshapr-space-6) 0;
   border: 0;
   background: transparent;
   display: flex;
   align-items: flex-start;
-  gap: 1.2rem;
+  gap: var(--reshapr-space-5);
 }
 
 .featureIcon {
@@ -150,8 +320,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
-  background: color-mix(in srgb, var(--ifm-color-primary) 10%, transparent);
   color: var(--ifm-color-primary);
 }
 
@@ -160,7 +328,7 @@
 }
 
 .featureCard h3 {
-  margin-bottom: 0.45rem;
+  margin-bottom: var(--reshapr-space-2);
 }
 
 .featureCard p {
@@ -169,18 +337,30 @@
 }
 
 .panel {
-  border-radius: 0;
-  border: 0;
-  padding: 0;
-  background: transparent;
-  max-width: 640px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--reshapr-landing-gap) var(--reshapr-space-12);
+  align-items: start;
+  max-width: 1100px;
   margin: 0 auto;
-  text-align: center;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  text-align: left;
+}
+
+.panelCopy {
+  max-width: 36rem;
+}
+
+.panelCopy h2 {
+  margin-bottom: var(--reshapr-space-4);
 }
 
 .panel p {
   color: var(--ifm-font-color-base);
-  margin-bottom: 0;
+  margin: 0;
 }
 
 .checkList {
@@ -190,8 +370,8 @@
 }
 
 .checkList li {
-  margin-bottom: 0.7rem;
-  padding-left: 1.4rem;
+  margin-bottom: var(--reshapr-space-3);
+  padding-left: var(--reshapr-space-6);
   position: relative;
   color: var(--ifm-font-color-base);
 }
@@ -201,12 +381,30 @@
   position: absolute;
   left: 0;
   top: 0;
-  color: var(--ifm-font-color-base);
+  color: var(--ifm-color-primary);
   font-weight: 700;
 }
 
+/* Panel checklist: 32px rhythm + hairline dividers (see --reshapr-lp-check-gap) */
+.panelCheckList li {
+  margin-bottom: 0;
+}
+
+.panelCheckList li + li {
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  padding-top: var(--reshapr-lp-check-gap);
+}
+
+.panelCheckList li + li::before {
+  top: var(--reshapr-lp-check-gap);
+}
+
+[data-theme='dark'] .panelCheckList li + li {
+  border-color: var(--ifm-color-emphasis-300);
+}
+
 .ctaSection {
-  padding: 5rem 0;
+  padding: var(--reshapr-landing-section-y) 0;
 }
 
 .ctaCard {
@@ -214,10 +412,11 @@
   padding: 0;
   border: 0;
   background: transparent;
-  display: grid;
-  grid-template-columns: 1fr auto;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  text-align: center;
+  gap: var(--reshapr-landing-gap);
 }
 
 .ctaCard p {
@@ -226,20 +425,27 @@
 }
 
 @media screen and (max-width: 996px) {
+  .landingFrame {
+    --reshapr-landing-pad-x: clamp(1.25rem, 5vw, 7.5rem);
+    --reshapr-landing-pad-y: clamp(1.5rem, 4vw, 3.75rem);
+    --reshapr-landing-section-y: clamp(3rem, 10vw, 7.5rem);
+    --reshapr-lp-check-gap: clamp(1.25rem, 4vw, 2rem);
+  }
+
   .heroBanner {
-    padding: 2.6rem 0 2rem;
+    padding: var(--reshapr-landing-pad-y) 0;
   }
 
   .ctaSection {
-    padding: 1.6rem 0;
+    padding: var(--reshapr-landing-section-y) 0;
   }
 
   .section {
-    padding: 1.6rem 0;
+    padding: var(--reshapr-landing-section-y) 0;
   }
 
   .sectionAlt {
-    padding: 1.6rem 0;
+    padding: var(--reshapr-landing-section-y) 0;
   }
 
   .section h2,
@@ -273,39 +479,54 @@
     font-size: 1.05rem;
   }
 
-  .heroImage {
+  .heroImageWrap .heroImage {
     max-width: 100%;
-    height: auto;
+    height: 100%;
   }
 
   .heroImageWrap::after {
     background:
       linear-gradient(
         to right,
-        var(--ifm-background-surface-color) 0%,
+        var(--ifm-background-color) 0%,
         transparent 10%,
         transparent 90%,
-        var(--ifm-background-surface-color) 100%
+        var(--ifm-background-color) 100%
       ),
       linear-gradient(
         to bottom,
-        var(--ifm-background-surface-color) 0%,
+        var(--ifm-background-color) 0%,
         transparent 12%,
         transparent 88%,
-        var(--ifm-background-surface-color) 100%
+        var(--ifm-background-color) 100%
       );
   }
 
   .featureGrid {
     grid-template-columns: 1fr;
+    max-width: 640px;
+  }
+
+  .featureCard {
+    flex-direction: row;
   }
 
   .panel {
     grid-template-columns: 1fr;
+    gap: var(--reshapr-space-7);
   }
 
-  .ctaCard {
-    grid-template-columns: 1fr;
-    text-align: center;
+  .ctaCliRow {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .ctaCliRow .cliQuickstart {
+    max-width: 100%;
+  }
+
+  .ctaCliRow .button {
+    width: 100%;
   }
 }

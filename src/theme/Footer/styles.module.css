@@ -1,26 +1,26 @@
 .footer {
-  margin-top: 4rem;
+  margin-top: var(--reshapr-space-16);
   background: var(--ifm-navbar-background-color, var(--ifm-background-color));
   border-top: 1px solid
     color-mix(in srgb, var(--ifm-color-emphasis-300) 45%, transparent);
 }
 
 .topSection {
-  padding: 1.8rem 0;
+  padding: var(--reshapr-space-7) 0;
 }
 
 .topGrid {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-  gap: 1.2rem;
+  gap: var(--reshapr-space-5);
 }
 
 .nav {
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 1.2rem;
+  gap: var(--reshapr-space-5);
 }
 
 .navLink {
@@ -43,28 +43,34 @@
   gap: 0.52rem;
 }
 
+/* Icon fill follows navbar link tokens: ink (light) / white (dark) */
 .socialLink {
-  width: 38px;
-  height: 38px;
-  border-radius: 999px;
-  border: 1px solid var(--ifm-color-emphasis-300);
-  color: var(--ifm-font-color-base);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: color-mix(in srgb, var(--ifm-background-surface-color) 88%, transparent);
-  transition: all 0.2s ease;
+  padding: 0.35rem;
+  color: var(--palette-ink);
+  background: none;
+  border: none;
+  border-radius: 0;
+  transition: opacity 0.2s ease;
 }
 
 .socialLink:hover {
-  color: var(--ifm-font-color-secondary);
-  border-color: var(--ifm-font-color-secondary);
-  background: color-mix(in srgb, var(--ifm-font-color-base) 8%, transparent);
+  opacity: 0.65;
   text-decoration: none;
 }
 
+[data-theme='dark'] .socialLink {
+  color: var(--palette-white);
+}
+
+[data-theme='dark'] .socialLink:hover {
+  opacity: 0.7;
+}
+
 .bottomSection {
-  padding: 1.2rem 0;
+  padding: var(--reshapr-space-5) 0;
 }
 
 .copy {
@@ -78,20 +84,20 @@
 
 @media (max-width: 996px) {
   .topSection {
-    padding: 1.6rem 0;
+    padding: var(--reshapr-space-6) 0;
   }
 
   .topGrid {
     grid-template-columns: 1fr;
     justify-items: center;
     text-align: center;
-    gap: 1rem;
+    gap: var(--reshapr-space-4);
   }
 
   .nav {
     flex-wrap: wrap;
     justify-content: center;
-    gap: 0.8rem 1.2rem;
+    gap: var(--reshapr-space-3) var(--reshapr-space-5);
   }
 
   .navLink {
@@ -101,11 +107,6 @@
 
   .socials {
     justify-self: center;
-  }
-
-  .socialLink {
-    width: 36px;
-    height: 36px;
   }
 
   .copy {

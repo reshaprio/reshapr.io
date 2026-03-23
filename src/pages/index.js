@@ -1,46 +1,93 @@
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
+import {m} from 'motion/react';
+import {Code, Copy, Globe, ShieldCheck} from 'lucide-react';
 
 import Heading from '@theme/Heading';
+import {ICON_SIZE_INLINE_PX, ICON_SIZE_LP_FEATURE_PX} from '@site/src/constants/iconSizes';
+import VideoWithPlaceholder from '@site/src/components/VideoWithPlaceholder';
+import PageMotionRoot, {scrollEase, usePageRevealMotion} from '@site/src/components/PageMotion';
 import styles from './index.module.css';
+
+const CLI_INSTALL_CMD = 'npm install -g reshapr-cli';
+
+function CliInstallSnippet() {
+  const [copied, setCopied] = useState(false);
+  const copiedTimerRef = useRef(/** @type {number | undefined} */ (undefined));
+
+  useEffect(() => {
+    return () => {
+      if (copiedTimerRef.current !== undefined) {
+        window.clearTimeout(copiedTimerRef.current);
+      }
+    };
+  }, []);
+
+  const copyCommand = useCallback(() => {
+    if (typeof navigator === 'undefined' || !navigator.clipboard?.writeText) {
+      return;
+    }
+    void navigator.clipboard.writeText(CLI_INSTALL_CMD).then(() => {
+      if (copiedTimerRef.current !== undefined) {
+        window.clearTimeout(copiedTimerRef.current);
+      }
+      setCopied(true);
+      copiedTimerRef.current = window.setTimeout(() => {
+        setCopied(false);
+        copiedTimerRef.current = undefined;
+      }, 2000);
+    });
+  }, []);
+
+  return (
+    <div className={styles.cliQuickstart}>
+      <div className={styles.cliBar}>
+        <code className={styles.cliCode}>
+          <span className={styles.cliPrompt} aria-hidden>
+            $
+          </span>
+          <span className={styles.cliCommand}>{CLI_INSTALL_CMD}</span>
+        </code>
+        <button
+          type="button"
+          className={styles.cliCopyBtn}
+          onClick={copyCommand}
+          aria-label={copied ? 'Copied to clipboard' : 'Copy install command'}
+          title={copied ? 'Copied' : 'Copy'}>
+          <Copy size={ICON_SIZE_INLINE_PX} strokeWidth={1.5} aria-hidden />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+const featureIconProps = {
+  size: ICON_SIZE_LP_FEATURE_PX,
+  strokeWidth: 1.5,
+  'aria-hidden': true,
+};
 
 const featureCards = [
   {
     title: 'No-code API translation',
     description:
       'Turn existing REST, GraphQL, and gRPC services into MCP endpoints without rewriting your backend.',
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="16 18 22 12 16 6" />
-        <polyline points="8 6 2 12 8 18" />
-        <line x1="14" y1="4" x2="10" y2="20" />
-      </svg>
-    ),
+    icon: <Code {...featureIconProps} />,
   },
   {
     title: 'Security-first exposure',
     description:
       'Apply API key or OAuth protections, backend secrets, and operation filters before agents can call tools.',
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-        <path d="m9 12 2 2 4-4" />
-      </svg>
-    ),
+    icon: <ShieldCheck {...featureIconProps} />,
   },
   {
     title: 'Deploy Anywhere',
     description:
       'Expose endpoints on managed gateways or run gateways in your own trust domain for stricter data boundaries.',
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10" />
-        <line x1="2" y1="12" x2="22" y2="12" />
-        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-      </svg>
-    ),
+    icon: <Globe {...featureIconProps} />,
   },
 ];
 
@@ -52,43 +99,80 @@ const highlights = [
 ];
 
 function HomepageHeader() {
+  const {
+    reduceMotion,
+    containerVariants,
+    itemVariants,
+  } = usePageRevealMotion();
+
   return (
     <header className={clsx(styles.heroBanner)}>
       <div className="container">
         <div className={styles.heroGrid}>
           <div className={styles.heroContent}>
-            <Heading as="h1" className={styles.heroTitle}>
-              The open source, no-code MCP Server for AI-Native API Access
-            </Heading>
-            <p className={styles.heroSubtitle}>
-              Build a uniform API value chain for AI agents with secure, no-code
-              endpoint translation across your existing API services.
-            </p>
-            <div className={styles.buttons}>
-              <Link className="button button--primary button--lg" to="https://try.reshapr.io/">
-                Try it!
-              </Link>
-              <Link
-                className="button button--secondary button--lg"
-                href="/docs/explanation/why-reshapr"
-                target="_blank"
-                rel="noopener noreferrer">
-                Get Started
-              </Link>
-            </div>
+            <m.div
+              className={styles.heroMotionStack}
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible">
+              <m.div variants={itemVariants}>
+                <Heading as="h1" className={styles.heroTitle}>
+                  The open source, no-code MCP Server for
+                  <br />
+                  AI-Native API Access
+                </Heading>
+              </m.div>
+
+              <m.p variants={itemVariants} className={styles.heroSubtitle}>
+                Build a uniform API value chain for AI agents with secure, no-code
+                endpoint translation across your existing API services.
+              </m.p>
+
+              <m.div variants={itemVariants} className={styles.buttons}>
+                <m.div
+                  className={clsx(styles.heroButtonLift, styles.heroButtonLiftPrimary)}
+                  whileHover={reduceMotion ? undefined : {y: -0.5}}
+                  whileTap={reduceMotion ? undefined : {scale: 0.997}}>
+                  <Link className="button button--primary button--lg" to="https://try.reshapr.io/">
+                    Start Building
+                  </Link>
+                </m.div>
+                <m.div
+                  className={styles.heroButtonLift}
+                  whileHover={reduceMotion ? undefined : {y: -0.5}}
+                  whileTap={reduceMotion ? undefined : {scale: 0.997}}>
+                  <Link
+                    className="button button--secondary button--lg"
+                    to="/docs/explanation/why-reshapr">
+                    View Docs
+                  </Link>
+                </m.div>
+              </m.div>
+            </m.div>
           </div>
-          <div className={styles.heroImageWrap}>
-            <video
-              className={styles.heroImage}
-              autoPlay
-              loop
+
+          <m.div
+            className={styles.heroImageWrap}
+            initial={reduceMotion ? false : {opacity: 0, y: 12}}
+            animate={reduceMotion ? false : {opacity: 1, y: 0}}
+            transition={{
+              duration: 0.85,
+              delay: 0.22,
+              ease: [0.25, 0.1, 0.25, 1],
+            }}>
+            <VideoWithPlaceholder
+              src="/img/banner-hero-video.mp4"
+              className={styles.heroVideoRoot}
+              videoClassName={styles.heroImage}
+              reduceMotion={reduceMotion}
+              autoPlay={!reduceMotion}
+              loop={!reduceMotion}
               muted
               playsInline
-              preload="auto"
-              aria-label="reShapr hero demo video">
-              <source src="/img/banner-hero-video.mp4" type="video/mp4" />
-            </video>
-          </div>
+              preload="metadata"
+              aria-label="reShapr hero demo video"
+            />
+          </m.div>
         </div>
       </div>
     </header>
@@ -96,54 +180,111 @@ function HomepageHeader() {
 }
 
 function HomepageMain() {
+  const {
+    reduceMotion,
+    inViewBase,
+    inViewHidden,
+    headerTransition,
+    cardTransition,
+  } = usePageRevealMotion();
+
   return (
     <main>
       <section className={styles.section}>
         <div className="container">
-          <div className={styles.sectionHeader}>
+          <m.div
+            className={styles.sectionHeader}
+            initial={inViewHidden}
+            whileInView={inViewBase}
+            viewport={{once: true, margin: '-72px 0px', amount: 0.25}}
+            transition={headerTransition}>
             <Heading as="h2">Everything you need to ship MCP endpoints</Heading>
             <p>
               Build an AI-ready access layer on top of your existing APIs with
               governance, security controls, and flexible deployment.
             </p>
-          </div>
+          </m.div>
           <div className={styles.featureGrid}>
-            {featureCards.map((feature) => (
-              <article key={feature.title} className={styles.featureCard}>
+            {featureCards.map((feature, index) => (
+              <m.article
+                key={feature.title}
+                className={styles.featureCard}
+                initial={inViewHidden}
+                whileInView={inViewBase}
+                viewport={{once: true, margin: '0px 0px -10% 0px', amount: 0.15}}
+                transition={cardTransition(index)}>
                 <div className={styles.featureIcon}>{feature.icon}</div>
                 <div className={styles.featureBody}>
                   <Heading as="h3">{feature.title}</Heading>
                   <p>{feature.description}</p>
                 </div>
-              </article>
+              </m.article>
             ))}
           </div>
         </div>
       </section>
 
+      <section className={styles.sectionAlt}>
+        <div className="container">
+          <m.div
+            className={styles.panel}
+            initial={inViewHidden}
+            whileInView={inViewBase}
+            viewport={{once: true, margin: '-64px 0px', amount: 0.2}}
+            transition={
+              reduceMotion
+                ? {duration: 0}
+                : {duration: 0.52, ease: scrollEase}
+            }>
+            <div className={styles.panelCopy}>
+              <Heading as="h2">Built for secure AI-native operations</Heading>
+              <p>
+                Keep control of how APIs are exposed to AI clients—credentials,
+                policies, and runtime behavior stay in your trust domain, not
+                bolted on after the fact.
+              </p>
+            </div>
+            <ul className={clsx(styles.checkList, styles.panelCheckList)}>
+              {highlights.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </m.div>
+        </div>
+      </section>
 
       <section className={styles.ctaSection}>
         <div className="container">
-          <div className={styles.ctaCard}>
-            <div>
+          <m.div
+            className={styles.ctaCard}
+            initial={inViewHidden}
+            whileInView={inViewBase}
+            viewport={{once: true, margin: '-48px 0px', amount: 0.3}}
+            transition={
+              reduceMotion
+                ? {duration: 0}
+                : {duration: 0.48, ease: scrollEase}
+            }>
+            <div className={styles.ctaLead}>
               <Heading as="h2">Start building with reShapr</Heading>
               <p>
                 Follow the quickstart, import your first API artifact, and expose secure MCP endpoints instantly.
               </p>
             </div>
-            <div className={styles.buttons}>
-              <Link
-                className="button button--primary button--lg"
-                to="/docs/tutorials/getting-started">
-                Quickstart
-              </Link>
-              <Link
-                className="button button--secondary button--lg"
-                to="/docs/explanation/architecture">
-                How It Works
-              </Link>
+            <div className={styles.ctaCliRow}>
+              <CliInstallSnippet />
+              <m.div
+                className={clsx(styles.heroButtonLift, styles.heroButtonLiftPrimary)}
+                whileHover={reduceMotion ? undefined : {y: -0.5}}
+                whileTap={reduceMotion ? undefined : {scale: 0.997}}>
+                <Link
+                  className="button button--primary button--lg"
+                  to="/docs/tutorials/getting-started">
+                  CLI Quickstart
+                </Link>
+              </m.div>
             </div>
-          </div>
+          </m.div>
         </div>
       </section>
     </main>
@@ -156,8 +297,12 @@ export default function Home() {
     <Layout
       title={siteConfig.title}
       description="reShapr documentation and guides for building secure MCP endpoints from existing APIs.">
-      <HomepageHeader />
-      <HomepageMain />
+      <PageMotionRoot>
+        <div className={styles.landingFrame}>
+          <HomepageHeader />
+          <HomepageMain />
+        </div>
+      </PageMotionRoot>
     </Layout>
   );
 }

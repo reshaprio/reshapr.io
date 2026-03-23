@@ -107,6 +107,7 @@ const config = {
       // Replace with your project's social card
       image: 'img/reshapr-social-card.svg',
       colorMode: {
+        // Until the user toggles theme, follow OS preference; toggle only sets light vs dark.
         respectPrefersColorScheme: true,
       },
       navbar: {
@@ -116,10 +117,16 @@ const config = {
           srcDark: 'img/reShapr-logo-dark.png',
         },
         items: [
-          {to: '/', label: 'Home', position: 'left', className: 'navbar-home-link'},
+          {
+            to: '/',
+            label: 'Home',
+            position: 'left',
+            /* Without this, NavLink treats "/" as a prefix of every path, so Home stays "active" everywhere */
+            activeBaseRegex: '^/$',
+          },
           {to: '/about', label: 'About', position: 'left'},
           {
-            to: '/docs/explanation/why-reshapr',
+            to: '/docs/',
             position: 'left',
             label: 'Docs',
           },
@@ -137,7 +144,7 @@ const config = {
             type: 'html',
             position: 'right',
             value:
-              '<a class="navbar-github-link" href="https://github.com/reshaprio/reshapr" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository reshaprio/reshapr">GitHub</a>',
+              '<a class="navbar-github-link" href="https://github.com/reshaprio/reshapr" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository reshaprio/reshapr"></a>',
           },
         ],
       },
@@ -155,7 +162,7 @@ const config = {
             items: [
               {
                 label: 'reShapr Docs',
-                to: '/docs/explanation/why-reshapr',
+                to: '/docs/',
               },
             ],
           },
