@@ -1,9 +1,11 @@
 import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
 import Link from '@docusaurus/Link';
+import clsx from 'clsx';
 import {BrandSocialIcon} from '@site/src/components/BrandSocialIcons';
 import {m} from 'motion/react';
 import PageMotionRoot, {usePageRevealMotion} from '@site/src/components/PageMotion';
+import landingShell from '@site/src/components/LandingShell/styles.module.css';
 import styles from './community.module.css';
 
 const channels = [
@@ -64,7 +66,7 @@ export default function CommunityPage() {
       title="Community"
       description="Community space for reShapr users, contributors, and open-source collaborators.">
       <PageMotionRoot>
-        <main className={styles.main}>
+        <main className={clsx(landingShell.landingFrame, styles.main)}>
           <section className={styles.heroSection}>
             <div className="container">
               <m.div
