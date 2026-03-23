@@ -1,6 +1,8 @@
+import ThemedImage from '@theme/ThemedImage';
+
 # Hybrid deployment
 
-As introduced in [Why reShapr?](../explanation/why-reshapr.md), the reShapr architecture allows deployment on several types and locations of Gateways, depending on your subscription plan. Thanks to this flexible architecture, the reShapr solution can be used in a **hybrid deployment** mode where you, as the *Acme Company*, can choose to host some reShapr Gateways within your own trust domain, close to your AI workloads and API backend endpoints. This gives you **full control over the data plane,** ensuring that your data never leaves your trusted environment!
+As introduced in [Why reShapr?](../overview/why-reshapr.md), the reShapr architecture allows deployment on several types and locations of Gateways, depending on your subscription plan. Thanks to this flexible architecture, the reShapr solution can be used in a **hybrid deployment** mode where you, as the *Acme Company*, can choose to host some reShapr Gateways within your own trust domain, close to your AI workloads and API backend endpoints. This gives you **full control over the data plane,** ensuring that your data never leaves your trusted environment!
 
 This page explains how a reShapr hybrid deployment is working and how to implement it.
 
@@ -11,7 +13,13 @@ The [Gateway Group & Gateway](../explanation/gateway-groups-and-gateways.md) pag
 - The *Gateway Groups* represent the abstract target of your MCP Server exposition - it is owned by an organization and defines labels for matching *Gateways*,
 - The *Gateways* are the concrete elements that expose your MCP Servers - they receive deployment directives and configuration plans from the reShapr control plane. **
 
-![image.png](deploy-hybrid-gateway/image.png)
+<ThemedImage
+  alt="Hybrid Deployment"
+  sources={{
+    light: '/img/docs/deploy-hybrid-gateway-light.svg',
+    dark: '/img/docs/deploy-hybrid-gateway-dark.svg',
+  }}
+/>
 
 When it’s running, a reShapr Gateway discovers the MCP Servers it has to expose from the control plane. This discovery is made according to the [Exposition](../explanation/configuration-and-exposition.md) you previously created and the Gateway Groups you chose. To do so, the Gateway presents **a set of label selectors** that will be used during the discovery and throughout its lifetime to synchronize its [Service](../explanation/services-and-artifacts.md) definitions and [Configuration Plans](../explanation/configuration-and-exposition.md). While it is alive, an ephemeral Gateway representation is tied to the Gateway Group in the control plane.
 

@@ -126,7 +126,7 @@ const config = {
           },
           {to: '/about', label: 'About', position: 'left'},
           {
-            to: '/docs/',
+            to: '/docs/overview/why-reshapr',
             position: 'left',
             label: 'Docs',
           },
@@ -162,7 +162,7 @@ const config = {
             items: [
               {
                 label: 'reShapr Docs',
-                to: '/docs/',
+                to: '/docs/overview/why-reshapr',
               },
             ],
           },

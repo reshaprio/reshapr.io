@@ -38,7 +38,7 @@ This is what flexibility means for enterprise MCP adoption.
 See also:
 
 - [Why reShapr?](./why-reshapr.md)
-- [Configuration Plan and Exposition](./configuration-and-exposition.md)
-- [Security Options and Secrets](./security-model.md)
+- [Configuration Plan and Exposition](../explanation/configuration-and-exposition.md)
+- [Security Options and Secrets](../explanation/security-model.md)
 - [Cloud Options and Plans](../reference/cloud-plans.md)
 - [Hybrid Deployment](../how-to-guides/deploy-hybrid-gateway.md)

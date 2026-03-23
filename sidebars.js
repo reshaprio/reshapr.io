@@ -29,12 +29,12 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'explanation/why-reshapr',
+          id: 'overview/why-reshapr',
           label: 'Why reShapr?',
         },
         {
           type: 'doc',
-          id: 'explanation/architecture',
+          id: 'overview/how-it-works',
           label: 'How It Works',
         },
       ],

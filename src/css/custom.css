@@ -968,6 +968,15 @@ img.navbar__logo {
     background-size: 0.65rem 0.65rem !important;
   }
 
+  /* Widen the doc content column and equalize spacing */
+  [class*='docItemCol'] {
+    max-width: 100% !important;
+  }
+
+  [class*='docMainContainer'] {
+    padding-left: 1.9rem;
+  }
+
   .theme-doc-sidebar-container .menu__link,
   .theme-blog-list-page aside.col.col--3 nav.thin-scrollbar a,
   .theme-blog-post-page aside.col.col--3 nav.thin-scrollbar a {
