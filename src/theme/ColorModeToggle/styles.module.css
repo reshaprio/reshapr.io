@@ -99,7 +99,7 @@
   height: var(--reshapr-toggle-icon);
 }
 
-@media (max-width: 996px) {
+@media (max-width: 1024px) {
   .wrapper {
     --reshapr-toggle-thumb: 1.25rem;
     --reshapr-toggle-icon: 13px;

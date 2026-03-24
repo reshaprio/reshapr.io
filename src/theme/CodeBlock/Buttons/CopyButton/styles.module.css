@@ -1,0 +1,71 @@
+/**
+ * Swizzled from @docusaurus/theme-classic.
+ * Full opacity while copied must NOT depend on :hover — otherwise the check + label
+ * disappear as soon as the pointer leaves the block.
+ */
+
+/* `.buttonGroup` in the theme is a hashed CSS-module class — do not target `.buttonGroup` globally. */
+:global(.theme-code-block) .copyButtonCopied {
+  opacity: 1 !important;
+}
+
+.copyButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.copyButtonIcons {
+  position: relative;
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+}
+
+.copyButtonIcon,
+.copyButtonSuccessIcon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  fill: currentColor;
+  opacity: inherit;
+  width: inherit;
+  height: inherit;
+  transition: all var(--ifm-transition-fast) ease;
+}
+
+.copyButtonSuccessIcon {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.33);
+  opacity: 0;
+  color: #00d600;
+}
+
+.copyButtonCopied .copyButtonIcon {
+  transform: scale(0.33);
+  opacity: 0;
+}
+
+.copyButtonCopied .copyButtonSuccessIcon {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  transition-delay: 0.075s;
+}
+
+.copiedLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: #00d600;
+  white-space: nowrap;
+}
+
+[data-theme='dark'] .copiedLabel {
+  color: #4ade80;
+}
+
+[data-theme='dark'] .copyButtonSuccessIcon {
+  color: #4ade80;
+}

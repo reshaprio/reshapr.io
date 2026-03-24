@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
 import React from 'react';
 import clsx from 'clsx';
 import {
@@ -11,12 +17,14 @@ import {
 } from '@docusaurus/theme-common/internal';
 import NavbarItem from '@theme/NavbarItem';
 import NavbarColorModeToggle from '@theme/Navbar/ColorModeToggle';
+import SearchBar from '@theme/SearchBar';
 import NavbarMobileSidebarToggle from '@theme/Navbar/MobileSidebar/Toggle';
 import NavbarLogo from '@theme/Navbar/Logo';
-
+import NavbarSearch from '@theme/Navbar/Search';
 import styles from './styles.module.css';
 
 function useNavbarItems() {
+  // TODO temporary casting until ThemeConfig type is improved
   return useThemeConfig().navbar.items;
 }
 
@@ -41,12 +49,7 @@ ${JSON.stringify(item, null, 2)}`,
   );
 }
 
-export default function NavbarContent() {
-  const mobileSidebar = useNavbarMobileSidebar();
-
-  const items = useNavbarItems();
-  const [leftItems, rightItems] = splitNavbarItems(items);
-
+function NavbarContentLayout({start, center, right}) {
   return (
     <div className={clsx('navbar__inner', 'navbar__inner--reshapr')}>
       <div
@@ -55,11 +58,11 @@ export default function NavbarContent() {
           'navbar__items',
           'navbar__items--brand',
         )}>
-        {!mobileSidebar.disabled && <NavbarMobileSidebarToggle />}
-        <NavbarLogo />
+        {start}
       </div>
-      <div className={clsx('navbar__items', 'navbar__items--reshapr-nav')}>
-        <NavbarItems items={leftItems} />
+      <div
+        className={clsx('navbar__items', 'navbar__items--reshapr-nav')}>
+        {center}
       </div>
       <div
         className={clsx(
@@ -67,9 +70,40 @@ export default function NavbarContent() {
           'navbar__items',
           'navbar__items--right',
         )}>
-        <NavbarItems items={rightItems} />
-        <NavbarColorModeToggle className={styles.colorModeToggle} />
+        {right}
       </div>
     </div>
+  );
+}
+
+export default function NavbarContent() {
+  const mobileSidebar = useNavbarMobileSidebar();
+  const items = useNavbarItems();
+  const [leftItems, rightItems] = splitNavbarItems(items);
+  const searchBarItem = items.find((item) => item.type === 'search');
+
+  return (
+    <NavbarContentLayout
+      start={
+        <>
+          {!mobileSidebar.disabled && <NavbarMobileSidebarToggle />}
+          <NavbarLogo />
+        </>
+      }
+      center={<NavbarItems items={leftItems} />}
+      right={
+        // TODO stop hardcoding items?
+        // Ask the user to add the respective navbar items => more flexible
+        <>
+          <NavbarItems items={rightItems} />
+          <NavbarColorModeToggle className={styles.colorModeToggle} />
+          {!searchBarItem && (
+            <NavbarSearch>
+              <SearchBar />
+            </NavbarSearch>
+          )}
+        </>
+      }
+    />
   );
 }

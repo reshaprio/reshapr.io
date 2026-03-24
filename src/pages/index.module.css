@@ -41,6 +41,14 @@
   box-shadow: 0 2px 10px rgba(0, 93, 93, 0.1);
 }
 
+[data-theme='dark'] .heroButtonLiftPrimary:hover {
+  box-shadow: 0 4px 24px rgba(99, 187, 182, 0.28);
+}
+
+[data-theme='dark'] .heroButtonLiftPrimary:active {
+  box-shadow: 0 2px 14px rgba(99, 187, 182, 0.22);
+}
+
 .heroTitle {
   max-width: 720px;
   margin-bottom: 0;

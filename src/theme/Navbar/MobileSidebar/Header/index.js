@@ -3,8 +3,6 @@
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
- *
- * Theme toggle is in the mobile primary menu footer (`Navbar/MobileSidebar/PrimaryMenu`).
  */
 import React from 'react';
 import {useNavbarMobileSidebar} from '@docusaurus/theme-common/internal';

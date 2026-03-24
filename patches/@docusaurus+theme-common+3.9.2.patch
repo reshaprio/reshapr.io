@@ -1,0 +1,20 @@
+diff --git a/node_modules/@docusaurus/theme-common/lib/hooks/useWindowSize.js b/node_modules/@docusaurus/theme-common/lib/hooks/useWindowSize.js
+index edd5724..82430d7 100644
+--- a/node_modules/@docusaurus/theme-common/lib/hooks/useWindowSize.js
++++ b/node_modules/@docusaurus/theme-common/lib/hooks/useWindowSize.js
+@@ -11,11 +11,11 @@ const windowSizes = {
+     mobile: 'mobile',
+     ssr: 'ssr',
+ };
+-// Note: this value is also hardcoded in Infima
+-// Both JS and CSS must have the same value
+-// Updating this JS value alone is not enough
++// Note: Infima’s narrow breakpoint remains 996px in CSS; this site extends “mobile”
++// behavior (nav drawer, doc/blog sidebars) to 1024px. Navbar top-bar rules in
++// `src/css/custom.css` align with this value.
+ // See https://github.com/facebook/docusaurus/issues/9603
+-const DesktopBreakpoint = 996;
++const DesktopBreakpoint = 1024;
+ function getWindowSize(desktopBreakpoint) {
+     if (!ExecutionEnvironment.canUseDOM) {
+         throw new Error('getWindowSize() should only be called after React hydration');

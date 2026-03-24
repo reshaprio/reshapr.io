@@ -133,6 +133,12 @@ body,
   color: var(--palette-white);
 }
 
+[data-theme='dark'] .button.button--primary:hover,
+[data-theme='dark'] .button.button--primary:active {
+  background-color: color-mix(in srgb, var(--ifm-color-primary) 68%, var(--ifm-color-primary-light));
+  border-color: color-mix(in srgb, var(--ifm-color-primary) 68%, var(--ifm-color-primary-light));
+}
+
 .button.button--primary:disabled {
   color: color-mix(in srgb, var(--palette-white) 72%, transparent);
 }
@@ -159,7 +165,7 @@ body,
 }
 
 .navbar__link {
-  font-size: var(--reshapr-font-inline-icon);
+  font-size: 16px;
   font-weight: 500;
   line-height: 1.35;
   color: var(--palette-ink);
@@ -209,7 +215,8 @@ body,
   text-decoration-thickness: 1.5px;
 }
 
-[data-theme='dark'] .navbar__link {
+[data-theme='dark'] .navbar__link,
+[data-theme='dark'] .navbar-sidebar .menu__link {
   color: var(--palette-white);
 }
 
@@ -292,134 +299,160 @@ body,
   }
 }
 
-.navbar,
-.navbar__inner,
-.navbar__items,
-.navbar__brand,
-.navbar__item,
-.navbar__link {
-  display: flex;
-  align-items: center;
-}
-
+/*
+ * Top bar (`.navbar > .navbar__inner` only — not `.navbar-sidebar`).
+ *
+ * Infima sets `.navbar__item { display: none }` below 996px; we extend the “drawer + logomark”
+ * pattern to max-width 1024px (see overrides below).
+ * Do NOT set `display` on `.navbar__item` / `.navbar__link` at all breakpoints: a rule like
+ * `.navbar > .navbar__inner .navbar__item { display: flex }` wins over Infima and forces every
+ * link onto one row (overlap on small screens).
+ */
 .navbar {
   --reshapr-nav-height: var(--ifm-navbar-height);
 }
 
-.navbar__inner {
+.navbar > .navbar__inner {
   min-height: var(--reshapr-nav-height);
-  display: flex;
-  align-items: center;
+  width: 100%;
 }
 
 /*
- * Top nav: mobile = flex (brand vs actions). Desktop (≥997px) = grid auto | 1fr | auto so the
- * link cluster centers in the slack between logo and GitHub/theme controls (optical balance).
+ * Desktop nav layout matches deploy-preview (auto | 1fr | auto grid) — see
+ * https://deploy-preview-2--reshaprio.netlify.app/ — brand column, centered primary links, utilities.
  */
-.navbar__inner.navbar__inner--reshapr {
-  display: flex;
-  flex-wrap: nowrap;
+.navbar > .navbar__inner.navbar__inner--reshapr {
   align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  flex: 1 1 auto;
-  min-width: 0;
   column-gap: var(--reshapr-space-3);
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  min-width: 0;
   position: relative;
+  width: 100%;
 }
 
-.navbar__inner.navbar__inner--reshapr > .navbar__items {
+.navbar > .navbar__inner.navbar__inner--reshapr > .navbar__items {
   min-width: 0;
 }
 
 .navbar__items--brand {
+  flex: 0 1 auto;
   position: relative;
   z-index: 2;
-  flex: 0 1 auto;
 }
 
 .navbar__items--reshapr-nav {
-  justify-content: center;
-  display: flex !important;
   align-items: center;
+  display: flex !important;
   gap: 0.35rem;
+  justify-content: center;
   max-width: 100%;
   min-width: 0;
 }
 
-.navbar__items--right {
-  position: relative;
-  z-index: 2;
-  flex: 0 0 auto;
-}
-
-@media (min-width: 997px) {
-  .navbar__inner.navbar__inner--reshapr {
+/* Match main content width; grid centers the middle column’s link cluster (preview behavior). */
+@media (min-width: 1025px) {
+  .navbar > .navbar__inner.navbar__inner--reshapr {
+    box-sizing: border-box;
     display: grid !important;
-    grid-template-columns: auto 1fr auto;
-    justify-content: unset;
+    flex-wrap: unset !important;
+    grid-template-columns: auto 1fr auto !important;
+    justify-content: unset !important;
     justify-items: unset;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: var(--ifm-container-width);
+    padding-inline: clamp(1rem, 2.5vw, 1.75rem);
   }
 
-  .navbar__inner.navbar__inner--reshapr > .navbar__items {
+  .navbar > .navbar__inner.navbar__inner--reshapr > .navbar__items {
     flex: unset;
   }
 
   .navbar__items--brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    justify-content: flex-start;
     justify-self: start;
+    min-width: 0;
   }
 
   .navbar__items--reshapr-nav {
+    justify-content: center;
     justify-self: center;
-    width: max-content;
     max-width: 100%;
+    width: max-content;
   }
 
-  .navbar__items--right {
+  .navbar > .navbar__inner > .navbar__items--right {
     justify-self: end;
   }
 }
 
-@media (max-width: 996px) {
-  .navbar__items--reshapr-nav {
-    display: none !important;
-  }
-}
-
-.navbar__brand {
+.navbar > .navbar__inner .navbar__brand {
   margin-right: 0.9rem;
-  display: flex;
-  align-items: center;
   height: auto;
 }
 
-.navbar__brand > a,
-.navbar__item,
-.navbar__items,
-.navbar__items--left,
-.navbar__items--reshapr-nav,
-.navbar__items--right {
-  height: auto;
-  display: flex;
+.navbar > .navbar__inner .navbar__items--right {
   align-items: center;
-}
-
-.navbar__items--left > .navbar__item,
-.navbar__items--reshapr-nav > .navbar__item {
-  margin: 0 0.1rem;
-}
-
-.navbar__link {
-  height: auto;
-  display: inline-flex;
-  align-items: center;
-  padding: 0 0.62rem;
-}
-
-.navbar__items--right {
   flex-shrink: 0;
   gap: 0.35rem;
-  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+@media (min-width: 1025px) {
+  .navbar > .navbar__inner .navbar__brand > a,
+  .navbar > .navbar__inner .navbar__item,
+  .navbar > .navbar__inner .navbar__items {
+    height: auto;
+    display: flex;
+    align-items: center;
+  }
+
+  .navbar__items--reshapr-nav > .navbar__item {
+    margin: 0 0.1rem;
+  }
+
+  .navbar__items--reshapr-nav .navbar__link {
+    height: auto;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.32rem 0.62rem;
+  }
+
+  /* Gram-like top nav: 300ms ease-out hover pill behind primary links only */
+  .navbar__items--reshapr-nav .navbar__link {
+    position: relative;
+    z-index: 0;
+    isolation: isolate;
+    border-radius: 6px;
+    transition: color 0.2s ease;
+  }
+
+  .navbar__items--reshapr-nav .navbar__link::after {
+    content: '';
+    position: absolute;
+    inset: 1px 0;
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--palette-ink) 9%, transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  [data-theme='dark'] .navbar__items--reshapr-nav .navbar__link::after {
+    background: color-mix(in srgb, var(--palette-bg) 22%, transparent);
+  }
+
+  .navbar__items--reshapr-nav .navbar__link:hover::after {
+    opacity: 1;
+  }
 }
 
 /* Gram-like top nav: 300ms ease-out hover pill behind label */
@@ -450,7 +483,7 @@ body,
 [data-theme='dark'] .navbar__items--left .navbar__link::after,
 [data-theme='dark'] .navbar__items--reshapr-nav .navbar__link::after,
 [data-theme='dark'] .navbar__items--right .navbar__link::after {
-  background: color-mix(in srgb, var(--palette-bg) 14%, transparent);
+  background: color-mix(in srgb, var(--palette-bg) 22%, transparent);
 }
 
 .navbar__items--left .navbar__link:hover::after,
@@ -481,6 +514,11 @@ body,
   border-color: var(--ifm-color-primary-dark);
 }
 
+[data-theme='dark'] .navbar-try-button:hover {
+  background: color-mix(in srgb, var(--ifm-color-primary) 68%, var(--ifm-color-primary-light));
+  border-color: color-mix(in srgb, var(--ifm-color-primary) 68%, var(--ifm-color-primary-light));
+}
+
 .navbar button.clean-btn {
   display: inline-flex;
   align-items: center;
@@ -509,7 +547,7 @@ body,
 }
 
 /* Navbar search / menu: 18×18 next to 20px type */
-@media (min-width: 997px) {
+@media (min-width: 1025px) {
   .navbar button.clean-btn svg {
     width: var(--reshapr-icon-size-inline);
     height: var(--reshapr-icon-size-inline);
@@ -523,10 +561,113 @@ body,
   justify-content: center;
 }
 
-.navbar__toggle {
-  display: none !important;
+/* Hamburger: visible at 1024px and below; hidden from 1025px up */
+@media (min-width: 1025px) {
+  .navbar .navbar__toggle {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .navbar .navbar__toggle {
+    display: inline-flex !important;
+  }
+}
+
+.navbar .navbar__toggle {
   align-items: center;
   justify-content: center;
+}
+
+/*
+ * ≤1024px: hamburger + logomark only. Infima hides `.navbar__item` only below 996px — we
+ * also hide top-bar items and the right cluster so 997–1024px matches the drawer pattern.
+ */
+@media (max-width: 1024px) {
+  /*
+   * Infima applies horizontal padding on `.navbar` via --ifm-navbar-padding-horizontal (1rem/side).
+   * In devtools that reads as ~32px total inset before `.navbar__inner`, which fights the centered
+   * logomark grid. Drop nav padding; keep a single gutter on `.navbar__inner` (matches 1rem content rhythm).
+   */
+  .navbar.navbar--fixed-top {
+    --ifm-navbar-padding-horizontal: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .navbar > .navbar__inner .navbar__item {
+    display: none !important;
+  }
+
+  .navbar > .navbar__inner > .navbar__items--right {
+    display: none !important;
+  }
+
+  /*
+   * Small-screen top bar: hamburger left, logomark truly centered (1fr | auto | 1fr grid).
+   * `space-between` pinned the mark to the right; equal side tracks keep the brand column on the viewport midline.
+   */
+  .navbar > .navbar__inner {
+    display: flex;
+    width: 100%;
+    box-sizing: border-box;
+    padding-inline: max(var(--reshapr-space-4), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+  }
+
+  /* Drawer holds primary links — hide the desktop center column */
+  .navbar > .navbar__inner > .navbar__items--reshapr-nav {
+    display: none !important;
+  }
+
+  .navbar > .navbar__inner > .navbar__items--brand {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    column-gap: 0.5rem;
+  }
+
+  .navbar > .navbar__inner > .navbar__items--brand .navbar__toggle {
+    grid-column: 1;
+    justify-self: start;
+    align-self: center;
+  }
+
+  .navbar > .navbar__inner > .navbar__items--brand .navbar__brand {
+    grid-column: 2;
+    justify-self: center;
+    margin-right: 0;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  /* Compact mark: no nudge on small screens — already sized to fit */
+  .navbar > .navbar__inner img.navbar__logo.navbar__logo-compact {
+    transform: none;
+  }
+
+  /*
+   * Larger hamburger touch target (WCAG 2.5.5: min ~44×44 CSS px). The toggle uses `.clean-btn`;
+   * the generic mobile rule below shrinks all `button.clean-btn` to 36px — override for `.navbar__toggle` only.
+   */
+  .navbar .navbar__toggle.clean-btn {
+    width: 96px !important;
+    min-width: 96px !important;
+    height: 96px !important;
+    min-height: 96px !important;
+    flex-shrink: 0;
+  }
+
+  .navbar .navbar__toggle.clean-btn svg {
+    width: 48px !important;
+    height: 48px !important;
+  }
 }
 
 .navbar-github-link {
@@ -592,11 +733,7 @@ body,
   text-decoration: none;
 }
 
-@media (max-width: 996px) {
-  .navbar__toggle {
-    display: inline-flex !important;
-  }
-
+@media (max-width: 1024px) {
   .navbar__inner {
     --reshapr-nav-height: 84px;
     min-height: var(--reshapr-nav-height);
@@ -629,7 +766,8 @@ body,
     line-height: 1.35;
   }
 
-  .navbar button.clean-btn svg {
+  /* Exclude navbar hamburger — sized above for a larger touch target. */
+  .navbar button.clean-btn:not(.navbar__toggle) svg {
     width: var(--reshapr-icon-size);
     height: var(--reshapr-icon-size);
   }
@@ -647,7 +785,7 @@ body,
     transform: translateY(-0.25px);
   }
 
-  .navbar button.clean-btn {
+  .navbar button.clean-btn:not(.navbar__toggle):not(.navbar-sidebar__back) {
     width: 36px;
     height: 36px;
   }
@@ -665,18 +803,14 @@ body,
     width: 13px !important;
     height: 13px !important;
   }
-
-  /* Icon-only top bar on small screens: nav links + GitHub + theme live in the drawer */
-  .navbar__inner.navbar__inner--reshapr > .navbar__items--right {
-    display: none !important;
-  }
 }
 
 /* Mobile drawer: GitHub row (icon + label); top bar uses icon-only link */
-@media (max-width: 996px) {
+@media (max-width: 1024px) {
   .navbar-sidebar .menu__list-item .navbar-github-link {
-    display: inline-flex;
+    display: flex;
     align-items: center;
+    justify-content: flex-start;
     gap: 0.55rem;
     width: 100%;
     min-width: 0;
@@ -686,8 +820,16 @@ body,
     padding: 0.35rem 0;
     font-size: 1rem;
     line-height: 1.35;
+    text-align: left;
     color: var(--palette-ink);
     text-decoration: none;
+    transform: none;
+  }
+
+  .navbar-sidebar .menu__list-item:has(.navbar-github-link) {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
   }
 
   .navbar-sidebar .menu__list-item .navbar-github-link::before {
@@ -710,25 +852,72 @@ body,
   color: var(--palette-white);
 }
 
-.navbar__logo img,
-img.navbar__logo {
+/* Mobile drawer: color-mode toggle row (sits under GitHub) */
+.navbar-sidebar .menu__list-item--color-toggle {
+  display: flex;
+  align-items: center;
+  padding: 0.6rem 0;
+  margin-top: 0.25rem;
+}
+
+/*
+ * Navbar: full wordmark vs compact mark (see `src/theme/Navbar/Logo/index.js`).
+ * `navbar__logo` is on the SAME element as `navbar__logo-full` / `navbar__logo-compact`
+ * (not a parent wrapper), so selectors use compound classes.
+ */
+.navbar__logo.navbar__logo-full {
+  display: block;
+  height: auto;
+}
+
+.navbar__logo.navbar__logo-compact {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .navbar__logo.navbar__logo-full {
+    display: none !important;
+  }
+
+  .navbar__logo.navbar__logo-compact {
+    display: block !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .navbar__logo.navbar__logo-compact {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .navbar-sidebar .navbar__logo.navbar__logo-full img,
+  .navbar-sidebar .navbar__logo.navbar__logo-compact {
+    height: 40px;
+    max-height: 40px;
+    transform: none;
+  }
+}
+
+.navbar__logo.navbar__logo-full img,
+img.navbar__logo.navbar__logo-compact {
   background: transparent !important;
   object-fit: contain;
 }
 
-.navbar__logo img,
-img.navbar__logo {
+.navbar__logo.navbar__logo-full img {
   height: 80px;
   width: auto;
   max-height: 80px;
+  display: block;
+  margin: 0;
 }
 
-@media (max-width: 996px) {
-  .navbar__logo img,
-  img.navbar__logo {
-    height: 62px;
-    max-height: 62px;
-  }
+img.navbar__logo.navbar__logo-compact {
+  height: 48px;
+  width: 48px;
+  max-height: 48px;
+  margin: 0;
 }
 
 /* Hide external-link indicator icons globally */
@@ -746,46 +935,143 @@ img.navbar__logo {
 
   /* IMPORTANT: remove Infima's vertical padding */
   --ifm-navbar-padding-vertical: 0px;
+
+  /*
+   * Mobile drawer motion — from resources/interpolation/system.css (@theme Motion).
+   * source.tsx uses motion spring { stiffness: 550, damping: 50 } as reference; CSS uses these curves.
+   */
+  --reshapr-nav-drawer-duration: 0.55s;
+  --reshapr-nav-drawer-backdrop-duration: 0.36s;
+  --reshapr-ease-swift: cubic-bezier(0.23, 0.88, 0.26, 0.92);
+  --reshapr-ease-overlay: cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  /* prettier-ignore — matches resources/interpolation/system.css --timing-bounce */
+  --reshapr-timing-bounce: linear(
+    0 0%,
+    0.005871 1%,
+    0.022058 2%,
+    0.046612 3%,
+    0.077823 4%,
+    0.114199 5%,
+    0.154441 6%,
+    0.197431 7.000000000000001%,
+    0.242208 8%,
+    0.287959 9%,
+    0.333995 10%,
+    0.379743 11%,
+    0.424732 12%,
+    0.46858 13%,
+    0.510982 14.000000000000002%,
+    0.551702 15%,
+    0.590564 16%,
+    0.627445 17%,
+    0.662261 18%,
+    0.694971 19%,
+    0.725561 20%,
+    0.754047 21%,
+    0.780462 22%,
+    0.804861 23%,
+    0.82731 24%,
+    0.847888 25%,
+    0.866679 26%,
+    0.883775 27%,
+    0.899272 28.000000000000004%,
+    0.913267 28.999999999999996%,
+    0.925856 30%,
+    0.937137 31%,
+    0.947205 32%,
+    0.956153 33%,
+    0.96407 34%,
+    0.971043 35%,
+    0.977153 36%,
+    0.982479 37%,
+    0.987094 38%,
+    0.991066 39%,
+    0.994462 40%,
+    0.997339 41%,
+    0.999755 42%,
+    1.001761 43%,
+    1.003404 44%,
+    1.004727 45%,
+    1.00577 46%,
+    1.006569 47%,
+    1.007157 48%,
+    1.007563 49%,
+    1.007813 50%,
+    1.007931 51%,
+    1.007939 52%,
+    1.007855 53%,
+    1.007697 54%,
+    1.007477 55.00000000000001%,
+    1.00721 56.00000000000001%,
+    1.006907 56.99999999999999%,
+    1.006576 57.99999999999999%,
+    1.006228 59%,
+    1.005868 60%,
+    1.005503 61%,
+    1.005137 62%,
+    1.004776 63%,
+    1.004422 64%,
+    1.004078 65%,
+    1.003746 66%,
+    1.003429 67%,
+    1.003127 68%,
+    1.00284 69%,
+    1.002571 70%,
+    1.002318 71%,
+    1.002082 72%,
+    1.001863 73%,
+    1.00166 74%,
+    1.001473 75%,
+    1.001301 76%,
+    1.001143 77%,
+    1.001 78%,
+    1.000869 79%,
+    1.000752 80%,
+    1.000645 81%,
+    1.00055 82%,
+    1.000464 83%,
+    1.000388 84%,
+    1.000321 85%,
+    1.000261 86%,
+    1.000209 87%,
+    1.000163 88%,
+    1.000123 89%,
+    1.000088 90%
+  );
 }
 
-/* Make sure the flex row is truly centered */
-.navbar {
-  min-height: var(--ifm-navbar-height);
-  display: flex;
-  align-items: center;
+/* Infima: mobile drawer slide + fade — override timing to match reshapr interpolation tokens */
+.navbar-sidebar {
+  transition-duration: var(--reshapr-nav-drawer-duration);
+  transition-timing-function: var(--reshapr-timing-bounce);
 }
 
-.navbar__inner {
-  min-height: var(--ifm-navbar-height);
-  height: var(--ifm-navbar-height);
-  align-items: center !important;
+.navbar-sidebar__backdrop {
+  transition-duration: var(--reshapr-nav-drawer-backdrop-duration);
+  transition-timing-function: var(--reshapr-ease-swift);
 }
 
-.navbar__brand,
-.navbar__brand > a,
-.navbar__logo {
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
-
-.navbar__logo img,
-img.navbar__logo {
-  display: block;
-  margin: 0;
-  transform: translateY(-2px);
-}
-
-@media (max-width: 996px) {
-  .navbar__inner {
-    min-height: 84px;
-    height: 84px;
+@media (prefers-reduced-motion: reduce) {
+  .navbar-sidebar,
+  .navbar-sidebar__backdrop {
+    transition-duration: 1ms !important;
+    transition-timing-function: linear !important;
   }
+}
 
-  .navbar__logo img,
-  img.navbar__logo {
-    transform: translateY(-1px);
-  }
+/* Mobile drawer: "← Back to main menu" button in the docs secondary menu.
+   `.navbar button.clean-btn` in the ≤1024px block above forces 36×36 + zero
+   padding on icon buttons; match that specificity so the back button overrides. */
+.navbar button.navbar-sidebar__back {
+  white-space: nowrap;
+  width: 100%;
+  height: auto;
+  padding: var(--reshapr-space-3) var(--reshapr-space-4);
+  margin-bottom: var(--reshapr-space-2);
+  font-size: var(--reshapr-nav-footer-font-size);
+  font-weight: 600;
+  border-bottom: 1px solid var(--reshapr-doc-divider);
+  text-align: left;
 }
 
 /* Docs sidebar category icons — Lucide stroke paths (v0.544, ISC), mask + currentColor */
@@ -1178,12 +1464,35 @@ img.navbar__logo {
 }
 
 /* Docs pages: crisp column layout + flat article rhythm */
-/* Fixed nav: frosted glass (content scrolls behind — similar to devouringdetails.com-style bars) */
+/*
+ * Frosted glass on the bar row only — NOT on `<nav class="navbar">`.
+ * `backdrop-filter` on `.navbar` creates a containing block for `position: fixed` children,
+ * so the mobile drawer (`.navbar-sidebar`, sibling of `.navbar__inner`) was clipped to the
+ * nav height and looked “empty”. See: fixed + filter/backdrop on ancestor (CSS positioning).
+ */
 .navbar.navbar--fixed-top {
+  background: transparent;
+  box-shadow: none;
+}
+
+.navbar.navbar--fixed-top > .navbar__inner {
+  position: relative;
+  isolation: isolate;
+}
+
+.navbar.navbar--fixed-top > .navbar__inner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  z-index: -1;
+  pointer-events: none;
   background: color-mix(in srgb, var(--ifm-navbar-background-color) 72%, transparent);
   backdrop-filter: blur(14px) saturate(165%);
   -webkit-backdrop-filter: blur(14px) saturate(165%);
-  box-shadow: none;
 }
 
 [data-theme='light'] .navbar.navbar--fixed-top,
@@ -1413,39 +1722,3 @@ html.docs-doc-page .theme-code-block div[class*='codeBlockTitle'] {
     padding-top: var(--reshapr-space-8);
   }
 }
-
-/*
- * Navbar layout — placed last so it wins over Infima `.navbar__inner { display:flex }`
- * when both live in @layer docusaurus.infima (bundler merge order).
- */
-.navbar.navbar--fixed-top .navbar__inner.navbar__inner--reshapr {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  flex-wrap: nowrap !important;
-}
-
-@media (min-width: 997px) {
-  .navbar.navbar--fixed-top .navbar__inner.navbar__inner--reshapr {
-    display: grid !important;
-    grid-template-columns: auto 1fr auto !important;
-    justify-content: unset !important;
-    flex-wrap: unset !important;
-  }
-
-  .navbar.navbar--fixed-top .navbar__inner.navbar__inner--reshapr .navbar__items--brand {
-    justify-self: start !important;
-  }
-
-  .navbar.navbar--fixed-top .navbar__inner.navbar__inner--reshapr .navbar__items--reshapr-nav {
-    justify-self: center !important;
-    width: max-content !important;
-    max-width: 100% !important;
-  }
-
-  .navbar.navbar--fixed-top .navbar__inner.navbar__inner--reshapr .navbar__items--right {
-    justify-self: end !important;
-  }
-}
-
-

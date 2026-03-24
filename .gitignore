@@ -22,3 +22,6 @@ yarn-error.log*
 # Local reference trees (avoid accidental megacommits)
 reshapr.io-main/
 resources/
+
+# Local sandbox / scratch files
+_sandbox/
