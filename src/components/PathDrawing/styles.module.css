@@ -1,0 +1,11 @@
+.image {
+  max-width: 80vw;
+  display: block;
+  margin: 0 auto;
+}
+
+.shape {
+  stroke-width: 10;
+  stroke-linecap: round;
+  fill: transparent;
+}
