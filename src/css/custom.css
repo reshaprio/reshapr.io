@@ -1042,6 +1042,17 @@ img.navbar__logo.navbar__logo-compact {
   }
 }
 
+/* Mobile drawer: "← Back to main menu" button in the docs secondary menu */
+.navbar-sidebar__back {
+  white-space: nowrap;
+  width: 100%;
+  padding: var(--reshapr-space-3) var(--reshapr-space-4);
+  margin-bottom: var(--reshapr-space-2);
+  font-size: var(--reshapr-nav-footer-font-size);
+  font-weight: 600;
+  border-bottom: 1px solid var(--reshapr-doc-divider);
+}
+
 /* Docs sidebar category icons — Lucide stroke paths (v0.544, ISC), mask + currentColor */
 .sidebar-icon-overview > .menu__list-item-collapsible > .menu__link,
 .sidebar-icon-tutorials > .menu__list-item-collapsible > .menu__link,
