@@ -1254,7 +1254,7 @@ img.navbar__logo.navbar__logo-compact {
     background-size: 0.65rem 0.65rem !important;
   }
 
-  /* Widen the doc content column and equalize spacing */
+  /* Widen the doc content column on mid-range desktop (hides right TOC intentionally) */
   [class*='docItemCol'] {
     max-width: 100% !important;
   }
@@ -1322,6 +1322,13 @@ img.navbar__logo.navbar__logo-compact {
     font-size: var(--reshapr-nav-footer-font-size);
     font-weight: 700;
     line-height: 1.45;
+  }
+}
+
+/* Wide screen: restore natural column widths so the right TOC re-appears */
+@media (min-width: 1280px) {
+  [class*='docItemCol'] {
+    max-width: unset !important;
   }
 }
 
