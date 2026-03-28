@@ -12,12 +12,10 @@ First, you have to tell reShapr how to proceed for retrieving this artifact. You
 - `-u, --url <url>` to ask the reShapr control plane to download a remote file.
 
 > 💡 When specifying a remote URL with the `-u` option, it can also be useful to specify a Secret with the `-s, --secret <artifactSecret>` to authorize the access to the remote endpoint. Check the [Secret commands](cli-commands.md) just below to learn how to create them.
-> 
 
 The discovery of the artifact Service is automatic for [OpenAPI 3.x](https://www.openapis.org/) specs and [gRPC/Protobuf](https://grpc.io/) definitions. By default, reShapr will use the identification elements (`name` and `version`) found in the artifact. You can, however, decide to override these information by using the additional `--sn, --serviceName <name>` and  `--sv, --serviceVersion <version>` options. 
 
 > ⚠️ The discovery of Service from [GraphQL](https://graphql.org/)  schemas need some more help. Here, the additional `--sn, --serviceName <name>` and  `--sv, --serviceVersion <version>` options are mandatory. If not specified, the import will fail.
-> 
 
 When importing an artifact Service, you may also choose not to consider all the different operations that will be discovered. Perhaps you want to restrict it to read-only access, or maybe your existing API is too coarse-grained, and you want to filter on a single domain. Whatever the reason, you can configure this with the following options:
 
@@ -67,7 +65,6 @@ Similar to the `import` command, you need to instruct reShapr on how to retrieve
 - `-u, --url <url>` to ask the reShapr control plane to download a remote file.
 
 > 💡 When specifying a remote URL with the `-u` option, it can also be useful to specify a Secret with the `-s, --secret <artifactSecret>` to authorize the access to the remote endpoint. Check the [Secret commands](cli-commands.md) just below to learn how to create them.
-> 
 
 Here’s an example of an artifact attachment:
 
@@ -105,7 +102,7 @@ Here’s below an example of a secret creation:
 
 ```bash
 reshapr secret create my-secret --description 'A secret to access a super secured endpoint' -B \ 
-		-t acme_wXl53oz5gFeSmBt8awTUJI72yQSrtbMP -h x-acme-api-key --certificate ../certs/my-secret.pem
+-t acme_wXl53oz5gFeSmBt8awTUJI72yQSrtbMP -h x-acme-api-key --certificate ../certs/my-secret.pem
 ```
 
 With this output:
@@ -122,16 +119,16 @@ Like the `secret create` command, you have to assign your secret a `name` and an
 
 - For [**URL Mode Elicitation for Sensitive Data**](https://modelcontextprotocol.io/specification/2025-11-25/client/elicitation#url-mode-elicitation-for-sensitive-data), use the `-t, --token <token>` option flag to provide the name of the token collected from the user and set as a header to the backedn remote endpoint,
 - For [**URL Mode Elicitation for OAuth Flows**](https://modelcontextprotocol.io/specification/2025-11-25/client/elicitation#url-mode-elicitation-for-oauth-flows), you have to provide **three mandatory options**:
-    - `--oc, --oauth2ClientID <oauth2ClientID>` : Allow to configure the client ID used for the third-party authorization server,
-    - `--oae, --oauth2AuthorizationEndpoint <authorizationEndpoint>` : Allow the specification of the Authorization endpoint for the backend authentication (including query parameters but without `clientID` and `redirect_uri` that will be added dynamically),
-    - `--ote, --oauth2TokenEndpoint <tokenEndpoint>` : Allow the configuration of the token exchange endpoint for the backend authentication.
+- `--oc, --oauth2ClientID <oauth2ClientID>` : Allow to configure the client ID used for the third-party authorization server,
+- `--oae, --oauth2AuthorizationEndpoint <authorizationEndpoint>` : Allow the specification of the Authorization endpoint for the backend authentication (including query parameters but without `clientID` and `redirect_uri` that will be added dynamically),
+- `--ote, --oauth2TokenEndpoint <tokenEndpoint>` : Allow the configuration of the token exchange endpoint for the backend authentication.
 
 Below is an example of how to create such an Elicitation-based Secret:
 
 ```bash
 reshapr secret create-elicitation 3rd-party-oauth --oc reshapr-saas \
-	--oae https://idp.example.com/realms/3rdparty/protocol/openid-connect/auth\?scope\=openid\%20profile\&response_type\=code\&prompt\=login \
-	--ote https://idp.eample.com/realms/3rdparty/protocol/openid-connect/token
+--oae https://idp.example.com/realms/3rdparty/protocol/openid-connect/auth\?scope\=openid\%20profile\&response_type\=code\&prompt\=login \
+--ote https://idp.eample.com/realms/3rdparty/protocol/openid-connect/token
 ```
 
 With this output:
@@ -208,13 +205,13 @@ Below is an example on how to create a Configuration Plan with these security op
 
 ```bash
 reshapr config create-oauth 'oauth2-plan for Open-Meteo APIs' -s 0NTK2N8P7GMQR --be https://api.open-meteo.com \
-	--oas '["https://idp.example.com/realms/3rdparty"]' --oju https://idp.example.com/realms/3rdparty/protocol/openid-connect/certs \
-	--osc '["openid", "custom"]'
+--oas '["https://idp.example.com/realms/3rdparty"]' --oju https://idp.example.com/realms/3rdparty/protocol/openid-connect/certs \
+--osc '["openid", "custom"]'
 ```
 
 ### `reshapr config renew-api-key` command
 
-Given a Configuration Plan that was previously created with the `--apiKey` option, this command allows you to revoke the existing API key and have reShapr generate a new one. The new API key is immediately propagated to the gateway, exposing the associated MCP Endpoint configuration. 
+Given a Configuration Plan that was previously created with the `--apiKey` option, this command allows you to revoke the existing API key and have reShapr generate a new one. The new API key is immediately propagated to the gateway, exposing the associated MCP Endpoint configuration.
 
 `reshapr config renew-api-key <configurationId>` will remove the existing API key and output a fresh API key that replaces it. The new API key is provided only once; you must store it in a secure location and share it only with trusted individuals.
 
@@ -250,4 +247,3 @@ $ reshapr service get 0N0802V07SZEH -o json | jq .name
 ==== OUTPUT ====
 "Open-Meteo APIs"
 ```
-
