@@ -1542,6 +1542,10 @@ img.navbar__logo.navbar__logo-compact {
   border-bottom: 1px solid var(--ifm-color-emphasis-200);
 }
 
+.theme-blog-post-page article > div > :first-child {
+  margin-top: 3rem !important;
+}
+
 .theme-blog-post-page article header h1 {
   font-size: clamp(1.9rem, 1.65rem + 0.85vw, 2.5rem);
   font-weight: 700;
