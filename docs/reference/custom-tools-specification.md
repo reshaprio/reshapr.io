@@ -53,11 +53,10 @@ A `CustomTools` artifact follows some simple rules:
 - It always contains an identification section made of `apiVersion` and `kind` properties that **must** have the [`reshapr.io/v1alpha1`](http://reshapr.io/v1alpha1) and `CustomTools` values respectively,
 - It **must** be bound to a specific reShapr [Service](../explanation/services-and-artifacts.md) using the [`service.name`](http://service.name) and `service.version` properties whose values **must** match an already discovered Service,
 - The `customTools` section then defines the tools:
-    - We have a single tool here: `get_user_with_latest_followers`
-    - A custom tool **must** always have a `tool` that defines the original tool it overrides and replaces: here we’re using the GitHub `user` tool,
-    - A custom tool **may** provide optional `title` and `description` to provide more context to the LLM or Agent when choosing an appropriate tool,
-    - A custom tool **must** also provide and `input` schema description that described its parameters. Input schema reuses the same structure as the regular MCP Tools Input Schema.
-    - A custom tool **may** also specify `arguments` that represents the arguments that will be used with the original tool that is overridden. Here we’re fixing the arguments as well as the relation navigation options for fetching exactly what we need.
+- We have a single tool here: `get_user_with_latest_followers`
+- A custom tool **must** always have a `tool` that defines the original tool it overrides and replaces: here we’re using the GitHub `user` tool,
+- A custom tool **may** provide optional `title` and `description` to provide more context to the LLM or Agent when choosing an appropriate tool,
+- A custom tool **must** also provide and `input` schema description that described its parameters. Input schema reuses the same structure as the regular MCP Tools Input Schema.
+- A custom tool **may** also specify `arguments` that represents the arguments that will be used with the original tool that is overridden. Here we’re fixing the arguments as well as the relation navigation options for fetching exactly what we need.
 
 In the case of custom tools using `arguments`, the value **can** be expressed using `${}` expressions that will be replaced by input values. Typically in our example, the MCP client will send a `user` value as input and this value will be used n the place of the `${user}` placeholder when invoking the original tool.
-

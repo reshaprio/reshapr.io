@@ -18,10 +18,4 @@ A Gateway Group is a named resource owned and dedicated to an organization—the
 
 During its bootstrap phase, a reShapr Gateway will advertise itself to the control plane and discover the MCP Servers it has to expose. This discovery is made according to the [Exposition](configuration-and-exposition.md) you previously created and the policies or Gateway Groups you choose. To do so, the Gateway presents **a set of selectors** that will be used during the discovery and throughout its lifetime to synchronize its [Service](services-and-artifacts.md) definitions and [Configuration Plans](configuration-and-exposition.md). While it is alive, an ephemeral Gateway representation is tied to the Gateway Group in the control plane.
 
-<aside>
-💡
-
 A Gateway is not necessarily attached to a single Gateway Group ; it can be attached to many of them as long as its selectors match the labels (exposition criteria) of the group! You could have a set of Gateways with a unique selector `org=acme` matching all the Acme’s Gateway Groups.
-
-</aside>
-

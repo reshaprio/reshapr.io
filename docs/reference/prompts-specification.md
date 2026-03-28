@@ -4,7 +4,7 @@ As explained in[Why reShapr?](../overview/why-reshapr.md), reShapr can create se
 
 Contrary to tools, **prompts can’t - and shouldn’t - be directly inferred from an API contract**. They should be designed to provide users with accelerators on how to interact with the model, offer additional instructions and guardrails on how to use tools for a specific use case, or provide additional details on how to orchestrate tool calls. 
 
-reShapr provides **an easy way to design and specify your Prompts using a simple YAML description,** called the `Prompts` specification. If you want to provide such prompts to your reShapr-powered MCP endpoint, you’ll need to write this simple file and `attach` it to your existing Service. Let’s see a simple example of such a file: 
+reShapr provides **an easy way to design and specify your Prompts using a simple YAML description,** called the `Prompts` specification. If you want to provide such prompts to your reShapr-powered MCP endpoint, you’ll need to write this simple file and `attach` it to your existing Service. Let’s see a simple example of such a file:
 
 ```yaml
 apiVersion: reshapr.io/v1alpha1
@@ -34,10 +34,9 @@ A `Prompts` artifact follows some simple rules:
 - It always contain an identification section made of `apiVersion` and `kind` properties that **must** have the [`reshapr.io/v1alpha1`](http://reshapr.io/v1alpha1) and `Prompts` values respectively,
 - It **must** be bound to a specific reShapr [Service](../explanation/services-and-artifacts.md) using the [`service.name`](http://service.name) and `service.version` properties which values **must** match an already discovered Service,
 - The `prompts` section then defines the prompts:
-    - We have 2 prompts here: `list_pets` and `get_pet`
-    - A prompt **must** always have a `result` which will be returned to the model when called,
-    - A prompt **may** provide optional `title` and `description` to provide more context to the user when choosing an appropriate prompt,
-    - A prompt **may** also provide `arguments` that allow the production of a customized result prompt message, where the user provides its contextuel values for each argument.
+  - We have 2 prompts here: `list_pets` and `get_pet`
+  - A prompt **must** always have a `result` which will be returned to the model when called,
+  - A prompt **may** provide optional `title` and `description` to provide more context to the user when choosing an appropriate prompt,
+  - A prompt **may** also provide `arguments` that allow the production of a customized result prompt message, where the user provides its contextuel values for each argument.
 
 In the case of prompt using `arguments`, the `result` value **can** be expressed using `${}` expressions that will be replaced by user provided values. Typically in our example, if user is looking for a pet named **Rusty**, the prompt will be generated with `Rusty` in the place of the `${name}` placeholder.
-
