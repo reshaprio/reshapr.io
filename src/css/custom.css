@@ -437,7 +437,7 @@ body,
     box-sizing: border-box;
     display: grid !important;
     flex-wrap: unset !important;
-    grid-template-columns: auto max-content 1fr !important;
+    grid-template-columns: 1fr auto 1fr !important;
     justify-content: unset !important;
     justify-items: unset;
     padding-inline: clamp(1rem, 2.5vw, 1.75rem);
@@ -457,8 +457,8 @@ body,
   }
 
   .navbar__items--reshapr-nav {
-    justify-content: flex-start;
-    justify-self: start;
+    justify-content: center;
+    justify-self: center;
     width: max-content;
     max-width: min(100%, 52rem);
   }
