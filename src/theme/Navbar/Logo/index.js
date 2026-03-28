@@ -25,7 +25,9 @@ function NavbarLogoThemedImage({logo, alt, imageClassName}) {
   const compactSrc = useBaseUrl(COMPACT_LOGO_PATH);
 
   const fullBlock = (
-    <div className={clsx(imageClassName, 'navbar__logo-full')}>
+    <div
+      className={clsx(imageClassName, 'navbar__logo-full')}
+      suppressHydrationWarning>
       <ThemedImage
         className={logo.className}
         sources={sources}
@@ -42,7 +44,8 @@ function NavbarLogoThemedImage({logo, alt, imageClassName}) {
       className={clsx(imageClassName, logo.className, 'navbar__logo-compact')}
       src={compactSrc}
       alt={alt}
-      style={logo.style}
+      style={{...logo.style, display: 'none'}}
+      suppressHydrationWarning
     />
   );
 

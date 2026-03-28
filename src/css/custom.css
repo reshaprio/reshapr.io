@@ -470,7 +470,10 @@ body,
 
 .navbar > .navbar__inner .navbar__brand {
   margin-right: 0.9rem;
-  height: auto;
+  height: var(--reshapr-navbar-logo-wordmark-max-height);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
 }
 
 .navbar > .navbar__inner .navbar__items--right {
@@ -921,7 +924,8 @@ body,
  */
 .navbar__logo.navbar__logo-full {
   display: block;
-  height: auto;
+  height: var(--reshapr-navbar-logo-wordmark-max-height);
+  overflow: hidden;
 }
 
 .navbar__logo.navbar__logo-compact {
