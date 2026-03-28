@@ -108,75 +108,73 @@ function HomepageHeader() {
 
   return (
     <header className={clsx(styles.heroBanner)}>
-      <div className="container">
-        <div className={styles.heroGrid}>
-          <div className={styles.heroContent}>
-            <m.div
-              className={styles.heroMotionStack}
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible">
-              <m.div variants={itemVariants}>
-                <Heading as="h1" className={styles.heroTitle}>
-                  The open source, no-code MCP Server for
-                  <br />
-                  AI-Native API Access
-                </Heading>
-              </m.div>
-
-              <m.p variants={itemVariants} className={styles.heroSubtitle}>
-                Build a uniform API value chain for AI agents with secure, no-code
-                endpoint translation across your existing API services.
-              </m.p>
-
-              <m.div variants={itemVariants} className={styles.buttons}>
-                <m.div
-                  className={clsx(styles.heroButtonLift, styles.heroButtonLiftPrimary)}
-                  whileHover={reduceMotion ? undefined : {y: -0.5}}
-                  whileTap={reduceMotion ? undefined : {scale: 0.997}}>
-                  <Link className="button button--primary button--lg" to="https://try.reshapr.io/">
-                    Start Building
-                  </Link>
-                </m.div>
-                <m.div
-                  className={styles.heroButtonLift}
-                  whileHover={reduceMotion ? undefined : {y: -0.5}}
-                  whileTap={reduceMotion ? undefined : {scale: 0.997}}>
-                  <Link
-                    className="button button--secondary button--lg"
-                    to="/docs/overview/why-reshapr">
-                    View Docs
-                  </Link>
-                </m.div>
-              </m.div>
-            </m.div>
-          </div>
-
-          <m.div
-            className={styles.heroImageWrap}
-            initial={reduceMotion ? false : {opacity: 0, y: 12}}
-            animate={reduceMotion ? false : {opacity: 1, y: 0}}
-            transition={{
-              duration: 0.85,
-              delay: 0.22,
-              ease: [0.25, 0.1, 0.25, 1],
-            }}>
-            <VideoWithPlaceholder
-              srcLight="/img/banner-hero-video-light.mp4"
-              srcDark="/img/banner-hero-video-dark.mp4"
-              className={styles.heroVideoRoot}
-              videoClassName={styles.heroImage}
-              reduceMotion={reduceMotion}
-              autoPlay={!reduceMotion}
-              loop={!reduceMotion}
-              muted
-              playsInline
-              preload="metadata"
-              aria-label="reShapr hero demo video"
-            />
+      {/* Copy column — has its own padding to match the site container */}
+      <div className={styles.heroContentWrap}>
+        <m.div
+          className={styles.heroMotionStack}
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible">
+          <m.div variants={itemVariants}>
+            <Heading as="h1" className={styles.heroTitle}>
+              The open source, no-code MCP Server for
+              <br />
+              AI-Native API Access
+            </Heading>
           </m.div>
-        </div>
+
+          <m.p variants={itemVariants} className={styles.heroSubtitle}>
+            Build a uniform API value chain for AI agents with secure, no-code
+            endpoint translation across your existing API services.
+          </m.p>
+
+          <m.div variants={itemVariants} className={styles.buttons}>
+            <m.div
+              className={clsx(styles.heroButtonLift, styles.heroButtonLiftPrimary)}
+              whileHover={reduceMotion ? undefined : {y: -0.5}}
+              whileTap={reduceMotion ? undefined : {scale: 0.997}}>
+              <Link className="button button--primary button--lg" to="https://try.reshapr.io/">
+                Start Building
+              </Link>
+            </m.div>
+            <m.div
+              className={styles.heroButtonLift}
+              whileHover={reduceMotion ? undefined : {y: -0.5}}
+              whileTap={reduceMotion ? undefined : {scale: 0.997}}>
+              <Link
+                className="button button--secondary button--lg"
+                to="/docs/overview/why-reshapr">
+                View Docs
+              </Link>
+            </m.div>
+          </m.div>
+        </m.div>
       </div>
+
+      {/* Video column — direct child of heroBanner, extends to the right viewport edge */}
+      <m.div
+        className={styles.heroImageWrap}
+        initial={reduceMotion ? false : {opacity: 0, y: 12}}
+        animate={reduceMotion ? false : {opacity: 1, y: 0}}
+        transition={{
+          duration: 0.85,
+          delay: 0.22,
+          ease: [0.25, 0.1, 0.25, 1],
+        }}>
+        <VideoWithPlaceholder
+          srcLight="/img/banner-hero-video-light.mp4"
+          srcDark="/img/banner-hero-video-dark.mp4"
+          className={styles.heroVideoRoot}
+          videoClassName={styles.heroImage}
+          reduceMotion={reduceMotion}
+          autoPlay={!reduceMotion}
+          loop={!reduceMotion}
+          muted
+          playsInline
+          preload="metadata"
+          aria-label="reShapr hero demo video"
+        />
+      </m.div>
     </header>
   );
 }

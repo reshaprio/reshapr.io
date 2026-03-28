@@ -15,7 +15,7 @@ export default function HomeBreadcrumbItem() {
           description: 'Top-level breadcrumb linking to the marketing site',
         })}
         className="breadcrumbs__link"
-        href={homeHref}>
+        to={homeHref}>
         Platform
       </Link>
     </li>

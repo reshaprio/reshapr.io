@@ -238,9 +238,9 @@ body,
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --reshapr-dark-canvas: #0a0a0a;
+  --reshapr-dark-canvas: #0d1012; /* lifted from #0a0a0a — subtle cool-dark, less stark */
   --reshapr-dark-surface: #2c2d30; /* color/grey/18 */
-  --reshapr-dark-raised: #161616;
+  --reshapr-dark-raised: #161b1f; /* subtle cool tint to match canvas */
 
   --ifm-hr-background-color: #3b3b3b; /* color/grey/23 */
   /* Darker cyan for primary buttons (white label); lighter cyan for links */
@@ -318,8 +318,7 @@ body,
 }
 
 /*
- * Desktop nav layout matches deploy-preview (auto | 1fr | auto grid) — see
- * https://deploy-preview-2--reshaprio.netlify.app/ — brand column, centered primary links, utilities.
+ * Desktop nav: brand | left-aligned link cluster | utilities on the right (avoids optical “off-center” bar).
  */
 .navbar > .navbar__inner.navbar__inner--reshapr {
   align-items: center;
@@ -347,18 +346,18 @@ body,
   align-items: center;
   display: flex !important;
   gap: 0.35rem;
-  justify-content: center;
+  justify-content: flex-start;
   max-width: 100%;
   min-width: 0;
 }
 
-/* Match main content width; grid centers the middle column’s link cluster (preview behavior). */
+/* Match main content width; primary links sit just after the logo. */
 @media (min-width: 1025px) {
   .navbar > .navbar__inner.navbar__inner--reshapr {
     box-sizing: border-box;
     display: grid !important;
     flex-wrap: unset !important;
-    grid-template-columns: auto 1fr auto !important;
+    grid-template-columns: auto max-content 1fr !important;
     justify-content: unset !important;
     justify-items: unset;
     margin-left: auto;
@@ -381,10 +380,10 @@ body,
   }
 
   .navbar__items--reshapr-nav {
-    justify-content: center;
-    justify-self: center;
-    max-width: 100%;
+    justify-content: flex-start;
+    justify-self: start;
     width: max-content;
+    max-width: min(100%, 52rem);
   }
 
   .navbar > .navbar__inner > .navbar__items--right {
@@ -893,8 +892,8 @@ body,
 @media (max-width: 1024px) {
   .navbar-sidebar .navbar__logo.navbar__logo-full img,
   .navbar-sidebar .navbar__logo.navbar__logo-compact {
-    height: 40px;
-    max-height: 40px;
+    height: var(--reshapr-navbar-logo-sidebar-height);
+    max-height: var(--reshapr-navbar-logo-sidebar-height);
     transform: none;
   }
 }
@@ -906,17 +905,17 @@ img.navbar__logo.navbar__logo-compact {
 }
 
 .navbar__logo.navbar__logo-full img {
-  height: 80px;
+  height: var(--reshapr-navbar-logo-wordmark-max-height);
   width: auto;
-  max-height: 80px;
+  max-height: var(--reshapr-navbar-logo-wordmark-max-height);
   display: block;
   margin: 0;
 }
 
 img.navbar__logo.navbar__logo-compact {
-  height: 48px;
-  width: 48px;
-  max-height: 48px;
+  height: var(--reshapr-navbar-logo-compact-size);
+  width: var(--reshapr-navbar-logo-compact-size);
+  max-height: var(--reshapr-navbar-logo-compact-size);
   margin: 0;
 }
 
@@ -927,8 +926,12 @@ img.navbar__logo.navbar__logo-compact {
 
 /* Overright Docusaurus default code block styles - Yacine */
 :root {
-  /* keep your custom height */
-  --ifm-navbar-height: 120px;
+  /* Navbar logo — tuned down from 80/48px wordmark/mark for a lighter top bar */
+  --reshapr-navbar-logo-wordmark-max-height: 64px;
+  --reshapr-navbar-logo-compact-size: 40px;
+  --reshapr-navbar-logo-sidebar-height: 34px;
+
+  --ifm-navbar-height: 104px;
 
   /* Wide layout for all pages */
   --ifm-container-width: 1400px;

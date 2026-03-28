@@ -1,116 +1,115 @@
 .footer {
+  position: relative;
+  background: var(--ifm-background-color);
+  border-top: 1px solid color-mix(in srgb, var(--ifm-color-emphasis-300) 30%, transparent);
   margin-top: var(--reshapr-space-16);
-  background: var(--ifm-navbar-background-color, var(--ifm-background-color));
-  border-top: 1px solid
-    color-mix(in srgb, var(--ifm-color-emphasis-300) 45%, transparent);
 }
 
-.topSection {
-  padding: var(--reshapr-space-7) 0;
+.inner {
+  padding: var(--reshapr-space-16) 0 var(--reshapr-space-10);
 }
 
-.topGrid {
+/* ── Column grid ───────────────────────────────────────────────── */
+.grid {
   display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: var(--reshapr-space-5);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--reshapr-space-10) var(--reshapr-space-12);
+  padding-bottom: var(--reshapr-space-12);
+  border-bottom: 1px solid color-mix(in srgb, var(--ifm-color-emphasis-300) 20%, transparent);
 }
 
-.nav {
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: var(--reshapr-space-5);
-}
+.col {}
 
-.navLink {
+.colTitle {
+  margin: 0 0 var(--reshapr-space-4);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
   color: var(--ifm-font-color-base);
-  text-decoration: none;
-  font-size: var(--reshapr-nav-footer-font-size);
-  font-weight: 500;
-  line-height: var(--reshapr-nav-footer-font-size);
 }
 
-.navLink:hover {
+.colList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--reshapr-space-3);
+}
+
+.link {
+  font-size: 0.875rem;
+  font-weight: 400;
   color: var(--ifm-font-color-secondary);
   text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.link:hover {
+  color: var(--ifm-font-color-base);
+  text-decoration: none;
+}
+
+/* ── Bottom bar ────────────────────────────────────────────────── */
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--reshapr-space-6);
+  gap: var(--reshapr-space-5);
+}
+
+.copy {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--ifm-font-color-secondary);
+  font-weight: 400;
 }
 
 .socials {
-  justify-self: end;
   display: inline-flex;
   align-items: center;
-  gap: 0.52rem;
+  gap: 0.3rem;
 }
 
-/* Icon fill follows navbar link tokens: ink (light) / white (dark) */
 .socialLink {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 0.35rem;
-  color: var(--palette-ink);
-  background: none;
-  border: none;
-  border-radius: 0;
-  transition: opacity 0.2s ease;
+  color: var(--ifm-font-color-secondary);
+  border-radius: 6px;
+  transition: color 0.15s ease, background 0.15s ease;
 }
 
 .socialLink:hover {
-  opacity: 0.65;
+  color: var(--ifm-font-color-base);
+  background: color-mix(in srgb, var(--ifm-font-color-base) 6%, transparent);
   text-decoration: none;
 }
 
-[data-theme='dark'] .socialLink {
-  color: var(--palette-white);
-}
-
-[data-theme='dark'] .socialLink:hover {
-  opacity: 0.7;
-}
-
-.bottomSection {
-  padding: var(--reshapr-space-5) 0;
-}
-
-.copy {
-  margin: 0.12rem 0;
-  text-align: center;
-  color: var(--ifm-font-color-base);
-  font-size: var(--reshapr-nav-footer-font-size);
-  font-weight: 500;
-  line-height: 1.5;
-}
-
+/* ── Responsive ────────────────────────────────────────────────── */
 @media (max-width: 996px) {
-  .topSection {
-    padding: var(--reshapr-space-6) 0;
+  .inner {
+    padding: var(--reshapr-space-10) 0 var(--reshapr-space-8);
   }
 
-  .topGrid {
-    grid-template-columns: 1fr;
-    justify-items: center;
-    text-align: center;
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--reshapr-space-8) var(--reshapr-space-8);
+    padding-bottom: var(--reshapr-space-8);
+  }
+
+  .bottom {
+    flex-direction: column-reverse;
+    align-items: flex-start;
     gap: var(--reshapr-space-4);
   }
+}
 
-  .nav {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--reshapr-space-3) var(--reshapr-space-5);
-  }
-
-  .navLink {
-    font-size: 14px;
-    line-height: 14px;
-  }
-
-  .socials {
-    justify-self: center;
-  }
-
-  .copy {
-    font-size: 14px;
-    line-height: 1.45;
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr;
   }
 }

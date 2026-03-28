@@ -1,22 +1,38 @@
+/*
+ * Full-bleed hero: heroBanner IS the two-column grid.
+ * Left col (copy) carries its own page-gutter padding.
+ * Right col (video) extends naturally to the viewport right edge — no hacks needed.
+ */
 .heroBanner {
-  padding: var(--reshapr-landing-pad-y) 0;
-  background: var(--reshapr-lp-hero);
-}
-
-.heroGrid {
-  display: grid;
-  gap: var(--reshapr-landing-gap);
-  align-items: stretch;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
-}
-
-.heroContent {
   position: relative;
-  min-height: 560px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  align-items: stretch;
+  min-height: clamp(480px, 56vh, 760px);
+  background: var(--reshapr-lp-hero);
+  overflow: clip;
+}
+
+
+/*
+ * Copy column: mirrors the site container's left gutter so text stays aligned with the page.
+ * padding-left = max(pad-x, centered-container-offset + pad-x)
+ */
+.heroContentWrap {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding-top: var(--reshapr-landing-pad-y);
+  padding-bottom: var(--reshapr-landing-pad-y);
+  padding-left: max(
+    var(--reshapr-landing-pad-x),
+    calc((100vw - var(--reshapr-landing-max, 1440px)) / 2 + var(--reshapr-landing-pad-x))
+  );
+  padding-right: var(--reshapr-landing-gap);
 }
+
 
 .heroMotionStack {
   position: relative;
@@ -27,12 +43,133 @@
   width: 100%;
 }
 
+/*
+ * Speakeasy-style CTA: gradient ring via ::before + inset face on ::after.
+ * Primary: one-shot diagonal sheen on hover (background-position on ::after).
+ */
+/*
+ * Grid (not flex) avoids cyclic % width: max-content + child width:100% left the link
+ * narrower than the box, so ::after filled the wrapper but the label sat in a strip (broken ring).
+ * One column minmax(0,1fr) + width/min(max) keeps chrome and hit-area aligned.
+ */
 .heroButtonLift {
-  display: inline-flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: stretch;
+  align-items: stretch;
+  width: 100%;
+  max-width: max-content;
+  min-width: 0;
+  box-sizing: border-box;
   border-radius: var(--ifm-button-border-radius);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
 }
 
-/* Primary CTA: shadow on hover via CSS (avoid animating box-shadow in Motion) */
+.heroButtonLift::before,
+.heroButtonLift::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Full-size gradient layer (the “shape behind” in Figma) */
+.heroButtonLift::before {
+  inset: 0;
+  z-index: -2;
+  background: linear-gradient(
+    125deg,
+    var(--palette-soft) 0%,
+    var(--ifm-color-primary) 42%,
+    var(--palette-accent) 100%
+  );
+}
+
+/* Inset fill — same size as the label area; leaves 1px of ::before visible as ring */
+.heroButtonLift::after {
+  inset: 1px;
+  z-index: -1;
+  background: var(--ifm-background-surface-color);
+  transition:
+    inset 0.18s ease,
+    background-color 0.2s ease;
+}
+
+.heroButtonLiftPrimary::after {
+  background-color: var(--ifm-color-primary);
+  background-image: linear-gradient(
+    105deg,
+    transparent 0%,
+    transparent 38%,
+    rgba(255, 255, 255, 0.26) 50%,
+    transparent 62%,
+    transparent 100%
+  );
+  background-size: 260% 100%;
+  background-position: 125% 50%;
+  background-repeat: no-repeat;
+}
+
+.heroButtonLiftPrimary:hover::after {
+  background-color: var(--ifm-color-primary-dark);
+  animation: heroPrimarySheen 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes heroPrimarySheen {
+  from {
+    background-position: 125% 50%;
+  }
+
+  to {
+    background-position: -125% 50%;
+  }
+}
+
+.heroButtonLift:not(.heroButtonLiftPrimary):hover::after {
+  background: color-mix(in srgb, var(--ifm-background-surface-color) 94%, var(--ifm-color-emphasis-200));
+}
+
+.heroButtonLift:active::after {
+  inset: 2px;
+}
+
+/*
+ * Negative z-index on ::before/::after keeps them behind in-flow content.
+ * (Positive z-index on the link can still lose to ::after in some paint orders.)
+ */
+.heroButtonLift .button {
+  position: relative;
+  z-index: 0;
+  grid-column: 1;
+  min-width: 0;
+  width: auto;
+  max-width: none;
+  box-sizing: border-box;
+  background: transparent !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.heroButtonLiftPrimary .button.button--primary,
+.heroButtonLiftPrimary .button.button--primary:visited {
+  color: var(--palette-white) !important;
+}
+
+.heroButtonLift:not(.heroButtonLiftPrimary) .button.button--secondary,
+.heroButtonLift:not(.heroButtonLiftPrimary) .button.button--secondary:visited {
+  color: var(--ifm-color-primary) !important;
+}
+
+/* Avoid a second outline; the gradient ring is the chrome */
+.heroButtonLift:not(.heroButtonLiftPrimary) .button {
+  border-color: transparent !important;
+}
+
+/* Primary CTA: glow beneath on hover */
 .heroButtonLiftPrimary:hover {
   box-shadow: 0 4px 18px rgba(0, 93, 93, 0.12);
 }
@@ -47,6 +184,41 @@
 
 [data-theme='dark'] .heroButtonLiftPrimary:active {
   box-shadow: 0 2px 14px rgba(99, 187, 182, 0.22);
+}
+
+[data-theme='dark'] .heroButtonLift::before {
+  background: linear-gradient(
+    125deg,
+    color-mix(in srgb, var(--palette-soft) 85%, #fff) 0%,
+    var(--ifm-color-primary-light) 40%,
+    color-mix(in srgb, var(--palette-accent) 90%, #fff) 100%
+  );
+}
+
+[data-theme='dark'] .heroButtonLiftPrimary::after {
+  background-image: linear-gradient(
+    105deg,
+    transparent 0%,
+    transparent 36%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 64%,
+    transparent 100%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroButtonLift::after {
+    transition: background-color 0.2s ease;
+  }
+
+  .heroButtonLift:active::after {
+    inset: 1px;
+  }
+
+  .heroButtonLiftPrimary:hover::after {
+    animation: none;
+    background-color: var(--ifm-color-primary-dark);
+  }
 }
 
 .heroTitle {
@@ -68,12 +240,30 @@
 }
 
 .buttons {
+  --reshapr-hero-cta-pair-width: min(100%, 32rem);
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: flex-start;
   gap: var(--reshapr-space-3);
   flex-wrap: wrap;
   margin-top: 0;
+}
+
+/* Wide hero: primary + secondary share one width (equal columns, aligned edges) */
+@media screen and (min-width: 1101px) {
+  .buttons {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: var(--reshapr-hero-cta-pair-width);
+    max-width: 100%;
+  }
+
+  .buttons .heroButtonLift {
+    flex: 1 1 0;
+    min-width: 0;
+    width: auto;
+    max-width: none; /* equal pair: fill flex columns, ignore max-content cap */
+  }
 }
 
 /* Install command + copy (Lucide); used in bottom CTA beside CLI Quickstart */
@@ -177,57 +367,72 @@
   background: color-mix(in srgb, var(--ifm-font-color-base) 6%, transparent);
 }
 
+/*
+ * Video column: fills its grid track (which goes all the way to the viewport right edge).
+ * display:flex + align-items:stretch lets the VideoWithPlaceholder root fill the full height.
+ */
 .heroImageWrap {
   display: flex;
-  justify-content: center;
   align-items: stretch;
-  min-height: 560px;
   position: relative;
+  z-index: 1;
   isolation: isolate;
+  overflow: hidden;
+  align-self: stretch;
+  min-width: 0;
+  min-height: 0;
+  background: transparent;
 }
 
-/* Desktop: fill hero column height; aspect-ratio comes from VideoWithPlaceholder on narrow */
-@media screen and (min-width: 997px) {
-  .heroImageWrap .heroVideoRoot {
-    aspect-ratio: unset;
-    flex: 1 1 auto;
-    align-self: stretch;
-    width: 100%;
-    min-height: 560px;
-  }
-}
-
-.heroImage {
+.heroImageWrap .heroVideoRoot {
+  flex: 1 1 auto;
   width: 100%;
-  max-width: 860px;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-  border-radius: 0;
-  box-shadow: none;
+  min-width: 0;
+  min-height: 0;
+  max-width: none;
+  aspect-ratio: unset;
 }
 
+/*
+ * Video vignette: hard fade on the left edge (meets the copy column), softer on top/bottom.
+ * Right edge is intentionally open — video spills off-screen.
+ */
 .heroImageWrap::after {
   content: '';
   position: absolute;
   inset: 0;
   pointer-events: none;
+  z-index: 2;
   background:
     linear-gradient(
       to right,
       var(--ifm-background-color) 0%,
-      transparent 14%,
-      transparent 86%,
-      var(--ifm-background-color) 100%
+      color-mix(in srgb, var(--ifm-background-color) 60%, transparent) 10%,
+      color-mix(in srgb, var(--ifm-background-color) 18%, transparent) 22%,
+      transparent 40%
     ),
     linear-gradient(
       to bottom,
-      var(--ifm-background-color) 0%,
-      transparent 18%,
-      transparent 82%,
-      var(--ifm-background-color) 100%
+      color-mix(in srgb, var(--ifm-background-color) 32%, transparent) 0%,
+      transparent 18%
+    ),
+    linear-gradient(
+      to top,
+      color-mix(in srgb, var(--ifm-background-color) 32%, transparent) 0%,
+      transparent 18%
     );
-  z-index: 2;
+}
+
+/* Cover = largest scale in the bleed region (crops edges of frame). */
+.heroImageWrap .heroImage {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center center;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .section {
@@ -279,23 +484,36 @@
   .featureGrid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--reshapr-landing-gap) var(--reshapr-space-10);
-    align-items: start;
+    align-items: stretch;
   }
 
   .featureCard {
     flex-direction: column;
-    padding: var(--reshapr-space-5) 0;
+    height: 100%;
+    padding: var(--reshapr-space-6) var(--reshapr-space-5);
+  }
+
+  .featureBody {
+    display: flex;
+    flex-direction: column;
   }
 }
 
 .featureCard {
-  border-radius: 0;
-  padding: var(--reshapr-space-6) 0;
-  border: 0;
-  background: transparent;
+  border-radius: 10px;
+  padding: var(--reshapr-space-5) var(--reshapr-space-6);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: color-mix(in srgb, var(--ifm-background-color) 50%, var(--ifm-background-surface-color));
+  box-sizing: border-box;
   display: flex;
   align-items: flex-start;
   gap: var(--reshapr-space-5);
+  min-height: 0;
+}
+
+[data-theme='dark'] .featureCard {
+  border-color: var(--ifm-color-emphasis-300);
+  background: color-mix(in srgb, var(--ifm-color-emphasis-100) 75%, transparent);
 }
 
 .featureIcon {
@@ -310,6 +528,7 @@
 
 .featureBody {
   flex: 1 1 auto;
+  min-width: 0;
 }
 
 .featureCard h3 {
@@ -445,9 +664,18 @@
     grid-template-columns: 1fr;
   }
 
-  .heroContent,
-  .heroImageWrap {
+  .heroBanner {
+    grid-template-columns: 1fr;
     min-height: auto;
+  }
+
+  .heroContentWrap {
+    padding-left: var(--reshapr-landing-pad-x);
+    padding-right: var(--reshapr-landing-pad-x);
+  }
+
+  .heroImageWrap {
+    aspect-ratio: 16 / 9;
   }
 
   .heroTitle {
@@ -461,24 +689,6 @@
   .heroImageWrap .heroImage {
     max-width: 100%;
     height: 100%;
-  }
-
-  .heroImageWrap::after {
-    background:
-      linear-gradient(
-        to right,
-        var(--ifm-background-color) 0%,
-        transparent 10%,
-        transparent 90%,
-        var(--ifm-background-color) 100%
-      ),
-      linear-gradient(
-        to bottom,
-        var(--ifm-background-color) 0%,
-        transparent 12%,
-        transparent 88%,
-        var(--ifm-background-color) 100%
-      );
   }
 
   .featureGrid {
@@ -505,7 +715,37 @@
     max-width: 100%;
   }
 
-  .ctaCliRow .button {
+  /* Full-width CTA: stretch grid track; max-width none so pair fills column */
+  .ctaCliRow .heroButtonLift {
     width: 100%;
+    max-width: none;
+    min-width: 0;
+  }
+
+  .buttons {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .buttons .heroButtonLift {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+  }
+}
+
+/* Narrow desktop hero column: same full-width chrome as mobile so pills don’t split */
+@media screen and (min-width: 997px) and (max-width: 1100px) {
+  .buttons {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .buttons .heroButtonLift {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
   }
 }

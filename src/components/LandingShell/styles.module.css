@@ -1,10 +1,12 @@
 /* Figma landing frame: 1440 artboard, wide horizontal padding, shared by LP + marketing pages */
+
 .landingFrame {
+  position: relative;
   --reshapr-landing-max: 1440px;
-  --reshapr-landing-pad-x: 7.5rem; /* 120px */
-  --reshapr-landing-pad-y: 3.75rem; /* 60px — hero top/bottom on LP */
-  --reshapr-landing-section-y: 7.5rem; /* 120px — vertical padding per main LP section */
-  --reshapr-landing-gap: 2.5rem; /* 40px — matches --reshapr-space-10 */
+  --reshapr-landing-pad-x: 3rem; /* 48px */
+  --reshapr-landing-pad-y: 2.5rem; /* 40px — hero top/bottom */
+  --reshapr-landing-section-y: 4rem; /* 64px */
+  --reshapr-landing-gap: 2rem; /* 32px */
   --reshapr-lp-check-gap: 2rem; /* 32px between checklist rows */
   --reshapr-lp-hero: var(--ifm-background-color);
   --reshapr-lp-band: color-mix(in srgb, var(--ifm-background-surface-color) 32%, var(--ifm-background-color));
@@ -17,11 +19,84 @@
   overflow-x: clip;
 }
 
+/*
+ * Bottom atmosphere: soft blobs (same language as hero); short + masked so no floor band.
+ */
+.landingFrame::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: clamp(220px, 38vh, 460px);
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(
+      ellipse 90% 70% at 52% 112%,
+      color-mix(in srgb, var(--ifm-color-primary) 8%, transparent) 0%,
+      transparent 56%
+    ),
+    radial-gradient(
+      ellipse 52% 46% at 92% 104%,
+      color-mix(in srgb, var(--palette-accent) 7%, transparent) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse 48% 42% at 12% 108%,
+      color-mix(in srgb, var(--palette-soft) 6%, transparent) 0%,
+      transparent 48%
+    );
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 36%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 36%);
+}
+
+/* Keep section/content above the bottom wash (home: header+main; blog: container; about/community: sections inside main.landingFrame) */
+.landingFrame > * {
+  position: relative;
+  z-index: 1;
+}
+
 [data-theme='dark'] .landingFrame {
-  --reshapr-lp-hero: var(--ifm-background-color);
-  --reshapr-lp-band: color-mix(in srgb, var(--ifm-background-surface-color) 42%, var(--ifm-background-color));
-  --reshapr-lp-panel-grey: color-mix(in srgb, var(--ifm-color-emphasis-200) 62%, var(--ifm-background-color));
-  --reshapr-lp-cta: color-mix(in srgb, var(--ifm-background-surface-color) 68%, var(--ifm-background-color));
+  --reshapr-lp-hero:       var(--ifm-background-color);
+  --reshapr-lp-band:       var(--ifm-background-color);
+  --reshapr-lp-panel-grey: var(--ifm-background-color);
+  --reshapr-lp-cta:        var(--ifm-background-color);
+}
+
+[data-theme='dark'] .landingFrame::after {
+  background:
+    radial-gradient(
+      ellipse 88% 68% at 48% 112%,
+      color-mix(in srgb, var(--ifm-color-primary-light) 10%, transparent) 0%,
+      transparent 54%
+    ),
+    radial-gradient(
+      ellipse 50% 44% at 8% 106%,
+      color-mix(in srgb, var(--palette-accent) 8%, transparent) 0%,
+      transparent 48%
+    ),
+    radial-gradient(
+      ellipse 46% 40% at 96% 102%,
+      color-mix(in srgb, var(--palette-soft) 6%, transparent) 0%,
+      transparent 46%
+    );
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 34%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 34%);
+}
+
+/* Film grain — absolute, covers full scrollable frame height */
+[data-theme='dark'] .landingFrame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px 180px;
 }
 
 .landingFrame :global(.container) {
@@ -36,9 +111,9 @@
 
 @media screen and (max-width: 996px) {
   .landingFrame {
-    --reshapr-landing-pad-x: clamp(1.25rem, 5vw, 7.5rem);
-    --reshapr-landing-pad-y: clamp(1.5rem, 4vw, 3.75rem);
-    --reshapr-landing-section-y: clamp(3rem, 10vw, 7.5rem);
-    --reshapr-lp-check-gap: clamp(1.25rem, 4vw, 2rem);
+    --reshapr-landing-pad-x: clamp(1rem, 4vw, 3rem);
+    --reshapr-landing-pad-y: clamp(1rem, 3vw, 2.5rem);
+    --reshapr-landing-section-y: clamp(2rem, 6vw, 4rem);
+    --reshapr-lp-check-gap: clamp(1rem, 3.5vw, 2rem);
   }
 }
