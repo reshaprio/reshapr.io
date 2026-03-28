@@ -6,7 +6,7 @@ authors:
   - laurent
 description: "How reShapr enables secure, multi-tenant MCP deployment with authentication, authorization, and enterprise-grade access controls."
 image: /img/blog/secure-deployment-1.png
-tags: [Security, MCP, Enterprise]
+tags: [Security, MCP, Enterprise, OAuth, Authentication, Authorization, Multi-Tenant, Hybrid, On-Prem, API, Deployment, Zero Trust]
 ---
 
 <!-- markdownlint-disable MD001 MD026 MD030 MD045 -->
@@ -17,14 +17,14 @@ The [Model Context Protocol](https://modelcontextprotocol.io/docs/getting-starte
 
 However, envisioning a generalization of the tools and protocols at scale raises a lot of questions for enterprise-readiness and adoption:
 
--   How do we **authenticate the communication** between the MCP client and the MCP server?
--   How do we **authorize or deny access** to specific tools/resources/prompts for a user on the MCP server?
--   How do we **call upstream APIs on behalf of a user** from our MCP server?
--   How to **proceed flexibly**, encompassing different deployment topologies and trust boundaries?
+- How do we **authenticate the communication** between the MCP client and the MCP server?
+- How do we **authorize or deny access** to specific tools/resources/prompts for a user on the MCP server?
+- How do we **call upstream APIs on behalf of a user** from our MCP server?
+- How to **proceed flexibly**, encompassing different deployment topologies and trust boundaries?
 
 reShapr « No-Code MCP Server » has been designed with all these concerns and constraints at the core to offer a flexible approach to security in MCP server execution.
 
-In this blog post, we’ll examine the different options proposed by the reShapr MCP solution. We’ll review the existing options at the time of the Beta Program launch and discuss future development and options that will appear in the subsequent iterations. If you’re interested in our content, follow us [on LinkedIn](https://www.linkedin.com/company/reshapr/), [Bluesky](https://bsky.app/profile/reshapr.io), [YouTube](https://www.youtube.com/@reShapr) (demos) or [on X](https://x.com/reshaprio). Also, it’s still time to join the Beta Program here on [https://reshapr.io](https://reshapr.io) 😉
+In this blog post, we’ll examine the different options proposed by the reShapr MCP solution.
 
 <!-- truncate -->
 
@@ -34,17 +34,17 @@ Enterprise infrastructure and deployment topologies may vary. Not all situations
 
 At the time of writing, reShapr can be used as a **fully Cloud-based solution**: it is deployed in its own trust domain, and your MCP client can sit in your organization’s trust domain, too. Depending on the upstream backend API you’re using, you may also need to access a third-party upstream trust domain. That’s a lot of security boundaries to manage.
 
-![](/img/blog/secure-deployment-1.png)
+![reShapr cloud-based deployment topology showing MCP client in the organization trust domain, reShapr in its own trust domain, and upstream backend API in a third-party trust domain](/img/blog/secure-deployment-1.png)
 
 Within these security domains, you’ll find the essential pieces to secure the access and invocations of this chain of exchanges: the organization’s internal Identity Provider, the upstream service Identity Provider, and the **reShapr Authz** component, which will play a pivotal role in the options we’ll discuss in the rest of this article.
 
 But that’s not the only way to use reShapr! The next iteration will introduce **the Hybrid mode**! In this mode, reShapr Gateway will be able to enter your organization’s trust domain to interact closely with your identity provider.
 
-![](/img/blog/secure-deployment-2.png)
+![reShapr hybrid deployment topology with the gateway inside the organization trust domain, closer to the internal identity provider](/img/blog/secure-deployment-2.png)
 
 This move will be even more significant during the third iteration, when we’ll release the **full On-Premises mode,** allowing you to have finer control over your security boundaries. Given the fact that a massive part of the MCP Server use-cases is made by the re-use/re-encapsulation of internal APIs, this leads us to an even more controlled environment, as represented below:
 
-![](/img/blog/secure-deployment-3.png)
+![reShapr full on-premises deployment topology with all components inside the organization trust domain for maximum security control](/img/blog/secure-deployment-3.png)
 
 > You can see it easily now: the diversity of situations and **use cases opens the way to a palette of security mechanisms** that can make sense in some situations or feel totally over-engineered in others. And that’s where our flexibility shines!
 
@@ -70,10 +70,10 @@ However, it’s still the users’ responsibility to store and distribute them a
 
 Using this option, the reShapr MCP server will apply recommendations from the [MCP Authorization specification](https://modelcontextprotocol.io/specification/draft/basic/authorization) to utilize OAuth2 standards for securing access to endpoints. reShapr can integrate with your own OAuth 2.0 Authorization Server. More precisely, it implements all the following specs:
 
--   OAuth 2.1 / PKCE support (public OAuth clients)
--   OAuth 2.0 Protected Resource Metadata ([RFC9728](https://datatracker.ietf.org/doc/html/rfc9728))
--   OAuth 2.0 Authorization Server Metadata ([RFC8414](https://datatracker.ietf.org/doc/html/rfc8414))
--   OAuth 2.0 Resource Indicators ([RFC 8707](https://www.rfc-editor.org/rfc/rfc8707.html))
+- OAuth 2.1 / PKCE support (public OAuth clients)
+- OAuth 2.0 Protected Resource Metadata ([RFC9728](https://datatracker.ietf.org/doc/html/rfc9728))
+- OAuth 2.0 Authorization Server Metadata ([RFC8414](https://datatracker.ietf.org/doc/html/rfc8414))
+- OAuth 2.0 Resource Indicators ([RFC 8707](https://www.rfc-editor.org/rfc/rfc8707.html))
 
 > 💡 In case you don’t have an OAuth 2 Authorization Server at hand, reShapr provides its own **reShapr Authz** that can be used to host OAuth clients using the OAuth 2.0 Dynamic Client Registration Protocol ([RFC7591](https://datatracker.ietf.org/doc/html/rfc7591)). The reShapr IDP delegates authentication to social identity providers, allowing you to secure access to your MCP Server.
 
@@ -99,8 +99,8 @@ This is not a completely different option, but rather an addition to previous fo
 
 Among the options we’re thinking about, the following two options are at the top of our list:
 
--   The declaration, translation and transmission of backend credentials that the MCP client would have provided. It would need to provide two credentials: one for the MCP endpoint and another for the backend. reShapr would be in charge of validating both to avoid “confused deputy” effects and ease auditability.
--   The use of [URL elicitations](https://github.com/modelcontextprotocol/modelcontextprotocol/issues/1036) for interacting with the MCP client and dynamically retrieving a backend access token (credit to [Christian Posta](https://www.linkedin.com/in/ceposta/) for [the brilliant explanation here](https://blog.christianposta.com/mcp-authorization-patterns-upstream-api-calls/#pattern-4-protocol-support-for-url-elicitation)).
+- The declaration, translation and transmission of backend credentials that the MCP client would have provided. It would need to provide two credentials: one for the MCP endpoint and another for the backend. reShapr would be in charge of validating both to avoid “confused deputy” effects and ease auditability.
+- The use of [URL elicitations](https://github.com/modelcontextprotocol/modelcontextprotocol/issues/1036) for interacting with the MCP client and dynamically retrieving a backend access token (credit to [Christian Posta](https://www.linkedin.com/in/ceposta/) for [the brilliant explanation here](https://blog.christianposta.com/mcp-authorization-patterns-upstream-api-calls/#pattern-4-protocol-support-for-url-elicitation)).
 
 ### Wrap-up
 
