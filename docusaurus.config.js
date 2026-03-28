@@ -106,7 +106,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Replace with your project's social card
-      image: 'img/reshapr-social-card.svg',
+      image: 'img/reShapr-logo-light.png',
       colorMode: {
         // Until the user toggles theme, follow OS preference; toggle only sets light vs dark.
         respectPrefersColorScheme: true,
@@ -159,8 +159,8 @@ const config = {
         style: 'dark',
         logo: {
           alt: 'reShapr Logo',
-          src: 'img/reShapr-logo-light@2x.png',
-          srcDark: 'img/reShapr-logo-light@2x.png',
+          src: 'img/reShapr-logo-light.png',
+          srcDark: 'img/reShapr-logo-light.png',
           href: 'https://reshapr.io',
         },
         links: [

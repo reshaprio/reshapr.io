@@ -2,7 +2,7 @@
 
 .landingFrame {
   position: relative;
-  --reshapr-landing-max: 1440px;
+  --reshapr-landing-max: 1400px;
   --reshapr-landing-pad-x: 3rem; /* 48px */
   --reshapr-landing-pad-y: 2.5rem; /* 40px — hero top/bottom */
   --reshapr-landing-section-y: 4rem; /* 64px */

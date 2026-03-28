@@ -115,7 +115,7 @@ export default function AboutPage() {
                 </m.p>
                 <m.p variants={motion.itemVariants} className={styles.leadAccent}>
                   We built reShapr to change that, with one objective:
-                  <strong> make enterprise API-to-MCP a doption fast, reliable, and secure</strong>.
+                  <strong> make enterprise API-to-MCP adoption fast, reliable, and secure</strong>.
                 </m.p>
                 <m.p variants={motion.itemVariants} className={styles.body}>
                   Our platform instantly transforms your existing APIs (REST,
@@ -151,7 +151,7 @@ export default function AboutPage() {
                         alt={founder.name}
                         loading="lazy"
                         onError={(event) => {
-                          event.currentTarget.src = '/img/reShapr-logo-dark@2x.png';
+                          event.currentTarget.src = '/img/reShapr-logo-dark.png';
                         }}
                       />
                       <div className={styles.founderBody}>

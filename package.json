@@ -15,9 +15,7 @@
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "import:medium": "node ./scripts/import-medium.js",
-    "postinstall": "patch-package",
-    "import:medium:export": "node ./scripts/import-medium-export.js"
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@docusaurus/core": "^3.5.2",
