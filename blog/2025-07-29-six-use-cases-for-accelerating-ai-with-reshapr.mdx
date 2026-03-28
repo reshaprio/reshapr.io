@@ -6,18 +6,25 @@ authors:
   - laurent
 description: "Six ways organizations use reShapr to streamline API enablement, accelerate prototyping, and securely integrate AI into production."
 image: /img/blog/six-use-cases-hero.jpg
-tags: [Use Cases, AI, Enterprise]
+tags: [Use Cases, AI, Enterprise, MCP, No-Code, API, Security, REST, gRPC, GraphQL, LLM, CI/CD, Hybrid, On-Prem, RAG]
 ---
 
-<!-- markdownlint-disable MD001 MD026 MD030 MD045 -->
+{/* markdownlint-disable MD001 MD026 MD030 MD045 */}
 
 If you’re aiming to build AI‑native applications faster without sacrificing security or overhauling existing infrastructure, [**reShapr**](https://reshapr.io/) offers a transformative edge. Here are six compelling use cases showcasing how organizations leverage reShapr to streamline API enablement, accelerate prototyping, and securely integrate AI into production.
 
-![](/img/blog/six-use-cases-hero.jpg)
+<figure style={{textAlign: 'center', margin: '1.5rem 0'}}>
 
-Credit: [Osarugue Igbinoba](https://unsplash.com/fr/photos/couloir-en-arc-eclaire-xfbn4nNiS3s)
+![Six use cases for accelerating AI with reShapr — from API enablement to secure hybrid deployment](/img/blog/six-use-cases-hero.jpg)
 
-<!-- truncate -->
+<figcaption style={{fontSize: '0.85rem', color: 'var(--ifm-color-emphasis-600)', marginTop: '0.5rem'}}>
+
+Credit: [Osarugue Igbinoba](https://unsplash.com/fr/photos/couloir-en-arc-eclaire-xfbn4nNiS3s)
+
+</figcaption>
+</figure>
+
+{/* truncate */}
 
 ### 1\. 🛠️ Convert Internal APIs into MCPs — AI Enablement in Minutes
 
@@ -79,32 +86,63 @@ Credit: [Osarugue Igbinoba](https://unsplash.com/fr/photos/couloir-en-arc-eclai
 
 reShapr has been demonstrated to instantly translate the [Open-Meteo](https://open-meteo.com/) REST weather API into an MCP endpoint without requiring any code. This highlights how quickly external data sources can become AI‑ready tools using reShapr’s solution.
 
+First, authenticate with the reShapr online try:
+
+```shell
+❯ reshapr login -s https://try.reshapr.io
+ℹ️  Opening browser: https://try.reshapr.io/cli/login?redirect_uri=http://localhost:5556
+ℹ️  Listening for authentication callback on http://localhost:5556
+✅ Login successful!
+ℹ️  Welcome, yada!
+ℹ️  Organization: yada
+✅ Configuration saved to /Users/yacine/.reshapr/config
+```
+
+Then, import and expose the API as an MCP server using in a single command:
+
+```shell
+❯ reshapr import -u https://raw.githubusercontent.com/open-meteo/open-meteo/refs/heads/main/openapi.yml --backendEndpoint https://api.open-meteo.com
+✅ Import successful!
+ℹ️  Discovered Service Open-Meteo APIs with ID: 0PXEW1ZDWFCZS
+✅ Exposition done!
+✅ Exposition is now active!
+Exposition ID  : 0PXEW2272H0PB
+Organization   : yada
+Created on     : 2026-03-28T19:06:26.743899
+Service ID     : 0PXEW1ZDWFCZS
+Service Name   : Open-Meteo APIs
+Service Version: 1.0
+Service Type   : REST -> https://api.open-meteo.com
+Endpoints      : mcp.try.reshapr.io/mcp/yada/Open-Meteo+APIs/1.0
+```
+
+That's it. Your MCP server is live at `https://mcp.try.reshapr.io/mcp/yada/Open-Meteo+APIs/1.0`, use `https` for reShapr Try, or `http` depending on your deployment. Connect it to any MCP client, LLM conversational agent, or agentic workflow as a remote HTTP Streamable MCP server and enjoy 😎
+
 More demos available on our [YouTube channel](https://www.youtube.com/@reShapr) 🙌
 
 ### ✅ Why reShapr Matters
 
 Whether you’re embedding AI assistants, building RAG workflows, or enabling LLM-driven agents, reShapr lets you move forward quickly **without compromising control**:
 
--   Instant MCP Server for internal or external APIs, securely exposed.
--   Safe AI experimentation on real data for faster iteration.
--   Seamless version control and lifecycle sync.
--   Protocol-agnostic support with no vendor lock-in.
--   Flexible deployment to match enterprise security policies.
+- Instant MCP Server for internal or external APIs, securely exposed.
+- Safe AI experimentation on real data for faster iteration.
+- Seamless version control and lifecycle sync.
+- Protocol-agnostic support with no vendor lock-in.
+- Flexible deployment to match enterprise security policies.
 
 ### 🎯 Business Benefits Summarized
 
 #### Speed
+- Prototype AI integrations in minutes using production APIs with no backend overhaul
 
-Prototype AI integrations in minutes using production APIs with no backend overhaul
+#### Security & Compliance  
+- Enforce governance, logging, and access controls even in sensitive environments
 
-**Security & Compliance  
-**Enforce governance, logging, and access controls even in sensitive environments
+#### Flexibility  
+- Works across REST/GraphQL/gRPC, deploys SaaS, hybrid, or on-prem
 
-**Flexibility  
-**Works across REST/GraphQL/gRPC, deploys SaaS, hybrid, or on-prem
-
-**Cost Efficiency  
-**Avoid rewriting backend services, minimize development overhead
+#### Cost Efficiency
+- Avoid rewriting backend services, minimize development overhead
 
 ### 🔗 Looking Ahead
 
@@ -112,4 +150,4 @@ Integration into a modern AI ecosystem is as straightforward as flipping a switc
 
 > reShapr empowers businesses to **accelerate AI use cases**, **reduce integration friction**, and **deliver secure production-ready experiences while effectively leveraging existing infrastructure**.
 
-To explore reShapr’s vision and strategic context, see _"_[_Why reShapr_](https://reshaprio.medium.com/why-reshapr-db9788cd9062)_"_ for deeper insight into the MCP framework and its architecture.
+To explore reShapr’s vision and strategic context, see _"_[_Why reShapr_](/blog/2025/07/24/why-reshapr)_"_ for deeper insight into the MCP framework and its architecture.
