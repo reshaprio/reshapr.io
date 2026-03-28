@@ -61,7 +61,6 @@
   max-width: var(--ifm-container-width);
   margin: 0 auto 1.5rem;
   padding-top: 2rem;
-  border-top: 0px solid var(--ifm-color-emphasis-200);
 }
 
 .foundersEyebrow {
