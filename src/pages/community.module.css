@@ -128,12 +128,21 @@
 }
 
 .channelCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
   margin-top: auto;
   padding-top: 0.75rem;
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--ifm-link-color);
   letter-spacing: 0.01em;
+  transition: gap 0.2s ease, color 0.15s ease;
+}
+
+.channelCard:hover .channelCta {
+  color: var(--ifm-link-hover-color);
+  gap: 0.5rem;
 }
 
 .channelText {

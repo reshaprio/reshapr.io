@@ -117,7 +117,9 @@ export default function CommunityPage() {
                         </Heading>
                       </div>
                       <p className={styles.channelText}>{channel.description}</p>
-                      <span className={styles.channelCta}>{channel.cta} →</span>
+                      <span className={styles.channelCta}>
+                        {channel.cta} <span aria-hidden="true">→</span>
+                      </span>
                     </m.a>
                   ))}
                 </div>
