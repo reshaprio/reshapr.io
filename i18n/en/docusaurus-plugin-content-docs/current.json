@@ -87,10 +87,6 @@
     "message": "Resources Specification",
     "description": "The label for the doc item 'Resources Specification' in sidebar 'tutorialSidebar', linking to the doc reference/resources-specification"
   },
-  "sidebar.tutorialSidebar.doc.Cloud Options and Plans": {
-    "message": "Cloud Options and Plans",
-    "description": "The label for the doc item 'Cloud Options and Plans' in sidebar 'tutorialSidebar', linking to the doc reference/cloud-plans"
-  },
   "sidebar.tutorialSidebar.doc.Demos": {
     "message": "Demos",
     "description": "The label for the doc item 'Demos' in sidebar 'tutorialSidebar', linking to the doc demos"

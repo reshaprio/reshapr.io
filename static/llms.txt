@@ -39,7 +39,6 @@ reShapr enables enterprises to expose their APIs to AI agents and LLMs via the M
 - Custom tools specification: https://reshapr.io/docs/reference/custom-tools-specification
 - Resources specification: https://reshapr.io/docs/reference/resources-specification
 - Prompts specification: https://reshapr.io/docs/reference/prompts-specification
-- Cloud plans: https://reshapr.io/docs/reference/cloud-plans
 - Demos: https://reshapr.io/docs/demos
 
 ## Blog

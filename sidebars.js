@@ -143,11 +143,6 @@ const sidebars = {
           id: 'reference/resources-specification',
           label: 'Resources Specification',
         },
-        {
-          type: 'doc',
-          id: 'reference/cloud-plans',
-          label: 'Cloud Options and Plans',
-        },
       ],
     },
     {

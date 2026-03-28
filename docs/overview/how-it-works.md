@@ -29,9 +29,9 @@ The platform has two major parts:
 
 This architecture supports multiple deployment models:
 
-1. **Cloud SaaS**: reShapr hosts both control plane and data plane.
+1. **Cloud**: reShapr hosts both control plane and data plane.
 2. **Hybrid**: you host some gateways in your own trust domain while reShapr manages control.
-3. **On-premises** (roadmap): both control and data planes in your own environment.
+3. **On-premises**: both control and data planes in your own environment.
 
 This is what flexibility means for enterprise MCP adoption.
 
@@ -40,5 +40,4 @@ See also:
 - [Why reShapr?](./why-reshapr.md)
 - [Configuration Plan and Exposition](../explanation/configuration-and-exposition.md)
 - [Security Options and Secrets](../explanation/security-model.md)
-- [Cloud Options and Plans](../reference/cloud-plans.md)
 - [Hybrid Deployment](../how-to-guides/deploy-hybrid-gateway.md)

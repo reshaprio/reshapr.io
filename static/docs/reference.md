@@ -96,14 +96,6 @@ All commands accept `-o json` or `-o yaml` for structured output (pipe-friendly 
 
 ---
 
-## Cloud Plans
-
-https://reshapr.io/docs/reference/cloud-plans
-
-See the full plan comparison at https://reshapr.io/docs/reference/cloud-plans
-
----
-
 ## Prompts Specification
 
 https://reshapr.io/docs/reference/prompts-specification
