@@ -12,13 +12,16 @@
 /* ── Column grid ───────────────────────────────────────────────── */
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--reshapr-space-10) var(--reshapr-space-12);
+  grid-template-columns: repeat(3, auto);
+  justify-content: center;
+  gap: var(--reshapr-space-10) 26rem;
   padding-bottom: var(--reshapr-space-12);
   border-bottom: 1px solid color-mix(in srgb, var(--ifm-color-emphasis-300) 20%, transparent);
 }
 
-.col {}
+.col {
+  text-align: left;
+}
 
 .colTitle {
   margin: 0 0 var(--reshapr-space-4);
@@ -35,6 +38,7 @@
   padding: 0;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: var(--reshapr-space-3);
 }
 
@@ -103,7 +107,7 @@
 
   .bottom {
     flex-direction: column-reverse;
-    align-items: flex-start;
+    align-items: center;
     gap: var(--reshapr-space-4);
   }
 }

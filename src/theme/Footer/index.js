@@ -5,7 +5,7 @@ import styles from './styles.module.css';
 
 const columns = [
   {
-    title: 'Product',
+    title: 'Project',
     items: [
       {label: 'Why reShapr',     to:   '/docs/overview/why-reshapr'},
       {label: 'How It Works',    to:   '/docs/overview/how-it-works'},
@@ -76,7 +76,7 @@ export default function Footer() {
 
           {/* Bottom bar */}
           <div className={styles.bottom}>
-            <p className={styles.copy}>© {new Date().getFullYear()} reShapr. Open source under Apache 2.0.</p>
+            <p className={styles.copy}>© {new Date().getFullYear()} reShapr - Open source under Apache-2.0 license.</p>
             <div className={styles.socials}>
               {socials.map(({label, href, icon}) => (
                 <a
