@@ -7,7 +7,6 @@ authors:
 description: "How reShapr enables secure, multi-tenant MCP deployment with authentication, authorization, and enterprise-grade access controls."
 image: /img/blog/secure-deployment-1.png
 tags: [Security, MCP, Enterprise]
-source_url: "https://medium.com/@reshaprio/secure-mcp-deployment-with-reshapr-917186c682b2"
 ---
 
 <!-- markdownlint-disable MD001 MD026 MD030 MD045 -->
