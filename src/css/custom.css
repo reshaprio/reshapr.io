@@ -1481,7 +1481,8 @@ img.navbar__logo.navbar__logo-compact {
 }
 
 /* Blog list: expand col--9/col--offset-1 to full container width, matching About/Community */
-.theme-blog-list-page .row > .col {
+.theme-blog-list-page .row > .col,
+.theme-blog-post-page .row > .col:not(aside) {
   max-width: 100%;
   flex: 0 0 100%;
   margin-left: 0;
@@ -1534,9 +1535,9 @@ img.navbar__logo.navbar__logo-compact {
   padding-top: 0.5rem;
 }
 
-/* Cap line length for comfortable reading and center within its column */
+/* Blog post: full container width, matching About/Community */
 .theme-blog-post-page article {
-  max-width: 680px;
+  max-width: 100%;
   margin: 0;
   padding-top: 0.5rem;
 }

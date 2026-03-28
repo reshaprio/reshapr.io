@@ -18,11 +18,10 @@ export default function BlogLayout(props) {
               <main
                 className={clsx('col', {
                   'col--7': hasSidebar,
-                  'col--9 col--offset-1': !hasSidebar,
+                  'col--12': !hasSidebar,
                 })}>
                 <LoadReveal>{children}</LoadReveal>
               </main>
-              {toc && <div className="col col--2">{toc}</div>}
             </div>
           </div>
         </div>
