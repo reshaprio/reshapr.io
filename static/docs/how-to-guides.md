@@ -31,9 +31,17 @@ Run reShapr gateways inside your own infrastructure while the control plane stay
 - reShapr Gateway container image (URL provided by the reShapr team via ttl.sh)
 - reShapr CLI installed and logged in
 
+### Overview
+
+In hybrid mode:
+- Gateway Groups are the abstract target of your MCP Server exposition (owned by an organization, defines labels for matching Gateways)
+- Gateways are the concrete elements that expose your MCP Servers (they receive deployment directives and configuration plans from the reShapr control plane)
+- The control plane only holds configuration — all application data stays in your datacenter
+
 ### Step 1 — Retrieve an API Token
 
 ```bash
+reshapr login
 reshapr api-token create <my-gateway-token> -v 90
 # → ⚠ API Token: acme-oXYvTI8f8BeuJ5-HlNuon6vs2wSao8qS7WRNIYwoFW4
 # Store securely — shown only once.
@@ -77,11 +85,20 @@ reshapr expo create --configuration <configId> --gateway-group 0P58T3XKK1MEQ
 
 The gateway auto-discovers and loads the MCP server configuration without interruption.
 
+### Gateway lifecycle
+
+1. **Registration** — gateway connects, authenticates with API token, fetches config
+2. **Health check** — every 2 minutes; 5-minute timeout triggers re-registration (MCP serving continues)
+3. **Changes streaming** — control plane pushes updates; MCP servers update without interruption
+4. **Termination** — notification sent, streaming stops, MCP servers drain
+
 ### Security notes
 
 - Gateway → control plane communication is always gateway-initiated (no ingress required)
 - Transport: gRPC over HTTP/2 with TLS + token-based auth
+- API tokens are generated, renewed, and revoked by the control plane (shared or per-gateway)
 - Control plane only holds configuration; all application data stays in your datacenter
+- Gateways can access private Authorization Servers or IDPs in your environment
 
 ---
 
