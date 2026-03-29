@@ -6,7 +6,7 @@ This page details the installation and the basic usages of the reShapr Command L
 
 The `reshapr` CLI is an NPM package available at [https://www.npmjs.com/package/@reshapr/reshapr-cli](https://www.npmjs.com/package/@reshapr/reshapr-cli). You can install it globally in your Linux or MacOS system.
 
-In a terminal window, just issue the following command: 
+In a terminal window, just issue the following command:
 
 ```bash
 npm install -g @reshapr/reshapr-cli
@@ -26,7 +26,7 @@ With this output:
 
 The current `version` of the CLI is `0.0.5`.
 
-> We're iterating fast! Make sure you're on the latest version so you don't miss any of the new magic ;) 🚀
+> We're iterating fast! Make sure you're on the latest version so you don't miss any of the new magic 🚀
 
 You can also check the embedded help with this command:
 
@@ -241,6 +241,6 @@ Service Type   : REST -> https://api.open-meteo.com
 Endpoints      : mcp.try.reshapr.io/mcp/yada/Open-Meteo+APIs/1.0
 ```
 
-Easy, No
+Easy, No!
 
 🎉 Congrats! You deployed an MCP Endpoint with just one CLI command! Check the `Endpoints` information just above (`mcp.try.reshapr.io/mcp/<organization>/Open-Meteo+APIs/1.0`): you can use this endpoint with `https://` prefix in your favorite MCP Client to access your new MCP Server!
