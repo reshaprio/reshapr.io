@@ -77,4 +77,77 @@ reshapr import -u https://raw.githubusercontent.com/open-meteo/open-meteo/refs/h
 
 ---
 
+## Docker Compose
+
+https://reshapr.io/docs/tutorials/docker-compose
+
+Run reShapr locally using Docker Compose for development and testing.
+
+### Prerequisites
+
+- Docker (with Docker Compose v2)
+- Node.js v18+ and the reShapr CLI (`npm install -g @reshapr/reshapr-cli`)
+
+### Quick start with the CLI
+
+```bash
+reshapr run                    # pulls latest release, starts containers in background
+reshapr status                 # check running containers
+reshapr stop                   # shut everything down
+```
+
+`reshapr run` downloads `install/docker-compose-all-in-one.yml` from GitHub, configures image tags, saves the file to `~/.reshapr/`, and runs `docker compose up -d`.
+
+Options: `--release <version>` (default: `latest`; also accepts `nightly` or a specific tag like `0.0.5`).
+
+### Create an admin user
+
+```bash
+SERVER_URL=http://localhost:5555
+SERVER_TOKEN=CzBuQ9B0i8qrUQe6WLiDLqR3gv4iCbxvjTJQP0z0CFGQbjgBHPZSusa9d1gZKwwjdoCsJ8ogRwRzc06GipJSjSDkFOy0BSOKvAa2EjU3As9I5UjgizTzxsJAVJIXtdo2xiXHhcry9KeJa0zRhDtGmm8WMujoXrlfj0ChlJKaHZiZsRthd4UHrWkKur9KySXpPFP21H4C0Cq6OgM1rJpvMZ7Jd2ZzeEcd5lKE4PlchHZBVEdu8jYzjQtU50fkOPoR
+
+curl -XPOST $SERVER_URL/api/admin/users \
+  -H "Content-Type: application/json" -H "x-reshapr-api-key: $SERVER_TOKEN" \
+  -d '{"username":"admin","email":"reshapr@example.com","password":"password","firstname":"Reshapr","lastname":"Admin"}'
+
+curl -XPUT $SERVER_URL/api/admin/users/admin/organization/reshapr/owner \
+  -H "x-reshapr-api-key: $SERVER_TOKEN"
+```
+
+### Create a regular user and organization
+
+```bash
+curl -XPOST $SERVER_URL/api/admin/users \
+  -H "Content-Type: application/json" -H "x-reshapr-api-key: $SERVER_TOKEN" \
+  -d '{"username":"jdoe","email":"jdoe@example.com","password":"my-super-long-password","firstName":"John","lastName":"Doe"}'
+
+curl -XPOST $SERVER_URL/api/admin/users/jdoe/organization \
+  -H "Content-Type: application/json" -H "x-reshapr-api-key: $SERVER_TOKEN" \
+  -d '{"name":"jdoe","description":"Organization for user jdoe"}'
+
+curl -XPOST $SERVER_URL/api/admin/quotas/organization/jdoe \
+  -H "Content-Type: application/json" -H "x-reshapr-api-key: $SERVER_TOKEN" \
+  -d '[{"metric":"gateway-group.count","enabled":true,"limit":3},{"metric":"gateway.count","enabled":true,"limit":3},{"metric":"exposition.count","enabled":true,"limit":10}]'
+```
+
+### Login and use
+
+```bash
+reshapr login --server http://localhost:5555
+```
+
+Control plane: `http://localhost:5555` — MCP gateway: `http://localhost:7777`.
+
+### Manual setup (without the CLI)
+
+```bash
+git clone https://github.com/reshaprio/reshapr.git
+cd reshapr/install
+docker compose -f docker-compose-all-in-one.yml up
+```
+
+Helper scripts included: `create-admin.sh`, `create-user+org.sh`.
+
+---
+
 *For the full site index see https://reshapr.io/llms.txt*
