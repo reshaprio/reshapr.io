@@ -2,7 +2,7 @@
 
 Hey hey… wondering why we built reShapr? 🤔
 
-> Check out our 👉 [**blog post**](/blog/2025/07/24/why-reshapr) on that topic!
+> Check out our 👉 [**blog post**](/blog/why-reshapr) on that topic!
 
 ***Building Your Own MCP Server Is a Trap!***
 
