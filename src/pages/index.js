@@ -132,7 +132,7 @@ function HomepageHeader() {
               className={clsx(styles.heroButtonLift, styles.heroButtonLiftPrimary)}
               whileHover={reduceMotion ? undefined : {y: -0.5}}
               whileTap={reduceMotion ? undefined : {scale: 0.997}}>
-              <Link className="button button--primary button--lg" to="https://try.reshapr.io/">
+              <Link className="button button--primary button--lg" to="/docs/tutorials/try-reshapr-online">
                 Try Online
               </Link>
             </m.div>
@@ -143,7 +143,7 @@ function HomepageHeader() {
               <Link
                 className="button button--secondary button--lg"
                 to="/docs/overview/why-reshapr">
-                View Docs
+                Read The Docs
               </Link>
             </m.div>
           </m.div>
