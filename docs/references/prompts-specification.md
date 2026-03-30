@@ -32,7 +32,7 @@ prompts:
 A `Prompts` artifact follows some simple rules:
 
 - It always contain an identification section made of `apiVersion` and `kind` properties that **must** have the **[`reshapr.io/v1alpha1`](http://reshapr.io/v1alpha1)** and `Prompts` values respectively,
-- It **must** be bound to a specific reShapr **[Service](../explanation/services-and-artifacts.md)** using the **[`service.name`](http://service.name)** and `service.version` properties which values **must** match an already discovered Service,
+- It **must** be bound to a specific reShapr **[Service](../explanations/services-and-artifacts.md)** using the **[`service.name`](http://service.name)** and `service.version` properties which values **must** match an already discovered Service,
 - The `prompts` section then defines the prompts:
   - We have 2 prompts here: `list_pets` and `get_pet`
   - A prompt **must** always have a `result` which will be returned to the model when called,

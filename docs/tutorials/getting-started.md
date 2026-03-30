@@ -115,7 +115,7 @@ With this output:
 
 ## Import Artifact & Service
 
-Importing an artifact is the first step to expose MCP endpoints for your API. Artifacts enable the discovery of Services as explained in **[Services & Artifacts](../explanation/services-and-artifacts.md)**. Let’s do that using the public **[Open-Meteo OpenAPI specification](https://github.com/open-meteo/open-meteo/blob/main/openapi.yml)**. For that we’ll need the **[Raw URL of this document](https://raw.githubusercontent.com/open-meteo/open-meteo/refs/heads/main/openapi.yml)** and we’ll use the `import` command: 
+Importing an artifact is the first step to expose MCP endpoints for your API. Artifacts enable the discovery of Services as explained in **[Services & Artifacts](../explanations/services-and-artifacts.md)**. Let’s do that using the public **[Open-Meteo OpenAPI specification](https://github.com/open-meteo/open-meteo/blob/main/openapi.yml)**. For that we’ll need the **[Raw URL of this document](https://raw.githubusercontent.com/open-meteo/open-meteo/refs/heads/main/openapi.yml)** and we’ll use the `import` command: 
 
 ```bash
 reshapr import -u https://raw.githubusercontent.com/open-meteo/open-meteo/refs/heads/main/openapi.yml
@@ -153,7 +153,7 @@ Operations :
 
 ## Configuring consumption
 
-**[Configuration Plan](../explanation/configuration-and-exposition.md)** will allow you to define how your Service will be consumed by MCP Clients. You’ll define the **backend endpoint** the MCP Gateway will target as well as the **security options** for future expositions. Let’s create a simple configuration plan for the  **[Open-Meteo Service](https://github.com/open-meteo/open-meteo/blob/main/openapi.yml)** we just imported.
+**[Configuration Plan](../explanations/configuration-and-exposition.md)** will allow you to define how your Service will be consumed by MCP Clients. You’ll define the **backend endpoint** the MCP Gateway will target as well as the **security options** for future expositions. Let’s create a simple configuration plan for the  **[Open-Meteo Service](https://github.com/open-meteo/open-meteo/blob/main/openapi.yml)** we just imported.
 
 For that, we need the Service identifier we got just before (`0PXEW1ZDWFCZS`) and we need to know the public endpoint of this API (`https://api.open-meteo.com`). We’ll use the `config create` command and provide a basic name and description:
 

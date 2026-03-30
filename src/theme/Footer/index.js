@@ -19,7 +19,7 @@ const columns = [
     items: [
       {label: 'Docs',         to:   '/docs/overview/why-reshapr'},
       {label: 'Demos',        to:   '/docs/demos'},
-      {label: 'CLI',          to:   '/docs/reference/cli-commands'},
+      {label: 'CLI',          to:   '/docs/references/cli-commands'},
       {label: 'GitHub',       href: 'https://github.com/reshaprio/reshapr/'},
       {label: 'Community',    to:   '/community'},
     ],

@@ -29,16 +29,16 @@ reShapr enables enterprises to expose their APIs to AI agents and LLMs via the M
 - Try reShapr online: https://reshapr.io/docs/tutorials/try-reshapr-online
 - Docker Compose deployment: https://reshapr.io/docs/tutorials/docker-compose
 - Helm chart deployment: https://reshapr.io/docs/tutorials/helm-charts
-- Security model: https://reshapr.io/docs/explanation/security-model
-- Services and artifacts: https://reshapr.io/docs/explanation/services-and-artifacts
-- Gateway groups and gateways: https://reshapr.io/docs/explanation/gateway-groups-and-gateways
-- Configuration and exposition: https://reshapr.io/docs/explanation/configuration-and-exposition
+- Security model: https://reshapr.io/docs/explanations/security-model
+- Services and artifacts: https://reshapr.io/docs/explanations/services-and-artifacts
+- Gateway groups and gateways: https://reshapr.io/docs/explanations/gateway-groups-and-gateways
+- Configuration and exposition: https://reshapr.io/docs/explanations/configuration-and-exposition
 - Hybrid gateway deployment: https://reshapr.io/docs/how-to-guides/deploy-hybrid-gateway
-- Features reference: https://reshapr.io/docs/reference/features
-- CLI commands: https://reshapr.io/docs/reference/cli-commands
-- Custom tools specification: https://reshapr.io/docs/reference/custom-tools-specification
-- Resources specification: https://reshapr.io/docs/reference/resources-specification
-- Prompts specification: https://reshapr.io/docs/reference/prompts-specification
+- Features reference: https://reshapr.io/docs/references/features
+- CLI commands: https://reshapr.io/docs/references/cli-commands
+- Custom tools specification: https://reshapr.io/docs/references/custom-tools-specification
+- Resources specification: https://reshapr.io/docs/references/resources-specification
+- Prompts specification: https://reshapr.io/docs/references/prompts-specification
 - Demos: https://reshapr.io/docs/demos
 
 ## Blog

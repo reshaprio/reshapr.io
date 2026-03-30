@@ -53,39 +53,39 @@
   },
   "sidebar.tutorialSidebar.doc.Services and Artifacts": {
     "message": "Services and Artifacts",
-    "description": "The label for the doc item 'Services and Artifacts' in sidebar 'tutorialSidebar', linking to the doc explanation/services-and-artifacts"
+    "description": "The label for the doc item 'Services and Artifacts' in sidebar 'tutorialSidebar', linking to the doc explanations/services-and-artifacts"
   },
   "sidebar.tutorialSidebar.doc.Configuration and Exposition": {
     "message": "Configuration and Exposition",
-    "description": "The label for the doc item 'Configuration and Exposition' in sidebar 'tutorialSidebar', linking to the doc explanation/configuration-and-exposition"
+    "description": "The label for the doc item 'Configuration and Exposition' in sidebar 'tutorialSidebar', linking to the doc explanations/configuration-and-exposition"
   },
   "sidebar.tutorialSidebar.doc.Gateway Groups and Gateways": {
     "message": "Gateway Groups and Gateways",
-    "description": "The label for the doc item 'Gateway Groups and Gateways' in sidebar 'tutorialSidebar', linking to the doc explanation/gateway-groups-and-gateways"
+    "description": "The label for the doc item 'Gateway Groups and Gateways' in sidebar 'tutorialSidebar', linking to the doc explanations/gateway-groups-and-gateways"
   },
   "sidebar.tutorialSidebar.doc.Security Model": {
     "message": "Security Model",
-    "description": "The label for the doc item 'Security Model' in sidebar 'tutorialSidebar', linking to the doc explanation/security-model"
+    "description": "The label for the doc item 'Security Model' in sidebar 'tutorialSidebar', linking to the doc explanations/security-model"
   },
   "sidebar.tutorialSidebar.doc.Features Overview": {
     "message": "Features Overview",
-    "description": "The label for the doc item 'Features Overview' in sidebar 'tutorialSidebar', linking to the doc reference/features"
+    "description": "The label for the doc item 'Features Overview' in sidebar 'tutorialSidebar', linking to the doc references/features"
   },
   "sidebar.tutorialSidebar.doc.CLI Commands": {
     "message": "CLI Commands",
-    "description": "The label for the doc item 'CLI Commands' in sidebar 'tutorialSidebar', linking to the doc reference/cli-commands"
+    "description": "The label for the doc item 'CLI Commands' in sidebar 'tutorialSidebar', linking to the doc references/cli-commands"
   },
   "sidebar.tutorialSidebar.doc.Prompts Specification": {
     "message": "Prompts Specification",
-    "description": "The label for the doc item 'Prompts Specification' in sidebar 'tutorialSidebar', linking to the doc reference/prompts-specification"
+    "description": "The label for the doc item 'Prompts Specification' in sidebar 'tutorialSidebar', linking to the doc references/prompts-specification"
   },
   "sidebar.tutorialSidebar.doc.Custom Tools Specification": {
     "message": "Custom Tools Specification",
-    "description": "The label for the doc item 'Custom Tools Specification' in sidebar 'tutorialSidebar', linking to the doc reference/custom-tools-specification"
+    "description": "The label for the doc item 'Custom Tools Specification' in sidebar 'tutorialSidebar', linking to the doc references/custom-tools-specification"
   },
   "sidebar.tutorialSidebar.doc.Resources Specification": {
     "message": "Resources Specification",
-    "description": "The label for the doc item 'Resources Specification' in sidebar 'tutorialSidebar', linking to the doc reference/resources-specification"
+    "description": "The label for the doc item 'Resources Specification' in sidebar 'tutorialSidebar', linking to the doc references/resources-specification"
   },
   "sidebar.tutorialSidebar.doc.Demos": {
     "message": "Demos",

@@ -51,7 +51,7 @@ customTools:
 A `CustomTools` artifact follows some simple rules:
 
 - It always contains an identification section made of `apiVersion` and `kind` properties that **must** have the **[`reshapr.io/v1alpha1`](http://reshapr.io/v1alpha1)** and `CustomTools` values respectively,
-- It **must** be bound to a specific reShapr **[Service](../explanation/services-and-artifacts.md)** using the **[`service.name`](http://service.name)** and `service.version` properties whose values **must** match an already discovered Service,
+- It **must** be bound to a specific reShapr **[Service](../explanations/services-and-artifacts.md)** using the **[`service.name`](http://service.name)** and `service.version` properties whose values **must** match an already discovered Service,
 - The `customTools` section then defines the tools:
 - We have a single tool here: `get_user_with_latest_followers`
 - A custom tool **must** always have a `tool` that defines the original tool it overrides and replaces: here we’re using the GitHub `user` tool,

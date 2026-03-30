@@ -8,7 +8,7 @@ This page explains how a reShapr hybrid deployment is working and how to impleme
 
 ## Overview
 
-The **[Gateway Group & Gateway](../explanation/gateway-groups-and-gateways.md)** page introduces the core concepts of this deployment architecture:
+The **[Gateway Group & Gateway](../explanations/gateway-groups-and-gateways.md)** page introduces the core concepts of this deployment architecture:
 
 - The *Gateway Groups* represent the abstract target of your MCP Server exposition - it is owned by an organization and defines labels for matching *Gateways*,
 - The *Gateways* are the concrete elements that expose your MCP Servers - they receive deployment directives and configuration plans from the reShapr control plane. **
@@ -21,7 +21,7 @@ The **[Gateway Group & Gateway](../explanation/gateway-groups-and-gateways.md)**
   }}
 />
 
-When it’s running, a reShapr Gateway discovers the MCP Servers it has to expose from the control plane. This discovery is made according to the **[Exposition](../explanation/configuration-and-exposition.md)** you previously created and the Gateway Groups you chose. To do so, the Gateway presents **a set of label selectors** that will be used during the discovery and throughout its lifetime to synchronize its **[Service](../explanation/services-and-artifacts.md)** definitions and **[Configuration Plans](../explanation/configuration-and-exposition.md)**. While it is alive, an ephemeral Gateway representation is tied to the Gateway Group in the control plane.
+When it’s running, a reShapr Gateway discovers the MCP Servers it has to expose from the control plane. This discovery is made according to the **[Exposition](../explanations/configuration-and-exposition.md)** you previously created and the Gateway Groups you chose. To do so, the Gateway presents **a set of label selectors** that will be used during the discovery and throughout its lifetime to synchronize its **[Service](../explanations/services-and-artifacts.md)** definitions and **[Configuration Plans](../explanations/configuration-and-exposition.md)**. While it is alive, an ephemeral Gateway representation is tied to the Gateway Group in the control plane.
 
 A Gateway is not necessarily attached to a single Gateway Group; it can be attached to many groups as long as its selectors match the group's labels! You could have a set of Gateways with a unique selector `org=acme` matching all the Acme’s Gateway Groups.
 
@@ -30,7 +30,7 @@ A Gateway is not necessarily attached to a single Gateway Group; it can be attac
 A *Gateway* starts, lives, and terminates according to a certain lifecycle. Below are the different elements covering this lifecycle:
 
 1. The first stage of a Gateway life is the **Registration phase**. A Gateway is configured to be connected to a control plane instance (a hostname and a port). During startup, the Gateway advertises itself to the control plane, providing an API Token for authentication, its unique identifier, its label selectors, and the information of the URLs which can be used for reaching this Gateway.
-    1. If authentication is successful, then the Gateway is registered into the control plane, and it fetches its **[Service](../explanation/services-and-artifacts.md)** definitions and **[Configuration Plans](../explanation/configuration-and-exposition.md)** for exposing the MCP Servers,
+    1. If authentication is successful, then the Gateway is registered into the control plane, and it fetches its **[Service](../explanations/services-and-artifacts.md)** definitions and **[Configuration Plans](../explanations/configuration-and-exposition.md)** for exposing the MCP Servers,
     2. If authentication failed, then the Gateway stops with an error message.
 2. After successful registration, the Gateway starts a **Health check** process. This health check will be done every 2 minutes and is acknowledged by the control plane.
     1. If a health check cannot happen because of the control plane being unavailable, the Gateway is considered as *unsynchronized* - a **Registration** phase will be done upon reconnection,
@@ -50,8 +50,8 @@ It’s worth noting the following security characteristics of this architecture:
 
 - Communication between the control plane and Gateways is always at the initiative of the gateways through an upstream network channel. The Gateway must be able to reach out to the control plane, and then bi-directional streaming is set up on the same communication channel. Network admin doesn’t have to set up any ingress access for the control plane to reach out to the Gateway - only the egress route to the control plane is necessary.
 - Communication is done over **[gRPC](https://en.wikipedia.org/wiki/GRPC)** protocol, that used **[HTTP/2](https://en.wikipedia.org/wiki/HTTP/2)** with **[TLS](https://en.wikipedia.org/wiki/Transport_Layer_Security)**. On top of that, reShapr implements token-based authorization with an API Token that is generated, renewed, and revoked by the control plane. You can decide to share the API Token among different gateways or have an API Token per-gateway,
-- When running in this hybrid mode, the control plane only holds the configuration of your MCP Servers: the **[Services & Artifacts](../explanation/services-and-artifacts.md)** definition as well as the **[Configuration Plan & Exposition](../explanation/configuration-and-exposition.md)**. All the application data : the exchanges between your Agents, LLM, MCP Clients, and your backend API (included the reShapr MCP Servers) stay in your datacenter!
-- Because the Gateway runs in the location of your choice, they can now access any private Authorization Server or IDP you may want to use via the **[Security options & Secrets](../explanation/security-model.md)**!
+- When running in this hybrid mode, the control plane only holds the configuration of your MCP Servers: the **[Services & Artifacts](../explanations/services-and-artifacts.md)** definition as well as the **[Configuration Plan & Exposition](../explanations/configuration-and-exposition.md)**. All the application data : the exchanges between your Agents, LLM, MCP Clients, and your backend API (included the reShapr MCP Servers) stay in your datacenter!
+- Because the Gateway runs in the location of your choice, they can now access any private Authorization Server or IDP you may want to use via the **[Security options & Secrets](../explanations/security-model.md)**!
 
 ## Installation
 

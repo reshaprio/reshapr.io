@@ -39,7 +39,7 @@ resources:
 A `Resources` artifact follows some simple rules:
 
 - It always contains an identification section made of `apiVersion` and `kind` properties that **must** have the **[`reshapr.io/v1alpha1`](http://reshapr.io/v1alpha1)** and `Resources` values respectively,
-- It **must** be bound to a specific reShapr **[Service](../explanation/services-and-artifacts.md)** using the **[`service.name`](http://service.name)** and `service.version` properties whose values **must** match an already discovered Service,
+- It **must** be bound to a specific reShapr **[Service](../explanations/services-and-artifacts.md)** using the **[`service.name`](http://service.name)** and `service.version` properties whose values **must** match an already discovered Service,
 - The `resources` section then defines the resources:
   - We have a single resource here: **[`file://](file://)**/project/readme.md`  . Resource identifiers **must** always start with some protocol-specific notation like `file://.`
   - A resource **must** always have a `name` that defines it’s short name,
@@ -75,6 +75,6 @@ A `resourceTemplate` follows these rules:
 - It has the same basic properties as a `resource` except for the `mimeType` property that doesn’t make sense here, as we represent many resources
 - A template **must not** have `text` or `blob` to define its content. Because it represents a collection of resources, the discovery and fetching of content will be dynamic!
 
-To fetch its resource content, a `resourceTemplate` **will reuse [the backend endpoint URL](../explanation/configuration-and-exposition.md) coming from the MCP Server Configuration Plan!**
+To fetch its resource content, a `resourceTemplate` **will reuse [the backend endpoint URL](../explanations/configuration-and-exposition.md) coming from the MCP Server Configuration Plan!**
 
 As an example, imagine that you have configured your backend endpoint URL to be **[https://api.acme.com](https://api.came.com)**. When asking for a resource with `path=resources/doc.md` , then your reShapr MCP Server will actually try to fetch the **[https://api.acme.com/project/src/resources/doc.md?mode=raw](https://api.acme.com/project/src/resources/doc.md?mode=raw)** URL to get its content. Depending on the received content (text or binary), the reShapr endpoint will use the correct encoding to allow your agent or host application to correctly interpret this content.

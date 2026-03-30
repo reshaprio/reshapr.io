@@ -1,12 +1,12 @@
 # reShapr — Reference
 
-https://reshapr.io/docs/reference/features
+https://reshapr.io/docs/references/features
 
 ---
 
 ## Features Overview
 
-https://reshapr.io/docs/reference/features
+https://reshapr.io/docs/references/features
 
 ### API Translation
 - OpenAPI 2.x/3.x, GraphQL, gRPC Protobuf → MCP Server (no code)
@@ -44,7 +44,7 @@ https://reshapr.io/docs/reference/features
 
 ## CLI Commands
 
-https://reshapr.io/docs/reference/cli-commands
+https://reshapr.io/docs/references/cli-commands
 
 Install: `npm install -g @reshapr/reshapr-cli`
 
@@ -105,7 +105,7 @@ All commands accept `-o json` or `-o yaml` for structured output (pipe-friendly 
 
 ## Prompts Specification
 
-https://reshapr.io/docs/reference/prompts-specification
+https://reshapr.io/docs/references/prompts-specification
 
 Prompts can't and shouldn't be directly inferred from an API contract. They provide users with accelerators on how to interact with the model, offer additional instructions and guardrails, or detail how to orchestrate tool calls.
 
@@ -122,7 +122,7 @@ A `Prompts` artifact:
 
 ## Custom Tools Specification
 
-https://reshapr.io/docs/reference/custom-tools-specification
+https://reshapr.io/docs/references/custom-tools-specification
 
 MCP Servers should rarely be used as-is without polishing the context. Custom Tools let you rename, condense, and translate default operations into LLM-friendly tools for specific use cases.
 
@@ -140,7 +140,7 @@ A `CustomTools` artifact:
 
 ## Resources Specification
 
-https://reshapr.io/docs/reference/resources-specification
+https://reshapr.io/docs/references/resources-specification
 
 Resources allow MCP servers to share data that provides context to LLMs — files, database schemas, or application-specific information. Unlike tools (model-controlled actions), resources are application-driven data for reading and referencing.
 

@@ -54,8 +54,8 @@ reShapr has two major parts:
 ### See also
 
 - Why reShapr? — https://reshapr.io/docs/overview/why-reshapr
-- Configuration Plan and Exposition — https://reshapr.io/docs/explanation/configuration-and-exposition
-- Security Options and Secrets — https://reshapr.io/docs/explanation/security-model
+- Configuration Plan and Exposition — https://reshapr.io/docs/explanations/configuration-and-exposition
+- Security Options and Secrets — https://reshapr.io/docs/explanations/security-model
 - Hybrid Deployment — https://reshapr.io/docs/how-to-guides/deploy-hybrid-gateway
 
 ---

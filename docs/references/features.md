@@ -15,15 +15,15 @@ Want to get all the features in a nutshell? This is where you can find all of th
 - Support of **[2023-11-25](https://modelcontextprotocol.io/specification/2025-11-25)** and **[2025-06-18](https://modelcontextprotocol.io/specification/2025-06-18)** versions
 - MCP **[Streamable HTTP transport](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports#streamable-http)**
 - `Tools`, `Prompts` and `Resources` (**[📄](prompts-specification.md)**)
-- **[URL Mode with Elicitation Required Error](https://modelcontextprotocol.io/specification/2025-11-25/client/elicitation#url-mode-with-elicitation-required-error-flow)** (**[📄](../explanation/security-model.md)**)
-- **[OAuth Authorization](https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization)** for endpoint security (**[📄](../explanation/security-model.md)**)
+- **[URL Mode with Elicitation Required Error](https://modelcontextprotocol.io/specification/2025-11-25/client/elicitation#url-mode-with-elicitation-required-error-flow)** (**[📄](../explanations/security-model.md)**)
+- **[OAuth Authorization](https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization)** for endpoint security (**[📄](../explanations/security-model.md)**)
 
 ## Security
 
 - **MCP Endpoint security:**
   - HTTP with TLS Transport
   - API key management (**[📄](cli-commands.md)**)
-  - OAuth Authorization with support of OAuth 2.0 Dynamic Client Registration Protocol (**[RFC7591](https://datatracker.ietf.org/doc/html/rfc7591)**), OAuth 2.0 Protected Resource Metadata (**[RFC9728](https://datatracker.ietf.org/doc/html/rfc9728)**), OAuth 2.0 Authorization Server Metadata (**[RFC8414](https://datatracker.ietf.org/doc/html/rfc8414)**), OAuth 2.0 Resource Indicators (**[RFC 8707](https://www.rfc-editor.org/rfc/rfc8707.html)**) (**[📄](../explanation/security-model.md)**)
+  - OAuth Authorization with support of OAuth 2.0 Dynamic Client Registration Protocol (**[RFC7591](https://datatracker.ietf.org/doc/html/rfc7591)**), OAuth 2.0 Protected Resource Metadata (**[RFC9728](https://datatracker.ietf.org/doc/html/rfc9728)**), OAuth 2.0 Authorization Server Metadata (**[RFC8414](https://datatracker.ietf.org/doc/html/rfc8414)**), OAuth 2.0 Resource Indicators (**[RFC 8707](https://www.rfc-editor.org/rfc/rfc8707.html)**) (**[📄](../explanations/security-model.md)**)
   - Secure Production Identity Framework for Everyone (**[SPIFFE](https://spiffe.io/)**) support
   - Custom Authorization Server integration
   - Configurable scopes or claims per tool

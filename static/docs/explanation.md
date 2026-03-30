@@ -1,12 +1,12 @@
 # reShapr — Explanation
 
-https://reshapr.io/docs/explanation/services-and-artifacts
+https://reshapr.io/docs/explanations/services-and-artifacts
 
 ---
 
 ## Services & Artifacts
 
-https://reshapr.io/docs/explanation/services-and-artifacts
+https://reshapr.io/docs/explanations/services-and-artifacts
 
 A **Service** in reShapr is a versioned functional unit — e.g. "User Management Service v1.0" — discovered from an imported artifact. Services are versioned so multiple versions can coexist. Updating a service means re-importing its reference artifact; if the name and version match, the definition is updated in place. When a version is no longer needed, you can delete it — but existing expositions for that version will be automatically removed.
 
@@ -22,7 +22,7 @@ Importing is done via the reShapr CLI `reshapr import` command. Local files (`-f
 
 ## Configuration Plan & Exposition
 
-https://reshapr.io/docs/explanation/configuration-and-exposition
+https://reshapr.io/docs/explanations/configuration-and-exposition
 
 A **Configuration Plan** defines how a Service is consumed by MCP clients. It specifies:
 
@@ -40,7 +40,7 @@ An **Exposition** is the final step: it associates a Configuration Plan with a *
 
 ## Gateway Groups & Gateways
 
-https://reshapr.io/docs/explanation/gateway-groups-and-gateways
+https://reshapr.io/docs/explanations/gateway-groups-and-gateways
 
 A **Gateway Group** is a named, label-based policy target owned by an organization. Labels represent deployment criteria: region, SLO tier, lifecycle environment, or any combination. Expositions target a Gateway Group, not individual gateways.
 
@@ -57,7 +57,7 @@ A **Gateway** is a runtime process that advertises itself to the control plane a
 
 ## Security Model
 
-https://reshapr.io/docs/explanation/security-model
+https://reshapr.io/docs/explanations/security-model
 
 Security covers two layers: the MCP endpoint itself, and the backend API the gateway calls.
 

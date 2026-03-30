@@ -9,8 +9,8 @@ const HUMAN_HREFS = {
   overview:        '/docs/overview/why-reshapr',
   tutorials:       '/docs/tutorials/getting-started',
   'how-to-guides': '/docs/tutorials/docker-compose',
-  explanation:     '/docs/explanation/services-and-artifacts',
-  reference:       '/docs/reference/features',
+  explanation:     '/docs/explanations/services-and-artifacts',
+  reference:       '/docs/references/features',
   demos:           '/docs/demos',
 };
 
