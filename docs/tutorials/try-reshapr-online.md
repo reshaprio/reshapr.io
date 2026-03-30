@@ -6,6 +6,16 @@ Head over to **[try.reshapr.io](https://try.reshapr.io/)** to get started instan
 
 ## Login workflow
 
+### Step 0 - Use your preferred web browser
+
+And go to:
+
+```shell
+https://try.reshapr.io
+```
+
+![Step 0 — Use your preferred web browser and go to the reShapr Try](/img/docs/try-reshapr-online-0.png)
+
 ### Step 1 — Choose an authentication provider
 
 Select **GitHub** or **Google** to authenticate with the reShapr online try.
@@ -24,31 +34,38 @@ If you have two-factor authentication enabled, complete the verification step.
 
 ![Step 3 — Two-factor authentication prompt during GitHub login](/img/docs/try-reshapr-online-3.png)
 
-### Step 4 — Authenticate with the CLI
+### Step 4 — Setup your try org name
+
+You can customize your trial organization (change its default name if you’d like).
+
+![Step 4 — Customize your trial organization and follow the instructions](/img/docs/try-reshapr-online-4.png)
+
+Then install the CLI:
+
+```shell
+npm install -g @reshapr/reshapr-cli
+```
+
+and log in to Reshapr online:
+
+```shell
+reshapr login -s https://try.reshapr.io
+```
+
+### Step 5 — Authenticate with the CLI
 
 When the browser opens, authorize the CLI — the token is valid for **2 hours**.
 
-```shell
-❯ reshapr login -s https://try.reshapr.io
-ℹ️  Opening browser: https://try.reshapr.io/cli/login?redirect_uri=http://localhost:5556
-ℹ️  Listening for authentication callback on http://localhost:5556
-✅ Login successful!
-ℹ️  Welcome, yada!
-ℹ️  Organization: yada
-✅ Configuration saved to /Users/yacine/.reshapr/config
-```
+![Step 5 — Authorize the reShapr CLI in the browser](/img/docs/try-reshapr-online-5.png)
 
-![Step 4 — Authorize the reShapr CLI in the browser](/img/docs/try-reshapr-online-4.png)
-
-
-### Step 5 — You're all set!
+### Step 6 — You're all set!
 
 Login is successful. You can now use the CLI to import APIs, create expositions, and manage MCP servers. Follow the instructions in the **[Getting Started](/docs/tutorials/getting-started)** tutorial to continue.
 
-![Step 5 — CLI login successful, ready to use reShapr](/img/docs/try-reshapr-online-5.png)
+![Step 6 — CLI login successful, ready to use reShapr](/img/docs/try-reshapr-online-6.png)
 
-### Step 6 — Access the online dashboard
+### Step 7 — Access the online dashboard
 
-Once authenticated, you land on the reShapr Try dashboard.
+Once authenticated, you can back to `https://try.reshapr.io` and you'll land on the reShapr Try dashboard.
 
-![Step 6 — reShapr Try online dashboard after successful login](/img/docs/try-reshapr-online-6.png)
+![Step 7 — reShapr Try online dashboard after successful login](/img/docs/try-reshapr-online-7.png)
