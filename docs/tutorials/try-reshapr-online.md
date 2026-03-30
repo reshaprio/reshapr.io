@@ -24,21 +24,11 @@ If you have two-factor authentication enabled, complete the verification step.
 
 ![Step 3 — Two-factor authentication prompt during GitHub login](/img/docs/try-reshapr-online-3.png)
 
-### Step 4 — Access the online dashboard
+### Step 4 — Authenticate with the CLI
 
-Once authenticated, you land on the reShapr Try dashboard.
-
-![Step 4 — reShapr Try online dashboard after successful login](/img/docs/try-reshapr-online-4.png)
-
-### Step 5 — Authenticate with the CLI
-
-Press `Ctrl+C` in the browser and log in using the reShapr CLI. When the browser opens, authorize the CLI — the token is valid for **2 hours**.
+When the browser opens, authorize the CLI — the token is valid for **2 hours**.
 
 ```shell
-❯ reshapr login -s https://try.reshapr.io
-ℹ️  Opening browser: https://try.reshapr.io/cli/login?redirect_uri=http://localhost:5556
-ℹ️  Listening for authentication callback on http://localhost:5556
-^C
 ❯ reshapr login -s https://try.reshapr.io
 ℹ️  Opening browser: https://try.reshapr.io/cli/login?redirect_uri=http://localhost:5556
 ℹ️  Listening for authentication callback on http://localhost:5556
@@ -48,11 +38,17 @@ Press `Ctrl+C` in the browser and log in using the reShapr CLI. When the browser
 ✅ Configuration saved to /Users/yacine/.reshapr/config
 ```
 
-![Step 5 — Authorize the reShapr CLI in the browser](/img/docs/try-reshapr-online-5.png)
+![Step 4 — Authorize the reShapr CLI in the browser](/img/docs/try-reshapr-online-4.png)
 
-### Step 6 — You're all set!
+
+### Step 5 — You're all set!
 
 Login is successful. You can now use the CLI to import APIs, create expositions, and manage MCP servers. Follow the instructions in the **[Getting Started](/docs/tutorials/getting-started)** tutorial to continue.
 
-![Step 6 — CLI login successful, ready to use reShapr](/img/docs/try-reshapr-online-6.png)
+![Step 5 — CLI login successful, ready to use reShapr](/img/docs/try-reshapr-online-5.png)
 
+### Step 6 — Access the online dashboard
+
+Once authenticated, you land on the reShapr Try dashboard.
+
+![Step 6 — reShapr Try online dashboard after successful login](/img/docs/try-reshapr-online-6.png)
