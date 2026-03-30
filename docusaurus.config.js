@@ -220,6 +220,10 @@ config.scripts = [
     src: 'https://plausible.io/js/pa-TOyYchE3DUzm-4XTvkMo-.js',
     async: true,
   },
+  {
+    src: '/scripts/plausible-init.js',
+    defer: true,
+  },
 ];
 
 export default config;
