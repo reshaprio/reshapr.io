@@ -1818,12 +1818,24 @@ html.docs-doc-page .theme-doc-markdown.markdown ol {
   margin-bottom: var(--reshapr-space-4);
 }
 
-html.docs-doc-page .theme-doc-markdown.markdown blockquote {
-  margin: var(--reshapr-space-5) 0;
-  padding-left: var(--reshapr-space-4);
-  border-left: 3px solid var(--ifm-color-emphasis-300);
-  color: var(--ifm-font-color-secondary);
-  font-style: normal;
+/* Global blockquote style — leadAccent look (matches About page) */
+blockquote {
+  margin: 1.75rem 0;
+  padding: 1.25rem 1.5rem;
+  border-left: 3px solid var(--ifm-link-color);
+  background: color-mix(in srgb, var(--ifm-link-color) 6%, transparent);
+  border-radius: 0 0.5rem 0.5rem 0;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--ifm-font-color-base);
+  font-style: italic;
+}
+
+@media (max-width: 640px) {
+  blockquote {
+    padding: 1rem 1.125rem;
+    margin: 1.25rem 0;
+  }
 }
 
 html.docs-doc-page .theme-doc-markdown.markdown hr {

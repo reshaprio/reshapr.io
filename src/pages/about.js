@@ -114,7 +114,7 @@ export default function AboutPage() {
                   engineering time while introducing <strong>security risks</strong> and technical debt.
                 </m.p>
                 <m.p variants={motion.itemVariants} className={styles.leadAccent}>
-                  We built reShapr to change that, with one objective:
+                  We built <strong>reShapr</strong> to change that, with one objective:
                   <strong> make enterprise API-to-MCP adoption fast, reliable, and secure</strong>.
                 </m.p>
                 <m.p variants={motion.itemVariants} className={styles.body}>
