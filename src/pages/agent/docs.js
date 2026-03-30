@@ -18,8 +18,8 @@ const SECTIONS = {
   overview:      {label: 'Overview',      file: '/docs/overview.md'},
   tutorials:     {label: 'Tutorials',     file: '/docs/tutorials.md'},
   'how-to-guides': {label: 'How-to Guides', file: '/docs/how-to-guides.md'},
-  explanation:   {label: 'Explanation',   file: '/docs/explanation.md'},
-  reference:     {label: 'Reference',     file: '/docs/reference.md'},
+  explanation:   {label: 'Explanations',  file: '/docs/explanations.md'},
+  reference:     {label: 'References',    file: '/docs/references.md'},
   demos:         {label: 'Demos',         file: '/docs/demos.md'},
 };
 

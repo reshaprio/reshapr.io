@@ -17,8 +17,8 @@ reShapr enables enterprises to expose their APIs to AI agents and LLMs via the M
 - Overview: https://reshapr.io/docs/overview.md
 - Tutorials: https://reshapr.io/docs/tutorials.md
 - How-to Guides: https://reshapr.io/docs/how-to-guides.md
-- Explanation: https://reshapr.io/docs/explanation.md
-- Reference: https://reshapr.io/docs/reference.md
+- Explanation: https://reshapr.io/docs/explanations.md
+- Reference: https://reshapr.io/docs/references.md
 - Demos: https://reshapr.io/docs/demos.md
 
 ## Documentation (human-readable)

@@ -4,19 +4,118 @@ https://reshapr.io/docs/tutorials/docker-compose
 
 ---
 
-## Docker Compose (coming soon)
+## Run using Docker Compose
 
 https://reshapr.io/docs/tutorials/docker-compose
 
-Run reShapr locally using Docker Compose for development and testing. Full guide coming soon.
+Run reShapr locally using Docker Compose for development and testing.
+
+### Prerequisites
+
+- Docker (with Docker Compose v2) or Podman
+- Node.js v18+ and the reShapr CLI (`npm install -g @reshapr/reshapr-cli`)
+
+### Quick start with the CLI
+
+```bash
+reshapr run                    # pulls latest release, starts containers in background
+reshapr status                 # check running containers
+reshapr stop                   # shut everything down
+```
+
+`reshapr run` downloads `install/docker-compose-all-in-one.yml` from GitHub, configures image tags, saves the file to `~/.reshapr/`, and runs `docker compose up -d`.
+
+Options: `--release <version>` (default: `latest`; also accepts `nightly` or a specific tag like `0.0.5`).
+
+### Create an admin user
+
+```bash
+SERVER_URL=http://localhost:5555
+SERVER_TOKEN=<default-api-key>
+
+curl -XPOST $SERVER_URL/api/admin/users \
+  -H "Content-Type: application/json" -H "x-reshapr-api-key: $SERVER_TOKEN" \
+  -d '{"username":"admin","email":"reshapr@example.com","password":"password","firstname":"Reshapr","lastname":"Admin"}'
+
+curl -XPUT $SERVER_URL/api/admin/users/admin/organization/reshapr/owner \
+  -H "x-reshapr-api-key: $SERVER_TOKEN"
+```
+
+### Login and use
+
+```bash
+reshapr login --server http://localhost:5555
+```
+
+Control plane: `http://localhost:5555` — MCP gateway: `http://localhost:7777`.
+
+### Manual setup (without the CLI)
+
+```bash
+git clone https://github.com/reshaprio/reshapr.git
+cd reshapr/install
+docker compose -f docker-compose-all-in-one.yml up
+```
+
+Helper scripts included: `create-admin.sh`, `create-user+org.sh`.
 
 ---
 
-## Helm Charts (coming soon)
+## Install on Kubernetes
 
 https://reshapr.io/docs/tutorials/kubernetes
 
-Deploy reShapr on Kubernetes using Helm for production-grade environments. Full guide coming soon.
+Deploy reShapr on Kubernetes using Helm charts. Two OCI-based charts are available on Quay.io (latest version: 0.0.2):
+
+- `reshapr-control-plane` — Control plane API server + database
+- `reshapr-proxy` — MCP gateway (data plane)
+
+### Install the control plane (development)
+
+```bash
+helm repo add bitnami https://charts.bitnami.com/bitnami && helm repo update
+
+helm install reshapr-control-plane \
+  oci://quay.io/reshapr/reshapr-helm-charts/reshapr-control-plane --version 0.0.2 \
+  --create-namespace --namespace reshapr-system \
+  --set postgresql.enabled=true \
+  --set postgresql.auth.password=admin \
+  --set apiKey.value=dev-api-key-change-me-in-production \
+  --set encryptionKey.value=dev-encryption-key-change-me-in-production \
+  --set admin.nameValue=admin \
+  --set admin.passwordValue=password \
+  --set admin.emailValue=reshapr@example.com \
+  --set admin.defaultGatewayTokensValue=my-super-secret-token-xyz
+```
+
+### Install the proxy (development)
+
+```bash
+helm install reshapr-proxy \
+  oci://quay.io/reshapr/reshapr-helm-charts/reshapr-proxy --version 0.0.2 \
+  --create-namespace --namespace reshapr-proxies \
+  --set gateway.idPrefix=acme \
+  --set gateway.labels='env=dev;team=reshapr' \
+  --set gateway.fqdns=mcp.acme.loc \
+  --set gateway.controlPlane.host=reshapr-control-plane-ctrl.reshapr-system \
+  --set gateway.controlPlane.port=5555 \
+  --set gateway.controlPlane.token=my-super-secret-token-xyz
+```
+
+### Key parameters
+
+Control plane: `ctrl.replicaCount`, `postgresql.enabled`, `externalDatabase.host`, `admin.*`, `apiKey.value`, `ingress.enabled`.
+
+Proxy: `replicaCount`, `gateway.idPrefix`, `gateway.fqdns`, `gateway.labels`, `gateway.controlPlane.*`, `autoscaling.enabled`, `ingress.enabled`.
+
+### Production notes
+
+- Use external PostgreSQL with `postgresql.enabled=false` and `externalDatabase.*`
+- Store tokens in Kubernetes secrets (`gateway.controlPlane.existingSecret`, `apiKey.existingSecret`)
+- Enable ingress with TLS for both charts
+- Enable HPA for the proxy with `autoscaling.enabled=true`
+
+Full parameter reference: https://github.com/reshaprio/reshapr-helm-charts
 
 ---
 
