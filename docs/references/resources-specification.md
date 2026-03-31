@@ -38,10 +38,10 @@ resources:
 
 A `Resources` artifact follows some simple rules:
 
-- It always contains an identification section made of `apiVersion` and `kind` properties that **must** have the **[`reshapr.io/v1alpha1`](http://reshapr.io/v1alpha1)** and `Resources` values respectively,
-- It **must** be bound to a specific reShapr **[Service](../explanations/services-and-artifacts.md)** using the **[`service.name`](http://service.name)** and `service.version` properties whose values **must** match an already discovered Service,
+- It always contains an identification section made of `apiVersion` and `kind` properties that **must** have the **`reshapr.io/v1alpha1`** and `Resources` values respectively,
+- It **must** be bound to a specific reShapr **[Service](../explanations/services-and-artifacts.md)** using the **`service.name`** and `service.version` properties whose values **must** match an already discovered Service,
 - The `resources` section then defines the resources:
-  - We have a single resource here: **[`file://](file://)**/project/readme.md`  . Resource identifiers **must** always start with some protocol-specific notation like `file://.`
+  - We have a single resource here: **`file:///project/readme.md`**. Resource identifiers **must** always start with some protocol-specific notation like `file://.`
   - A resource **must** always have a `name` that defines it’s short name,
   - A resource **may** provide optional `title` , `description`, `mimeType` and `icons` to provide more context to the Agent when choosing an appropriate resource,
   - A resource **may** also specify its content by using either a `text` or a `blob` property. `text` specifies its content as plain text, `blob` value must be encoded using Base64
@@ -77,4 +77,4 @@ A `resourceTemplate` follows these rules:
 
 To fetch its resource content, a `resourceTemplate` **will reuse [the backend endpoint URL](../explanations/configuration-and-exposition.md) coming from the MCP Server Configuration Plan!**
 
-As an example, imagine that you have configured your backend endpoint URL to be **[https://api.acme.com](https://api.came.com)**. When asking for a resource with `path=resources/doc.md` , then your reShapr MCP Server will actually try to fetch the **[https://api.acme.com/project/src/resources/doc.md?mode=raw](https://api.acme.com/project/src/resources/doc.md?mode=raw)** URL to get its content. Depending on the received content (text or binary), the reShapr endpoint will use the correct encoding to allow your agent or host application to correctly interpret this content.
+As an example, imagine that you have configured your backend endpoint URL to be **`https://api.acme.com`**. When asking for a resource with `path=resources/doc.md` , then your reShapr MCP Server will actually try to fetch the **`https://api.acme.com/project/src/resources/doc.md?mode=raw`)** URL to get its content. Depending on the received content (text or binary), the reShapr endpoint will use the correct encoding to allow your agent or host application to correctly interpret this content.

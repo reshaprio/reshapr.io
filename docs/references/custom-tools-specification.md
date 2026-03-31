@@ -1,6 +1,6 @@
 # Custom Tools
 
-The use of MCP Server raises important concerns regarding the control of the context - see our dedicated blog post **[From Context Overload to Context Control!](https://reshaprio.medium.com/from-context-overload-to-context-control-f867caa816e5)** on this topic. There are different facets of this need of control: the search for efficiency (economical & technical performance), the reduction of security threats, and the adaptation to a business context or process.
+The use of MCP Server raises important concerns regarding the control of the context - see our dedicated blog post **[From Context Overload to Context Control!](/blog/from-context-overload-to-context-control)** on this topic. There are different facets of this need of control: the search for efficiency (economical & technical performance), the reduction of security threats, and the adaptation to a business context or process.
 
 Even official MCP Servers can be questioned regarding these concerns:
 
@@ -50,8 +50,8 @@ customTools:
 
 A `CustomTools` artifact follows some simple rules:
 
-- It always contains an identification section made of `apiVersion` and `kind` properties that **must** have the **[`reshapr.io/v1alpha1`](http://reshapr.io/v1alpha1)** and `CustomTools` values respectively,
-- It **must** be bound to a specific reShapr **[Service](../explanations/services-and-artifacts.md)** using the **[`service.name`](http://service.name)** and `service.version` properties whose values **must** match an already discovered Service,
+- It always contains an identification section made of `apiVersion` and `kind` properties that **must** have the **`reshapr.io/v1alpha1`** and `CustomTools` values respectively,
+- It **must** be bound to a specific reShapr **[Service](../explanations/services-and-artifacts.md)** using the **`service.name`** and `service.version` properties whose values **must** match an already discovered Service,
 - The `customTools` section then defines the tools:
 - We have a single tool here: `get_user_with_latest_followers`
 - A custom tool **must** always have a `tool` that defines the original tool it overrides and replaces: here we’re using the GitHub `user` tool,
