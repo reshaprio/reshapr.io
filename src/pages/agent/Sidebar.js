@@ -4,6 +4,12 @@ import styles from './styles.module.css';
 
 export const NAV = [
   {
+    label: 'Site',
+    items: [
+      {label: 'Home', href: '/agent/'},
+    ],
+  },
+  {
     label: 'Docs',
     items: [
       {label: 'Overview',       href: '/agent/docs?s=overview'},
