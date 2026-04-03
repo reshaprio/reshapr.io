@@ -36,7 +36,7 @@ Want to get all the features in a nutshell? This is where you can find all of th
 ## Operations
 
 - MCP Server endpoints rate limiting
-- **[User-friendly CLI](https://www.npmjs.com/package/reshapr-cli)** for importing API definitions, declaring secrets and configuring deployment (**[📄](cli-commands.md)**)
+- **[User-friendly CLI](https://www.npmjs.com/package/@reshapr/reshapr-cli)** for importing API definitions, declaring secrets and configuring deployment (**[📄](cli-commands.md)**)
 - Full-stack observability with **[Open Telemetry](https://opentelemetry.io/)** support
 - Flexible deployment: SaaS, hybrid or on-premises
 - Scalable model with auto-discovery of new Gateways
