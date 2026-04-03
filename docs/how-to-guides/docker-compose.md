@@ -23,10 +23,10 @@ reshapr run
 ```
 
 ```bash
-ℹ️  Resolved 'latest' to release '0.0.7'.
-ℹ️  Downloading compose file from https://raw.githubusercontent.com/reshaprio/reshapr/refs/tags/0.0.7/install/docker-compose-all-in-one.yml...
-✅ Compose file saved to /Users/you/.reshapr/docker-compose-0.0.7.yml
-ℹ️  Starting Reshapr containers (release: 0.0.7)...
+ℹ️  Resolved 'latest' to release '0.0.8'.
+ℹ️  Downloading compose file from https://raw.githubusercontent.com/reshaprio/reshapr/refs/tags/0.0.8/install/docker-compose-all-in-one.yml...
+✅ Compose file saved to /Users/you/.reshapr/docker-compose-0.0.8.yml
+ℹ️  Starting Reshapr containers (release: 0.0.8)...
 ✅ Reshapr containers started successfully.
 ```
 
@@ -35,7 +35,7 @@ By default this pulls the **latest** stable release. You can also target a speci
 Run a specific release:
 
 ```bash
-reshapr run --release 0.0.7
+reshapr run --release 0.0.8
 ```
 
 Run the nightly build (latest from main branch):
@@ -55,10 +55,10 @@ reshapr status
 ```
 
 ```bash
-ℹ️  Reshapr containers (release: 0.0.7, started at: 2026-04-01T10:30:00.000Z)
+ℹ️  Reshapr containers (release: 0.0.8, started at: 2026-04-01T10:30:00.000Z)
 NAME                           IMAGE                                        ...   STATUS
-reshapr-ctrl-1                 registry.reshapr.io/reshapr/reshapr-ctrl:0.0.7           ...   Up 2 minutes
-reshapr-proxy-1                registry.reshapr.io/reshapr/reshapr-proxy:0.0.7          ...   Up 2 minutes
+reshapr-ctrl-1                 registry.reshapr.io/reshapr/reshapr-ctrl:0.0.8           ...   Up 2 minutes
+reshapr-proxy-1                registry.reshapr.io/reshapr/reshapr-proxy:0.0.8          ...   Up 2 minutes
 reshapr-db-1                   postgres:17                                  ...   Up 2 minutes
 ```
 
@@ -101,7 +101,7 @@ reshapr stop
 ```
 
 ```bash
-ℹ️  Stopping Reshapr containers (release: 0.0.7)...
+ℹ️  Stopping Reshapr containers (release: 0.0.8)...
 ✅ Reshapr containers stopped successfully.
 ```
 
