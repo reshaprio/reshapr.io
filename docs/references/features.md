@@ -12,7 +12,7 @@ Want to get all the features in a nutshell? This is where you can find all of th
 
 ## MCP support
 
-- Support of **[2023-11-25](https://modelcontextprotocol.io/specification/2025-11-25)** and **[2025-06-18](https://modelcontextprotocol.io/specification/2025-06-18)** versions
+- Support of **[2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25)** and **[2025-06-18](https://modelcontextprotocol.io/specification/2025-06-18)** versions
 - MCP **[Streamable HTTP transport](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports#streamable-http)**
 - `Tools`, `Prompts` and `Resources` (**[📄](prompts-specification.md)**)
 - **[URL Mode with Elicitation Required Error](https://modelcontextprotocol.io/specification/2025-11-25/client/elicitation#url-mode-with-elicitation-required-error-flow)** (**[📄](../explanations/security-model.md)**)
