@@ -21,10 +21,10 @@ reshapr --version
 With this output:
 
 ```bash
-0.0.7
+0.0.8
 ```
 
-The current `version` of the CLI is `0.0.7`.
+The current `version` of the CLI is `0.0.8`.
 
 :::warning
 We're iterating fast! Make sure you're on the latest version so you don't miss any of the new magic 🚀
@@ -109,7 +109,7 @@ With this output:
   Organization: yada
   Server      : https://app.try.reshapr.io
 ℹ️  Server Information
-  Version     : 0.0.7
+  Version     : 0.0.8
   Build time  : 2026-03-17T17:26:05Z
   Mode        : on-premises
   Internal IDP: undefined

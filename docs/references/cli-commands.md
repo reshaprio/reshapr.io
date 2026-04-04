@@ -59,7 +59,7 @@ Endpoints      : mcp.beta.reshapr.io/mcp/<organization>/GitHub+GraphQL/20250917
 
 ### `reshapr attach` command
 
-Available since version `0.0.6` of the CLI, the attach command allows you to provide and attach complementary artifacts to an already discovered **[Service](../explanations/services-and-artifacts.md)**. This command will typically be used immediately after the `import` command to provide additional information about **[Prompts](prompts-specification.md)** or **[Custom Tools](custom-tools-specification.md)**.
+Available since version `0.0.8` of the CLI, the attach command allows you to provide and attach complementary artifacts to an already discovered **[Service](../explanations/services-and-artifacts.md)**. This command will typically be used immediately after the `import` command to provide additional information about **[Prompts](prompts-specification.md)** or **[Custom Tools](custom-tools-specification.md)**.
 
 Similar to the `import` command, you need to instruct reShapr on how to retrieve this artifact. You can use:
 

@@ -33,7 +33,7 @@ https://reshapr.io/docs/tutorials/getting-started
 
 ```bash
 npm install -g @reshapr/reshapr-cli
-reshapr --version   # → 0.0.5
+reshapr --version   # → 0.0.8
 ```
 
 ### Login
@@ -98,7 +98,7 @@ reshapr stop                   # shut everything down
 
 `reshapr run` downloads `install/docker-compose-all-in-one.yml` from GitHub, configures image tags, saves the file to `~/.reshapr/`, and runs `docker compose up -d`.
 
-Options: `--release <version>` (default: `latest`; also accepts `nightly` or a specific tag like `0.0.5`).
+Options: `--release <version>` (default: `latest`; also accepts `nightly` or a specific tag like `0.0.8`).
 
 ### Create an admin user
 
