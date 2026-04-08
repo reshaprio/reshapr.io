@@ -8,7 +8,6 @@ import React from 'react';
 import {useNavbarMobileSidebar} from '@docusaurus/theme-common/internal';
 import {translate} from '@docusaurus/Translate';
 import IconClose from '@theme/Icon/Close';
-import NavbarLogo from '@theme/Navbar/Logo';
 
 function CloseButton() {
   const mobileSidebar = useNavbarMobileSidebar();
@@ -29,8 +28,7 @@ function CloseButton() {
 
 export default function NavbarMobileSidebarHeader() {
   return (
-    <div className="navbar-sidebar__brand">
-      <NavbarLogo />
+    <div className="navbar-sidebar__brand" style={{justifyContent: 'flex-end'}}>
       <CloseButton />
     </div>
   );

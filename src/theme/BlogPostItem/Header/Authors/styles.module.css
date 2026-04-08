@@ -38,3 +38,16 @@
   font-size: 0.75rem;
   color: var(--ifm-color-emphasis-400);
 }
+
+@media (max-width: 768px) {
+  .byline {
+    gap: 0.3rem 0.5rem;
+    margin-top: 0.75rem;
+    font-size: 0.8125rem;
+  }
+
+  .avatar {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}

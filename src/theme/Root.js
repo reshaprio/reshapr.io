@@ -3,8 +3,9 @@ import Link from '@docusaurus/Link';
 import { useLocation } from '@docusaurus/router';
 
 function getAgentHref(pathname) {
-  if (pathname.startsWith('/agent/')) return null;
+  if (pathname.startsWith('/agent/') || pathname === '/agent') return null;
 
+  if (pathname === '/' || pathname === '') return '/agent/';
   if (pathname.startsWith('/blog')) return '/agent/blog';
 
   if (pathname.startsWith('/docs/overview')) return '/agent/docs?s=overview';
@@ -23,7 +24,7 @@ function getAgentHref(pathname) {
   if (pathname.startsWith('/about')) return '/agent/about';
   if (pathname.startsWith('/community')) return '/agent/community';
 
-  return '/agent/blog';
+  return '/agent/';
 }
 
 export default function Root({ children }) {

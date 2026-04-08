@@ -27,3 +27,13 @@
 .breadcrumbBack:hover .breadcrumbArrow {
   transform: translateX(-4px);
 }
+
+@media (max-width: 768px) {
+  .breadcrumb {
+    margin-bottom: 1.25rem;
+  }
+
+  .breadcrumbBack {
+    font-size: 0.875rem;
+  }
+}

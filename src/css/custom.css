@@ -14,8 +14,8 @@
  */
 .agent-view-toggle {
   position: fixed;
-  bottom: 1.5rem;
-  right: 1.5rem;
+  bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
+  right: max(1.5rem, env(safe-area-inset-right, 0px));
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -719,16 +719,16 @@ body,
    * the generic mobile rule below shrinks all `button.clean-btn` to 36px — override for `.navbar__toggle` only.
    */
   .navbar .navbar__toggle.clean-btn {
-    width: 96px !important;
-    min-width: 96px !important;
-    height: 96px !important;
-    min-height: 96px !important;
+    width: 56px !important;
+    min-width: 56px !important;
+    height: 56px !important;
+    min-height: 56px !important;
     flex-shrink: 0;
   }
 
   .navbar .navbar__toggle.clean-btn svg {
-    width: 48px !important;
-    height: 48px !important;
+    width: 28px !important;
+    height: 28px !important;
   }
 }
 
@@ -810,9 +810,9 @@ body,
   }
 
   .navbar-github-link {
-    width: 36px;
-    min-width: 36px;
-    height: 36px;
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
     font-size: 0;
     line-height: 0;
     padding: 0;
@@ -843,8 +843,8 @@ body,
   }
 
   .navbar button.clean-btn:not(.navbar__toggle):not(.navbar-sidebar__back) {
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
   }
 
   .navbar button.clean-btn.reshapr-color-segmented {
@@ -944,18 +944,13 @@ body,
 
 @media (max-width: 360px) {
   .navbar__logo.navbar__logo-compact {
-    display: none !important;
+    height: 28px !important;
+    width: 28px !important;
+    max-height: 28px !important;
   }
 }
 
-@media (max-width: 1024px) {
-  .navbar-sidebar .navbar__logo.navbar__logo-full img,
-  .navbar-sidebar .navbar__logo.navbar__logo-compact {
-    height: var(--reshapr-navbar-logo-sidebar-height);
-    max-height: var(--reshapr-navbar-logo-sidebar-height);
-    transform: none;
-  }
-}
+/* Sidebar logo removed — navbar logo stays visible behind the drawer */
 
 .navbar__logo.navbar__logo-full img,
 img.navbar__logo.navbar__logo-compact {
@@ -1100,6 +1095,13 @@ img.navbar__logo.navbar__logo-compact {
     1.000123 89%,
     1.000088 90%
   );
+}
+
+/* Sidebar header: logo removed, compact close-button row */
+.navbar-sidebar .navbar-sidebar__brand {
+  min-height: 0;
+  height: auto;
+  padding: 0.5rem 0.75rem;
 }
 
 /* Infima: mobile drawer slide + fade — override timing to match reshapr interpolation tokens */
@@ -1636,6 +1638,16 @@ img.navbar__logo.navbar__logo-compact {
   .theme-blog-list-page article,
   .theme-blog-post-page article {
     padding-top: 1rem;
+  }
+
+  .theme-blog-post-page article header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .theme-blog-post-page article header h1 {
+    font-size: clamp(1.5rem, 1.3rem + 0.7vw, 2rem);
+    margin-bottom: 0.75rem;
   }
 }
 

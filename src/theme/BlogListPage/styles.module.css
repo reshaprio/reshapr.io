@@ -228,7 +228,7 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 996px) {
   .hero {
     grid-template-columns: 1fr;
     gap: 1.5rem;
@@ -236,10 +236,21 @@
     padding-bottom: 2.5rem;
   }
 
+  .heroImageWrap {
+    max-height: 280px;
+    order: 0;
+  }
+
   .heroTitle {
     font-size: clamp(1.75rem, 5vw, 2.35rem);
   }
 
+  .heroDescription {
+    -webkit-line-clamp: 3;
+  }
+}
+
+@media screen and (max-width: 768px) {
   .latestList {
     grid-template-columns: 1fr;
     gap: 1.5rem;
@@ -247,5 +258,9 @@
 
   .latestHeading {
     margin-bottom: 1rem;
+  }
+
+  .readMore {
+    font-size: 0.875rem;
   }
 }

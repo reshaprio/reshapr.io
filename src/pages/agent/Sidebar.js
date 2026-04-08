@@ -29,35 +29,57 @@ export const NAV = [
   },
 ];
 
+const MOBILE_NAV = [
+  {label: 'Docs',  href: '/agent/docs?s=overview'},
+  {label: 'Blog',  href: '/agent/blog'},
+  {label: 'About', href: '/agent/about'},
+];
+
 export default function AgentSidebar({activeHref}) {
   return (
-    <nav className={styles.sidebar} aria-label="Site navigation">
-      <Link to="/" className={styles.sidebarHome}>
-        ~/reshapr
-      </Link>
-      {NAV.map(section => (
-        <div key={section.label} className={styles.sidebarSection}>
-          <p className={styles.sidebarLabel}>{section.label}</p>
-          <ul className={styles.sidebarList}>
-            {section.items.map(item => {
-              const isActive = activeHref
-                ? item.href === activeHref
-                : false;
-              return (
-                <li key={item.href}>
-                  <Link
-                    to={item.href}
-                    className={`${styles.sidebarLink} ${isActive ? styles.sidebarLinkActive : ''}`}
-                  >
-                    {isActive && <span className={styles.sidebarActiveDot} aria-hidden="true" />}
-                    {item.label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      ))}
-    </nav>
+    <>
+      <nav className={styles.sidebar} aria-label="Site navigation">
+        <Link to="/" className={styles.sidebarHome}>
+          ~/reshapr
+        </Link>
+        {NAV.map(section => (
+          <div key={section.label} className={styles.sidebarSection}>
+            <p className={styles.sidebarLabel}>{section.label}</p>
+            <ul className={styles.sidebarList}>
+              {section.items.map(item => {
+                const isActive = activeHref
+                  ? item.href === activeHref
+                  : false;
+                return (
+                  <li key={item.href}>
+                    <Link
+                      to={item.href}
+                      className={`${styles.sidebarLink} ${isActive ? styles.sidebarLinkActive : ''}`}
+                    >
+                      {isActive && <span className={styles.sidebarActiveDot} aria-hidden="true" />}
+                      {item.label}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
+      </nav>
+
+      <nav className={styles.mobileNav} aria-label="Site navigation">
+        <Link to="/" className={styles.mobileNavHome}>~/reshapr</Link>
+        <span className={styles.mobileNavSep} aria-hidden="true">/</span>
+        {MOBILE_NAV.map(item => (
+          <Link
+            key={item.href}
+            to={item.href}
+            className={`${styles.mobileNavLink} ${activeHref === item.href ? styles.mobileNavLinkActive : ''}`}
+          >
+            {item.label}
+          </Link>
+        ))}
+      </nav>
+    </>
   );
 }
