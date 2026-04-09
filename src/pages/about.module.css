@@ -191,4 +191,9 @@
     width: 72px;
     height: 72px;
   }
+
+  .socialLink {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
 }

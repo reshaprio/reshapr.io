@@ -115,8 +115,8 @@ function HomepageHeader() {
           animate="visible">
           <m.div variants={itemVariants}>
             <Heading as="h1" className={styles.heroTitle}>
-              The open source, no-code MCP Server for
-              <br />
+              The open source, no-code MCP Server for{' '}
+              <span className={styles.heroTitleBreak} />
               AI-Native API Access
             </Heading>
           </m.div>

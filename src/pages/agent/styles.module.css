@@ -216,9 +216,95 @@
   color: var(--ifm-link-color) !important;
 }
 
+/* ─── Mobile nav strip (hidden on desktop) ───────────────────────────────── */
+.mobileNav {
+  display: none;
+}
+
 /* ─── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
+  .root {
+    flex-direction: column;
+  }
+
   .sidebar {
     display: none;
+  }
+
+  .mobileNav {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    background: #111;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobileNavHome {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #63bbb6 !important;
+    text-decoration: none !important;
+    flex-shrink: 0;
+  }
+
+  .mobileNavHome:hover {
+    color: #9debe7 !important;
+  }
+
+  .mobileNavSep {
+    color: rgba(255, 255, 255, 0.2);
+    font-size: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .mobileNavLink {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5) !important;
+    text-decoration: none !important;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    flex-shrink: 0;
+    transition: color 0.12s, background 0.12s;
+  }
+
+  .mobileNavLink:hover {
+    color: rgba(255, 255, 255, 0.85) !important;
+  }
+
+  .mobileNavLinkActive {
+    color: #c9d1d9 !important;
+    background: rgba(255, 255, 255, 0.07);
+  }
+
+  .toolbar {
+    padding: 0.5rem 1rem;
+  }
+
+  .path {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .copyBtn {
+    min-height: 44px;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .content {
+    padding: 1.25rem 1rem;
+    font-size: 0.8125rem;
+    line-height: 1.7;
+  }
+
+  .viewToggle {
+    bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+    right: max(1rem, env(safe-area-inset-right, 0px));
+    font-size: 0.75rem;
+    padding: 0.4rem 0.9rem;
   }
 }

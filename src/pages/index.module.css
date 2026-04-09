@@ -231,6 +231,16 @@
   font-weight: 650;
 }
 
+.heroTitleBreak {
+  display: block;
+}
+
+@media screen and (max-width: 640px) {
+  .heroTitleBreak {
+    display: none;
+  }
+}
+
 .heroSubtitle {
   max-width: 680px;
   margin: 0;
@@ -664,10 +674,6 @@
     line-height: 1.6;
   }
 
-  .heroGrid {
-    grid-template-columns: 1fr;
-  }
-
   .heroBanner {
     grid-template-columns: 1fr;
     min-height: auto;
@@ -687,7 +693,7 @@
   }
 
   .heroSubtitle {
-    font-size: 1.05rem;
+    font-size: clamp(0.9375rem, 0.9rem + 0.3vw, 1.05rem);
   }
 
   .heroImageWrap .heroImage {
@@ -707,6 +713,12 @@
   .panel {
     grid-template-columns: 1fr;
     gap: var(--reshapr-space-7);
+  }
+
+  .cliCopyBtn {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.5rem;
   }
 
   .ctaCliRow {
