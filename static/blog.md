@@ -4,7 +4,7 @@ Perspectives on AI infrastructure, the Model Context Protocol, and enterprise AP
 
 https://reshapr.io/blog
 
-Tags: MCP, AI, Enterprise, Security, Architecture, Production, Context, Use Cases
+Tags: MCP, AI, Enterprise, Security, Architecture, Production, Context, Use Cases, Announcement, Open-Source
 
 ---
 
@@ -12,9 +12,21 @@ Tags: MCP, AI, Enterprise, Security, Architecture, Production, Context, Use Case
 
 ---
 
+### [Welcome to reShapr](https://reshapr.io/blog/welcome-to-reshapr)
+
+2026-03-31 — Announcement, MCP, Open-Source
+
+From a private beta experiment to an open project — reShapr is now live. Here's the story behind it and what comes next.
+
+A few months ago, the reShapr team started experimenting with a new idea: What if existing APIs could instantly become MCP tools usable by AI agents without writing glue code? After a private beta with enterprises that validated the approach, reShapr is now an open-source project — built by the co-founders of Microcks to help organizations turn existing APIs into AI-native tools instantly, expose services as MCP servers, and accelerate AI + cloud native adoption.
+
+Full post: https://reshapr.io/blog/welcome-to-reshapr
+
+---
+
 ### [From Context Overload to Context Control](https://reshapr.io/blog/from-context-overload-to-context-control)
 
-2025-11-19 — MCP, Production, Context
+2026-03-30 — MCP, Production, Context
 
 How reShapr's selective tool exposure makes the Model Context Protocol production-ready at enterprise scale.
 
@@ -24,21 +36,9 @@ Full post: https://reshapr.io/blog/from-context-overload-to-context-control
 
 ---
 
-### [Secure MCP Deployment with reShapr](https://reshapr.io/blog/secure-mcp-deployment-with-reshapr)
-
-2025-09-26 — Security, MCP, Enterprise
-
-How reShapr enables secure, multi-tenant MCP deployment with authentication, authorization, and enterprise-grade access controls.
-
-Security is the hardest part of putting MCP in production. reShapr provides a layered security model — OAuth2, API keys, mTLS — combined with tenant isolation and fine-grained access policies, so enterprises can expose internal APIs to AI agents without compromising their security posture.
-
-Full post: https://reshapr.io/blog/secure-mcp-deployment-with-reshapr
-
----
-
 ### [Six Use Cases for Accelerating AI with reShapr](https://reshapr.io/blog/six-use-cases-for-accelerating-ai-with-reshapr)
 
-2025-07-29 — Use Cases, AI, Enterprise
+2026-03-15 — Use Cases, AI, Enterprise
 
 Six ways organizations use reShapr to streamline API enablement, accelerate prototyping, and securely integrate AI into production.
 
@@ -50,7 +50,7 @@ Full post: https://reshapr.io/blog/six-use-cases-for-accelerating-ai-with-reshap
 
 ### [Why reShapr?](https://reshapr.io/blog/why-reshapr)
 
-2025-07-24 — MCP, Architecture, Enterprise
+2026-03-01 — MCP, Architecture, Enterprise
 
 Why enterprises shouldn't build MCP servers from scratch — and what a no-code MCP server changes about AI-native API access.
 

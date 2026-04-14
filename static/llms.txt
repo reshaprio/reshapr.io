@@ -45,10 +45,10 @@ reShapr enables enterprises to expose their APIs to AI agents and LLMs via the M
 
 Full machine-readable blog index: https://reshapr.io/blog.md
 
-- [From Context Overload to Context Control](https://reshapr.io/blog/from-context-overload-to-context-control): How reShapr's selective tool exposure makes the Model Context Protocol production-ready at enterprise scale. (2025-11-19)
-- [Secure MCP Deployment with reShapr](https://reshapr.io/blog/secure-mcp-deployment-with-reshapr): How reShapr enables secure, multi-tenant MCP deployment with authentication, authorization, and enterprise-grade access controls. (2025-09-26)
-- [Six Use Cases for Accelerating AI with reShapr](https://reshapr.io/blog/six-use-cases-for-accelerating-ai-with-reshapr): Six ways organizations use reShapr to streamline API enablement, accelerate prototyping, and securely integrate AI into production. (2025-07-29)
-- [Why reShapr?](https://reshapr.io/blog/why-reshapr): Why enterprises shouldn't build MCP servers from scratch — and what a no-code MCP server changes about AI-native API access. (2025-07-24)
+- [Welcome to reShapr](https://reshapr.io/blog/welcome-to-reshapr): From a private beta experiment to an open project — reShapr is now live. Here's the story behind it and what comes next. (2026-03-31)
+- [From Context Overload to Context Control](https://reshapr.io/blog/from-context-overload-to-context-control): How reShapr's selective tool exposure makes the Model Context Protocol production-ready at enterprise scale. (2026-03-30)
+- [Six Use Cases for Accelerating AI with reShapr](https://reshapr.io/blog/six-use-cases-for-accelerating-ai-with-reshapr): Six ways organizations use reShapr to streamline API enablement, accelerate prototyping, and securely integrate AI into production. (2026-03-15)
+- [Why reShapr?](https://reshapr.io/blog/why-reshapr): Why enterprises shouldn't build MCP servers from scratch — and what a no-code MCP server changes about AI-native API access. (2026-03-01)
 
 ## Company
 

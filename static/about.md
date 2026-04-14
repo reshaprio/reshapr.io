@@ -31,7 +31,7 @@ Co-founder of Microcks & reShapr | Postman team member
 Co-founder of Microcks & reShapr | Postman team member
 
 - LinkedIn: https://www.linkedin.com/in/yacinekheddache/
-- Bluesky: https://bsky.app/profile/yadayac.bsky.social
+- Bluesky: https://bsky.app/profile/kheddache.me
 - GitHub: https://github.com/yada
 
 ---

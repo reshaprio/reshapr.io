@@ -67,10 +67,10 @@ https://reshapr.io/docs/how-to-guides/kubernetes
 
 Deploy reShapr on Kubernetes using Helm charts for production-grade environments.
 
-reShapr provides two Helm charts, distributed as OCI artifacts on the reShapr registry:
+reShapr provides two Helm charts, distributed as OCI artifacts:
 
-- `reshapr-control-plane` — Control plane API server + database (`registry.reshapr.io/reshapr/reshapr-ctrl`)
-- `reshapr-proxy` — MCP gateway (data plane) (`registry.reshapr.io/reshapr/reshapr-proxy`)
+- `reshapr-control-plane` — Control plane API server + database (`https://quay.io/repository/reshapr/reshapr-helm-charts/reshapr-control-plane`)
+- `reshapr-proxy` — MCP gateway (data plane) (`https://quay.io/repository/reshapr/reshapr-helm-charts/reshapr-proxy`)
 
 Full installation instructions: https://github.com/reshaprio/reshapr-helm-charts
 

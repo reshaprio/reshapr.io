@@ -13,7 +13,7 @@ https://reshapr.io/docs/references/features
 - Rename operations, split APIs by inclusion/exclusion, define CustomTools
 
 ### MCP Support
-- Protocol versions: 2023-11-25 and 2025-06-18
+- Protocol versions: 2025-11-25 and 2025-06-18
 - Streamable HTTP transport
 - Tools, Prompts, and Resources
 - Elicitation (URL Mode for sensitive data and OAuth flows)
