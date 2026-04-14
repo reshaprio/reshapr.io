@@ -47,6 +47,14 @@ const config = {
         href: '/site.webmanifest',
       },
     },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'llmstxt',
+        type: 'text/plain',
+        href: '/llms.txt',
+      },
+    },
   ],
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -111,6 +119,7 @@ const config = {
         includeBlog: true,
         excludeImports: true,
         removeDuplicateHeadings: true,
+        generateMarkdownFiles: true,
         description:
           'reShapr is a no-code AI translation layer that instantly converts existing APIs (REST, gRPC, GraphQL) into secure, production-ready MCP (Model Context Protocol) servers — without writing a line of code.',
         rootContent: `reShapr enables enterprises to expose their APIs to AI agents and LLMs via the Model Context Protocol. It handles authentication, authorization, context control, and multi-tenant deployment so teams can move from API to AI-native endpoint in seconds.

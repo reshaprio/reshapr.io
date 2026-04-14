@@ -18,6 +18,9 @@ export default function Root({ children }) {
 
   return (
     <>
+      <blockquote className="llms-txt-directive">
+        For the complete documentation index, see <a href="/llms.txt">llms.txt</a>.
+      </blockquote>
       {children}
       {agentHref && (
         <Link to={agentHref} className="agent-view-toggle" aria-label="Switch to agent view">

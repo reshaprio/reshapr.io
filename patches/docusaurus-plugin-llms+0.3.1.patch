@@ -1,0 +1,13 @@
+diff --git a/node_modules/docusaurus-plugin-llms/lib/generator.js b/node_modules/docusaurus-plugin-llms/lib/generator.js
+index f769ecb..e05742f 100644
+--- a/node_modules/docusaurus-plugin-llms/lib/generator.js
++++ b/node_modules/docusaurus-plugin-llms/lib/generator.js
+@@ -281,7 +281,7 @@ async function generateIndividualMarkdownFiles(docs, outputDir, siteUrl, docsDir
+         // Create updated DocInfo with new URL pointing to the generated markdown file
+         // Convert file path to URL path (use forward slashes)
+         const urlPath = (0, utils_1.normalizePath)(uniquePath);
+-        const newUrl = `${siteUrl}/${urlPath}`;
++        const newUrl = `/${urlPath}`;
+         updatedDocs.push({
+             ...doc,
+             url: newUrl,
