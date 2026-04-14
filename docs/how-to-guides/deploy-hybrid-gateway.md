@@ -1,3 +1,7 @@
+---
+description: Run reShapr gateways inside your own infrastructure while the control plane stays in the cloud. Your application traffic never leaves your datacenter.
+---
+
 import ThemedImage from '@theme/ThemedImage';
 
 # Hybrid deployment

@@ -1,3 +1,7 @@
+---
+description: Understand Gateway Groups and Gateways — the deployment units that route MCP traffic across tenants and environments.
+---
+
 import ThemedImage from '@theme/ThemedImage';
 
 # Gateway Group & Gateway

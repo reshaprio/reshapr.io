@@ -1,3 +1,7 @@
+---
+description: Video demos showing reShapr in action — CLI installation, Docker setup, and OpenAPI-to-MCP conversion.
+---
+
 <!-- markdownlint-disable MD033 -->
 
 # Demos

@@ -1,3 +1,7 @@
+---
+description: Define MCP Resources to share contextual data — files, schemas, or application-specific information — with LLMs.
+---
+
 # Resources
 
 As explained in **[Why reShapr?](../overview/why-reshapr.md)**, reShapr can create secure MCP servers in seconds without coding, just by importing your API’s existing artifacts - like **[OpenAPI 3.x](https://www.openapis.org/)** specs, **[GraphQL](https://graphql.org/)** schemas and **[gRPC/Protobuf](https://grpc.io/)** definitions. These artifacts are directly used to produce **[MCP Tools](https://modelcontextprotocol.io/specification/2025-06-18/server/tools)** that are at the core of the Model Context Protocol. Another interesting aspect of MCP is that it may be composed of **[Resources](https://modelcontextprotocol.io/specification/2025-06-18/server/resources)**. Resources allow servers to share data that provides context to LLM, such as files, database schemas, or application-specific information.

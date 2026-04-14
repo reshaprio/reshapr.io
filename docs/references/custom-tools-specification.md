@@ -1,3 +1,7 @@
+---
+description: Define Custom Tools to rename, condense, and translate default API operations into LLM-friendly MCP tools.
+---
+
 # Custom Tools
 
 The use of MCP Server raises important concerns regarding the control of the context - see our dedicated blog post **[From Context Overload to Context Control!](/blog/from-context-overload-to-context-control)** on this topic. There are different facets of this need of control: the search for efficiency (economical & technical performance), the reduction of security threats, and the adaptation to a business context or process.

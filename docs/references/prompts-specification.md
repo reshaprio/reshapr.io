@@ -1,3 +1,7 @@
+---
+description: Define MCP Prompts using YAML to provide accelerators, guardrails, and orchestration instructions for tool usage.
+---
+
 # Prompts
 
 As explained in **[Why reShapr?](../overview/why-reshapr.md)**, reShapr can create secure MCP servers in seconds without coding, just by importing your API’s existing artifacts - like **[OpenAPI 3.x](https://www.openapis.org/)** specs, **[GraphQL](https://graphql.org/)** schemas and **[gRPC/Protobuf](https://grpc.io/)** definitions. These artifacts are directly used to produce **[MCP Tools](https://modelcontextprotocol.io/specification/2025-06-18/server/tools)** that are at the core of the Model Context Protocol. Another interesting aspect of MCP is that it may be composed of **[MCP Resources](https://modelcontextprotocol.io/specification/2025-06-18/server/resources)** and **[MCP Prompts](https://modelcontextprotocol.io/specification/2025-06-18/server/prompts)**. While MCP Tools are often enough for practical use of MCP, all these capabilities are likely to be part of a complete and production ready MCP Server.

@@ -1,3 +1,7 @@
+---
+description: Define Configuration Plans and Expositions to control how Services become MCP Server endpoints.
+---
+
 # Configuration Plan & Exposition
 
 Before being turned into an MCP Server endpoint, a reShapr **[Service](services-and-artifacts.md)** must have a *Configuration Plan* defined. A Configuration Plan will allow you to define how your Service will be consumed by MCP Clients. You’ll define the **backend endpoint** the reShapr Gateway will target as well as the **security options** you want to apply to future expositions.

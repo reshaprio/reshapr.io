@@ -102,6 +102,43 @@ const config = {
     ],
   ],
 
+  plugins: [
+    [
+      'docusaurus-plugin-llms',
+      {
+        generateLLMsTxt: true,
+        generateLLMsFullTxt: true,
+        includeBlog: true,
+        excludeImports: true,
+        removeDuplicateHeadings: true,
+        description:
+          'reShapr is a no-code AI translation layer that instantly converts existing APIs (REST, gRPC, GraphQL) into secure, production-ready MCP (Model Context Protocol) servers — without writing a line of code.',
+        rootContent: `reShapr enables enterprises to expose their APIs to AI agents and LLMs via the Model Context Protocol. It handles authentication, authorization, context control, and multi-tenant deployment so teams can move from API to AI-native endpoint in seconds.
+
+**Key concepts:**
+- **MCP (Model Context Protocol)**: An open standard by Anthropic for connecting LLMs to external tools and data sources. reShapr implements and extends it for enterprise use.
+- **No-code server creation**: Connect an existing API artifact (OpenAPI spec, gRPC proto, etc.) and reShapr generates a secure MCP server automatically.
+- **Context control**: reShapr filters which tools are exposed to which agents, preventing context overload and keeping LLM interactions precise.
+- **Gateway groups**: Logical groupings of MCP gateways for multi-tenant and multi-environment deployments.
+- **Hybrid deployment**: Run reShapr in the cloud, on-premise, or in hybrid configurations via Docker Compose or Helm charts.
+
+**Company:**
+- Website: https://reshapr.io
+- About: https://reshapr.io/about
+- Community: https://reshapr.io/community
+- GitHub: https://github.com/reshaprio/reshapr`,
+        includeOrder: [
+          'overview/*',
+          'tutorials/*',
+          'how-to-guides/*',
+          'explanations/*',
+          'references/*',
+          'demos*',
+        ],
+      },
+    ],
+  ],
+
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({

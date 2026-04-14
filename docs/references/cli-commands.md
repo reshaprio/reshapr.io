@@ -1,3 +1,7 @@
+---
+description: Full reference for reShapr CLI commands — import, attach, config, expo, secrets, gateway management, and more.
+---
+
 # reShapr CLI advanced
 
 ## Artifact commands

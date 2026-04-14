@@ -1,3 +1,7 @@
+---
+description: Security options for MCP endpoints — API keys, OAuth2, SPIFFE, backend secrets, and elicitation-based credential flows.
+---
+
 import ThemedImage from '@theme/ThemedImage';
 
 # Security options & Secrets

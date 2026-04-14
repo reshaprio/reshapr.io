@@ -1,3 +1,7 @@
+---
+description: How reShapr discovers Services from API artifacts (OpenAPI, GraphQL, gRPC) and the conventions used during import.
+---
+
 # Services & Artifacts
 
 As explained in **[Why reShapr?](../overview/why-reshapr.md)**, reShapr ingest your API’s existing artifacts such as **[OpenAPI 3.x](https://www.openapis.org/)** specs, **[GraphQL](https://graphql.org/)**  schemas and **[gRPC/Protobuffer](https://grpc.io/)** definitions to discover Services and create MCP Servers. A Service in reShapr represents a functional service promise - for example a *User Management Service* with a specific version - for example `1.0` - made of several operations (`searchUsers`, `getUserById,` etc...). Service are versioned so you’ll be able to handle the different versions of the *User Management Service* which can be `1.0`, `1.1`, `2.0` and so on…
