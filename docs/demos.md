@@ -7,19 +7,19 @@
 ## Demo Videos
 
 <div class="youtube-demo-grid">
-  <a class="youtube-demo-card" href="https://www.youtube.com/watch?v=W1xfiBpGzI0" target="_blank" rel="noopener noreferrer">
-    <img src="/img/demos/open-meteo-demo.jpg" alt="Watch Micepe Translate Open-Meteo API to MCP Instantly" />
-    <span>Translate Open-Meteo API to MCP Instantly</span>
+  <a class="youtube-demo-card" href="https://youtu.be/bmSPkisbqJo" target="_blank" rel="noopener noreferrer">
+    <img src="/img/demos/installing-cli.jpg" alt="reShapr Demo #0: Installing the reShapr CLI" />
+    <span>Demo #0: Installing the reShapr CLI</span>
   </a>
 
-  <a class="youtube-demo-card" href="https://www.youtube.com/watch?v=Krgy5XMzods" target="_blank" rel="noopener noreferrer">
-    <img src="/img/demos/docs-prompts-demo.jpg" alt="Watch Micepe Build MCP API Documentation and prompts in Minutes" />
-    <span>Build MCP API Documentation and Prompts in Minutes</span>
+  <a class="youtube-demo-card" href="https://youtu.be/ECZAiXbSwDc" target="_blank" rel="noopener noreferrer">
+    <img src="/img/demos/running-locally-with-docker.jpg" alt="reShapr Demo #1: Running reShapr Locally with Docker" />
+    <span>Demo #1: Running reShapr with Docker</span>
   </a>
 
-  <a class="youtube-demo-card" href="https://www.youtube.com/watch?v=eptKmTh5r6Y" target="_blank" rel="noopener noreferrer">
-    <img src="/img/demos/open-mcp-catalog-demo.jpg" alt="Watch Micepe Build Open-MCP Catalog in Minutes" />
-    <span>Build Open-MCP Catalog in Minutes</span>
+  <a class="youtube-demo-card" href="https://youtu.be/EmBNZfUceTI" target="_blank" rel="noopener noreferrer">
+    <img src="/img/demos/import-open-meteo-expose-as-mcp.jpg" alt="reShapr Demo #2: Import OpenAPI (Open-Meteo) & Expose as MCP" />
+    <span>Demo #2: Import Open-Meteo & Expose as MCP</span>
   </a>
 </div>
 <br> </br>
