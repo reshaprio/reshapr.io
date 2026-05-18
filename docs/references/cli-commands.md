@@ -166,9 +166,9 @@ reshapr artifact list -s 0N2G4YZFDD3ZF
 ```
 
 ```bash
-ID             NAME                  TYPE                 MAIN
-0NKVYHWSR9VPT  github-api.graphql    GRAPHQL              Yes
-0NKVZAB12X3YZ  github-api-prompts    PROMPTS              No
+ID             NAME                  TYPE                        MAIN
+0NKVYHWSR9VPT  github-api.graphql    GRAPHQL_SCHEMA              Yes
+0NKVZAB12X3YZ  github-api-prompts    RESHAPR_PROMPTS              No
 ```
 
 ### `reshapr artifact get` command
@@ -194,7 +194,7 @@ ID           : 0NKVYHWSR9VPT
 Name         : github-api.graphql
 Organization : my-org
 Service ID   : 0N2G4YZFDD3ZF
-Type         : GRAPHQL
+Type         : GRAPHQL_SCHEMA
 Main Artifact: Yes
 Source       : github-api.graphql
 Path         : N/A
