@@ -15,3 +15,51 @@ Your first steps with reShapr will certainly be to import new artifacts into the
 As Services are versioned in reShapr, the direct consequence is that reShapr will be able to keep many different versions of the same Service in parallel. It will be then up to you to manage the expositions of version `1.0`, then version `2.0` etc. When a version of a service is no longer of importance for you, you can delete it - but it will automatically remove existing expositions.  
 
 Updating a Service in reShapr is a trivial process ; it simply means re-importing its reference artifacts. If its service name and version are already present in reShapr, the definition will be updated. If not, a new Service entry will be created and attached to your account.
+
+## Managing Artifacts
+
+A Service in reShapr is backed by one or more artifacts. The first artifact you import (using `reshapr import`) becomes the **main artifact** — it defines the Service identity, operations, and type. You can then attach additional artifacts (using `reshapr attach`) to enrich the Service with **[Prompts](../references/prompts-specification.md)** or **[Custom Tools](../references/custom-tools-specification.md)** definitions.
+
+### Listing artifacts
+
+You can list all artifacts associated with a Service using the `reshapr artifact list` command. This is useful to see what has been imported or attached previously:
+
+```bash
+reshapr artifact list -s 0N2G4YZFDD3ZF
+```
+
+```bash
+ID             NAME                  TYPE                 MAIN
+0NKVYHWSR9VPT  github-api.graphql    GRAPHQL              Yes
+0NKVZAB12X3YZ  github-api-prompts    PROMPTS              No
+```
+
+The `MAIN` column indicates which artifact is the primary definition for the Service. Only one artifact can be the main artifact per Service.
+
+### Inspecting an artifact
+
+To retrieve details of a specific artifact, use `reshapr artifact get`:
+
+```bash
+reshapr artifact get 0NKVYHWSR9VPT
+```
+
+```bash
+ℹ️  Artifact details
+ID           : 0NKVYHWSR9VPT
+Name         : github-api.graphql
+Organization : my-org
+Service ID   : 0N2G4YZFDD3ZF
+Type         : GRAPHQL
+Main Artifact: Yes
+Source       : github-api.graphql
+Path         : N/A
+```
+
+You can also display the full artifact content (syntax-highlighted) by adding the `-d, --display` flag:
+
+```bash
+reshapr artifact get 0NKVYHWSR9VPT -d
+```
+
+Both commands support the `-o, --output <format>` option for structured output in `json` or `yaml` format, which is convenient for automation. See the **[CLI Commands Reference](../references/cli-commands.md)** for the full details on all available options.
