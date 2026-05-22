@@ -1,12 +1,12 @@
 ---
-description: Define ToolsFilters to trim, reshape, and conditionally rewrite MCP tool outputs before they reach the model, keeping the context window lean and the response surface deterministic.
+description: Define ToolsOutputFilters to trim, reshape, and conditionally rewrite MCP tool outputs before they reach the model, keeping the context window lean and the response surface deterministic.
 ---
 
 # Tools Output Filtering
 
 As explained in **[Why reShapr?](../overview/why-reshapr.md)**, reShapr can create secure MCP servers in seconds without coding, just by importing your API's existing artifacts such as **[OpenAPI 3.x](https://www.openapis.org/)** specs, **[GraphQL](https://graphql.org/)** schemas, and **[gRPC/Protobuf](https://grpc.io/)** definitions. Once these artifacts are imported, the **[Custom Tools](./custom-tools-specification.md)** specification lets you redefine the *input* of a tool to fit a specific use case.
 
-`ToolsFilters` is the symmetrical capability on the *output* side: it lets you declaratively control what a tool returns to the model, before the response is wrapped into the JSON-RPC MCP envelope and sent back to the client.
+`ToolsOutputFilters` is the symmetrical capability on the *output* side: it lets you declaratively control what a tool returns to the model, before the response is wrapped into the JSON-RPC MCP envelope and sent back to the client.
 
 This matters for two reasons:
 
@@ -17,11 +17,11 @@ reShapr applies filtering universally, regardless of the source protocol (REST, 
 
 ## A first example
 
-Here is a simple `ToolsFilters` artifact that trims the response of a custom GitHub tool down to a single branch, removes a few sensitive or noisy fields, and rewrites one value:
+Here is a simple `ToolsOutputFilters` artifact that trims the response of a custom GitHub tool down to a single branch, removes a few sensitive or noisy fields, and rewrites one value:
 
 ```yaml
 apiVersion: reshapr.io/v1alpha1
-kind: ToolsFilters
+kind: ToolsOutputFilters
 service:
   name: GitHub GraphQL
   version: '20250917'
@@ -48,16 +48,16 @@ filters:
         value: Parigne Le Polin
 ```
 
-A `ToolsFilters` artifact follows some simple rules:
+A `ToolsOutputFilters` artifact follows some simple rules:
 
-- It always contains an identification section made of `apiVersion` and `kind` properties that **must** have the **`reshapr.io/v1alpha1`** and `ToolsFilters` values respectively,
+- It always contains an identification section made of `apiVersion` and `kind` properties that **must** have the **`reshapr.io/v1alpha1`** and `ToolsOutputFilters` values respectively,
 - It **must** be bound to a specific reShapr **[Service](../explanations/services-and-artifacts.md)** using the **`service.name`** and `service.version` properties whose values **must** match an already discovered Service,
 - The `filters` section then defines the filters, keyed by tool name:
   - The key (here `get_user_with_latest_followers`) **must** match an existing tool on the Service, either an imported tool or a **[Custom Tool](./custom-tools-specification.md)** previously attached to that Service,
   - A filter entry **may** specify a `retain` block, an ordered `patches` block, or both,
   - When both are present, `retain` **is always applied first**, as a pre-processing step that narrows the response, before `patches` are applied in order.
 
-You can specify as many tool filters as you want in the same `ToolsFilters` artifact, as long as each key targets a distinct tool of the bound Service.
+You can specify as many tool filters as you want in the same `ToolsOutputFilters` artifact, as long as each key targets a distinct tool of the bound Service.
 
 ## The `retain` operation
 
@@ -93,7 +93,7 @@ For the precise semantics of each operation, refer to **[RFC 6902: JavaScript Ob
 
 ## Conditional filtering
 
-Some tools return very different payloads depending on their inputs: a search endpoint that returns a person or an organisation, a polymorphic GraphQL union, a versioned REST resource. For these cases, `ToolsFilters` supports a conditional form where the filter for a tool is expressed as a **list** of branches, each guarded by a `test`:
+Some tools return very different payloads depending on their inputs: a search endpoint that returns a person or an organisation, a polymorphic GraphQL union, a versioned REST resource. For these cases, `ToolsOutputFilters` supports a conditional form where the filter for a tool is expressed as a **list** of branches, each guarded by a `test`:
 
 ```yaml
 filters:
@@ -126,9 +126,9 @@ Rules for the conditional form:
 
 ## Naming and configuration scope
 
-Unlike `Prompts`, `Resources`, and `CustomTools`, which directly transform a Service, `ToolsFilters` is often driven by *deployment-time* concerns (security posture, audience, token budget) rather than by the Service itself. The same Service and the same Custom Tools can legitimately be exposed multiple times on different gateways, each with its own filter set: a public partner-facing Exposition might strip more fields than an internal one.
+Unlike `Prompts`, `Resources`, and `CustomTools`, which directly transform a Service, `ToolsOutputFilters` is often driven by *deployment-time* concerns (security posture, audience, token budget) rather than by the Service itself. The same Service and the same Custom Tools can legitimately be exposed multiple times on different gateways, each with its own filter set: a public partner-facing Exposition might strip more fields than an internal one.
 
-For this reason, a future revision of the spec is expected to introduce a top-level `name` attribute on a `ToolsFilters` artifact, so that a **[Configuration Plan](../explanations/configuration-and-exposition.md)** can explicitly reference which filter set to apply at exposition time. Until that lands, a `ToolsFilters` artifact is bound to a Service and applies whenever that Service is exposed.
+For this reason, a future revision of the spec is expected to introduce a top-level `name` attribute on a `ToolsOutputFilters` artifact, so that a **[Configuration Plan](../explanations/configuration-and-exposition.md)** can explicitly reference which filter set to apply at exposition time. Until that lands, a `ToolsOutputFilters` artifact is bound to a Service and applies whenever that Service is exposed.
 
 ## Where filters fit in the request lifecycle
 
@@ -137,7 +137,7 @@ For a given MCP tool call, reShapr applies transformations in this order:
 1. The incoming MCP tool call is validated against the tool's input schema (the imported one, or the one defined by a **[Custom Tool](./custom-tools-specification.md)**).
 2. The call is converted to a protocol-specific request (REST, GraphQL, gRPC) and dispatched to the backend.
 3. The backend response is converted back into a canonical JSON response by reShapr's converters.
-4. **If a `ToolsFilters` artifact is attached to the Service and declares a filter for this tool, the filter is applied here: `retain` first, then `patches`.**
+4. **If a `ToolsOutputFilters` artifact is attached to the Service and declares a filter for this tool, the filter is applied here: `retain` first, then `patches`.**
 5. The filtered response is wrapped into the JSON-RPC MCP envelope and returned to the client.
 
-Because filtering happens after the converter step and before the MCP envelope, the same `ToolsFilters` artifact applies uniformly whether the underlying tool is backed by REST, GraphQL, or gRPC.
+Because filtering happens after the converter step and before the MCP envelope, the same `ToolsOutputFilters` artifact applies uniformly whether the underlying tool is backed by REST, GraphQL, or gRPC.
