@@ -41,6 +41,6 @@ A `Prompts` artifact follows some simple rules:
   - We have 2 prompts here: `list_pets` and `get_pet`
   - A prompt **must** always have a `result` which will be returned to the model when called,
   - A prompt **may** provide optional `title` and `description` to provide more context to the user when choosing an appropriate prompt,
-  - A prompt **may** also provide `arguments` that allow the production of a customized result prompt message, where the user provides its contextuel values for each argument.
+  - A prompt **may** also provide `arguments` that allow the production of a customized result prompt message, where the user provides its contextual values for each argument.
 
 In the case of prompt using `arguments`, the `result` value **can** be expressed using `${}` expressions that will be replaced by user provided values. Typically in our example, if user is looking for a pet named **Rusty**, the prompt will be generated with `Rusty` in the place of the `${name}` placeholder.

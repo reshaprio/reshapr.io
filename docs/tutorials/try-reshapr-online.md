@@ -66,6 +66,6 @@ Login is successful. You can now use the CLI to import APIs, create expositions,
 
 ### Step 7 — Access the online dashboard
 
-Once authenticated, you can back to `https://try.reshapr.io` and you'll land on the reShapr Try dashboard.
+Once authenticated, you can go back to `https://try.reshapr.io` and you'll land on the reShapr Try dashboard.
 
 ![Step 7 — reShapr Try online dashboard after successful login](/img/docs/try-reshapr-online-7.png)

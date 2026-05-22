@@ -63,4 +63,4 @@ A `CustomTools` artifact follows some simple rules:
 - A custom tool **must** also provide and `input` schema description that described its parameters. Input schema reuses the same structure as the regular MCP Tools Input Schema.
 - A custom tool **may** also specify `arguments` that represents the arguments that will be used with the original tool that is overridden. Here we’re fixing the arguments as well as the relation navigation options for fetching exactly what we need.
 
-In the case of custom tools using `arguments`, the value **can** be expressed using `${}` expressions that will be replaced by input values. Typically in our example, the MCP client will send a `user` value as input and this value will be used n the place of the `${user}` placeholder when invoking the original tool.
+In the case of custom tools using `arguments`, the value **can** be expressed using `${}` expressions that will be replaced by input values. Typically in our example, the MCP client will send a `user` value as input and this value will be used in the place of the `${user}` placeholder when invoking the original tool.
