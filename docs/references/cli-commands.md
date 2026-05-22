@@ -90,7 +90,7 @@ The discovery of Service from **[GraphQL](https://graphql.org/)**  schemas need 
 
 When importing an artifact Service, you may also choose not to consider all the different operations that will be discovered. Perhaps you want to restrict it to read-only access, or maybe your existing API is too coarse-grained, and you want to filter on a single domain. Whatever the reason, you can configure this with the following options:
 
-- `--io, --includedOperations [<operation1>, <operation2>]` : Allow specifying a list of operations to consider. Example: `--io '["createLabel", "createIssue]'` ,
+- `--io, --includedOperations [<operation1>, <operation2>]` : Allow specifying a list of operations to consider. Example: `--io '["createLabel", "createIssue"]'` ,
 - `--eo, --excludedOperations [<operation1>, <operation2>]` : Allow specifying a list of operations to ignore. Example: `--eo '["POST /order"]'` . This exclusion list will only be considered if no inclusion list is specified.
 
 The import command also allows you to quickly configure and expose the discovered Service using additional flags! If you add the `--be, --backendEndpoint <backendEndpointURL>`  flag to your command, this will create a *default* **[Configuration Plan & Exposition](../explanations/configuration-and-exposition.md)** for you, using the *default* gateways.
@@ -326,7 +326,7 @@ Below is an example of how to create such an Elicitation-based Secret:
 ```bash
 reshapr secret create-elicitation 3rd-party-oauth --oc reshapr-saas \
 --oae https://idp.example.com/realms/3rdparty/protocol/openid-connect/auth\?scope\=openid\%20profile\&response_type\=code\&prompt\=login \
---ote https://idp.eample.com/realms/3rdparty/protocol/openid-connect/token
+--ote https://idp.example.com/realms/3rdparty/protocol/openid-connect/token
 ```
 
 ```bash
@@ -507,8 +507,8 @@ And then let you select the operations in a list:
 
 Instead of doing things in an interactive way using the `--filter` option, you can also use the exclusive `--includedOperations` and `--excludedOperations` like detailed below:
 
-- `--io, --includedOperations [<operation1>, <operation2>]` : Allow the configuration of included operations, only the ones listed here will be actually exposed on the MCP Server endpoint. The operations must be specify within an array like this: `--io '["operation1", "operation2"]'`
-- `--eo, --excludedOperations [<operation1>, <operation2]` : Allow the specification of excluded operations, none of the ones listed here will be actually exposed on the MCP Server endpoint
+- `--io, --includedOperations [<operation1>, <operation2>]` : Allow the configuration of included operations, only the ones listed here will be actually exposed on the MCP Server endpoint. The operations must be specified within an array like this: `--io '["operation1", "operation2"]'`
+- `--eo, --excludedOperations [<operation1>, <operation2>]` : Allow the specification of excluded operations, none of the ones listed here will be actually exposed on the MCP Server endpoint
 
 Finally, you can use the Configuration plan to enable security options. Below are explanations of the options you may find:
 
@@ -518,7 +518,7 @@ Finally, you can use the Configuration plan to enable security options. Below ar
 
 ### `reshapr config create-oauth` command
 
-This command is actually an alias of the `config create` command, but with options focused on securing access to and an MCP endpoint using third-party OAuth 2 authorization servers. As such, `create-oauth` provides the same set of options for referring a Service, the implementation backend endpoint as well as the filtering options. It provides additional **mandatory flags** to configure the trust of access:
+This command is actually an alias of the `config create` command, but with options focused on securing access to an MCP endpoint using third-party OAuth 2 authorization servers. As such, `create-oauth` provides the same set of options for referring a Service, the implementation backend endpoint as well as the filtering options. It provides additional **mandatory flags** to configure the trust of access:
 
 - `--oas, --oauth2AuthorizationServers [<authorizationServer1>, <authorizationServer2>]` : Allow the specification of one or many authorization servers URLs that represent valid issuer for Bearer tokens,
 - `--oju, --oauth2jwksUri <jwksUri>` : Allow the configuration of the URI used for retrieving JSON Web Key Set for verifying the Bearer tokens signatures,

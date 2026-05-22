@@ -178,7 +178,7 @@ With this output:
 ✅ Configuration plan 'open-meteo-manual' created successfully with ID: 0PXPDMB4MFE6H
 ```
 
-> Likewise the `service` command, you can also use sub-commands like `list`, `get` or `delete` to manage your configurations.
+> Like the `service` command, you can also use sub-commands like `list`, `get` or `delete` to manage your configurations.
 
 ## Exposing an MCP Endpoint
 
@@ -222,7 +222,7 @@ Gateway Endpoints
     Endpoints: mcp.try.reshapr.io/mcp/yada/Open-Meteo+APIs/1.0
 ```
 
-> Likewise the `service` command, you can also use sub-commands like `list`, `get` or `delete` to manage your configurations.
+> Like the `service` command, you can also use sub-commands like `list`, `get` or `delete` to manage your configurations.
 
 🎉 Hooray! You deployed a MCP Endpoint! Check the `Endpoints` information just above (`mcp.try.reshapr.io/mcp/<organization>/Open-Meteo+APIs/1.0`): you can use this endpoint with `https://` prefix in your favorite MCP Client to access your new MCP Server!
 

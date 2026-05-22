@@ -141,7 +141,7 @@ The port `7777` is the default port used by the reShapr Gateway for incoming tra
 Here is an example `docker run` command to start the reShapr Gateway container with the necessary environment variables:
 
 ```bash
-docker run -it --rm -p 7777:7777 \\
+docker run -it --rm -p 7777:7777 \
     -e RESHAPR_CTRL_HOST=app.beta.reshapr.io \
     -e RESHAPR_CTRL_PORT=443 \
     -e RESHAPR_CTRL_TLS_PLAINTEXT=false \
