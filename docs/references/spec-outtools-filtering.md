@@ -17,7 +17,7 @@ reShapr applies filtering universally, regardless of the source protocol (REST, 
 
 ## A first example
 
-Here is a simple `ToolsOutputFilters` artifact that trims the response of a custom GitHub tool down to a single branch, removes a few sensitive or noisy fields, and rewrites one value:
+Here is a simple `ToolsOutputFilters` artifact that trims the response of a custom GitHub tool down to a few key fields, removes a sensitive field, and adds a value:
 
 ```yaml
 apiVersion: reshapr.io/v1alpha1
@@ -27,25 +27,18 @@ service:
   version: '20250917'
 filters:
   get_user_with_latest_followers:
-    retain:
-      - /userInfo
-    patches:
+    jsonRetain:
+      - /data/user/name
+      - /data/user/login
+      - /data/user/bio
+      - /data/user/avatarUrl
+      - /data/user/followers
+    jsonPatches:
       - op: add
-        path: /userInfo/country
-        value: "France"
+        path: /data/user/location
+        value: "Worldwide"
       - op: remove
-        path: /userInfo/age
-      - op: remove
-        path: /userInfo/bioHTML
-      - op: remove
-        path: /userInfo/companyHTML
-      - op: remove
-        path: /userInfo/copilotEndpoints
-      - op: remove
-        path: /userInfo/monthlyEstimatedSponsorsIncomeInCents
-      - op: replace
-        path: /userInfo/city
-        value: Parigne Le Polin
+        path: /data/user/followers/nodes
 ```
 
 A `ToolsOutputFilters` artifact follows some simple rules:
@@ -54,23 +47,24 @@ A `ToolsOutputFilters` artifact follows some simple rules:
 - It **must** be bound to a specific reShapr **[Service](../explanations/services-and-artifacts.md)** using the **`service.name`** and `service.version` properties whose values **must** match an already discovered Service,
 - The `filters` section then defines the filters, keyed by tool name:
   - The key (here `get_user_with_latest_followers`) **must** match an existing tool on the Service, either an imported tool or a **[Custom Tool](./custom-tools-specification.md)** previously attached to that Service,
-  - A filter entry **may** specify a `retain` block, an ordered `patches` block, or both,
-  - When both are present, `retain` **is always applied first**, as a pre-processing step that narrows the response, before `patches` are applied in order.
+  - A filter entry **must** specify at least one of `jsonRetain`, `jsonPatches`, or `convertToToon`,
+  - When both `jsonRetain` and `jsonPatches` are present, `jsonRetain` **is always applied first**, as a pre-processing step that narrows the response, before `jsonPatches` are applied in order,
+  - `convertToToon` is applied last, after `jsonRetain` and `jsonPatches`.
 
 You can specify as many tool filters as you want in the same `ToolsOutputFilters` artifact, as long as each key targets a distinct tool of the bound Service.
 
-## The `retain` operation
+## The `jsonRetain` operation
 
-`retain` is reShapr's addition to the JSON Patch vocabulary. Standard JSON Patch (see below) only lets you describe what to *remove*, which is impractical when the response is a large object and you only care about a small subset of it. With `retain`, you declare the branches you want to *keep*, and everything else is dropped before patches run.
+`jsonRetain` is reShapr's addition to the JSON Patch vocabulary. Standard JSON Patch (see below) only lets you describe what to *remove*, which is impractical when the response is a large object and you only care about a small subset of it. With `jsonRetain`, you declare the branches you want to *keep*, and everything else is dropped before patches run.
 
-- The value of `retain` **must** be a list of **[JSON Pointer](https://datatracker.ietf.org/doc/html/rfc6901)** paths,
+- The value of `jsonRetain` **must** be a non-empty list of **[JSON Pointer](https://datatracker.ietf.org/doc/html/rfc6901)** paths,
 - Each listed path **must** resolve against the original tool response. Paths that don't resolve are silently ignored (a missing branch isn't an error, it's simply nothing to keep),
-- The order of paths in `retain` is not significant: `retain` describes a *set* of branches to keep,
-- If `retain` is omitted, the whole response is passed through to the `patches` step unchanged.
+- The order of paths in `jsonRetain` is not significant: `jsonRetain` describes a *set* of branches to keep,
+- If `jsonRetain` is omitted, the whole response is passed through to the `jsonPatches` step unchanged.
 
-## The `patches` operation
+## The `jsonPatches` operation
 
-`patches` is an ordered sequence of **[JSON Patch](https://jsonpatch.com/)** operations, applied in the listed order to whatever the `retain` step produced (or to the full response, when `retain` is omitted).
+`jsonPatches` is an ordered sequence of **[JSON Patch](https://jsonpatch.com/)** operations, applied in the listed order to whatever the `jsonRetain` step produced (or to the full response, when `jsonRetain` is omitted).
 
 reShapr supports the six standard JSON Patch operations:
 
@@ -83,46 +77,46 @@ reShapr supports the six standard JSON Patch operations:
 | `move`     | Moves the value from `from` to `path` (equivalent to `copy` + `remove` on the source).          |
 | `test`     | Asserts that the value at `path` equals `value`. If the test fails, the patch sequence stops.   |
 
-- The value of `patches` **must** be a list of objects, each carrying an `op` property whose value **must** be one of the six operations above,
-- `path` **must** be a JSON Pointer that resolves against the working document (the response after `retain` has been applied),
+- The value of `jsonPatches` **must** be a non-empty list of objects, each carrying an `op` property whose value **must** be one of the six operations above,
+- `path` **must** be a JSON Pointer that resolves against the working document (the response after `jsonRetain` has been applied),
 - `op: copy` and `op: move` **must** additionally specify a `from` JSON Pointer,
 - `op: add`, `replace`, and `test` **must** specify a `value`,
 - The order of the list is significant: each operation sees the document as modified by the operations that came before it.
 
 For the precise semantics of each operation, refer to **[RFC 6902: JavaScript Object Notation (JSON) Patch](https://datatracker.ietf.org/doc/html/rfc6902)**.
 
-## Conditional filtering
+## The `convertToToon` operation
 
-Some tools return very different payloads depending on their inputs: a search endpoint that returns a person or an organisation, a polymorphic GraphQL union, a versioned REST resource. For these cases, `ToolsOutputFilters` supports a conditional form where the filter for a tool is expressed as a **list** of branches, each guarded by a `test`:
+`convertToToon` converts the final filtered JSON output into **[Toon format](https://toonformat.dev/)**, a compact LLM-friendly representation that reduces token usage further.
+
+- The value of `convertToToon` **must** be `true`,
+- It is applied **last**, after `jsonRetain` and `jsonPatches` have run,
+- It can be used alone, or combined with `jsonRetain` and/or `jsonPatches`.
+
+Example using all three operations together:
 
 ```yaml
+apiVersion: reshapr.io/v1alpha1
+kind: ToolsOutputFilters
+service:
+  name: GitHub GraphQL
+  version: '20250917'
 filters:
   get_user_with_latest_followers:
-    - test:
-        path: /userInfo/type
-        value: PhysicalPerson
-      retain:
-        - /userInfo/person
-      patches:
-        - op: remove
-          path: /userInfo/person/ssn
-    - test:
-        path: /userInfo/type
-        value: MoralPerson
-      retain:
-        - /userInfo/entity
-      patches:
-        - op: remove
-          path: /userInfo/entity/taxId
+    jsonRetain:
+      - /data/user/name
+      - /data/user/login
+      - /data/user/bio
+      - /data/user/avatarUrl
+      - /data/user/followers
+    jsonPatches:
+      - op: add
+        path: /data/user/location
+        value: "Worldwide"
+      - op: remove
+        path: /data/user/followers/nodes
+    convertToToon: true
 ```
-
-Rules for the conditional form:
-
-- A conditional filter is a **list** of branches (as opposed to the simple form, which is a single object),
-- Each branch **must** declare a `test` block with `path` and `value`, using the same semantics as JSON Patch's `test` operation,
-- Each branch **may** declare `retain` and/or `patches`, with the same meaning as in the simple form,
-- Branches are evaluated **in order**. The first branch whose `test` succeeds is the one whose `retain` and `patches` are applied; remaining branches are skipped,
-- If no branch's `test` matches, the response is returned unchanged.
 
 ## Naming and configuration scope
 
@@ -137,7 +131,7 @@ For a given MCP tool call, reShapr applies transformations in this order:
 1. The incoming MCP tool call is validated against the tool's input schema (the imported one, or the one defined by a **[Custom Tool](./custom-tools-specification.md)**).
 2. The call is converted to a protocol-specific request (REST, GraphQL, gRPC) and dispatched to the backend.
 3. The backend response is converted back into a canonical JSON response by reShapr's converters.
-4. **If a `ToolsOutputFilters` artifact is attached to the Service and declares a filter for this tool, the filter is applied here: `retain` first, then `patches`.**
+4. **If a `ToolsOutputFilters` artifact is attached to the Service and declares a filter for this tool, the filter is applied here: `jsonRetain` first, then `jsonPatches`, then `convertToToon` if set.**
 5. The filtered response is wrapped into the JSON-RPC MCP envelope and returned to the client.
 
 Because filtering happens after the converter step and before the MCP envelope, the same `ToolsOutputFilters` artifact applies uniformly whether the underlying tool is backed by REST, GraphQL, or gRPC.
