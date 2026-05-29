@@ -140,6 +140,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'references/spec-outtools-filtering',
+          label: 'Tools Output Filtering',
+        },
+        {
+          type: 'doc',
           id: 'references/resources-specification',
           label: 'Resources Specification',
         },
