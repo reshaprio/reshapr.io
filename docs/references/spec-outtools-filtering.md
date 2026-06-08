@@ -87,13 +87,27 @@ For the precise semantics of each operation, refer to **[RFC 6902: JavaScript Ob
 
 ## The `convertToToon` operation
 
-`convertToToon` converts the final filtered JSON output into **[Toon format](https://toonformat.dev/)**, a compact LLM-friendly representation that reduces token usage further.
+`convertToToon` converts the final filtered JSON output into **[Toon format](https://toonformat.dev/)**, a compact LLM-friendly representation that significantly reduces token usage.
 
 - The value of `convertToToon` **must** be `true`,
 - It is applied **last**, after `jsonRetain` and `jsonPatches` have run,
-- It can be used alone, or combined with `jsonRetain` and/or `jsonPatches`.
+- It can be used **alone** — without any `jsonRetain` or `jsonPatches` — and it will compact the full raw tool response as-is,
+- It works **regardless of the backend protocol**: REST, GraphQL, and gRPC tool responses are all converted to canonical JSON before filters run, so `convertToToon` applies uniformly across all three.
 
-Example using all three operations together:
+This makes `convertToToon: true` the simplest possible `ToolsOutputFilters` entry — a single key that immediately cuts token usage on any tool, without requiring you to know the response shape upfront:
+
+```yaml
+apiVersion: reshapr.io/v1alpha1
+kind: ToolsOutputFilters
+service:
+  name: GitHub GraphQL
+  version: '20250917'
+filters:
+  get_user_with_latest_followers:
+    convertToToon: true
+```
+
+You can also combine it with `jsonRetain` and `jsonPatches` to both shape and compact the response:
 
 ```yaml
 apiVersion: reshapr.io/v1alpha1
