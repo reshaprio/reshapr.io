@@ -8,7 +8,8 @@ Want to get all the features in a nutshell? This is where you can find all of th
 - Full API re-shaping capabilities:
   - Rename existing API (**[🎬](https://www.youtube.com/watch?v=5dLpRzFJkqU)**)
   - Split an existing API by including or excluding chosen API operations
-  - Adapt to your Agentic context, defining `CustomTools` by renaming, condensing, translating default operations (**[🎬](https://www.youtube.com/watch?v=3PU0iQzTuYI)**)
+  - Adapt to your Agentic context, defining `CustomTools` by renaming, condensing, translating default operations (**[🎬](https://www.youtube.com/watch?v=OjsSAt0JdOY)**)
+  - Script `CustomTools` to orchestrate several tools and return a slim result, available since reShapr `0.0.14` (**[📄](custom-tools-specification.md#scripted-custom-tools)**)
 
 ## MCP support
 
