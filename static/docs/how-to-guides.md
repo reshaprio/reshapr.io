@@ -93,6 +93,7 @@ In hybrid mode:
 - Gateway Groups are the abstract target of your MCP Server exposition (owned by an organization, defines labels for matching Gateways)
 - Gateways are the concrete elements that expose your MCP Servers (they receive deployment directives and configuration plans from the reShapr control plane)
 - The control plane only holds configuration — all application data stays in your datacenter
+- Since reShapr `0.0.14`, backend secret references can keep actual backend credentials local to the Gateway runtime
 
 ### Step 1 — Retrieve an API Token
 
@@ -154,6 +155,7 @@ The gateway auto-discovers and loads the MCP server configuration without interr
 - Transport: gRPC over HTTP/2 with TLS + token-based auth
 - API tokens are generated, renewed, and revoked by the control plane (shared or per-gateway)
 - Control plane only holds configuration; all application data stays in your datacenter
+- Backend secret references such as `${env:GITHUB_TOKEN}` let the control plane store only a pointer while the Gateway resolves the real credential locally
 - Gateways can access private Authorization Servers or IDPs in your environment
 
 ---
