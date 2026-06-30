@@ -11,6 +11,7 @@ https://reshapr.io/docs/references/features
 ### API Translation
 - OpenAPI 2.x/3.x, GraphQL, gRPC Protobuf → MCP Server (no code)
 - Rename operations, split APIs by inclusion/exclusion, define CustomTools
+- Since reShapr `0.0.14`: scripted CustomTools can orchestrate several tools and return a slim, LLM-friendly result
 
 ### MCP Support
 - Protocol versions: 2025-11-25 and 2025-06-18
@@ -134,9 +135,10 @@ A `CustomTools` artifact:
 - Has `apiVersion: reshapr.io/v1alpha1` and `kind: CustomTools`
 - Must be bound to a specific Service via `service.name` and `service.version`
 - Defines tools in a `customTools` section
-- Each tool must reference an original `tool` it overrides
 - Must provide an `input` schema description
-- May specify `arguments` with `${}` expressions for input substitution
+- Declarative form: references an original `tool` and may specify `arguments` with `${}` expressions for input substitution
+- Scripted form, since reShapr `0.0.14`: provides `script` and `tools`, runs JavaScript through the `rs` host API, and can call several allowed tools
+- Scripted tools support synchronous calls, asynchronous calls with `rs.callToolAsync` / `rs.awaitPromises`, structured failures with `rs.fail`, elicitation pre-flight, and gateway guardrails for timeout, tool-call count, and nesting depth
 
 ---
 
