@@ -30,7 +30,7 @@ A **Configuration Plan** defines how a Service is consumed by MCP clients. It sp
 - Operation filter (include or exclude specific operations, restrict to read-only, etc.)
 - Security options (None / API Key / OAuth2 Bearer)
 - Required permissions (scopes per tool)
-- Backend credentials (Secret)
+- Backend credentials (Secret), including literal credentials, elicitation-based credentials, or local secret references resolved by hybrid Gateways
 
 A Service can have multiple Configuration Plans for different environments or lifecycle stages. A Configuration Plan is always associated to a specific version of a Service.
 
@@ -73,7 +73,7 @@ Security covers two layers: the MCP endpoint itself, and the backend API the gat
 
 ### Backend secrets
 
-Stored securely in reShapr; injected at runtime by the gateway:
+Stored securely in reShapr or resolved locally by the gateway; injected at runtime by the gateway:
 
 - **Username/password** → `Authorization: Basic <base64>`
 - **Token** → `Authorization: Bearer <token>` (or custom header via `--tokenHeader`)
@@ -86,7 +86,13 @@ No pre-provisioning required. When the MCP server needs credentials it returns a
 - **Sensitive data mode** — user provides their own token/API key inline
 - **OAuth flow mode** — user completes an OAuth/OIDC authorization code flow; reShapr exchanges the code for a backend access token
 
-Recommended production combination: **OAuth2 endpoint security + Elicitation-based backend secret**.
+### Secret references (reShapr 0.0.14)
+
+Hybrid deployments can keep the actual backend credential local to the Gateway runtime. The control plane stores a reference such as `${env:GITHUB_TOKEN}`, and the Gateway resolves it from its local environment when it calls the backend endpoint.
+
+Secret references are resolved just in time on every backend call, so rotation can happen by updating the Gateway environment. They apply to sensitive backend credentials such as tokens, Basic auth username/password values, PEM-encoded TLS trust material, and OAuth2 client secrets.
+
+Recommended production combination: **OAuth2 endpoint security + Elicitation-based backend secret**. In hybrid deployments, use secret references when the backend credential must never leave the Gateway runtime.
 
 ---
 

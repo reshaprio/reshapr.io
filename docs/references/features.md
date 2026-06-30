@@ -4,7 +4,7 @@ Want to get all the features in a nutshell? This is where you can find all of th
 
 ## API Translation
 
-- OpenAPI 2.x & 3.x (**[🎬](https://www.youtube.com/watch?v=W1xfiBpGzI0)**), GraphQL Schema (**[🎬](https://www.youtube.com/watch?v=5dLpRzFJkqU)**), gRPC Protobuffer 3 (**[🎬](https://www.youtube.com/watch?v=eptKmTh5r6Y)**) to MCP Server no-code translation
+- OpenAPI 2.x & 3.x (**[🎬](https://www.youtube.com/watch?v=W1xfiBpGzI0)**), GraphQL Schema (**[🎬](https://www.youtube.com/watch?v=5dLpRzFJkqU)**), gRPC Protobuffer 3 to MCP Server no-code translation
 - Full API re-shaping capabilities:
   - Rename existing API (**[🎬](https://www.youtube.com/watch?v=5dLpRzFJkqU)**)
   - Split an existing API by including or excluding chosen API operations
@@ -31,7 +31,8 @@ Want to get all the features in a nutshell? This is where you can find all of th
   - Header transmission and header translation
   - **[URL Mode Elicitation for Sensitive Data](https://modelcontextprotocol.io/specification/2025-11-25/client/elicitation#url-mode-elicitation-for-sensitive-data)** retrieval (**[🎬](https://www.youtube.com/watch?v=0f2cdKAV730)**)
   - **[URL Mode Elicitation for OAuth flows](https://modelcontextprotocol.io/specification/2025-11-25/client/elicitation#url-mode-elicitation-for-oauth-flows)** authorization
-  - Static backend secrets for basic, token-based or certificate-based authentication (**[🎬](https://www.youtube.com/watch?v=eptKmTh5r6Y)**)
+  - Static backend secrets for basic, token-based or certificate-based authentication
+  - Local backend secret references resolved by hybrid Gateways, available since reShapr `0.0.14` (**[📄](../explanations/security-model.md#secret-references)**)
 
 ## Operations
 

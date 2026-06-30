@@ -29,6 +29,7 @@ https://reshapr.io/docs/references/features
 - Header transmission and translation
 - Static backend secrets (Basic, token, certificate)
 - Elicitation-based backend secrets (sensitive data + OAuth flows)
+- Since reShapr `0.0.14`: local backend secret references resolved by hybrid Gateways
 
 ### Operations
 - Rate limiting
@@ -67,6 +68,7 @@ Install: `npm install -g @reshapr/reshapr-cli`
 - `-u` username / `-p` password (Basic auth)
 - `-t <token>` / `-th <header>` (token auth)
 - `-c <path>` (X.509 certificate in PEM format)
+- Since reShapr `0.0.14`, sensitive backend Secret values may be literal values or references like `${env:GITHUB_TOKEN}` resolved locally by the Gateway
 
 `reshapr secret create-elicitation <name>` — Elicitation-based secret
 - `-t <token>` for Sensitive Data mode

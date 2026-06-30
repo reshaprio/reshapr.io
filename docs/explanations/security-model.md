@@ -47,6 +47,42 @@ reShapr also supports **Elicitation-based backend secret**. **[Elicitations](htt
 - The [**URL Mode Elicitation for Sensitive Data**](https://modelcontextprotocol.io/specification/2025-11-25/client/elicitation#url-mode-elicitation-for-sensitive-data) - in case your User has its own token/API key/authorization code to access the backend API.
 - The [**URL Mode Elicitation for OAuth Flows**](https://modelcontextprotocol.io/specification/2025-11-25/client/elicitation#url-mode-elicitation-for-oauth-flows) - in case your User has to complete an OAuth / OIDC authorization flow to enable the MCP Server to get an authorization code to access the backend API.
 
+### Secret references
+
+Available since reShapr `0.0.14`, backend Secrets can also use **secret references**. This is especially useful in hybrid deployments where the control plane is managed by reShapr, but the Gateway runs in your own premises. In this situation, you may want the control plane to know that a backend credential exists without storing or distributing the actual credential value.
+
+A secret reference uses the `${scheme:reference}` convention. When a sensitive value follows this pattern, the Gateway resolves it locally when it needs to call the backend endpoint. The value stored in the control plane is only the reference.
+
+Today, the supported scheme is `env`, which resolves a value from the Gateway environment:
+
+```bash
+${env:GITHUB_TOKEN}
+```
+
+When the Gateway needs to authenticate a backend call, it reads `GITHUB_TOKEN` from the Gateway process environment, falling back to the Gateway configuration sources such as system properties or a `.env` file. If the value cannot be resolved, the backend call fails explicitly instead of silently sending an empty credential.
+
+References can be used on their own or interpolated within a larger value:
+
+```bash
+Bearer ${env:API_TOKEN}
+${env:DB_USER}:${env:DB_PASSWORD}
+```
+
+Values that do not match the `${scheme:reference}` convention keep being used as literal Secret values, so existing Secrets remain compatible.
+
+Secret references are resolved **just in time**, on every backend call. Resolved values are not cached as control plane data and they do not need to be synchronized from the control plane to the Gateway. This also makes secret rotation straightforward: update the value in the Gateway environment and the next backend call uses the new value.
+
+Secret references are honored for sensitive credentials used by the Gateway to reach backend endpoints:
+
+- Token authentication for REST, GraphQL, and gRPC backends,
+- Basic authentication username and password,
+- PEM-encoded TLS trust material for gRPC backends,
+- OAuth2 client secrets used during authorization-code exchanges.
+
+Public identifiers, such as an OAuth2 `client_id`, are intentionally kept as literal values because they are exposed in the browser redirect by design.
+
+Using secret references moves the responsibility for protecting the real credential to the Gateway environment. You should scope environment variables to the Gateway process, prefer mounted secrets where your platform supports them, and make sure resolved values are never written to logs or audit trails.
+
 ## All together!
 
-MCP Endpoint security options and backend secret are not exclusive, and they’d rather be combined to secure the transmission chain from end to end. To achieve fully secure and authorized usage of your MCP Endpoint provided by reShapr, we recommend considering OAuth2 + Elicitation-based backend Secret when you configure your **[Service](services-and-artifacts.md)** for exposure on a reShapr gateway.
+MCP Endpoint security options and backend secret are not exclusive, and they’d rather be combined to secure the transmission chain from end to end. To achieve fully secure and authorized usage of your MCP Endpoint provided by reShapr, we recommend considering OAuth2 + Elicitation-based backend Secret when you configure your **[Service](services-and-artifacts.md)** for exposure on a reShapr gateway. In hybrid deployments, secret references can be added to this model when the actual backend credential must remain local to your Gateway runtime.

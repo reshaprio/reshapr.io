@@ -297,6 +297,8 @@ Then, depending on your Secret's nature, you will have to use one or more of the
 - `-h, --tokenHeader <tokenHeader>` : When using token or API key based authentication, the token header will allow you to customize the HTTP header used to send the token value.
 - `-c, --certificate <path>` : When accessing a TLS-secured endpoint, you may want to provide your specific X509 certificate using the PEM format.
 
+Since reShapr `0.0.14`, sensitive backend Secret values can be literal values or **[secret references](../explanations/security-model.md#secret-references)** such as `${env:GITHUB_TOKEN}`. In that case, the control plane stores the reference and the Gateway resolves the actual value locally when calling the backend endpoint.
+
 Here's below an example of a secret creation:
 
 ```bash
