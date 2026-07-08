@@ -47,7 +47,7 @@ reshapr login -s https://try.reshapr.io
 **Step 1 — Import an artifact** (discovers the Service automatically):
 
 ```bash
-reshapr import -u https://raw.githubusercontent.com/open-meteo/open-meteo/refs/heads/main/openapi.yml
+reshapr import -u https://raw.githubusercontent.com/open-meteo/open-meteo/refs/heads/main/openapi/forecast.yml
 # → Discovered Service Open-Meteo APIs with ID: 0PXEW1ZDWFCZS
 ```
 
@@ -70,7 +70,7 @@ reshapr expo create --configuration 0PXPDMB4MFE6H --gateway-group 1
 ### All-in-one magic command
 
 ```bash
-reshapr import -u https://raw.githubusercontent.com/open-meteo/open-meteo/refs/heads/main/openapi.yml \
+reshapr import -u https://raw.githubusercontent.com/open-meteo/open-meteo/refs/heads/main/openapi/forecast.yml \
   --backendEndpoint https://api.open-meteo.com
 # → Endpoint: mcp.try.reshapr.io/mcp/<org>/Open-Meteo+APIs/1.0
 ```
