@@ -8,11 +8,11 @@ Check out our 👉 [**blog post**](/blog/why-reshapr) on that topic!
 
 ***Building Your Own MCP Server Is a Trap!***
 
-*At first glance, building a MCP Server may seem straightforward. But very quickly, most teams realize:*
+*At first glance, building an MCP Server may seem straightforward. But very quickly, most teams realize:*
 
 - **It’s more than OpenAPI**: You need translation layers, prompt guards, retries, rate limiting, and grounding logic.
 - **Security gets messy fast**: How do you avoid exposing credentials in LLM prompts? How do you enforce identity, scope, and input validation?
-- **Fragility creeps in**: Most DIY solutions end up as brittle pipelines of JSON transforms, hardcoded logic, and embedded hacks that fall apart under load or worse, leak data.
+- **Fragility creeps in**: Most DIY solutions end up as brittle pipelines of JSON transforms, hardcoded logic, and embedded hacks that fall apart under load or, worse, leak data.
 
 This approach often duplicates your API logic into a parallel, standalone MCP layer, creating unnecessary complexity, increased maintenance overhead, and misalignment between your API and its AI-facing interface.
 
