@@ -4,12 +4,12 @@ description: Define MCP Resources to share contextual data — files, schemas, o
 
 # Resources
 
-As explained in **[Why reShapr?](../overview/why-reshapr.md)**, reShapr can create secure MCP servers in seconds without coding, just by importing your API’s existing artifacts - like **[OpenAPI 3.x](https://www.openapis.org/)** specs, **[GraphQL](https://graphql.org/)** schemas and **[gRPC/Protobuf](https://grpc.io/)** definitions. These artifacts are directly used to produce **[MCP Tools](https://modelcontextprotocol.io/specification/2025-06-18/server/tools)** that are at the core of the Model Context Protocol. Another interesting aspect of MCP is that it may be composed of **[Resources](https://modelcontextprotocol.io/specification/2025-06-18/server/resources)**. Resources allow servers to share data that provides context to LLM, such as files, database schemas, or application-specific information.
+As explained in **[Why reShapr?](../overview/why-reshapr.md)**, reShapr can create secure MCP servers in seconds without coding, just by importing your API’s existing artifacts - like **[OpenAPI 3.x](https://www.openapis.org/)** specs, **[GraphQL](https://graphql.org/)** schemas, and **[gRPC/Protobuf](https://grpc.io/)** definitions. These artifacts are directly used to produce **[MCP Tools](https://modelcontextprotocol.io/specification/2025-06-18/server/tools)** that are at the core of the Model Context Protocol. Another interesting aspect of MCP is that it may be composed of **[Resources](https://modelcontextprotocol.io/specification/2025-06-18/server/resources)**. Resources allow servers to share data that provides context to LLM, such as files, database schemas, or application-specific information.
 
 The key difference with tools is intent and usage pattern:
 
 - **Resources** are for when **you want to give the model access to existing data to read and reference**. Resources are designed to be **application-driven**, with host applications determining how to incorporate context based on their needs.
-- **Tools** are for when **you want the model to perform actions** or computations. Tools are designed to be **model-controlled**, meaning that the LLM can discover and invoke tools automatically based on it’s understanding and user’s prompts.
+- **Tools** are for when **you want the model to perform actions** or computations. Tools are designed to be **model-controlled**, meaning that the LLM can discover and invoke tools automatically based on its understanding and the user’s prompts.
 
 reShapr provides **an easy way to design and specify your Resources using a simple YAML description,** called the `Resources` specification. If you want to provide such resources to your reShapr-powered MCP endpoint, you’ll need to write this simple file and `attach` it to your existing Service. Let’s see a simple example of such a file:
 
@@ -46,8 +46,8 @@ A `Resources` artifact follows some simple rules:
 - It **must** be bound to a specific reShapr **[Service](../explanations/services-and-artifacts.md)** using the **`service.name`** and `service.version` properties whose values **must** match an already discovered Service,
 - The `resources` section then defines the resources:
   - We have a single resource here: **`file:///project/readme.md`**. Resource identifiers **must** always start with some protocol-specific notation like `file://.`
-  - A resource **must** always have a `name` that defines it’s short name,
-  - A resource **may** provide optional `title` , `description`, `mimeType` and `icons` to provide more context to the Agent when choosing an appropriate resource,
+  - A resource **must** always have a `name` that defines its short name,
+  - A resource **may** provide optional `title`, `description`, `mimeType` and `icons` to provide more context to the Agent when choosing an appropriate resource,
   - A resource **may** also specify its content by using either a `text` or a `blob` property. `text` specifies its content as plain text, `blob` value must be encoded using Base64
   - A resource  **may** also specify `annotations` that provide hints to clients about how to use or display the resource. More on this in the **[official MCP documentation](https://modelcontextprotocol.io/specification/2025-11-25/server/resources#annotations)**.
 
@@ -57,7 +57,7 @@ You can specify as many resources as you want in the same `Resources` artifact f
 
 As the above form represents the simplest way of doing things, reShapr also supports a more elaborate way of doing things via the concept of `resourceTemplates`. Resource templates represent parametrized resources using URI templates.
 
-Imagine you have a list of resources at a specific location (a URL), instead of describing each of them, you can use a template to parametrized the access. Resource Templates can be added to your `Resources` artifact using a `resourceTemplates` element like illustrated below:
+Imagine you have a list of resources at a specific location (a URL), instead of describing each of them, you can use a template to parameterize the access. Resource Templates can be added to your `Resources` artifact using a `resourceTemplates` element like illustrated below:
 
 ```yaml
 resourceTemplates:
