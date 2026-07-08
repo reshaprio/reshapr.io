@@ -8,7 +8,7 @@ Want to get all the features in a nutshell? This is where you can find all of th
 - Full API re-shaping capabilities:
   - Rename existing API (**[🎬](https://www.youtube.com/watch?v=5dLpRzFJkqU)**)
   - Split an existing API by including or excluding chosen API operations
-  - Adapt to your Agentic context, defining `CustomTools` by renaming, condensing, translating default operations (**[🎬](https://www.youtube.com/watch?v=OjsSAt0JdOY)**)
+  - Adapt to your Agentic context, defining `CustomTools` by renaming, condensing, and translating default operations (**[🎬](https://www.youtube.com/watch?v=OjsSAt0JdOY)**)
   - Script `CustomTools` to orchestrate several tools and return a slim result, available since reShapr `0.0.14` (**[📄](custom-tools-specification.md#scripted-custom-tools)**)
 
 ## MCP support
@@ -38,9 +38,9 @@ Want to get all the features in a nutshell? This is where you can find all of th
 ## Operations
 
 - MCP Server endpoints rate limiting
-- **[User-friendly CLI](https://www.npmjs.com/package/@reshapr/reshapr-cli)** for importing API definitions, declaring secrets and configuring deployment (**[📄](cli-commands.md)**)
+- **[User-friendly CLI](https://www.npmjs.com/package/@reshapr/reshapr-cli)** for importing API definitions, declaring secrets, and configuring deployment (**[📄](cli-commands.md)**)
 - Full-stack observability with **[Open Telemetry](https://opentelemetry.io/)** support
-- Flexible deployment: SaaS, hybrid or on-premises
+- Flexible deployment: SaaS, hybrid, or on-premises
 - Scalable model with auto-discovery of new Gateways
 - Fully multi-tenant, with strict segregation between domains and customers.
 - Zero downtime deployments with auto-propagation on configuration changes
