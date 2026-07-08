@@ -8,11 +8,11 @@ The use of MCP Server raises important concerns regarding the control of the con
 
 Even official MCP Servers can be questioned regarding these concerns:
 
-- The official GitHub MCP server exposes over 90 tools consuming 46k+ tokens, including high-risk operations like `delete_file` and `delete_workflow_run_logs` alongside benign tools like `get_pull_requests` .
+- The official GitHub MCP server exposes over 90 tools consuming 46k+ tokens, including high-risk operations like `delete_file` and `delete_workflow_run_logs` alongside benign tools like `get_pull_requests`.
 - The Snowflake official MCP server, for example, exposes an `execute_sql` tool accepting arbitrary SQL queries. Agents have to generate different SQL queries each time
-for the same request, making results non-deterministic and potentially wrong. Instead, organizations need tools that map to specific use cases. For example, `get_revenue_for_month(month, year)` that map to approved, parameterized queries reviewed by data teams.
+for the same request, making results non-deterministic and potentially wrong. Instead, organizations need tools that map to specific use cases. For example, `get_revenue_for_month(month, year)` that maps to approved, parameterized queries reviewed by data teams.
 
-As a consequence, MCP Servers - whether provided by an official third-party or built on your own existing API - **should be used very rarely as is without polishing the context usage.** They should be designed to provide LLM and Agents with clearly designed and parameterized actions that fit a specific use case. 
+As a consequence, MCP Servers - whether provided by an official third-party or built on your own existing API - **should be used very rarely as is without polishing the context usage.** They should be designed to provide LLMs and Agents with clearly designed and parameterized actions that fit a specific use case. 
 
 reShapr provides **an easy way to design and specify your Custom Tools using a simple YAML description,** called the `CustomTools` specification. If you want to provide such custom tools to your reShapr-powered MCP endpoint, you’ll need to write this simple file and `attach` it to your existing Service.
 
@@ -60,10 +60,10 @@ A `CustomTools` artifact follows some simple rules:
 - We have a single tool here: `get_user_with_latest_followers`
 - A declarative custom tool **must** have a `tool` that defines the original tool it overrides and replaces: here we’re using the GitHub `user` tool,
 - A custom tool **may** provide optional `title` and `description` to provide more context to the LLM or Agent when choosing an appropriate tool,
-- A custom tool **must** also provide and `input` schema description that described its parameters. Input schema reuses the same structure as the regular MCP Tools Input Schema.
-- A declarative custom tool **may** also specify `arguments` that represents the arguments that will be used with the original tool that is overridden. Here we’re fixing the arguments as well as the relation navigation options for fetching exactly what we need.
+- A custom tool **must** also provide an `input` schema description that describes its parameters. Input schema reuses the same structure as the regular MCP Tools Input Schema.
+- A declarative custom tool **may** also specify `arguments` that represent the arguments that will be used with the original tool that is overridden. Here we’re fixing the arguments as well as the relation navigation options for fetching exactly what we need.
 
-In the case of custom tools using `arguments`, the value **can** be expressed using `${}` expressions that will be replaced by input values. Typically in our example, the MCP client will send a `user` value as input and this value will be used in the place of the `${user}` placeholder when invoking the original tool.
+In the case of custom tools using `arguments`, the value **can** be expressed using `${}` expressions that will be replaced by input values. Typically in our example, the MCP client will send a `user` value as input, and this value will be used in the place of the `${user}` placeholder when invoking the original tool.
 
 ## Scripted Custom Tools
 
@@ -169,7 +169,7 @@ Before a scripted Custom Tool runs, reShapr checks every tool declared in `tools
 
 This is why the `tools` list must be exhaustive: it lets reShapr know which backend credentials may be required before any JavaScript code is executed.
 
-### Guard-rails
+### Guardrails
 
 Script execution is bounded by gateway settings:
 
