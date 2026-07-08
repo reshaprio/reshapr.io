@@ -6,12 +6,12 @@ import ThemedImage from '@theme/ThemedImage';
 
 # Security options & Secrets
 
-Security of MCP endpoints is a hot topic and let’s face it: a fast moving one! For that, reShapr has been designed to be flexible and allow many different security options. It has been implemented to allow evolution following the emerging best practices. 
+Security of MCP endpoints is a hot topic and let’s face it: a fast-moving one! For that, reShapr has been designed to be flexible and allow many different security options. It has been implemented to allow evolution following the emerging best practices. 
 
 In a nutshell, the security options we’ll expose just after will encompass two different concerns:
 
-- The access of the MCP Endpoint exposed by a reShapr gateway itself,
-- The access of the backend API used by the reShapr gateway once MCP endpoint access is safe.
+- Access to the MCP Endpoint exposed by a reShapr gateway itself,
+- Access to the backend API used by the reShapr gateway once MCP endpoint access is safe.
 
 <ThemedImage
   alt="Security Model"
@@ -39,8 +39,8 @@ In addition to protecting the MCP Endpoint or Server, access to the backend API 
 For this purpose, reShapr supports the concept of `Secret`, which enables the secure storage of information on how to authenticate the backend API call. In reShapr, a Secret can contain different information:
 
 - **A username/password pair** - in case the backend API only supports HTTP Basic authentication mechanisms. An `Authorization:  Basic <base64(username:password)>` header will be automatically issued and transmitted to the backend API.
-- **A token (with an optional associated header)** -  in case the backend support API Key or token-based authentication mechanisms. If no token header is provided then the default `Authorization: Bearer <token>`  is assumed and transmitted to the backend API but token header can hold any value.
-- **A X509 certificate** - that will be used to secure the transport, in case the backend API is enforcing TLS communication with client-side certificate.
+- **A token (with an optional associated header)** -  in case the backend supports API Key or token-based authentication mechanisms. If no token header is provided, then the default `Authorization: Bearer <token>`  is assumed and transmitted to the backend API, but the token header can hold any value.
+- **A X509 certificate** - that will be used to secure the transport, in case the backend API is enforcing TLS communication with a client-side certificate.
 
 reShapr also supports **Elicitation-based backend secret**. **[Elicitations](https://modelcontextprotocol.io/specification/2025-11-25/client/elicitation)** are a recent addition to the MCP Protocol, coming in version `2025-11-25` of the protocol. Unlike a standard backend Secret, an Elicitation-based one does not require proactive provisioning: when needed, the reShapr MCP Server will return to the user to request backend credentials or initiate an OAuth authorization flow. Two different flows are supported:
 
@@ -70,7 +70,7 @@ ${env:DB_USER}:${env:DB_PASSWORD}
 
 Values that do not match the `${scheme:reference}` convention keep being used as literal Secret values, so existing Secrets remain compatible.
 
-Secret references are resolved **just in time**, on every backend call. Resolved values are not cached as control plane data and they do not need to be synchronized from the control plane to the Gateway. This also makes secret rotation straightforward: update the value in the Gateway environment and the next backend call uses the new value.
+Secret references are resolved **just in time**, on every backend call. Resolved values are not cached as control plane data, and they do not need to be synchronized from the control plane to the Gateway. This also makes secret rotation straightforward: update the value in the Gateway environment, and the next backend call uses the new value.
 
 Secret references are honored for sensitive credentials used by the Gateway to reach backend endpoints:
 
