@@ -30,7 +30,7 @@ reshapr run
 ✅ Reshapr containers started successfully.
 ```
 
-By default this pulls the **latest** stable release. You can also target a specific release or use the **nightly** build:
+By default, this pulls the **latest** stable release. You can also target a specific release or use the **nightly** build:
 
 Run a specific release:
 
@@ -90,7 +90,7 @@ reshapr login --server http://localhost:5555
 ✅ Configuration saved to /Users/you/.reshapr/config
 ```
 
-> From here, you can follow the **[Getting Started tutorial](../tutorials/getting-started.md)** to import services, create configuration plans, and expose MCP endpoints just point everything at your local instance.
+> From here, you can follow the **[Getting Started tutorial](../tutorials/getting-started.md)** to import services, create configuration plans, and expose MCP endpoints; just point everything at your local instance.
 
 ## Stop the containers
 
@@ -135,7 +135,7 @@ Or start components separately, the control plane first:
 docker compose up
 ```
 
-Then the gateway proxy in a separate terminal:
+Then, the gateway proxy in a separate terminal:
 
 ```bash
 docker run -it --rm -p 7777:7777 \
