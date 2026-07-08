@@ -11,6 +11,7 @@ import BlogLayout from '@theme/BlogLayout';
 import BlogListPaginator from '@theme/BlogListPaginator';
 import SearchMetadata from '@theme/SearchMetadata';
 import BlogListPageStructuredData from '@theme/BlogListPage/StructuredData';
+import ThemedImage from '@theme/ThemedImage';
 import styles from './styles.module.css';
 
 function formatDate(dateStr) {
@@ -50,17 +51,41 @@ function AuthorMeta({authors, assets, date}) {
   );
 }
 
+function BlogPostImage({image, imageDark, className, loading}) {
+  if (imageDark) {
+    return (
+      <ThemedImage
+        sources={{
+          light: image,
+          dark: imageDark,
+        }}
+        alt=""
+        className={className}
+        loading={loading}
+      />
+    );
+  }
+
+  return <img src={image} alt="" className={className} loading={loading} />;
+}
+
 /** First post — prominent editorial hero */
 function FeaturedPost({item}) {
   const {metadata, assets} = item.content;
   const {title, permalink, date, authors, description, frontMatter} = metadata;
   const image = frontMatter?.image;
+  const imageDark = frontMatter?.imageDark;
 
   return (
     <article className={styles.hero}>
       {image && (
         <Link to={permalink} className={styles.heroImageWrap} tabIndex={-1} aria-hidden>
-          <img src={image} alt="" className={styles.heroImage} loading="eager" />
+          <BlogPostImage
+            image={image}
+            imageDark={imageDark}
+            className={styles.heroImage}
+            loading="eager"
+          />
         </Link>
       )}
       <div className={styles.heroBody}>
@@ -82,12 +107,18 @@ function PostRow({item}) {
   const {metadata, assets} = item.content;
   const {title, permalink, date, authors, description, frontMatter} = metadata;
   const image = frontMatter?.image;
+  const imageDark = frontMatter?.imageDark;
 
   return (
     <article className={styles.row}>
       {image && (
         <Link to={permalink} className={styles.rowImageWrap} tabIndex={-1} aria-hidden="true">
-          <img src={image} alt="" className={styles.rowImage} loading="lazy" />
+          <BlogPostImage
+            image={image}
+            imageDark={imageDark}
+            className={styles.rowImage}
+            loading="lazy"
+          />
         </Link>
       )}
       <div className={styles.rowBody}>
