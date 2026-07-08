@@ -1,6 +1,6 @@
 # Getting started with CLI
 
-This page details the installation and the basic usages of the reShapr Command Line Interface utility.
+This page details the installation and the basic usage of the reShapr Command Line Interface utility.
 
 ## Installation
 
@@ -12,7 +12,7 @@ In a terminal window, just issue the following command:
 npm install -g @reshapr/reshapr-cli
 ```
 
-From there, you can check everything is correctly installed with:
+From there, you can check that everything is correctly installed with:
 
 ```bash
 reshapr --version
@@ -121,7 +121,7 @@ With this output:
 
 ## Import Artifact & Service
 
-Importing an artifact is the first step to expose MCP endpoints for your API. Artifacts enable the discovery of Services as explained in **[Services & Artifacts](../explanations/services-and-artifacts.md)**. Let’s do that using the public **[Open-Meteo OpenAPI specification](https://github.com/open-meteo/open-meteo/blob/main/openapi/forecast.yml)**. For that we’ll need the **[Raw URL of this document](https://raw.githubusercontent.com/open-meteo/open-meteo/refs/heads/main/openapi/forecast.yml)** and we’ll use the `import` command:
+Importing an artifact is the first step to exposing MCP endpoints for your API. Artifacts enable the discovery of Services as explained in **[Services & Artifacts](../explanations/services-and-artifacts.md)**. Let’s do that using the public **[Open-Meteo OpenAPI specification](https://github.com/open-meteo/open-meteo/blob/main/openapi/forecast.yml)**. For that we’ll need the **[Raw URL of this document](https://raw.githubusercontent.com/open-meteo/open-meteo/refs/heads/main/openapi/forecast.yml)** and we’ll use the `import` command:
 
 ```bash
 reshapr import -u https://raw.githubusercontent.com/open-meteo/open-meteo/refs/heads/main/openapi/forecast.yml
@@ -135,7 +135,7 @@ With this output:
 ```
 
 :::info
-You can also import local files into reShapr using the `-f` option. There’s one caveat though: we’re not able to discover dependencies using this mode.
+You can also import local files into reShapr using the `-f` option. There’s one caveat, though: we’re not able to discover dependencies using this mode.
 :::
 
 You can now list and check the discovered Service with the `service` command:
@@ -158,14 +158,14 @@ Operations :
 ```
 
 :::info
-In case of mistake or unused Service, you can delete a service using the `reshapr service delete <id>` command.
+In case of a mistake or unused Service, you can delete a service using the `reshapr service delete <id>` command.
 :::
 
 ## Configuring consumption
 
 **[Configuration Plan](../explanations/configuration-and-exposition.md)** will allow you to define how your Service will be consumed by MCP Clients. You’ll define the **backend endpoint** the MCP Gateway will target as well as the **security options** for future expositions. Let’s create a simple configuration plan for the  **[Open-Meteo Service](https://github.com/open-meteo/open-meteo/blob/main/openapi/forecast.yml)** we just imported.
 
-For that, we need the Service identifier we got just before (`0PXEW1ZDWFCZS`) and we need to know the public endpoint of this API (`https://api.open-meteo.com`). We’ll use the `config create` command and provide a basic name and description:
+For that, we need the Service identifier we got just before (`0PXEW1ZDWFCZS`), and we need to know the public endpoint of this API (`https://api.open-meteo.com`). We’ll use the `config create` command and provide a basic name and description:
 
 ```bash
 reshapr config create 'open-meteo-manual' --description 'Manual Plan for Open-Meteo APIs' \
@@ -184,7 +184,7 @@ With this output:
 
 Exposing a Configuration Plan will allow you to define where your Service will be made available to MCP Clients. By creating an exposition, you’ll define the **group of gateways** that will receive all the configuration information and will be in charge of exposing the MCP Endpoints.
 
-To create an exposition, we need the Configuration Plan identifier we got earlier (`0PXPDMB4MFE6H`) and we identify the group of gateways we want to deploy on. The default gateway group has the id `1`. We can then use the `expo create` command for that:
+To create an exposition, we need the Configuration Plan identifier we got earlier (`0PXPDMB4MFE6H`), and we identify the group of gateways we want to deploy on. The default gateway group has the id `1`. We can then use the `expo create` command for that:
 
 ```bash
 reshapr expo create --configuration 0PXPDMB4MFE6H --gateway-group 1
@@ -224,7 +224,7 @@ Gateway Endpoints
 
 > Like the `service` command, you can also use sub-commands like `list`, `get` or `delete` to manage your configurations.
 
-🎉 Hooray! You deployed a MCP Endpoint! Check the `Endpoints` information just above (`mcp.try.reshapr.io/mcp/<organization>/Open-Meteo+APIs/1.0`): you can use this endpoint with `https://` prefix in your favorite MCP Client to access your new MCP Server!
+🎉 Hooray! You deployed an MCP Endpoint! Check the `Endpoints` information just above (`mcp.try.reshapr.io/mcp/<organization>/Open-Meteo+APIs/1.0`): you can use this endpoint with `https://` prefix in your favorite MCP Client to access your new MCP Server!
 
 ## All-in-one Magic command 🪄
 
