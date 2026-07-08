@@ -29,7 +29,7 @@ The platform has two major parts:
 
 This architecture supports multiple deployment models:
 
-1. **Cloud**: reShapr hosts both control plane and data plane.
+1. **Cloud**: reShapr hosts both the control plane and the data plane.
 2. **Hybrid**: you host some gateways in your own trust domain while reShapr manages control.
 3. **On-premises**: both control and data planes in your own environment.
 
