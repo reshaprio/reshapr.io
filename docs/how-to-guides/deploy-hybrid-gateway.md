@@ -8,14 +8,14 @@ import ThemedImage from '@theme/ThemedImage';
 
 As introduced in **[Why reShapr?](../overview/why-reshapr.md)**, the reShapr architecture allows deployment on several types and locations of Gateways, depending on your subscription plan. Thanks to this flexible architecture, the reShapr solution can be used in a **hybrid deployment** mode where you, as the *Acme Company*, can choose to host some reShapr Gateways within your own trust domain, close to your AI workloads and API backend endpoints. This gives you **full control over the data plane,** ensuring that your data never leaves your trusted environment!
 
-This page explains how a reShapr hybrid deployment is working and how to implement it.
+This page explains how a reShapr hybrid deployment works and how to implement it.
 
 ## Overview
 
 The **[Gateway Group & Gateway](../explanations/gateway-groups-and-gateways.md)** page introduces the core concepts of this deployment architecture:
 
 - The *Gateway Groups* represent the abstract target of your MCP Server exposition - it is owned by an organization and defines labels for matching *Gateways*,
-- The *Gateways* are the concrete elements that expose your MCP Servers, they receive deployment directives and configuration plans from the reShapr control plane.
+- The *Gateways* are the concrete elements that expose your MCP Servers; they receive deployment directives and configuration plans from the reShapr control plane.
 
 <ThemedImage
   alt="Hybrid Deployment"
@@ -27,7 +27,7 @@ The **[Gateway Group & Gateway](../explanations/gateway-groups-and-gateways.md)*
 
 When it’s running, a reShapr Gateway discovers the MCP Servers it has to expose from the control plane. This discovery is made according to the **[Exposition](../explanations/configuration-and-exposition.md)** you previously created and the Gateway Groups you chose. To do so, the Gateway presents **a set of label selectors** that will be used during the discovery and throughout its lifetime to synchronize its **[Service](../explanations/services-and-artifacts.md)** definitions and **[Configuration Plans](../explanations/configuration-and-exposition.md)**. While it is alive, an ephemeral Gateway representation is tied to the Gateway Group in the control plane.
 
-A Gateway is not necessarily attached to a single Gateway Group; it can be attached to many groups as long as its selectors match the group's labels! You could have a set of Gateways with a unique selector `org=acme` matching all the Acme’s Gateway Groups.
+A Gateway is not necessarily attached to a single Gateway Group; it can be attached to many groups as long as its selectors match the group's labels! You could have a set of Gateways with a unique selector `org=acme` matching all Acme’s Gateway Groups.
 
 ### Lifecycle
 
@@ -35,14 +35,14 @@ A *Gateway* starts, lives, and terminates according to a certain lifecycle. Belo
 
 1. The first stage of a Gateway life is the **Registration phase**. A Gateway is configured to be connected to a control plane instance (a hostname and a port). During startup, the Gateway advertises itself to the control plane, providing an API Token for authentication, its unique identifier, its label selectors, and the information of the URLs which can be used for reaching this Gateway.
     1. If authentication is successful, then the Gateway is registered into the control plane, and it fetches its **[Service](../explanations/services-and-artifacts.md)** definitions and **[Configuration Plans](../explanations/configuration-and-exposition.md)** for exposing the MCP Servers,
-    2. If authentication failed, then the Gateway stops with an error message.
+    2. If authentication fails, then the Gateway stops with an error message.
 2. After successful registration, the Gateway starts a **Health check** process. This health check will be done every 2 minutes and is acknowledged by the control plane.
-    1. If a health check cannot happen because of the control plane being unavailable, the Gateway is considered as *unsynchronized* - a **Registration** phase will be done upon reconnection,
-    2. If the control plane doesn’t receive a health check from the Gateway in a 5-minute period, it removes this Gateway from its internal list and marks it as *unsynchronized*. It will force a new **Registration**.
+    1. If a health check cannot happen because of the control plane being unavailable, the Gateway is considered *unsynchronized* - a **Registration** phase will be done upon reconnection,
+    2. If the control plane doesn’t receive a health check from the Gateway in 5 minutes, it removes this Gateway from its internal list and marks it as *unsynchronized*. It will force a new **Registration**.
     3. MCP Servers execution is not interrupted during health check issues.
-3. After successful registration, the Gateway also starts a **Changes Streaming** process: the control plane is able to push it the relevant notification changes based on its label selectors.
+3. After successful registration, the Gateway also starts a **Changes Streaming** process: the control plane can push the relevant notification changes based on its label selectors.
     1. Upon changes reception, the MCP Servers are immediately updated or removed without interruption.
-    2. If a new **Registration** happen (due to a connectivity issue), this streaming process is updated accordingly.
+    2. If a new **Registration** happens (due to a connectivity issue), this streaming process is updated accordingly.
 4. On process shutdown, the Gateway starts the **Termination** phase:
     1. Health checks are stopped, and a termination notification is sent to the control plane for the removal of its internal Gateway representation.
     2. The changes streaming process is stopped, and communication is cleaned.
@@ -53,10 +53,10 @@ A *Gateway* starts, lives, and terminates according to a certain lifecycle. Belo
 It’s worth noting the following security characteristics of this architecture:
 
 - Communication between the control plane and Gateways is always at the initiative of the gateways through an upstream network channel. The Gateway must be able to reach out to the control plane, and then bi-directional streaming is set up on the same communication channel. Network admin doesn’t have to set up any ingress access for the control plane to reach out to the Gateway - only the egress route to the control plane is necessary.
-- Communication is done over **[gRPC](https://en.wikipedia.org/wiki/GRPC)** protocol, that used **[HTTP/2](https://en.wikipedia.org/wiki/HTTP/2)** with **[TLS](https://en.wikipedia.org/wiki/Transport_Layer_Security)**. On top of that, reShapr implements token-based authorization with an API Token that is generated, renewed, and revoked by the control plane. You can decide to share the API Token among different gateways or have an API Token per-gateway,
-- When running in this hybrid mode, the control plane only holds the configuration of your MCP Servers: the **[Services & Artifacts](../explanations/services-and-artifacts.md)** definition as well as the **[Configuration Plan & Exposition](../explanations/configuration-and-exposition.md)**. All the application data : the exchanges between your Agents, LLM, MCP Clients, and your backend API (included the reShapr MCP Servers) stay in your datacenter!
+- Communication is done over **[gRPC](https://en.wikipedia.org/wiki/GRPC)** protocol, that used **[HTTP/2](https://en.wikipedia.org/wiki/HTTP/2)** with **[TLS](https://en.wikipedia.org/wiki/Transport_Layer_Security)**. On top of that, reShapr implements token-based authorization with an API Token that is generated, renewed, and revoked by the control plane. You can decide to share the API Token among different gateways or have an API Token per gateway.
+- When running in this hybrid mode, the control plane only holds the configuration of your MCP Servers: the **[Services & Artifacts](../explanations/services-and-artifacts.md)** definition as well as the **[Configuration Plan & Exposition](../explanations/configuration-and-exposition.md)**. All the application data: the exchanges between your Agents, LLM, MCP Clients, and your backend API (including the reShapr MCP Servers) stay in your datacenter!
 - Since reShapr `0.0.14`, backend **[secret references](../explanations/security-model.md#secret-references)** can keep actual backend credentials local to the Gateway runtime while the control plane only stores references such as `${env:GITHUB_TOKEN}`.
-- Because the Gateway runs in the location of your choice, they can now access any private Authorization Server or IDP you may want to use via the **[Security options & Secrets](../explanations/security-model.md)**!
+- Because the Gateway runs in the location of your choice, it can now access any private Authorization Server or IDP you may want to use via the **[Security options & Secrets](../explanations/security-model.md)**!
 
 ## Installation
 
@@ -78,7 +78,7 @@ To retrieve an API token for your gateway(s), follow these steps from the reShap
 
     This command will display the value of the newly created API token in the terminal. Typically, something like:
 
-    > The API Token to register Gateway is: acme-oXYvTI8f8BeuJ5-HlNuon6vs2wSao8qS7WRNIYwoFW4
+    > The API Token to register the Gateway is: acme-oXYvTI8f8BeuJ5-HlNuon6vs2wSao8qS7WRNIYwoFW4
 
     :::warning
     Make sure to store it securely, as it will not be shown again.
@@ -127,7 +127,7 @@ When starting the reShapr Gateway container, you need to set the following envir
 
 - `RESHAPR_CTRL_HOST`: The hostname of the reShapr Control Plane (e.g., `app.beta.reshapr.io`).
 - `RESHAPR_CTRL_PORT`: The port number of the reShapr Control Plane (e.g., `443`).
-- `RESHAPR_CTRL_TLS_PLAINTEXT` : A flag to disable plain text communication over TLS. Set it to `false`.
+- `RESHAPR_CTRL_TLS_PLAINTEXT`: A flag to disable plain-text communication over TLS. Set it to `false`.
 - `RESHAPR_CTRL_TOKEN`: The API token you retrieved to authorize your gateway.
 - `RESHAPR_GATEWAY_ID`: A unique identifier for your gateway (e.g., `acme-gateway-01`).
 - `RESHAPR_GATEWAY_FQDNS`: A comma-separated list of *Fully Qualified Domain Names* that represent the hosts that can be used to reach out to your gateway. If none are provided, it defaults to `localhost`.
