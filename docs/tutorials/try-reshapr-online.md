@@ -24,7 +24,7 @@ Select **GitHub** or **Google** to authenticate with the reShapr online try.
 
 ### Step 2 — Sign in with your provider
 
-Enter your credentials. In this example we are using GitHub.
+Enter your credentials. In this example, we are using GitHub.
 
 ![Step 2 — GitHub sign-in form for reShapr Try authentication](/img/docs/try-reshapr-online-2.png)
 
