@@ -1,0 +1,266 @@
+---
+title: "reShapr vs Official GitHub MCP 🥊"
+date: 2026-07-10
+authors:
+  - yacine
+description: "A live, curl-reproducible benchmark showing how reShapr turns a 31-call GitHub MCP pull-request workflow into one predictable agent action, then trims the response further with output filters and TOON."
+image: /img/blog/reshapr-github-mcp-benchmark-light.png
+imageDark: /img/blog/reshapr-github-mcp-benchmark-dark.png
+tags: [MCP, GitHub, API, Custom Tools, Scripted Custom Tools, Output Filtering, TOON, Benchmark, Token Optimization, LLM, AI Agents]
+---
+
+import ThemedImage from '@theme/ThemedImage';
+
+<figure style={{textAlign: 'center', margin: '1.5rem 0'}}>
+
+<ThemedImage
+  alt="reShapr vs Official GitHub MCP - 31 tool calls become one predictable agent action"
+  sources={{
+    light: '/img/blog/reshapr-github-mcp-benchmark-light.png',
+    dark: '/img/blog/reshapr-github-mcp-benchmark-dark.png',
+  }}
+/>
+
+</figure>
+
+### 31 Tool Calls Become 1 Predictable Agent Action
+
+{/* truncate */}
+
+This benchmark answers a practical agent question and turns the concepts introduced in our previous posts, [From Context Overload to Context Control](https://reshapr.io/blog/from-context-overload-to-context-control) and [From API Sprawl to Agent Actions](https://reshapr.io/blog/from-api-sprawl-to-agent-actions), into a **real-world measurement**. By providing a **fair comparison** between the **official GitHub MCP tools** and **reShapr**, it shows how task-shaped MCP actions translate into **measurable performance gains**.
+
+> If an AI agent needs **recent pull request velocity** for `microsoft/vscode`, the public GitHub repository for Visual Studio Code, should it drive the official GitHub MCP pull-request tools directly, or should it call **one purpose-built reShapr MCP action**?
+
+## The Use Case
+
+The test is **intentionally narrow and reproducible**. The agent starts with a simple goal: understand recent pull request velocity in `microsoft/vscode`. To answer it properly, it needs the **10 most recently updated pull requests**, the details for each pull request, **up to 5 review touchpoints**, and **up to 10 changed file paths** per pull request.
+
+That is a realistic workflow for **release tracking**, **engineering management**, **review triage**, and **agentic codebase analysis**. It is also exactly the kind of workflow where **generic tools create agent overhead**: list the pull requests, then loop over each pull request to fetch details, reviews, and files.
+
+The official GitHub MCP path exposes useful **primitive tools**. reShapr turns the same API surface into **one higher-level MCP action**.
+
+This matters beyond speed. reShapr makes repeated agent workflows **predictable, reliable, and reproducible**. The model can still reason and decide, but the workflow boundary becomes stable: **one named action, one input schema, one output shape, one measurable execution path**.
+
+## The Result
+
+This is the latest **measured live run** against `microsoft/vscode`, using the **same 10 pull requests** for the official MCP and reShapr custom-action comparison:
+
+<figure style={{textAlign: 'center', margin: '1.75rem 0'}}>
+
+<ThemedImage
+  alt="Bar chart comparing official GitHub MCP and reShapr MCP across tool calls, roundtrips, latency, response bytes, and estimated token load"
+  sources={{
+    light: '/img/blog/reshapr-github-mcp-reduction-chart-light.png',
+    dark: '/img/blog/reshapr-github-mcp-reduction-chart-dark.png',
+  }}
+/>
+
+</figure>
+
+Then reShapr applies a **second, independent optimization** at the **output boundary**. The same custom action was called through two `ToolsOutputFilters` artifacts on a matched reShapr run: first with **JSON retain/patch rules**, then with the same filter plus **`convertToToon: true`**.
+
+The official GitHub MCP baseline does not expose an equivalent output-filter artifact in this test, so the comparison stays explicit: **official primitive workflow versus reShapr custom action**, then **reShapr custom action versus reShapr custom action with output filtering**.
+
+<figure style={{textAlign: 'center', margin: '1.75rem 0'}}>
+
+<ThemedImage
+  alt="Bar chart comparing reShapr custom action, output filter, and output filter plus TOON across calls, latency, bytes, and estimated token load"
+  sources={{
+    light: '/img/blog/reshapr-github-mcp-variants-chart-light.png',
+    dark: '/img/blog/reshapr-github-mcp-variants-chart-dark.png',
+  }}
+/>
+
+</figure>
+
+That second optimization is smaller than the **31-to-1 action design**, but it still matters: another **12.4% response-byte reduction** from the custom action to filtered TOON output, on top of the main **97.2% reduction** versus the official GitHub MCP loop.
+
+The key point is **fairness**: reShapr does not pretend GitHub has less data. The reShapr action still performs the **source GitHub operations** needed to produce the answer. The win is that the agent sees **one semantic tool call, one compact response, and one stable task-shaped contract**.
+
+## Methodology
+
+The most natural way to run this use case is through **ChatGPT or another MCP-capable conversational agent**. A user would normally ask for the **outcome**, not for the individual API calls:
+
+```text
+Using the available GitHub MCP tools, analyze recent pull request velocity for the public repository microsoft/vscode.
+
+Use the 10 most recently updated pull requests. For each pull request, collect the pull request details, up to 5 review touchpoints, and up to 10 changed file paths.
+
+Return a compact summary with pull request id, title, creator, state, creation and merge timestamps, review touchpoints, and changed paths.
+```
+
+That is the typical agent experience: **one natural-language request becomes a multi-step MCP tool plan**. The model has to decide how to list pull requests, fan out over the selected pull requests, and gather the details, reviews, and changed files before it can synthesize an answer.
+
+With reShapr, the conversational agent can call **one task-shaped action**:
+
+```json
+{
+  "name": "get_repo_velocity_metrics",
+  "arguments": {
+    "owner": "microsoft",
+    "name": "vscode",
+    "prCount": 10,
+    "reviewCount": 5,
+    "fileCount": 10
+  }
+}
+```
+
+For the benchmark, we did not want the measurement to depend on **model behavior**. Different models, prompts, retry policies, or agent runtimes can make slightly different planning choices. One run may call tools in a different order. Another may inspect extra fields, retry a tool call, or stop early after a transient error.
+
+So the benchmark separates the **user experience** from the **measurement method**. The LLM prompt describes the real agent task. The **curl-based benchmark** measures the underlying MCP workflow directly. It sends the **same MCP requests over Streamable HTTP**, records each HTTP roundtrip, captures each `tools/call` response body, and calculates **latency, bytes, and estimated token load** from the collected responses.
+
+This gives us a **technical, predictable, and reproducible** way to measure the benchmark without letting **model behavior distort the numbers**. The expected LLM-agent result should be directionally the same: the official GitHub MCP path needs a **multi-call loop**, while the reShapr path exposes **one task-shaped action**. The curl benchmark makes that difference **explicit and auditable**.
+
+## Why This Benchmark
+
+Agents are bad at **unnecessary loops**. Every extra tool call adds protocol overhead, latency, logs, error states, retry decisions, and context the model may need to read. Pull request velocity is a clean benchmark because the naive workflow naturally becomes **`1 + 3N` tool calls**: one call to list pull requests, then three follow-up calls for every pull request to fetch details, reviews, and changed files.
+
+For 10 pull requests, this is:
+
+```text
+1 list call + (10 PRs * 3 follow-up calls) = 31 agent-facing MCP tool calls
+```
+
+With reShapr, the agent calls:
+
+```text
+get_repo_velocity_metrics(owner: "microsoft", name: "vscode", prCount: 10, reviewCount: 5, fileCount: 10)
+```
+
+The action returns **only what the use case needs**: pull request id, title, creator, state, creation and merge timestamps, review touchpoints, and changed paths.
+
+That is the demonstration: not "can MCP call GitHub?", but **"can we shape an API into the tool the agent actually needed?"**
+
+## The Bigger Issue: Predictable Agents
+
+LLM-driven agents are powerful because they can adapt, but that flexibility becomes a liability when the **same business workflow is rediscovered on every run**. One run may call tools in a different order. Another may skip a follow-up call. Another may over-fetch data, hit a transient error, or spend context on fields the task never needed.
+
+reShapr does not make the model deterministic. It makes the **agent workflow boundary predictable**.
+
+With the primitive-tool path, the agent is responsible for planning and executing the full loop:
+
+```text
+list pull requests -> for each pull request -> get details -> get reviews -> get files -> shape the result
+```
+
+With reShapr, that loop becomes a reusable MCP action:
+
+```text
+get_repo_velocity_metrics
+```
+
+The operational benefits are concrete. The **tool-call count** becomes predictable, **latency and payload size** become measurable, the **output shape** stays stable, and **failures** are localized to one action. Most importantly, **the same workflow** can be reproduced by humans, tests, and agents.
+
+This is a big deal for agent adoption. Teams do not only need agents that can improvise. They need agent capabilities that can be **audited, benchmarked, documented, and run again with confidence**.
+
+## What Is Being Compared
+
+Both paths use **Streamable HTTP MCP**, not stdio.
+
+The **official GitHub MCP path** uses the remote endpoint `https://api.githubcopilot.com/mcp/x/pull_requests/readonly` with the `X-MCP-Toolsets: pull_requests` header. The agent receives useful primitive tools, mainly `list_pull_requests` and `pull_request_read`, but it must still run the **full loop itself**: list pull requests, then fetch details, reviews, and files for each pull request.
+
+The **reShapr path** starts from the same **GitHub source of truth**. It imports the **full official GitHub REST OpenAPI YAML file** by URL, exposes GitHub REST operations through reShapr MCP, attaches **one custom tool** that orchestrates the pull request workflow, and can attach `ToolsOutputFilters` artifacts to **trim or TOON-encode** the custom action output. The result is a **compact task-specific payload** rather than a pile of primitive tool responses.
+
+Official GitHub OpenAPI URL used by reShapr:
+
+```text
+https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.yaml
+```
+
+The OpenAPI file is **not copied into this article**. reShapr imports it directly from that URL.
+
+## How reShapr Shapes the Workflow
+
+The key reShapr artifact is a small `CustomTools` definition. It tells reShapr which GitHub REST operations belong to the task and exposes the workflow as **one agent-facing action**:
+
+```yaml
+apiVersion: reshapr.io/v1alpha1
+kind: CustomTools
+service:
+  name: GitHub v3 REST API
+  version: "1.1.4"
+customTools:
+  get_repo_velocity_metrics:
+    description: Fetch recent pull requests, review touchpoints, and changed file paths as one compact repository velocity action.
+    tools:
+      - tool: get_repos_owner_repo_pulls
+      - tool: get_repos_owner_repo_pulls_pull_number
+      - tool: get_repos_owner_repo_pulls_pull_number_reviews
+      - tool: get_repos_owner_repo_pulls_pull_number_files
+```
+
+Those **four primitive operations** are the calls a generic agent has to **discover, sequence, and repeat** when it drives GitHub MCP directly. reShapr keeps the source API operations **visible and measurable**, but moves the orchestration behind **one predictable action**: `get_repo_velocity_metrics`.
+
+That is the practical difference between exposing an **API** to an agent and exposing a **capability** to an agent.
+
+## Reproduce It Yourself
+
+The **full benchmark package** is available in the reShapr demos repository:
+
+```text
+https://github.com/reshaprio/reshapr-demos/tree/main/benchs/github-mcp-vs-reshapr
+```
+
+It includes the **README**, **scripts**, **reShapr artifacts**, **output filters**, **payload examples**, and **curl-only benchmark runner** used to collect the numbers in this article.
+
+Use it to run the benchmark against `microsoft/vscode`, inspect **every MCP request and response body**, and adapt the workflow to another repository or MCP server. The package keeps the setup **reproducible** while keeping this post focused on the story: **31 primitive tool calls become one predictable action**, then **output filtering and TOON** reduce the payload further.
+
+We welcome **feedback, comments, and contributions**. If you reproduce the benchmark on another repository, improve the harness, or want to compare another MCP server, contributions are welcome.
+
+## How to Read the Numbers
+
+The benchmark separates **two things**:
+
+1. MCP protocol roundtrips: every Streamable HTTP exchange, including initialization and `tools/list`.
+2. Agent tool calls: only `tools/call` requests, because those are the calls an agent has to plan, issue, observe, and recover from.
+
+(*) For bytes and token estimate, the figures count **only tool-call response bodies**. That is the content the agent must consume to continue its work. The token estimate is intentionally simple: **response bytes divided by four**. The script uses `(bytes + 3) / 4` to round that byte-based estimate up to the nearest whole token. It is **not a tokenizer-specific claim**, but it is a useful size proxy.
+
+For the output-filter comparison, make sure the three reShapr variants inspect the **same pull request IDs**. `microsoft/vscode` is active enough that the "recently updated" set can change between runs. The published output-filter chart uses **one matched run** where all reShapr variants inspected the same 10 pull requests:
+
+```text
+325138,325045,325180,325168,325173,325170,325175,322952,325163,325165
+```
+
+The reShapr payload includes this field:
+
+```json
+{
+  "source_backend_calls": 31
+}
+```
+
+That field is important because it proves reShapr is **not hiding the source work**. It is consolidating the workflow at the **MCP boundary** and shaping the result **before the agent sees it**.
+
+## Why reShapr Wins Here
+
+The official GitHub MCP path gives the agent general-purpose pull-request tools. That is useful, but the agent still has to plan and drive the workflow step by step.
+
+reShapr lets an API owner or platform team expose a use-case-level action:
+
+```text
+get_repo_velocity_metrics
+```
+
+That action is better for agents because it has **one clear intent**, **one compact input schema**, **one response shape**, and **one failure surface**. It also gives the API owner one place to encode pagination, fan-out, filtering, and field selection, instead of asking every agent to rediscover that orchestration pattern at runtime.
+
+For platform teams, this is the practical reShapr advantage: it turns **existing APIs into agent-native tools** without asking every agent to rediscover the same orchestration loop.
+
+For this use case, the difference is not subtle. **31 agent tool calls become 1**. **34 MCP HTTP roundtrips become 4**. **267.8 KB** of official MCP tool responses becomes **7.4 KB**, and roughly **67.0K estimated tokens** becomes **1.9K**. When the use case can safely drop fields, **output filters and TOON** can reduce the already compact custom output further.
+
+That is the kind of improvement that changes **how reliable an agent workflow feels in practice**.
+
+## What This Demonstrates
+
+This benchmark does not argue that primitive MCP tools are bad. They are necessary. It shows that primitive tools are often **not the right final interface for agents**.
+
+The best agent-facing interface is usually **not the raw API**. It is a **domain action shaped around the task**:
+
+```text
+Repository velocity, not pull request plumbing.
+```
+
+reShapr provides the **missing layer**. It can import the **official API description**, expose it as **MCP over Streamable HTTP**, compose existing operations into a **custom tool**, reduce the payload to the **fields the task needs**, and keep the full flow **reproducible**.
+
+In this benchmark, that is why the reShapr approach wins: it keeps the **GitHub source of truth**, removes **avoidable agent overhead**, and turns a fragile multi-step agent loop into a **predictable workflow that can be reproduced, measured, and trusted**.
