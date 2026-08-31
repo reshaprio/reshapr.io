@@ -13,7 +13,7 @@ import PageMotionRoot, {scrollEase, usePageRevealMotion} from '@site/src/compone
 import landingShell from '@site/src/components/LandingShell/styles.module.css';
 import styles from './index.module.css';
 
-const CLI_INSTALL_CMD = 'npm install -g @reshapr/reshapr-cli';
+const CLI_INSTALL_CMD = 'npm install -g @reshapr/reshapr-cli --allow-scripts=@scarf/scarf';
 
 function CliInstallSnippet() {
   const [copied, setCopied] = useState(false);

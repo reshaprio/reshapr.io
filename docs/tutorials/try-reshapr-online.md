@@ -43,7 +43,7 @@ You can customize your trial organization (change its default name if you’d li
 Then install the CLI:
 
 ```shell
-npm install -g @reshapr/reshapr-cli
+npm install -g @reshapr/reshapr-cli --allow-scripts=@scarf/scarf
 ```
 
 and log in to Reshapr online:

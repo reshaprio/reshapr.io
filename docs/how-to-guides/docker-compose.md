@@ -11,7 +11,7 @@ Before you begin, make sure you have the following installed on your machine:
 - The **reShapr CLI** installed globally:
 
 ```bash
-npm install -g @reshapr/reshapr-cli
+npm install -g @reshapr/reshapr-cli --allow-scripts=@scarf/scarf
 ```
 
 ## Quick start with the CLI

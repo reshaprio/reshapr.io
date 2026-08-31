@@ -6,10 +6,28 @@ This page details the installation and the basic usage of the reShapr Command Li
 
 The `reshapr` CLI is an NPM package available at **[https://www.npmjs.com/package/@reshapr/reshapr-cli](https://www.npmjs.com/package/@reshapr/reshapr-cli)**. You can install it globally in your Linux or MacOS system.
 
-In a terminal window, just issue the following command:
+We recommend installing the CLI with anonymous usage telemetry enabled:
+
+```bash
+npm install -g @reshapr/reshapr-cli --allow-scripts=@scarf/scarf
+```
+
+The `--allow-scripts=@scarf/scarf` option explicitly authorizes Scarf's installation telemetry script. These anonymous metrics help the community measure adoption and support the project's future donation to the **[Agentic AI Foundation (AAIF)](https://aaif.io/)**.
+
+Telemetry is optional. **[Learn why we collect these metrics](https://github.com/reshaprio/reshapr.io/issues/27)**.
+
+To install the CLI without enabling telemetry, use:
 
 ```bash
 npm install -g @reshapr/reshapr-cli
+```
+
+The CLI remains fully functional when telemetry is not enabled.
+
+To remember your approval for future global installations, you can optionally configure npm at the user level:
+
+```bash
+npm config set allow-scripts=@scarf/scarf --location=user
 ```
 
 From there, you can check that everything is correctly installed with:

@@ -32,7 +32,7 @@ https://reshapr.io/docs/tutorials/getting-started
 ### Installation
 
 ```bash
-npm install -g @reshapr/reshapr-cli
+npm install -g @reshapr/reshapr-cli --allow-scripts=@scarf/scarf
 reshapr --version   # → 0.0.10
 ```
 
@@ -86,7 +86,7 @@ Run reShapr locally using Docker Compose for development and testing.
 ### Prerequisites
 
 - Docker (with Docker Compose v2)
-- Node.js v18+ and the reShapr CLI (`npm install -g @reshapr/reshapr-cli`)
+- Node.js v18+ and the reShapr CLI (`npm install -g @reshapr/reshapr-cli --allow-scripts=@scarf/scarf`)
 
 ### Quick start with the CLI
 

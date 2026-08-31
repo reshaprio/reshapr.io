@@ -48,7 +48,7 @@ https://reshapr.io/docs/references/features
 
 https://reshapr.io/docs/references/cli-commands
 
-Install: `npm install -g @reshapr/reshapr-cli`
+Install: `npm install -g @reshapr/reshapr-cli --allow-scripts=@scarf/scarf`
 
 ### Artifact commands
 

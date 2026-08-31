@@ -13,7 +13,7 @@ Run reShapr locally using Docker Compose for development and testing.
 ### Prerequisites
 
 - Docker (with Docker Compose v2) or Podman
-- Node.js v18+ and the reShapr CLI (`npm install -g @reshapr/reshapr-cli`)
+- Node.js v18+ and the reShapr CLI (`npm install -g @reshapr/reshapr-cli --allow-scripts=@scarf/scarf`)
 
 ### Quick start with the CLI
 
