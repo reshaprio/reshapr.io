@@ -118,15 +118,39 @@ for (const item of expectedGenerated) {
 const llmsPath = path.join(BUILD_DIR, 'llms.txt');
 if (fs.existsSync(llmsPath)) {
   const llmsContent = fs.readFileSync(llmsPath, 'utf8');
+  const canonicalOrigin = 'https://reshapr.io';
   for (const corePage of ['index.md', 'about.md', 'community.md', 'blog.md']) {
-    if (!llmsContent.includes(`](/${corePage})`)) {
-      errors.push(`llms.txt does not include core page: /${corePage}`);
+    if (!llmsContent.includes(`](${canonicalOrigin}/${corePage})`)) {
+      errors.push(`llms.txt does not include canonical core page: ${canonicalOrigin}/${corePage}`);
     }
   }
-  const linkedOutputs = [...llmsContent.matchAll(/\]\((\/[^)]+\.(?:md|txt))\)/g)]
-    .map(match => match[1].replace(/^\//, ''));
-  for (const linkedOutput of linkedOutputs) {
-    if (!outputExists(linkedOutput)) errors.push(`Broken llms.txt link: /${linkedOutput}`);
+  for (const item of expectedGenerated) {
+    if (!llmsContent.includes(`](${canonicalOrigin}/${item.output})`)) {
+      errors.push(`llms.txt does not include canonical generated page: ${canonicalOrigin}/${item.output}`);
+    }
+  }
+  const linkedTargets = [...llmsContent.matchAll(/\]\(([^)]+)\)/g)].map(match => match[1]);
+  for (const linkedTarget of linkedTargets) {
+    if (linkedTarget.startsWith('/')) {
+      errors.push(`llms.txt internal link must use the canonical origin: ${linkedTarget}`);
+      continue;
+    }
+
+    let linkedUrl;
+    try {
+      linkedUrl = new URL(linkedTarget);
+    } catch {
+      errors.push(`Invalid llms.txt link: ${linkedTarget}`);
+      continue;
+    }
+
+    if (linkedUrl.origin !== canonicalOrigin) continue;
+    if (linkedUrl.pathname.startsWith('//')) {
+      errors.push(`Malformed canonical llms.txt link: ${linkedTarget}`);
+      continue;
+    }
+    const linkedOutput = linkedUrl.pathname.replace(/^\/+/, '');
+    if (!outputExists(linkedOutput)) errors.push(`Broken llms.txt link: ${linkedTarget}`);
   }
 }
 

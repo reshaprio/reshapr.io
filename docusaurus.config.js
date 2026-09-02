@@ -135,10 +135,10 @@ const config = {
 - **Hybrid deployment**: Run reShapr in the cloud, on-premise, or in hybrid configurations via Docker Compose or Helm charts.
 
 **Company:**
-- [Website summary](/index.md)
-- [About reShapr](/about.md)
-- [Community resources](/community.md)
-- [Blog index](/blog.md)
+- [Website summary](https://reshapr.io/index.md)
+- [About reShapr](https://reshapr.io/about.md)
+- [Community resources](https://reshapr.io/community.md)
+- [Blog index](https://reshapr.io/blog.md)
 - [GitHub](https://github.com/reshaprio/reshapr)`,
         includeOrder: [
           'overview/*',
