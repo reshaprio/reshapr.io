@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const {
   BUILD_DIR,
+  MACHINE_DIRECTIVE,
   ROOT,
   publishedSources,
   sourceOutputPath,
@@ -11,6 +12,18 @@ const {
 } = require('./machine-content');
 
 const errors = [];
+
+for (const markdownPath of walkMarkdown(BUILD_DIR)) {
+  const content = fs.readFileSync(markdownPath, 'utf8');
+  const opening = content.slice(0, 1000);
+
+  if (!opening.includes(MACHINE_DIRECTIVE)) {
+    errors.push(
+      `${path.relative(BUILD_DIR, markdownPath)} does not contain the Agent View directive near the top of the page.`,
+    );
+  }
+}
+
 const requiredOutputs = [
   'index.md',
   'about.md',

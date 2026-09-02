@@ -5,6 +5,8 @@ const matter = require('gray-matter');
 const ROOT = path.join(__dirname, '..');
 const BUILD_DIR = path.join(ROOT, 'build');
 const SITE_URL = 'https://reshapr.io';
+const MACHINE_DIRECTIVE =
+  '> For AI agents: the complete documentation index is available at https://reshapr.io/llms.txt and the full documentation bundle at https://reshapr.io/llms-full.txt.';
 
 function walkMarkdown(directory) {
   if (!fs.existsSync(directory)) return [];
@@ -50,6 +52,7 @@ function publishedSources(directory) {
 
 module.exports = {
   BUILD_DIR,
+  MACHINE_DIRECTIVE,
   ROOT,
   SITE_URL,
   publishedSources,

@@ -8,7 +8,7 @@
     "start:clean": "docusaurus clear && docusaurus start",
     "generate:video-placeholders": "node ./scripts/generate-video-placeholders.js",
     "prebuild": "npm run generate:video-placeholders",
-    "build": "docusaurus build && node ./scripts/generate-blog-index.js && node ./scripts/validate-machine-content.js",
+    "build": "docusaurus build && node ./scripts/generate-blog-index.js && node ./scripts/inject-machine-directives.js && node ./scripts/validate-machine-content.js",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
