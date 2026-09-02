@@ -63,3 +63,17 @@ test('leaves ordinary browser requests unchanged', async () => {
   assert.equal(response, undefined);
   assert.equal(called, false);
 });
+
+test('leaves unsupported request methods unchanged', async () => {
+  let called = false;
+  const response = await contentNegotiation(
+    new Request('https://reshapr.io/docs/', {
+      method: 'POST',
+      headers: {accept: 'text/markdown'},
+    }),
+    {next: async () => { called = true; }},
+  );
+
+  assert.equal(response, undefined);
+  assert.equal(called, false);
+});

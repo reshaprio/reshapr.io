@@ -25,6 +25,7 @@ function addVaryAccept(headers) {
 }
 
 export default async function contentNegotiation(request, context) {
+  if (request.method !== 'GET' && request.method !== 'HEAD') return;
   if (!acceptsMarkdown(request)) return;
 
   const requestUrl = new URL(request.url);
@@ -50,7 +51,6 @@ export default async function contentNegotiation(request, context) {
 
 export const config = {
   path: '/*',
-  method: ['GET', 'HEAD'],
   header: {
     accept: 'text/markdown',
   },
