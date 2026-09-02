@@ -25,3 +25,6 @@ resources/
 
 # Local sandbox / scratch files
 _sandbox/
+
+# Local Netlify folder
+.netlify

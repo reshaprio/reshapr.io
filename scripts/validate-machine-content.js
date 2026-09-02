@@ -7,6 +7,8 @@ const {
   MACHINE_DIRECTIVE,
   ROOT,
   publishedSources,
+  routeMarkdownOutputPath,
+  sitemapLocations,
   sourceOutputPath,
   walkMarkdown,
 } = require('./machine-content');
@@ -33,6 +35,17 @@ const requiredOutputs = [
   'llms.txt',
   'llms-full.txt',
 ];
+
+const sitemapPages = sitemapLocations();
+for (const location of sitemapPages) {
+  const pageUrl = new URL(location);
+  if (pageUrl.origin !== 'https://reshapr.io') continue;
+
+  const markdownOutput = routeMarkdownOutputPath(pageUrl.pathname);
+  if (!outputExists(markdownOutput)) {
+    errors.push(`No negotiable Markdown for ${pageUrl.pathname}: /${markdownOutput}`);
+  }
+}
 
 function outputExists(relativePath) {
   return fs.existsSync(path.join(BUILD_DIR, relativePath));
@@ -136,5 +149,5 @@ if (errors.length > 0) {
   for (const error of errors) console.error(`- ${error}`);
   process.exitCode = 1;
 } else {
-  console.log(`[machine-content] Validated ${expectedGenerated.length} generated pages and ${requiredOutputs.length} core resources.`);
+  console.log(`[machine-content] Validated ${expectedGenerated.length} generated pages, ${sitemapPages.length} negotiable routes, and ${requiredOutputs.length} core resources.`);
 }

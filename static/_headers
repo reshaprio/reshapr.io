@@ -1,0 +1,29 @@
+/
+  Vary: Accept, Accept-Encoding
+
+/about
+  Vary: Accept, Accept-Encoding
+
+/about/*
+  Vary: Accept, Accept-Encoding
+
+/community
+  Vary: Accept, Accept-Encoding
+
+/community/*
+  Vary: Accept, Accept-Encoding
+
+/docs/*
+  Vary: Accept, Accept-Encoding
+
+/blog
+  Vary: Accept, Accept-Encoding
+
+/blog/*
+  Vary: Accept, Accept-Encoding
+
+/agent
+  Vary: Accept, Accept-Encoding
+
+/agent/*
+  Vary: Accept, Accept-Encoding

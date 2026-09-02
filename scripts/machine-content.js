@@ -20,6 +20,32 @@ function walkMarkdown(directory) {
     });
 }
 
+function sitemapLocations() {
+  const sitemapPath = path.join(BUILD_DIR, 'sitemap.xml');
+  if (!fs.existsSync(sitemapPath)) return [];
+
+  return [...fs.readFileSync(sitemapPath, 'utf8').matchAll(/<loc>([^<]+)<\/loc>/g)]
+    .map(match => match[1]);
+}
+
+function normalizedRoutePath(pathname) {
+  if (pathname === '/') return '/';
+  return pathname.replace(/\/+$/, '');
+}
+
+function routeMarkdownOutputPath(pathname) {
+  const routePath = normalizedRoutePath(pathname);
+  if (routePath === '/') return 'index.md';
+  if (routePath === '/docs') return 'docs/index.md';
+  return `${routePath.replace(/^\/+/, '')}.md`;
+}
+
+function routeHtmlOutputPath(pathname) {
+  const routePath = normalizedRoutePath(pathname);
+  if (routePath === '/') return 'index.html';
+  return path.join(routePath.replace(/^\/+/, ''), 'index.html');
+}
+
 function readSource(sourcePath) {
   const parsed = matter(fs.readFileSync(sourcePath, 'utf8'));
   return {sourcePath, frontMatter: parsed.data};
@@ -56,6 +82,9 @@ module.exports = {
   ROOT,
   SITE_URL,
   publishedSources,
+  routeHtmlOutputPath,
+  routeMarkdownOutputPath,
+  sitemapLocations,
   sourceOutputPath,
   walkMarkdown,
 };
