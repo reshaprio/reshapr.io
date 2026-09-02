@@ -57,21 +57,6 @@
 /* ─────────────────────────────────────────────────────────────────────────── */
 
 /*
- * ─── Agent view: hide Docusaurus navbar ─────────────────────────────────────
- * Applied when AgentBlogView sets document.body.dataset.agentView = 'true'.
- * Overriding --ifm-navbar-height to 0 means every sticky/top calculation
- * that uses the variable (sidebar, toolbar) auto-recalculates for free.
- */
-body[data-agent-view='true'] {
-  --ifm-navbar-height: 0px !important;
-}
-
-body[data-agent-view='true'] .navbar {
-  display: none !important;
-}
-/* ─────────────────────────────────────────────────────────────────────────── */
-
-/*
  * ─── Aesthetic focus rings ──────────────────────────────────────────────────
  * Visible only on keyboard navigation (not on mouse click/touch).
  * border-radius on the element causes the outline to follow the rounded shape

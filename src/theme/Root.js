@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import Link from '@docusaurus/Link';
 import { useLocation } from '@docusaurus/router';
 import { getAgentHref } from '@site/src/utils/agentRoutes';
 
@@ -23,10 +22,10 @@ export default function Root({ children }) {
       </blockquote>
       {children}
       {agentHref && (
-        <Link to={agentHref} className="agent-view-toggle" aria-label="Switch to agent view">
+        <a href={agentHref} className="agent-view-toggle" aria-label="Open the machine-readable version">
           {/* SVG unchanged */}
           Agent View
-        </Link>
+        </a>
       )}
     </>
   );

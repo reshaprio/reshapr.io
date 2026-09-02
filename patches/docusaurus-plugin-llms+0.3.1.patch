@@ -11,3 +11,18 @@ index f769ecb..e05742f 100644
          updatedDocs.push({
              ...doc,
              url: newUrl,
+diff --git a/node_modules/docusaurus-plugin-llms/lib/utils.js b/node_modules/docusaurus-plugin-llms/lib/utils.js
+--- a/node_modules/docusaurus-plugin-llms/lib/utils.js
++++ b/node_modules/docusaurus-plugin-llms/lib/utils.js
+@@ -555,6 +555,11 @@ function cleanMarkdownContent(content, excludeImports = false, removeDuplicateH
+         // - import "..."; (side-effect imports)
+         cleaned = cleaned.replace(/^\s*import\s+.*?;?\s*$/gm, '');
+     }
++    // Preserve links authored as HTML before removing presentation tags.
++    cleaned = cleaned.replace(/<a\b[^>]*\bhref=(["'])(.*?)\1[^>]*>([\s\S]*?)<\/a>/gi, (_match, _quote, href, label) => {
++        const linkLabel = label.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
++        return `[${linkLabel || href}](${href})`;
++    });
+     // Remove HTML tags, but preserve XML content in code blocks
+     // We need to be selective to avoid removing XML content from code blocks
+     // This regex targets common HTML tags while being more conservative about XML

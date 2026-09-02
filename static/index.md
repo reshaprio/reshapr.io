@@ -33,11 +33,8 @@ reShapr sits between your existing APIs and AI agents. Point it at an OpenAPI sp
 
 - Home (this page): https://reshapr.io/index.md
 - Full site summary (llms.txt): https://reshapr.io/llms.txt
-- Docs overview: https://reshapr.io/docs/overview.md
-- Docs tutorials: https://reshapr.io/docs/tutorials.md
-- Docs how-to guides: https://reshapr.io/docs/how-to-guides.md
-- Docs explanations: https://reshapr.io/docs/explanations.md
-- Docs references: https://reshapr.io/docs/references.md
+- Docs index: https://reshapr.io/docs/index.md
+- Complete documentation index: https://reshapr.io/llms.txt
 - Docs demos: https://reshapr.io/docs/demos.md
 - Blog index: https://reshapr.io/blog.md
 - About: https://reshapr.io/about.md
