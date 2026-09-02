@@ -18,7 +18,11 @@ test('maps sitemap routes to their Markdown counterparts', () => {
   assert.equal(markdownPathname('/docs/'), '/docs/index.md');
   assert.equal(markdownPathname('/blog'), '/blog.md');
   assert.equal(markdownPathname('/blog/tags/mcp/'), '/blog/tags/mcp.md');
-  assert.equal(markdownPathname('/agent/'), '/agent.md');
+  assert.equal(markdownPathname('/agent/'), '/index.md');
+  assert.equal(markdownPathname('/agent/about'), '/about.md');
+  assert.equal(markdownPathname('/agent/blog'), '/blog.md');
+  assert.equal(markdownPathname('/agent/community'), '/community.md');
+  assert.equal(markdownPathname('/agent/docs'), '/docs/index.md');
 });
 
 test('does not negotiate requests that already target files', () => {

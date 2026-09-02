@@ -41,6 +41,10 @@ for (const location of sitemapPages) {
   const pageUrl = new URL(location);
   if (pageUrl.origin !== 'https://reshapr.io') continue;
 
+  if (pageUrl.pathname === '/agent/' || pageUrl.pathname.startsWith('/agent/')) {
+    errors.push(`Legacy Agent View route should not be in the sitemap: ${pageUrl.pathname}`);
+  }
+
   const markdownOutput = routeMarkdownOutputPath(pageUrl.pathname);
   if (!outputExists(markdownOutput)) {
     errors.push(`No negotiable Markdown for ${pageUrl.pathname}: /${markdownOutput}`);
@@ -114,6 +118,11 @@ for (const item of expectedGenerated) {
 const llmsPath = path.join(BUILD_DIR, 'llms.txt');
 if (fs.existsSync(llmsPath)) {
   const llmsContent = fs.readFileSync(llmsPath, 'utf8');
+  for (const corePage of ['index.md', 'about.md', 'community.md', 'blog.md']) {
+    if (!llmsContent.includes(`](/${corePage})`)) {
+      errors.push(`llms.txt does not include core page: /${corePage}`);
+    }
+  }
   const linkedOutputs = [...llmsContent.matchAll(/\]\((\/[^)]+\.(?:md|txt))\)/g)]
     .map(match => match[1].replace(/^\//, ''));
   for (const linkedOutput of linkedOutputs) {

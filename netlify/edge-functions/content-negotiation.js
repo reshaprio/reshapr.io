@@ -6,6 +6,15 @@ function acceptsMarkdown(request) {
 
 export function markdownPathname(pathname) {
   const routePath = pathname === '/' ? '/' : pathname.replace(/\/+$/, '');
+  const legacyAgentRoutes = {
+    '/agent': '/index.md',
+    '/agent/about': '/about.md',
+    '/agent/blog': '/blog.md',
+    '/agent/community': '/community.md',
+    '/agent/docs': '/docs/index.md',
+  };
+
+  if (legacyAgentRoutes[routePath]) return legacyAgentRoutes[routePath];
   if (/\.[^/]+$/.test(routePath)) return null;
   if (routePath === '/') return '/index.md';
   if (routePath === '/docs') return '/docs/index.md';
