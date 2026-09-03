@@ -1,17 +1,15 @@
----
-description: Security options for MCP endpoints — API keys, OAuth2, SPIFFE, backend secrets, and elicitation-based credential flows.
----
+description: Trust boundaries and security controls for MCP endpoints, Gateways, and backend APIs.
 
 import ThemedImage from '@theme/ThemedImage';
 
-# Security options & Secrets
+# Security model
 
-Security of MCP endpoints is a hot topic and let’s face it: a fast-moving one! For that, reShapr has been designed to be flexible and allow many different security options. It has been implemented to allow evolution following the emerging best practices. 
+reShapr separates two trust boundaries that require independent controls:
 
-In a nutshell, the security options we’ll expose just after will encompass two different concerns:
+1. **MCP client to Gateway:** the Gateway decides whether a client can access an Exposition.
+2. **Gateway to backend API:** after accepting the MCP request, the Gateway authenticates to the REST, GraphQL, or gRPC backend with the credentials configured for that Service.
 
-- Access to the MCP Endpoint exposed by a reShapr gateway itself,
-- Access to the backend API used by the reShapr gateway once MCP endpoint access is safe.
+Protecting one boundary does not protect the other. For example, an API key can restrict access to the MCP endpoint while a separate Secret authorizes the resulting backend call.
 
 <ThemedImage
   alt="Security Model"
@@ -21,68 +19,38 @@ In a nutshell, the security options we’ll expose just after will encompass two
   }}
 />
 
-## MCP Endpoint access
+## MCP endpoint access
 
-Three different options are available to secure the MCP Server or Endpoint exposed by a reShapr gateway:
+A Configuration Plan selects one endpoint access mode:
 
-- **None** - which is the *default* and probably not a good idea! This means that the gateway endpoint is unsecured. In this situation, all headers are propagated to the backend API. So this is a scenario that you would use just for a quick test OR if you decide - with great generosity - to provide a free MCP Server to the world!
-- **API Key** - means that the gateway will validate the value of the specific `x-reshapr-key` header in the incoming MCP requests. The API Key is generated  and transmitted just once at configuration time. It represents a token that you must store securely and must only share with trusted users. reShapr allows renewing an API Key and propagates the change to the gateways exposing the corresponding service.
-- **OAuth2 Bearer** - means that the gateway will validate the OAuth2 token provided as a `Bearer` in the `Authorization` header in the incoming requests. During the configuration time, you choose your OAuth2 Authorization Servers and the list of required scopes to access the MCP Server. This information is propagated to the gateways that will be in charge of trusting the incoming tokens. reShapr gateways implements the different specifications mentioned in the **[Model Context Protocol Version 2025-06-18 Authorization](https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization)** recommendations such as:
-  - OAuth 2.0 Protected Resource Metadata ([**RFC9728**](https://datatracker.ietf.org/doc/html/rfc9728))
-  - OAuth 2.0 Authorization Server Metadata ([**RFC8414**](https://datatracker.ietf.org/doc/html/rfc8414))
-  - OAuth 2.0 Resource Indicators ([**RFC 8707**](https://www.rfc-editor.org/rfc/rfc8707.html))
+- **None:** the Gateway does not authenticate the MCP client. Use this only when access is controlled elsewhere or for a bounded test environment.
+- **API key:** the Gateway compares the `x-reshapr-key` request header with the key assigned to the Configuration Plan. A renewed key is propagated to connected Gateways.
+- **OAuth 2.0 bearer JWT:** the Gateway verifies the token signature with a configured JWKS, accepts configured issuers, checks required JWT claims and expiration, and requires the scopes configured for the Exposition. This policy applies to the entire Exposition, not to individual Tools, Prompts, or Resources.
 
-## Backend Secrets
+The Gateway publishes OAuth 2.0 Protected Resource Metadata as defined by [RFC 9728](https://datatracker.ietf.org/doc/html/rfc9728). Its OAuth configuration refers to Authorization Server URLs and a JWKS URI; reShapr does not host an Authorization Server Metadata endpoint defined by [RFC 8414](https://datatracker.ietf.org/doc/html/rfc8414). When a JWT contains a `resource` claim, the Gateway compares it with the called MCP endpoint. This check is related to [RFC 8707](https://www.rfc-editor.org/rfc/rfc8707.html), but does not implement the complete token-request flow defined by that RFC.
 
-In addition to protecting the MCP Endpoint or Server, access to the backend API must also be protected. This backend must have a means to validate authentication and authorization proofs coming from the reShapr gateway.
+TLS for the client-to-Gateway connection is a deployment responsibility. For example, a Kubernetes Ingress can terminate TLS when configured with a certificate; TLS is not enabled merely by choosing API key or OAuth authentication.
 
-For this purpose, reShapr supports the concept of `Secret`, which enables the secure storage of information on how to authenticate the backend API call. In reShapr, a Secret can contain different information:
+## Gateway access to backend APIs
 
-- **A username/password pair** - in case the backend API only supports HTTP Basic authentication mechanisms. An `Authorization:  Basic <base64(username:password)>` header will be automatically issued and transmitted to the backend API.
-- **A token (with an optional associated header)** -  in case the backend supports API Key or token-based authentication mechanisms. If no token header is provided, then the default `Authorization: Bearer <token>`  is assumed and transmitted to the backend API, but the token header can hold any value.
-- **A X509 certificate** - that will be used to secure the transport, in case the backend API is enforcing TLS communication with a client-side certificate.
+A backend Secret is independent from MCP endpoint authentication. Depending on the backend protocol and Secret type, the Gateway can apply:
 
-reShapr also supports **Elicitation-based backend secret**. **[Elicitations](https://modelcontextprotocol.io/specification/2025-11-25/client/elicitation)** are a recent addition to the MCP Protocol, coming in version `2025-11-25` of the protocol. Unlike a standard backend Secret, an Elicitation-based one does not require proactive provisioning: when needed, the reShapr MCP Server will return to the user to request backend credentials or initiate an OAuth authorization flow. Two different flows are supported:
-
-- The [**URL Mode Elicitation for Sensitive Data**](https://modelcontextprotocol.io/specification/2025-11-25/client/elicitation#url-mode-elicitation-for-sensitive-data) - in case your User has its own token/API key/authorization code to access the backend API.
-- The [**URL Mode Elicitation for OAuth Flows**](https://modelcontextprotocol.io/specification/2025-11-25/client/elicitation#url-mode-elicitation-for-oauth-flows) - in case your User has to complete an OAuth / OIDC authorization flow to enable the MCP Server to get an authorization code to access the backend API.
 
 ### Secret references
 
-Available since reShapr `0.0.14`, backend Secrets can also use **secret references**. This is especially useful in hybrid deployments where the control plane is managed by reShapr, but the Gateway runs in your own premises. In this situation, you may want the control plane to know that a backend credential exists without storing or distributing the actual credential value.
+Backend Secrets can contain literal values stored by the control plane or references resolved locally by a Gateway. The `${env:VARIABLE}` scheme lets a hybrid Gateway retrieve a sensitive value from its own environment on each backend call, so the control plane stores and propagates only the reference. The current implementation provides the `env` resolver. The [public API contract](https://github.com/reshaprio/reshapr/blob/main/reshapr-public-openapi-v0.1.yaml) defines the Secret fields, while the tracked [secret resolver](https://github.com/reshaprio/reshapr/blob/main/proxy/src/main/java/io/reshapr/proxy/secret/SecretReferenceResolver.java) is the source of truth for resolution behavior.
 
-A secret reference uses the `${scheme:reference}` convention. When a sensitive value follows this pattern, the Gateway resolves it locally when it needs to call the backend endpoint. The value stored in the control plane is only the reference.
+## Elicited credentials
 
-Today, the supported scheme is `env`, which resolves a value from the Gateway environment:
+An Exposition can request a user-specific backend credential instead of relying only on a pre-provisioned Secret. The Gateway supports URL elicitation for a sensitive value or an OAuth/OIDC authorization flow.
 
-```bash
-${env:GITHUB_TOKEN}
-```
+The storage boundary depends on the negotiated MCP version. Protocol versions before `2026-07-28` bind the elicited value to a replicated MCP session. The public `2026-07-28` protocol is stateless, so the Gateway binds the value to the authenticated user's JWT issuer and subject. Stateless elicitation therefore requires a stable authenticated identity.
 
-When the Gateway needs to authenticate a backend call, it reads `GITHUB_TOKEN` from the Gateway process environment, falling back to the Gateway configuration sources such as system properties or a `.env` file. If the value cannot be resolved, the backend call fails explicitly instead of silently sending an empty credential.
+## Storage, propagation, and audit
 
-References can be used on their own or interpolated within a larger value:
+Sensitive Configuration Plan and Secret fields stored in the control plane are encrypted with a configured AES key. The current implementation uses simple encryption without authenticated encryption. Treat database access, encryption-key storage, backup protection, and rotation as deployment security responsibilities.
 
-```bash
-Bearer ${env:API_TOKEN}
-${env:DB_USER}:${env:DB_PASSWORD}
-```
+Configuration updates, including API key renewal, are propagated to connected Gateways over the control-plane discovery stream. This removes the need to restart a Gateway for a configuration change; changes and updates are applied on-the-fly.
 
-Values that do not match the `${scheme:reference}` convention keep being used as literal Secret values, so existing Secrets remain compatible.
+When audit is enabled on a Configuration Plan, the Gateway emits structured events for MCP calls and authentication failures. OpenTelemetry export for Gateway traces, metrics, and logs must also be configured. This does not imply built-in dashboards or equivalent telemetry coverage for the control plane, Web UI, operator, and admission controller.
 
-Secret references are resolved **just in time**, on every backend call. Resolved values are not cached as control plane data, and they do not need to be synchronized from the control plane to the Gateway. This also makes secret rotation straightforward: update the value in the Gateway environment, and the next backend call uses the new value.
-
-Secret references are honored for sensitive credentials used by the Gateway to reach backend endpoints:
-
-- Token authentication for REST, GraphQL, and gRPC backends,
-- Basic authentication username and password,
-- PEM-encoded TLS trust material for gRPC backends,
-- OAuth2 client secrets used during authorization-code exchanges.
-
-Public identifiers, such as an OAuth2 `client_id`, are intentionally kept as literal values because they are exposed in the browser redirect by design.
-
-Using secret references moves the responsibility for protecting the real credential to the Gateway environment. You should scope environment variables to the Gateway process, prefer mounted secrets where your platform supports them, and make sure resolved values are never written to logs or audit trails.
-
-## All together!
-
-MCP Endpoint security options and backend secret are not exclusive, and they’d rather be combined to secure the transmission chain from end to end. To achieve fully secure and authorized usage of your MCP Endpoint provided by reShapr, we recommend considering OAuth2 + Elicitation-based backend Secret when you configure your **[Service](services-and-artifacts.md)** for exposure on a reShapr gateway. In hybrid deployments, secret references can be added to this model when the actual backend credential must remain local to your Gateway runtime.

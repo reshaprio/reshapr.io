@@ -68,16 +68,11 @@ However, it’s still the users’ responsibility to store and distribute them a
 
 #### Option 3: OAuth Bearer
 
-Using this option, the reShapr MCP server will apply recommendations from the [MCP Authorization specification](https://modelcontextprotocol.io/specification/draft/basic/authorization) to utilize OAuth2 standards for securing access to endpoints. reShapr can integrate with your own OAuth 2.0 Authorization Server. More precisely, it implements all the following specs:
+Using this option, the reShapr MCP server applies the [MCP Authorization specification](https://modelcontextprotocol.io/specification/draft/basic/authorization) to integrate with a configured OAuth 2.0 Authorization Server. The Gateway validates signed bearer JWTs against configured issuers and JWKS, publishes OAuth 2.0 Protected Resource Metadata ([RFC 9728](https://datatracker.ietf.org/doc/html/rfc9728)), checks required scopes, and checks the `resource` claim against the called MCP endpoint when that claim is present.
 
-- OAuth 2.1 / PKCE support (public OAuth clients)
-- OAuth 2.0 Protected Resource Metadata ([RFC9728](https://datatracker.ietf.org/doc/html/rfc9728))
-- OAuth 2.0 Authorization Server Metadata ([RFC8414](https://datatracker.ietf.org/doc/html/rfc8414))
-- OAuth 2.0 Resource Indicators ([RFC 8707](https://www.rfc-editor.org/rfc/rfc8707.html))
+Authorization Server Metadata ([RFC 8414](https://datatracker.ietf.org/doc/html/rfc8414)) is consumed from the external identity infrastructure rather than hosted by reShapr. The `resource` claim check is related to Resource Indicators ([RFC 8707](https://www.rfc-editor.org/rfc/rfc8707.html)), but reShapr does not implement the complete token-request flow. Dynamic Client Registration (RFC 7591) is not provided.
 
-> 💡 In case you don’t have an OAuth 2 Authorization Server at hand, reShapr provides its own **reShapr Authz** that can be used to host OAuth clients using the OAuth 2.0 Dynamic Client Registration Protocol ([RFC7591](https://datatracker.ietf.org/doc/html/rfc7591)). The reShapr IDP delegates authentication to social identity providers, allowing you to secure access to your MCP Server.
-
-This option provides the most control over the authorization levels you want to set up: it controls the token’s validity, the issuer’s correctness, the targeted resource’s correctness, and the presence of required scopes or attributes. Hence, that’s typically the option to choose when restricting and controlling access to specific tools/resources/prompts.
+This option controls access to the Exposition as a whole. Required OAuth scopes are not assigned independently to specific Tools, Resources, or Prompts.
 
 ### Options for Backend API authentication
 
