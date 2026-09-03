@@ -3,10 +3,11 @@ This website is built using [Docusaurus](https://docusaurus.io/), a modern stati
 
 ## Contributing
 
-Please read our [Contributing Guide](https://github.com/reshaprio/.github/blob/main/CONTRIBUTING.md) before submitting any changes.
+Read the repository's [documentation contribution contract](./CONTRIBUTING.md) before changing content. It complements the organization-wide [Contributing Guide](https://github.com/reshaprio/.github/blob/main/CONTRIBUTING.md) with authoring, evidence, linking, and validation rules for this site.
 
 ### Prerequisites
-- Node.js (v18+)
+
+- Node.js 20 or later
 - npm
 
 ### Setup
