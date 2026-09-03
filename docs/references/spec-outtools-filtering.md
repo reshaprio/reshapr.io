@@ -1,5 +1,5 @@
 ---
-description: Define ToolsOutputFilters to trim, reshape, and conditionally rewrite MCP tool outputs before they reach the model, keeping the context window lean and the response surface deterministic.
+description: Define ToolsOutputFilters to retain, patch, or convert MCP tool outputs before they reach the model.
 ---
 
 # Tools Output Filtering
@@ -8,9 +8,9 @@ As explained in **[Why reShapr?](../overview/why-reshapr.md)**, reShapr can crea
 
 `ToolsOutputFilters` is the symmetrical capability on the *output* side: it lets you declaratively control what a tool returns to the model, before the response is wrapped into the JSON-RPC MCP envelope and sent back to the client.
 
-This matters for two reasons:
+This supports two common requirements:
 
-- **Context economics.** A GraphQL node with many scalar properties, or a REST endpoint returning a deeply nested JSON tree, can easily consume thousands of tokens, most of which are irrelevant to the task at hand. Filtering at the gateway keeps the context window focused on what the model actually needs.
+- **Response scope.** A GraphQL node with many scalar properties or a REST endpoint returning a deeply nested JSON tree can expose fields that are irrelevant to the task. Filtering at the gateway retains only the required response shape.
 - **Security and determinism.** Reusing a broad existing API often surfaces fields you'd rather not expose to an agent (PII, internal identifiers, expensive sub-trees). Filtering at the gateway gives you a single, declarative point of control, independent of the underlying API.
 
 reShapr applies filtering universally, regardless of the source protocol (REST, GraphQL, gRPC), because filters operate on the canonical JSON response produced by reShapr's protocol converters.
@@ -87,14 +87,14 @@ For the precise semantics of each operation, refer to **[RFC 6902: JavaScript Ob
 
 ## The `convertToToon` operation
 
-`convertToToon` converts the final filtered JSON output into **[Toon format](https://toonformat.dev/)**, a compact LLM-friendly representation that significantly reduces token usage.
+`convertToToon` converts the final filtered JSON output into **[Toon format](https://toonformat.dev/)**, a compact representation intended for LLM consumption.
 
 - The value of `convertToToon` **must** be `true`,
 - It is applied **last**, after `jsonRetain` and `jsonPatches` have run,
 - It can be used **alone** — without any `jsonRetain` or `jsonPatches` — and it will compact the full raw tool response as-is,
 - It works **regardless of the backend protocol**: REST, GraphQL, and gRPC tool responses are all converted to canonical JSON before filters run, so `convertToToon` applies uniformly across all three.
 
-This makes `convertToToon: true` the simplest possible `ToolsOutputFilters` entry — a single key that immediately cuts token usage on any tool, without requiring you to know the response shape upfront:
+This makes `convertToToon: true` the simplest possible `ToolsOutputFilters` entry: a single key that converts any tool response without requiring you to know its shape upfront.
 
 ```yaml
 apiVersion: reshapr.io/v1alpha1
@@ -134,9 +134,12 @@ filters:
 
 ## Naming and configuration scope
 
-Unlike `Prompts`, `Resources`, and `CustomTools`, which directly transform a Service, `ToolsOutputFilters` is often driven by *deployment-time* concerns (security posture, audience, token budget) rather than by the Service itself. The same Service and the same Custom Tools can legitimately be exposed multiple times on different gateways, each with its own filter set: a public partner-facing Exposition might strip more fields than an internal one.
+Like other complementary artifacts, a `ToolsOutputFilters` file is attached to a Service. A **[Configuration Plan](../explanations/configuration-and-exposition.md)** controls whether that attached artifact contributes to an Exposition through its `includedArtifacts` selection.
 
-For this reason, a future revision of the spec is expected to introduce a top-level `name` attribute on a `ToolsOutputFilters` artifact, so that a **[Configuration Plan](../explanations/configuration-and-exposition.md)** can explicitly reference which filter set to apply at exposition time. Until that lands, a `ToolsOutputFilters` artifact is bound to a Service and applies whenever that Service is exposed.
+- When `includedArtifacts` is absent or empty, all complementary artifacts attached to the Service apply, including every attached `ToolsOutputFilters` artifact.
+- When `includedArtifacts` contains artifact names, only those attached artifacts apply to the Configuration Plan.
+
+This selection lets two Configuration Plans expose the same Service with different output filters. For example, `partner-plan` can set `includedArtifacts` to `partner-output-filters.yaml`, while `internal-plan` selects `internal-output-filters.yaml`. Each Exposition then uses the filters selected by its Configuration Plan.
 
 ## Where filters fit in the request lifecycle
 

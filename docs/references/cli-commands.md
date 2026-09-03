@@ -4,6 +4,8 @@ description: Full reference for reShapr CLI commands — login, import, attach, 
 
 # reShapr CLI Reference
 
+**Last verified with reShapr CLI 0.2.3 on September 3, 2026.**
+
 ## Authentication commands
 
 ### `reshapr login` command
@@ -55,16 +57,26 @@ The info command displays information about your current authentication context 
 reshapr info
 ```
 
-```bash
+Example output (identity, deployment mode, version, and timestamps vary):
+
+```text
 ℹ️  User Information
   User        : admin
   Organization: my-org
   Server      : https://try.reshapr.io
 ℹ️  Server Information
-  Version     : 0.0.11
-  Build time  : 2025-05-10T08:30:00Z
+  Version     : 0.2.3
+  Build time  : <build timestamp>
   Mode        : saas
   Internal IDP: https://idp.reshapr.io
+```
+
+### `reshapr switch-org` command
+
+Switches the current CLI context to another organization of which the authenticated user is a member. The CLI stores the replacement token for subsequent commands.
+
+```bash
+reshapr switch-org <target-org>
 ```
 
 ## Artifact commands
@@ -126,7 +138,7 @@ Endpoints      : mcp.beta.reshapr.io/mcp/<organization>/GitHub+GraphQL/20250917
 
 ### `reshapr attach` command
 
-Available since version `0.0.8` of the CLI, the attach command allows you to provide and attach complementary artifacts to an already discovered **[Service](../explanations/services-and-artifacts.md)**. This command will typically be used immediately after the `import` command to provide additional information about **[Prompts](prompts-specification.md)** or **[Custom Tools](custom-tools-specification.md)**.
+The attach command allows you to provide and attach complementary artifacts to an already discovered **[Service](../explanations/services-and-artifacts.md)**. This command will typically be used immediately after the `import` command to provide additional information about **[Prompts](prompts-specification.md)** or **[Custom Tools](custom-tools-specification.md)**.
 
 Similar to the `import` command, you need to instruct reShapr on how to retrieve this artifact. You can use:
 
@@ -150,7 +162,7 @@ reshapr attach -f ../dev/github-api-prompts.yaml
 
 ### `reshapr artifact list` command
 
-Available since version `0.0.11` of the CLI, the artifact list command lets you list all artifacts associated with a given Service.
+The artifact list command lets you list all artifacts associated with a given Service.
 
 ```bash
 reshapr artifact list -s <serviceId>
@@ -173,7 +185,7 @@ ID             NAME                  TYPE                        MAIN
 
 ### `reshapr artifact get` command
 
-Available since version `0.0.11` of the CLI, this command retrieves details of a specific artifact by its ID.
+This command retrieves details of a specific artifact by its ID.
 
 ```bash
 reshapr artifact get <id> [options]
@@ -199,6 +211,18 @@ Main Artifact: Yes
 Source       : github-api.graphql
 Path         : N/A
 ```
+
+### `reshapr artifact delete` command
+
+Deletes an artifact by ID and reports the effect on Configuration Plans that reference it before asking for confirmation.
+
+```bash
+reshapr artifact delete <id> [options]
+```
+
+Available options:
+
+- `-f, --force` : Skip the confirmation prompt
 
 ## Service commands
 
@@ -550,6 +574,19 @@ Given a Configuration Plan that was previously created with the `--apiKey` optio
 
 `reshapr config renew-api-key <configurationId>` will remove the existing API key and output a fresh API key that replaces it. The new API key is provided only once; you must store it in a secure location and share it only with trusted individuals.
 
+### `reshapr config duplicate` command
+
+Duplicates a Configuration Plan under a new name.
+
+```bash
+reshapr config duplicate <id> --name <newName> [options]
+```
+
+Available options:
+
+- `-n, --name <newName>` (required) : Name of the duplicated Configuration Plan
+- `-o, --output <format>` : Output format (`json`, `yaml`)
+
 ### `reshapr config delete` command
 
 Deletes a configuration plan by its ID. This may also remove associated expositions.
@@ -832,23 +869,32 @@ Available options:
 
 - `-r, --release <release>` : Release of the containers to run (defaults to `latest`; use `nightly` for the latest development build)
 - `-e, --engine <engine>` : Container engine to use (`docker` or `podman`)
+- `--ui` : Download and deploy the Web UI Compose add-on
 
 ```bash
 reshapr run
 ```
 
-```bash
-ℹ️  Resolved 'latest' to release '0.0.11'.
-ℹ️  Downloading compose file from https://raw.githubusercontent.com/reshaprio/reshapr/refs/tags/0.0.11/install/docker-compose-all-in-one.yml...
-✅ Compose file saved to ~/.reshapr/docker-compose-0.0.11.yml
-ℹ️  Starting Reshapr containers (release: 0.0.11, engine: docker)...
+Example output when `latest` resolves to 0.2.3:
+
+```text
+ℹ️  Resolved 'latest' to release '0.2.3'.
+ℹ️  Downloading compose file from https://raw.githubusercontent.com/reshaprio/reshapr/refs/tags/0.2.3/install/docker-compose-all-in-one.yml...
+✅ Compose file saved to ~/.reshapr/docker-compose-0.2.3.yml
+ℹ️  Starting Reshapr containers (release: 0.2.3, engine: docker)...
 ✅ Reshapr containers started successfully.
 ```
 
 To use a specific release with Podman:
 
 ```bash
-reshapr run -r 0.0.10 -e podman
+reshapr run -r 0.2.3 -e podman
+```
+
+To include the Web UI:
+
+```bash
+reshapr run --release 0.2.3 --ui
 ```
 
 ### `reshapr status` command
@@ -859,11 +905,13 @@ Shows the status of locally running reShapr containers.
 reshapr status
 ```
 
-```bash
-ℹ️  Reshapr containers (release: 0.0.11, engine: docker, started at: 2025-05-18T10:30:00.000Z)
-NAME                    IMAGE                                           STATUS
-reshapr-control-plane   registry.reshapr.io/reshapr/control-plane:0.0.11   Up 2 hours
-reshapr-proxy           registry.reshapr.io/reshapr/proxy:0.0.11           Up 2 hours
+Example output:
+
+```text
+ℹ️  Reshapr containers (release: 0.2.3, engine: docker, started at: <timestamp>)
+NAME                    IMAGE                                      STATUS
+reshapr-control-plane   <control-plane image>:0.2.3                Up
+reshapr-proxy           <proxy image>:0.2.3                        Up
 ```
 
 ### `reshapr stop` command
@@ -874,10 +922,22 @@ Stops locally running reShapr containers and removes the run state.
 reshapr stop
 ```
 
-```bash
-ℹ️  Stopping Reshapr containers (release: 0.0.11, engine: docker)...
+Example output:
+
+```text
+ℹ️  Stopping Reshapr containers (release: 0.2.3, engine: docker)...
 ✅ Reshapr containers stopped successfully.
 ```
+
+## Administration commands
+
+The `reshapr admin` command manages control-plane users, organizations, quotas, memberships, and service accounts. These commands require a deployment admin API key and do not require a normal user login.
+
+```bash
+reshapr admin [--admin-api-key <key>] [--server <url>] <command>
+```
+
+Prefer the `RESHAPR_ADMIN_API_KEY` environment variable to placing the key in shell history. See the **[Admin CLI guide](https://github.com/reshaprio/reshapr/blob/main/cli/ADMIN_CLI.md)** for the current subcommands and examples, or run `reshapr admin --help`.
 
 ## Structured output
 

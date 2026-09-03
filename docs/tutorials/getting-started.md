@@ -2,9 +2,11 @@
 
 This page details the installation and the basic usage of the reShapr Command Line Interface utility.
 
+**Last verified with reShapr 0.2.3 on September 3, 2026.**
+
 ## Installation
 
-The `reshapr` CLI is an NPM package available at **[https://www.npmjs.com/package/@reshapr/reshapr-cli](https://www.npmjs.com/package/@reshapr/reshapr-cli)**. You can install it globally in your Linux or MacOS system.
+The `reshapr` CLI is an NPM package available at **[https://www.npmjs.com/package/@reshapr/reshapr-cli](https://www.npmjs.com/package/@reshapr/reshapr-cli)**. It requires Node.js 20 or later and can be installed globally on Linux or macOS.
 
 We recommend installing the CLI with anonymous usage telemetry enabled:
 
@@ -30,59 +32,19 @@ To remember your approval for future global installations, you can optionally co
 npm config set allow-scripts=@scarf/scarf --location=user
 ```
 
-From there, you can check that everything is correctly installed with:
+Check that everything is correctly installed:
 
 ```bash
 reshapr --version
 ```
 
-With this output:
+Then inspect the current command index:
 
 ```bash
-0.0.10
+reshapr --help
 ```
 
-The current `version` of the CLI is `0.0.10`.
-
-:::warning
-We're iterating fast! Make sure you're on the latest version so you don't miss any of the new magic 🚀
-:::
-
-You can also check the embedded help with this command:
-
-```bash
-reshapr help
-```
-
-With this output:
-
-```bash
-Usage: reshapr [options] [command]
-
-Reshapr CLI - A command line interface for Reshapr
-
-Options:
-  -V, --version     output the version number
-  -h, --help        display help for command
-
-Commands:
-  service           Manage services in Reshapr
-  secret            Manage secrets in Reshapr
-  expo              Manage expositions in Reshapr
-  config            Manage configuration plans in Reshapr
-  gateway-group     Manage gateway groups in Reshapr
-  api-token         Manage API tokens in Reshapr
-  login [options]   Login to Reshapr
-  info              Display information about current context and the Reshapr Server
-  logout            Logout from Reshapr
-  import [options]  Import an artifact into Reshapr
-  attach [options]  Attach an artifact to a Reshapr Service
-  quotas [options]  List and check your Reshapr quotas
-  run [options]     Start Reshapr locally using Docker Compose
-  status            Show the status of locally running Reshapr
-  stop              Stop locally running Reshapr containers
-  help [command]    display help for command
-```
+The command list evolves with the CLI. Use the embedded help as the source of truth and the **[CLI reference](../references/cli-commands.md)** for command details.
 
 ## Login to reShapr
 
@@ -118,7 +80,7 @@ Once connected, you can check the platform information:
 reshapr info
 ```
 
-With this output:
+Example output (user, organization, paths, and URLs vary):
 
 ```bash
 ❯ reshapr info
@@ -127,8 +89,8 @@ With this output:
   Organization: yada
   Server      : https://app.try.reshapr.io
 ℹ️  Server Information
-  Version     : 0.0.10
-  Build time  : 2026-03-17T17:26:05Z
+  Version     : 0.2.3
+  Build time  : <build timestamp>
   Mode        : on-premises
   Internal IDP: undefined
 ```
@@ -145,7 +107,7 @@ Importing an artifact is the first step to exposing MCP endpoints for your API. 
 reshapr import -u https://raw.githubusercontent.com/open-meteo/open-meteo/refs/heads/main/openapi/forecast.yml
 ```
 
-With this output:
+Example output (the generated identifier will differ):
 
 ```bash
 ✅ Import successful!
@@ -190,7 +152,7 @@ reshapr config create 'open-meteo-manual' --description 'Manual Plan for Open-Me
 --serviceId 0PXEW1ZDWFCZS --backendEndpoint https://api.open-meteo.com
 ```
 
-With this output:
+Example output (the generated identifier will differ):
 
 ```bash
 ✅ Configuration plan 'open-meteo-manual' created successfully with ID: 0PXPDMB4MFE6H
@@ -208,7 +170,7 @@ To create an exposition, we need the Configuration Plan identifier we got earlie
 reshapr expo create --configuration 0PXPDMB4MFE6H --gateway-group 1
 ```
 
-With this output:
+Example output (identifiers, Gateway names, and endpoints will differ):
 
 ```bash
 ✅ Exposition created successfully with ID: 0PXPE6HPWFE4H
@@ -242,7 +204,52 @@ Gateway Endpoints
 
 > Like the `service` command, you can also use sub-commands like `list`, `get` or `delete` to manage your configurations.
 
-🎉 Hooray! You deployed an MCP Endpoint! Check the `Endpoints` information just above (`mcp.try.reshapr.io/mcp/<organization>/Open-Meteo+APIs/1.0`): you can use this endpoint with `https://` prefix in your favorite MCP Client to access your new MCP Server!
+🎉 Congrats! You now have an MCP endpoint. Use the endpoint returned by the command, including its `https://` prefix, for the following verification.
+
+## Verify the MCP endpoint
+
+Set the exact endpoint URL returned by `reshapr expo create`:
+
+```bash
+export MCP_URL='https://mcp.try.reshapr.io/mcp/<organization>/Open-Meteo+APIs/1.0'
+export MCP_HEADERS="$(mktemp)"
+```
+
+Initialize a session using a supported session-based MCP version:
+
+```bash
+curl --silent --show-error --dump-header "$MCP_HEADERS" \
+  --header 'Content-Type: application/json' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"reshapr-docs","version":"0.2.3"}}}' \
+  "$MCP_URL" | jq .result.serverInfo
+
+export MCP_SESSION_ID="$(awk 'tolower($1) == "mcp-session-id:" {print $2}' "$MCP_HEADERS" | tr -d '\r')"
+test -n "$MCP_SESSION_ID"
+```
+
+List the available Tools and confirm the Open-Meteo operation is present:
+
+```bash
+curl --silent --show-error \
+  --header 'Content-Type: application/json' \
+  --header 'MCP-Protocol-Version: 2025-11-25' \
+  --header "MCP-Session-Id: $MCP_SESSION_ID" \
+  --data '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}' \
+  "$MCP_URL" | jq '.result.tools[].name'
+```
+
+The list must contain `get_v1_forecast`. Call it and inspect the current weather returned by the backend:
+
+```bash
+curl --silent --show-error \
+  --header 'Content-Type: application/json' \
+  --header 'MCP-Protocol-Version: 2025-11-25' \
+  --header "MCP-Session-Id: $MCP_SESSION_ID" \
+  --data '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"get_v1_forecast","arguments":{"latitude":48.8566,"longitude":2.3522,"current_weather":true,"timezone":"Europe/Paris"}}}' \
+  "$MCP_URL" | jq -r '.result.content[0].text | fromjson | .current_weather'
+```
+
+A JSON object containing the current temperature and weather values confirms that the Exposition, Gateway, and backend call work end to end.
 
 ## All-in-one Magic command 🪄
 
@@ -252,7 +259,7 @@ In case you didn’t take the shortcut, here’s the all-in-one command that doe
 reshapr import -u https://raw.githubusercontent.com/open-meteo/open-meteo/refs/heads/main/openapi/forecast.yml --backendEndpoint https://api.open-meteo.com
 ```
 
-With this output:
+Example output (identifiers and endpoint will differ):
 
 ```bash
 ✅ Import successful!
@@ -269,6 +276,4 @@ Service Type   : REST -> https://api.open-meteo.com
 Endpoints      : mcp.try.reshapr.io/mcp/yada/Open-Meteo+APIs/1.0
 ```
 
-Easy, No!
-
-🎉 Congrats! You deployed an MCP Endpoint with just one CLI command! Check the `Endpoints` information just above (`mcp.try.reshapr.io/mcp/<organization>/Open-Meteo+APIs/1.0`): you can use this endpoint with `https://` prefix in your favorite MCP Client to access your new MCP Server!
+🎉 Congrats! You deployed an MCP Endpoint with just one CLI command! Use the returned endpoint with the verification steps above to confirm the one-command path end to end.

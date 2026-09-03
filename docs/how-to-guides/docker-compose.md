@@ -2,12 +2,14 @@
 
 Learn how to run reShapr locally using Docker Compose for development and testing purposes.
 
+**Last verified with reShapr 0.2.3 on September 3, 2026.**
+
 ## Prerequisites
 
 Before you begin, make sure you have the following installed on your machine:
 
-- **[Docker](https://docs.docker.com/get-docker/)** (with Docker Compose v2)
-- **[Node.js](https://nodejs.org/)** (v18 or later) needed for the reShapr CLI
+- **[Docker](https://docs.docker.com/get-docker/)** with Docker Compose v2, or **[Podman](https://podman.io/)** with Compose support
+- **[Node.js](https://nodejs.org/)** 20 or later, required by the reShapr CLI
 - The **reShapr CLI** installed globally:
 
 ```bash
@@ -16,35 +18,33 @@ npm install -g @reshapr/reshapr-cli --allow-scripts=@scarf/scarf
 
 ## Quick start with the CLI
 
-The simplest way to run reShapr locally is through the `reshapr run` command. It automatically downloads the correct Docker Compose file from GitHub, configures the container images for the requested release, and starts everything in the background.
+The simplest way to run reShapr locally is through `reshapr run`. Pin the release so the downloaded Compose file, container images, and this guide use the same version:
 
 ```bash
-reshapr run
+reshapr run --release 0.2.3
 ```
 
-```bash
-ℹ️  Resolved 'latest' to release '0.0.10'.
-ℹ️  Downloading compose file from https://raw.githubusercontent.com/reshaprio/reshapr/refs/tags/0.0.10/install/docker-compose-all-in-one.yml...
-✅ Compose file saved to /Users/you/.reshapr/docker-compose-0.0.10.yml
-ℹ️  Starting Reshapr containers (release: 0.0.10)...
-✅ Reshapr containers started successfully.
-```
+The CLI downloads the release-owned [`docker-compose-all-in-one.yml`](https://github.com/reshaprio/reshapr/blob/0.2.3/install/docker-compose-all-in-one.yml), updates its reShapr image tags to `0.2.3`, caches it under `~/.reshapr/`, and starts the stack in the background.
 
-By default, this pulls the **latest** stable release. You can also target a specific release or use the **nightly** build:
-
-Run a specific release:
-
-```bash
-reshapr run --release 0.0.10
-```
-
-Run the nightly build (latest from main branch):
+Without `--release`, the CLI resolves `latest` through GitHub Releases. Use an explicit release for a reproducible environment. Use `nightly` only when you deliberately want artifacts from the `main` branch:
 
 ```bash
 reshapr run --release nightly
 ```
 
-The compose file is cached at `~/.reshapr/docker-compose-<release>.yml`, so subsequent runs reuse it without re-downloading.
+The CLI auto-detects Docker or Podman. To select one explicitly, use `--engine`:
+
+```bash
+reshapr run --release 0.2.3 --engine podman
+```
+
+Add the optional Web UI with `--ui`:
+
+```bash
+reshapr run --release 0.2.3 --ui
+```
+
+The Web UI addon is downloaded from the same release and becomes available at `http://localhost:3333`. The compose files are cached at `~/.reshapr/docker-compose-<release>.yml` and `~/.reshapr/docker-compose-ui-addon-<release>.yml`.
 
 ## Check status
 
@@ -54,13 +54,7 @@ Once the containers are running, verify their status:
 reshapr status
 ```
 
-```bash
-ℹ️  Reshapr containers (release: 0.0.10, started at: 2026-04-01T10:30:00.000Z)
-NAME                           IMAGE                                        ...   STATUS
-reshapr-ctrl-1                 registry.reshapr.io/reshapr/reshapr-ctrl:0.0.10           ...   Up 2 minutes
-reshapr-proxy-1                registry.reshapr.io/reshapr/reshapr-proxy:0.0.10          ...   Up 2 minutes
-reshapr-db-1                   postgres:17                                  ...   Up 2 minutes
-```
+The output identifies the selected release and container engine, then reports the Compose service status. Names and timestamps depend on your local engine and are not stable identifiers.
 
 The control plane is available at **`http://localhost:5555`** and the MCP gateway at **`http://localhost:7777`**.
 
@@ -100,58 +94,39 @@ When you're done, shut everything down:
 reshapr stop
 ```
 
-```bash
-ℹ️  Stopping Reshapr containers (release: 0.0.10)...
-✅ Reshapr containers stopped successfully.
-```
-
-This runs `docker compose down` on the saved compose file and cleans up the run state.
+This runs the selected engine's Compose `down` command on every saved compose file, including the Web UI addon when enabled, and cleans up the run state.
 
 ## Manual setup (without the CLI)
 
-If you prefer to manage Docker Compose directly, clone the reShapr repository and use the provided scripts:
+If you prefer to manage Docker Compose directly, check out the same release used by this guide:
 
 ```bash
-git clone https://github.com/reshaprio/reshapr.git
-```
-
-```bash
-cd reshapr/install
+git clone --branch 0.2.3 --depth 1 https://github.com/reshaprio/reshapr.git
+cd reshapr
 ```
 
 Start all services (control plane, gateway, and database) at once:
 
 ```bash
-docker compose -f docker-compose-all-in-one.yml up
+docker compose -f install/docker-compose-all-in-one.yml up -d
 ```
 
-The `install/` folder also includes helper scripts:
-
-- `start-all.sh`- a simple script to run the `docker compose` command above
-
-Or start components separately, the control plane first:
+To include the Web UI, compose the addon with the base file:
 
 ```bash
-docker compose up
+docker compose -f install/docker-compose-all-in-one.yml \
+  -f install/docker-compose-ui-addon.yml up -d
 ```
 
-Then, the gateway proxy in a separate terminal:
+With Podman, replace `docker compose` with `podman compose` in these commands.
 
 ```bash
-docker run -it --rm -p 7777:7777 \
-  -e RESHAPR_CTRL_HOST=host.docker.internal \
-  --add-host=host.docker.internal:host-gateway \
-  registry.reshapr.io/reshapr/reshapr-proxy:nightly
+podman compose -f install/docker-compose-all-in-one.yml up -d
 ```
 
-The `install/` folder also includes helper scripts:
-
-- `start-control-plane.sh` - a simple script to run the `docker compose` command above
-- `start-proxy.sh` - a simple script to run the `docker run` command above
-
-:::info
-The `host.docker.internal` mapping lets the proxy container reach the control plane running on your host machine.
-:::
+```bash
+docker compose -f install/docker-compose-all-in-one.yml down
+```
 
 ## Next steps
 
