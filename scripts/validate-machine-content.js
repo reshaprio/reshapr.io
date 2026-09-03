@@ -109,6 +109,11 @@ const staticMarkdown = new Set(
   walkMarkdown(path.join(ROOT, 'static'))
     .map(sourcePath => path.relative(path.join(ROOT, 'static'), sourcePath).split(path.sep).join('/')),
 );
+for (const coreRouteOutput of ['index.md', 'about.md', 'community.md']) {
+  if (staticMarkdown.has(coreRouteOutput)) {
+    errors.push(`Core route Markdown must be generated from HTML, not maintained in static/: /${coreRouteOutput}`);
+  }
+}
 for (const item of expectedGenerated) {
   if (staticMarkdown.has(item.output)) {
     errors.push(`Static/generated collision at /${item.output} (source: ${item.source})`);
