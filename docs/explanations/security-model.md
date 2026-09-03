@@ -1,4 +1,6 @@
+---
 description: Trust boundaries and security controls for MCP endpoints, Gateways, and backend APIs.
+---
 
 import ThemedImage from '@theme/ThemedImage';
 
