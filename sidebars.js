@@ -124,6 +124,16 @@ const sidebars = {
               id: 'how-to-guides/security/api-key',
               label: 'Protect with an API key',
             },
+            {
+              type: 'doc',
+              id: 'how-to-guides/security/oauth',
+              label: 'Protect with OAuth 2.0',
+            },
+            {
+              type: 'doc',
+              id: 'how-to-guides/security/backend-auth-and-elicitation',
+              label: 'Authenticate backend calls',
+            },
           ],
         },
         {
@@ -220,7 +230,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'explanations/security-model',
-              label: 'Security Model',
+              label: 'Security Capabilities and Limits',
             },
           ],
         },

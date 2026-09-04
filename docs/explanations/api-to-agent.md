@@ -73,7 +73,7 @@ Filtering changes the content returned by a call. TOON changes its encoding. Nei
 | Gateway to backend | Translated API request | Backend endpoint and Secret |
 | Gateway to MCP client | Tool result after selected treatment | Output filter and encoding |
 
-Protecting one boundary does not protect another. See the **[Security Model](./security-model.md)** for the separation between endpoint and backend credentials.
+Protecting one boundary does not protect another. See **[Security Capabilities and Limits](./security-model.md)** for the separation between endpoint and backend credentials.
 
 ## What makes an action agent-oriented
 

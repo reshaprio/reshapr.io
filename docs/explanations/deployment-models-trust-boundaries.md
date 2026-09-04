@@ -88,4 +88,4 @@ Likewise, streamed configuration changes avoid restarting the Gateway, but they 
 
 Use **[Control Plane to Gateway Synchronization](./control-plane-gateway-synchronization.md)** to understand registration and configuration propagation. Then use **[Deploy a Hybrid Gateway](../how-to-guides/deploy-hybrid-gateway.md)** to run a published Gateway image in another trust domain.
 
-For endpoint and backend authentication controls, see **[Security Model](./security-model.md)**.
+For endpoint and backend authentication controls, see **[Security Capabilities and Limits](./security-model.md)**.

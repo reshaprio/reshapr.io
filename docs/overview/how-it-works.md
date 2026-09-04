@@ -67,5 +67,5 @@ See also:
 - **[Why reShapr?](./why-reshapr.md)**
 - **[Services and Artifacts](../explanations/services-and-artifacts.md)**
 - **[Configuration Plan and Exposition](../explanations/configuration-and-exposition.md)**
-- **[Security Options and Secrets](../explanations/security-model.md)**
+- **[Security Capabilities and Limits](../explanations/security-model.md)**
 - **[Deploy a Hybrid Gateway](../how-to-guides/deploy-hybrid-gateway.md)**

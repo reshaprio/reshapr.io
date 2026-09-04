@@ -151,4 +151,5 @@ The endpoint is ready for an MCP client when negotiation succeeds, `tools/list` 
 
 - **[Create your first MCP endpoint](../tutorials/getting-started.md)** if you do not have one yet.
 - **[Protect an MCP endpoint with an API key](./security/api-key.md)** before sharing an unprotected endpoint.
-- **[Security Model](../explanations/security-model.md)** explains the client-to-Gateway and Gateway-to-backend trust boundaries.
+- **[Protect an MCP Endpoint with OAuth 2.0](./security/oauth.md)** when clients need authenticated identity and scopes.
+- **[Security Capabilities and Limits](../explanations/security-model.md)** explains the client-to-Gateway and Gateway-to-backend trust boundaries.

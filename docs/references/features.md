@@ -34,7 +34,7 @@ verification:
 | Tools | Available | `tools/list` and `tools/call` dispatch to REST, GraphQL, gRPC, or Custom Tools selected by the Plan. | [Custom Tools specification](custom-tools-specification.md) |
 | Prompts | Available | `prompts/list` and `prompts/get` serve Prompts artifacts selected by the Plan. | [Prompts specification](prompts-specification.md) |
 | Resources | Available | Static and templated Resources support list, template list, and read operations. | [Resources specification](resources-specification.md) |
-| URL elicitation | Available with limits | Backend credentials can be requested through legacy session-bound errors or `2026-07-28` stateless elicitation bound to an authenticated user. | [Security model](../explanations/security-model.md) |
+| URL elicitation | Available with limits | Backend credentials can be requested through legacy session-bound errors or `2026-07-28` stateless elicitation bound to an authenticated user. | [Backend authentication and elicitation](../how-to-guides/security/backend-auth-and-elicitation.md) |
 | Client cache hints | Available with limits | `ttlMs` and `cacheScope` are returned only for the `2026-07-28` protocol shape. | [Configuration Plan and Exposition](../explanations/configuration-and-exposition.md) |
 
 Methods such as roots, sampling, and subscriptions are not exposed as server capabilities. A dedicated compatibility matrix will document method-level behavior separately.
@@ -43,11 +43,11 @@ Methods such as roots, sampling, and subscriptions are not exposed as server cap
 
 | Capability | Availability | Scope | Reference |
 |---|---|---|---|
-| MCP endpoint API key | Available | The Gateway validates `x-reshapr-key`; keys can be renewed and propagated to connected Gateways. | [Security model](../explanations/security-model.md) |
-| MCP endpoint OAuth 2.0 | Available | The Gateway validates signed bearer JWTs against configured issuers and JWKS, publishes RFC 9728 metadata, checks required Exposition scopes, and checks a `resource` claim when present. | [Security model](../explanations/security-model.md) |
-| Backend authentication | Available with limits | Basic, token/header, certificate, and OAuth credentials depend on the backend protocol and Secret configuration. | [Security model](../explanations/security-model.md#gateway-access-to-backend-apis) |
-| Local secret references | Available with limits | Hybrid Gateways resolve `${env:VARIABLE}` references locally on each backend call. `env` is the provided resolver. | [Security model](../explanations/security-model.md#gateway-access-to-backend-apis) |
-| Audit events | Available with limits | A Gateway emits structured MCP-call and authentication-failure events when audit is enabled on the Configuration Plan. | [Security model](../explanations/security-model.md) |
+| MCP endpoint API key | Available | The Gateway validates `x-reshapr-key`; keys can be renewed and propagated to connected Gateways. | [API key guide](../how-to-guides/security/api-key.md) |
+| MCP endpoint OAuth 2.0 | Available | The Gateway validates signed bearer JWTs against configured issuers and JWKS, publishes RFC 9728 metadata, checks configured Exposition scopes, and checks a `resource` claim when present. | [OAuth 2.0 guide](../how-to-guides/security/oauth.md) |
+| Backend authentication | Available with limits | Basic, token/header, certificate, and OAuth credentials depend on the backend protocol and Secret configuration. | [Backend authentication and elicitation](../how-to-guides/security/backend-auth-and-elicitation.md) |
+| Local secret references | Available with limits | Hybrid Gateways resolve `${env:VARIABLE}` references locally on each backend call. `env` is the provided resolver. | [Backend authentication and elicitation](../how-to-guides/security/backend-auth-and-elicitation.md#create-a-locally-resolved-secret) |
+| Audit events | Available with limits | A Gateway emits structured MCP-call and authentication-failure events when audit is enabled on the Configuration Plan. | [Security Capabilities and Limits](../explanations/security-model.md) |
 | Multi-tenancy | Available | Control-plane data is isolated by organization through application-level discriminator tenancy. | [Project architecture](https://github.com/reshaprio/reshapr/blob/main/AGENTS.md) |
 | Organization quotas | Available with limits | Quotas limit governance resources such as Expositions and Gateways. They are not request-rate limits. | [Public API](https://github.com/reshaprio/reshapr/blob/main/reshapr-public-openapi-v0.1.yaml) |
 | Administrative identities | Available | Users, organizations, memberships, service accounts, and Gateway API tokens are managed through dedicated control-plane surfaces. | [Admin API](https://github.com/reshaprio/reshapr/blob/main/reshapr-admin-ctrl-openapi-v0.1.yaml) |

@@ -119,4 +119,4 @@ The endpoint rejects requests without the current key, accepts requests with it,
 ## Next step
 
 - **[Test an MCP endpoint](../test-mcp-endpoint.md)** to list and call its Tools with the key.
-- **[Security Model](../../explanations/security-model.md)** explains the two independent authentication boundaries.
+- **[Security Capabilities and Limits](../../explanations/security-model.md)** compares the independent authentication boundaries.
