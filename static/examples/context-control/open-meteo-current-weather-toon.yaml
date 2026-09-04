@@ -1,0 +1,14 @@
+apiVersion: reshapr.io/v1alpha1
+kind: ToolsOutputFilters
+service:
+  name: Open-Meteo Weather Forecast API
+  version: '1.0'
+filters:
+  current_weather:
+    jsonRetain:
+      - /latitude
+      - /longitude
+      - /timezone
+      - /current_units
+      - /current
+    convertToToon: true

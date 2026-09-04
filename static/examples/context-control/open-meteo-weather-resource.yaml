@@ -1,0 +1,14 @@
+apiVersion: reshapr.io/v1alpha1
+kind: Resources
+service:
+  name: Open-Meteo Weather Forecast API
+  version: '1.0'
+resources:
+  'reshapr://open-meteo/weather-code-note':
+    name: weather-code-note
+    title: Open-Meteo weather code note
+    description: Context for interpreting the weather_code field.
+    mimeType: text/plain
+    text: |-
+      The weather_code value follows the WMO weather interpretation codes used by Open-Meteo.
+      Consult the Open-Meteo forecast documentation for the current code table.

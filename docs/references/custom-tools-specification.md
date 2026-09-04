@@ -4,15 +4,9 @@ description: Define Custom Tools to rename, condense, and translate default API 
 
 # Custom Tools
 
-The use of MCP Server raises important concerns regarding the control of the context - see our dedicated blog post **[From Context Overload to Context Control!](/blog/from-context-overload-to-context-control)** on this topic. There are different facets of this need of control: the search for efficiency (economical & technical performance), the reduction of security threats, and the adaptation to a business context or process.
+An imported API operation does not always represent the task an Agent needs to perform. It may expose low-level parameters, protocol-specific navigation, or a capability broader than the intended use case. A `CustomTools` Artifact defines a smaller task-oriented interface while retaining the existing API implementation.
 
-Even official MCP Servers can be questioned regarding these concerns:
-
-- The official GitHub MCP server exposes over 90 tools consuming 46k+ tokens, including high-risk operations like `delete_file` and `delete_workflow_run_logs` alongside benign tools like `get_pull_requests`.
-- The Snowflake official MCP server, for example, exposes an `execute_sql` tool accepting arbitrary SQL queries. Agents have to generate different SQL queries each time
-for the same request, making results non-deterministic and potentially wrong. Instead, organizations need tools that map to specific use cases. For example, `get_revenue_for_month(month, year)` that maps to approved, parameterized queries reviewed by data teams.
-
-As a consequence, MCP Servers - whether provided by an official third-party or built on your own existing API - **should be used very rarely as is without polishing the context usage.** They should be designed to provide LLMs and Agents with clearly designed and parameterized actions that fit a specific use case. 
+Use **[Context Control](../explanations/context-control.md)** to decide when operation selection is sufficient and when a Custom Tool is the better mechanism. **[Context Control in Practice](../tutorials/context-control-in-practice.md)** provides a complete, measured example.
 
 reShapr provides **an easy way to design and specify your Custom Tools using a simple YAML description,** called the `CustomTools` specification. If you want to provide such custom tools to your reShapr-powered MCP endpoint, you’ll need to write this simple file and `attach` it to your existing Service.
 
@@ -22,7 +16,7 @@ Let’s explain this concept via a simple example: we want to provide an MCP Too
 reshapr import -f ../dev/github-api.graphql --sn 'GitHub GraphQL' --sv '20250917' --be https://api.github.com/graphql --io '["user"]'
 ```
 
-That allows us to have an MCP endpoint with just the `user` operation, but here we’re facing the complexity of the GraphQL API with too many parameters and relation navigation options! This tool will consume 2.5k tokens, and we’re not certain it will fetch all the required user information.
+That produces an MCP endpoint with only the `user` operation, but the generated Tool still reflects the GraphQL API's parameters and relation navigation. A task-specific Tool can make the expected input and selection explicit.
 
 Let’s say we want default information on the user, but also its avatar and details on its latest followers… We can define a new `get_user_with_latest_followers(login)` tool for a specific use case, and we just have to create and attach this simple YAML file:
 
@@ -62,6 +56,8 @@ A `CustomTools` artifact follows some simple rules:
 - A custom tool **may** provide optional `title` and `description` to provide more context to the LLM or Agent when choosing an appropriate tool,
 - A custom tool **must** also provide an `input` schema description that describes its parameters. Input schema reuses the same structure as the regular MCP Tools Input Schema.
 - A declarative custom tool **may** also specify `arguments` that represent the arguments that will be used with the original tool that is overridden. Here we’re fixing the arguments as well as the relation navigation options for fetching exactly what we need.
+
+When attached, reShapr derives each `customTools` key as an Artifact capability. A Configuration Plan includes the Artifact by name through `includedArtifacts`; see **[Attach and Select reShapr Artifacts](../how-to-guides/select-reshapr-artifacts.md)**.
 
 In the case of custom tools using `arguments`, the value **can** be expressed using `${}` expressions that will be replaced by input values. Typically in our example, the MCP client will send a `user` value as input, and this value will be used in the place of the `${user}` placeholder when invoking the original tool.
 

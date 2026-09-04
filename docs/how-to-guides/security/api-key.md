@@ -80,12 +80,11 @@ Keep the current value so that you can verify its revocation, then generate a re
 
 ```bash
 export RESHAPR_OLD_API_KEY="$RESHAPR_API_KEY"
-RENEWED_CONFIG_JSON="$(
-  reshapr config renew-api-key "$RESHAPR_CONFIG_ID" --output json
+RESHAPR_API_KEY="$(
+  reshapr config renew-api-key "$RESHAPR_CONFIG_ID" --output json \
+    | jq -er '.apiKey'
 )"
-RESHAPR_API_KEY="$(jq -er '.apiKey' <<<"$RENEWED_CONFIG_JSON")"
 export RESHAPR_API_KEY
-unset RENEWED_CONFIG_JSON
 ```
 
 The Gateway receives the Configuration Plan update without a restart.

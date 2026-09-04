@@ -11,7 +11,9 @@ As explained in **[Why reShapr?](../overview/why-reshapr.md)**, reShapr can crea
 This supports two common requirements:
 
 - **Response scope.** A GraphQL node with many scalar properties or a REST endpoint returning a deeply nested JSON tree can expose fields that are irrelevant to the task. Filtering at the gateway retains only the required response shape.
-- **Security and determinism.** Reusing a broad existing API often surfaces fields you'd rather not expose to an agent (PII, internal identifiers, expensive sub-trees). Filtering at the gateway gives you a single, declarative point of control, independent of the underlying API.
+- **Stable response shape.** Retaining and patching known fields gives the Agent a smaller, more predictable result independent of the underlying API protocol.
+
+In reShapr `0.2.3`, a filter-processing error returns the original Tool response. Treat `ToolsOutputFilters` as response shaping, **not as a security or data-loss-prevention boundary**. Prevent access to sensitive fields in the backend contract and authorization layer.
 
 reShapr applies filtering universally, regardless of the source protocol (REST, GraphQL, gRPC), because filters operate on the canonical JSON response produced by reShapr's protocol converters.
 
@@ -152,3 +154,5 @@ For a given MCP tool call, reShapr applies transformations in this order:
 5. The filtered response is wrapped into the JSON-RPC MCP envelope and returned to the client.
 
 Because filtering happens after the converter step and before the MCP envelope, the same `ToolsOutputFilters` artifact applies uniformly whether the underlying tool is backed by REST, GraphQL, or gRPC.
+
+To compare an unfiltered and filtered response with identical Tool arguments, follow **[Context Control in Practice](../tutorials/context-control-in-practice.md)**.

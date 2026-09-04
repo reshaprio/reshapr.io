@@ -1786,7 +1786,7 @@ html.docs-doc-page .theme-doc-markdown.markdown {
   padding-top: var(--reshapr-space-8);
   border-top: none;
   /* Readable measure + long-form rhythm (doc body only) */
-  max-width: min(68ch, 100%);
+  max-width: min(80ch, 100%);
   font-size: 1.0625rem;
   line-height: var(--reshapr-doc-body-line-height);
 }

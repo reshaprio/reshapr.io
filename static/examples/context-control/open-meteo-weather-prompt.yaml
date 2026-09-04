@@ -1,0 +1,16 @@
+apiVersion: reshapr.io/v1alpha1
+kind: Prompts
+service:
+  name: Open-Meteo Weather Forecast API
+  version: '1.0'
+prompts:
+  weather_brief:
+    title: Prepare a current weather brief
+    description: Ask for a concise current weather brief for one location.
+    arguments:
+      - name: location
+        description: Human-readable location to describe.
+        required: true
+    result: |-
+      Prepare a concise current weather brief for ${location}.
+      Use the current_weather Tool and include the temperature, weather code, and wind speed.

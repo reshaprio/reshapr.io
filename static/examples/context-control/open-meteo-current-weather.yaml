@@ -1,0 +1,33 @@
+apiVersion: reshapr.io/v1alpha1
+kind: CustomTools
+service:
+  name: Open-Meteo Weather Forecast API
+  version: '1.0'
+customTools:
+  current_weather:
+    tool: get_v1_forecast
+    description: Get the current temperature, weather code, and wind speed for one location.
+    input:
+      type: object
+      properties:
+        latitude:
+          type: string
+          description: WGS84 latitude.
+        longitude:
+          type: string
+          description: WGS84 longitude.
+        timezone:
+          type: string
+          description: IANA time zone name.
+      required:
+        - latitude
+        - longitude
+        - timezone
+    arguments:
+      latitude: ${latitude}
+      longitude: ${longitude}
+      current:
+        - temperature_2m
+        - weather_code
+        - wind_speed_10m
+      timezone: ${timezone}

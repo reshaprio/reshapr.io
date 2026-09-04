@@ -62,6 +62,17 @@ const sidebars = {
             },
           ],
         },
+        {
+          type: 'category',
+          label: 'Design an MCP surface',
+          items: [
+            {
+              type: 'doc',
+              id: 'tutorials/context-control-in-practice',
+              label: 'Context Control in practice',
+            },
+          ],
+        },
       ],
     },
     {
@@ -71,6 +82,17 @@ const sidebars = {
       description: 'Task-oriented guides for specific goals',
       collapsed: false,
       items: [
+        {
+          type: 'category',
+          label: 'Create and optimize',
+          items: [
+            {
+              type: 'doc',
+              id: 'how-to-guides/select-reshapr-artifacts',
+              label: 'Attach and select Artifacts',
+            },
+          ],
+        },
         {
           type: 'category',
           label: 'MCP endpoints',
@@ -130,6 +152,16 @@ const sidebars = {
           items: [
             {
               type: 'doc',
+              id: 'explanations/resource-lifecycle',
+              label: 'Resource Lifecycle',
+            },
+            {
+              type: 'doc',
+              id: 'explanations/api-to-agent',
+              label: 'From API to Agent Action',
+            },
+            {
+              type: 'doc',
               id: 'explanations/services-and-artifacts',
               label: 'Services and Artifacts',
             },
@@ -137,6 +169,11 @@ const sidebars = {
               type: 'doc',
               id: 'explanations/configuration-and-exposition',
               label: 'Configuration and Exposition',
+            },
+            {
+              type: 'doc',
+              id: 'explanations/context-control',
+              label: 'Context Control',
             },
           ],
         },

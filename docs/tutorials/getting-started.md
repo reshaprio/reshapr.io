@@ -309,5 +309,6 @@ You imported a versioned OpenAPI contract, created the Service, Configuration Pl
 
 ## Next step
 
+- **[Context Control in Practice](./context-control-in-practice.md)** turns this generated operation into a focused Tool and measures response filtering.
 - **[Test an MCP endpoint](../how-to-guides/test-mcp-endpoint.md)** with stateless or session-based clients and diagnose common errors.
 - **[Protect the endpoint with an API key](../how-to-guides/security/api-key.md)** and verify key rotation.

@@ -1,65 +1,84 @@
 ---
-description: How reShapr discovers Services from API artifacts (OpenAPI, GraphQL, gRPC) and the conventions used during import.
+description: Understand how API and reShapr Artifacts define a versioned Service and contribute capabilities to each MCP Exposition.
 ---
 
-# Services & Artifacts
+# Services and Artifacts
 
-As explained in **[Why reShapr?](../overview/why-reshapr.md)**, reShapr ingests your API’s existing artifacts such as **[OpenAPI 3.x](https://www.openapis.org/)** specs, **[GraphQL](https://graphql.org/)**  schemas and **[gRPC/Protobuffer](https://grpc.io/)** definitions to discover Services and create MCP Servers. A Service in reShapr represents a functional service promise - for example, a *User Management Service* with a specific version - for example, `1.0` - made of several operations (`searchUsers`, `getUserById,`, etc.). Services are versioned so you’ll be able to handle the different versions of the *User Management Service*, which can be `1.0`, `1.1`, `2.0` and so on…
+A reShapr **Service** is the versioned model of an API that can be shaped and exposed through MCP. **Artifacts** provide the contracts and complementary definitions from which reShapr builds that model.
 
-Your first steps with reShapr will certainly be to import new artifacts into the system so that reShapr can discover and propose Services to expose. As of today, this task is realized using the **[reShapr CLI](../tutorials/getting-started.md)** that holds the `reshapr import` tool. But before diving into the Getting Started guide, let’s review the information and conventions reShapr is using from these specifications.
+## The main Artifact defines the Service
 
-- When importing an **[OpenAPI 3.x](https://www.openapis.org/)** artifact, reShapr will naturally use the `info.name` and `info.version` that are mandatory elements in the specification. The discovered Service will then naturally have this name and version,
-- When importing a **[gRPC/Protobuffer](https://grpc.io/)** definition, reShapr will look for a Protocol Buffer `service` definition and will return the first it finds. reShapr will also look at the `package` directive. This package information will be used for two purposes: to provide a full name for the reShapr service that will be `<package>.<serviceName>` and to extract the version information. As it’s a best practice to put the version as the last element of a package name in gRPC, reShapr will use the last element as the version.
-- When importing a **[GraphQL](https://graphql.org/)**  schema, things are a bit different because Graph Schema doesn’t have a way to provide information on the service name or version. So when importing a GraphQL schema in reShapr, you will have to explicitly provide the `serviceName` and the `serviceVersion` you want this service to be registered as.
+Importing an API contract through the CLI, Web UI, or API creates or updates a Service. The imported contract becomes its **main Artifact** and determines:
 
-As Services are versioned in reShapr, the direct consequence is that reShapr will be able to keep many different versions of the same Service in parallel. It will then be up to you to manage the expositions of version `1.0`, then version `2.0` etc. When a version of a service is no longer of importance to you, you can delete it - but it will automatically remove existing expositions.  
+- the Service name and version;
+- the source protocol: OpenAPI, GraphQL, or gRPC;
+- the operations from which reShapr can generate MCP Tools.
 
-Updating a Service in reShapr is a trivial process; it simply means re-importing its reference artifacts. If its service name and version are already present in reShapr, the definition will be updated. If not, a new Service entry will be created and attached to your account.
+Only one main Artifact belongs to a Service. It is always available to the Service's Configuration Plans and cannot be excluded through `includedArtifacts`.
 
-## Managing Artifacts
+reShapr derives Service identity differently for each contract type:
 
-A Service in reShapr is backed by one or more artifacts. The first artifact you import (using `reshapr import`) becomes the **main artifact** — it defines the Service identity, operations, and type. You can then attach additional artifacts (using `reshapr attach`) to enrich the Service with **[Prompts](../references/prompts-specification.md)** or **[Custom Tools](../references/custom-tools-specification.md)** definitions.
+| Contract | Service identity |
+|---|---|
+| OpenAPI 3.x | The document's title and version identify the Service. |
+| gRPC/Protobuf | The first `service` definition and its package identify the Service; the final package segment supplies its version. |
+| GraphQL | The schema has no Service metadata, so the importer must provide the name and version. |
 
-### Listing artifacts
+Importing another contract with the same name and version updates the existing Service. A different version creates a separate Service that can have its own Plans and Expositions.
 
-You can list all artifacts associated with a Service using the `reshapr artifact list` command. This is useful to see what has been imported or attached previously:
+## Attached Artifacts enrich the Service
 
-```bash
-reshapr artifact list -s 0N2G4YZFDD3ZF
-```
+Attached reShapr Artifacts add capabilities or transformations without changing the source API contract:
 
-```bash
-ID             NAME                  TYPE                 MAIN
-0NKVYHWSR9VPT  github-api.graphql    GRAPHQL_SCHEMA               Yes
-0NKVZAB12X3YZ  github-api-prompts    RESHAPR_PROMPTS              No
-```
+| Artifact type | Contribution |
+|---|---|
+| **[Prompts](../references/prompts-specification.md)** | Reusable instructions exposed through MCP Prompts. |
+| **[Resources](../references/resources-specification.md)** | Static or remote context exposed through MCP Resources. |
+| **[Custom Tools](../references/custom-tools-specification.md)** | Task-oriented Tools that map to or orchestrate API operations. |
+| **[Tools Output Filters](../references/spec-outtools-filtering.md)** | Response retention, JSON Patch transformations, and optional TOON encoding. |
 
-The `MAIN` column indicates which artifact is the primary definition for the Service. Only one artifact can be the main artifact per Service.
+Each attached Artifact declares the target `service.name` and `service.version`. Attaching the same source again updates the Artifact and recomputes its metadata.
 
-### Inspecting an artifact
+## Derived capabilities make composition visible
 
-To retrieve details of a specific artifact, use `reshapr artifact get`:
+When reShapr imports an attached Artifact, it extracts a concise capability list:
 
-```bash
-reshapr artifact get 0NKVYHWSR9VPT
-```
+- Prompt names from `prompts`;
+- Custom Tool names from `customTools`;
+- Resource and Resource Template URIs from `resources` and `resourceTemplates`;
+- target Tool names from `filters`.
 
-```bash
-ℹ️  Artifact details
-ID           : 0NKVYHWSR9VPT
-Name         : github-api.graphql
-Organization : my-org
-Service ID   : 0N2G4YZFDD3ZF
-Type         : GRAPHQL_SCHEMA
-Main Artifact: Yes
-Source       : github-api.graphql
-Path         : N/A
-```
+These derived capabilities help operators inspect what an Artifact contributes without reading its complete source. They preserve declaration order and remove duplicates. They are available through Artifact API representations, the CLI, and the Web UI's Service, Artifact, and Plan views.
 
-You can also display the full artifact content (syntax-highlighted) by adding the `-d, --display` flag:
+Capability metadata is descriptive. It does not replace MCP discovery, authorize a Tool call, or guarantee that a capability is included in every Exposition.
 
-```bash
-reshapr artifact get 0NKVYHWSR9VPT -d
-```
+## Configuration Plans select attached Artifacts
 
-Both commands support the `-o, --output <format>` option for structured output in `json` or `yaml` format, which is convenient for automation. See the **[CLI Commands Reference](../references/cli-commands.md)** for the full details on all available options.
+A Service can have several **Configuration Plans**, each selecting a different set of operations and attached Artifacts. `includedArtifacts` contains Artifact names:
+
+- a non-empty list selects only those attached Artifacts;
+- an absent or empty list selects all attached Artifacts;
+- the main Artifact, and any schema derived from it, remain available regardless of this setting.
+
+This lets one Service support distinct MCP surfaces. For example, an internal Plan can include operational Resources and detailed output, while a partner Plan selects a narrower Custom Tool and response filter.
+
+The selected Artifacts contribute to every Exposition created from that Plan. See **[Service, Artifact, Plan, Exposition, Gateway: The Lifecycle](./resource-lifecycle.md)** for the complete resource chain.
+
+## Updates and deletion propagate
+
+Updating a main or attached Artifact refreshes the affected Service representation. Connected Gateways receive the resulting Exposition updates through control-plane discovery.
+
+Deletion has wider consequences:
+
+- deleting an Exposition removes its endpoint from the target Gateway Group;
+- deleting a Configuration Plan removes its Expositions;
+- deleting a Service removes its Artifacts, Plans, and Expositions;
+- deleting an attached Artifact removes its name from Plans that selected it.
+
+The last case needs particular care. If removing an Artifact leaves a Plan with an empty `includedArtifacts` list, that empty list means **all remaining attached Artifacts**. Adjust or remove the Plan before deleting the Artifact when this fallback would broaden its MCP surface.
+
+## Apply the model
+
+- **[Attach and Select reShapr Artifacts](../how-to-guides/select-reshapr-artifacts.md)** shows how to inspect capabilities and create two Plan-specific selections.
+- **[Context Control](./context-control.md)** compares operation selection, Artifact selection, Custom Tools, and output transformations.
+- **[CLI Commands](../references/cli-commands.md)** documents Artifact inspection commands and options.
