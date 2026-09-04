@@ -2,7 +2,15 @@
 
 The fastest way to experience reShapr is through our hosted online environment: no installation required 🙌
 
+**Last verified with reShapr 0.2.3 on September 4, 2026.**
+
 Head over to **[try.reshapr.io](https://try.reshapr.io/)** to get started instantly.
+
+## Prerequisites
+
+- A GitHub or Google account
+- Node.js 20 or later to install the CLI
+- A browser allowed to open the CLI authentication callback
 
 ## Login workflow
 
@@ -60,7 +68,7 @@ When the browser opens, authorize the CLI — the token is valid for **2 hours**
 
 ### Step 6 — You're all set!
 
-Login is successful. You can now use the CLI to import APIs, create expositions, and manage MCP servers. Follow the instructions in the **[Getting Started](/docs/tutorials/getting-started)** tutorial to continue.
+Login is successful. You can now use the CLI to import APIs, create expositions, and manage MCP servers.
 
 ![Step 6 — CLI login successful, ready to use reShapr](/img/docs/try-reshapr-online-6.png)
 
@@ -69,3 +77,17 @@ Login is successful. You can now use the CLI to import APIs, create expositions,
 Once authenticated, you can go back to `https://try.reshapr.io` and you'll land on the reShapr Try dashboard.
 
 ![Step 7 — reShapr Try online dashboard after successful login](/img/docs/try-reshapr-online-7.png)
+
+## Result
+
+Your browser session and CLI are authenticated against the hosted reShapr environment. `reshapr info` should show your trial organization and server.
+
+## Limits
+
+- The CLI token is valid for two hours. Run `reshapr login -s https://try.reshapr.io` again after it expires.
+- The hosted trial is shared infrastructure intended for evaluation, not production workloads.
+- Identifiers, organization names, endpoints, and dashboard contents differ between accounts.
+
+## Next step
+
+Continue with **[Your First MCP Endpoint, End to End](./getting-started.md)**. It imports a versioned Open-Meteo contract, creates an Exposition in this environment, and calls the generated weather Tool.

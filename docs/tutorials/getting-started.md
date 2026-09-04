@@ -1,8 +1,19 @@
-# Getting started with CLI
+---
+description: Turn a versioned Open-Meteo contract into a reShapr MCP endpoint, then discover, list, and call its generated Tool.
+---
 
-This page details the installation and the basic usage of the reShapr Command Line Interface utility.
+# Your First MCP Endpoint, End to End
 
-**Last verified with reShapr 0.2.3 on September 3, 2026.**
+Import an OpenAPI contract, create a Configuration Plan and Exposition, then call a generated Tool and observe live weather data returned through reShapr.
+
+**Last verified with reShapr 0.2.3 on September 4, 2026.**
+
+## Prerequisites
+
+- Node.js 20 or later
+- `curl` and `jq`
+- Access to the **[reShapr Online Try](./try-reshapr-online.md)** or a **[local reShapr 0.2.3 environment](../how-to-guides/docker-compose.md)**
+- Outbound access to GitHub and `https://api.open-meteo.com`
 
 ## Installation
 
@@ -48,7 +59,7 @@ The command list evolves with the CLI. Use the embedded help as the source of tr
 
 ## Login to reShapr
 
-While we use the **[reShapr Online Try](/docs/tutorials/try-reshapr-online)** in this tutorial, you should point the server URL to your own environment if you have one set up. Common URLs include `http://localhost:5555` for Docker Compose or your cluster’s ingress URL for Kubernetes.
+While we use the **[reShapr Online Try](./try-reshapr-online.md)** in this tutorial, you should point the server URL to your own environment if you have one set up. Common URLs include `http://localhost:5555` for Docker Compose or your cluster’s ingress URL for Kubernetes.
 
 Use the following `login` command with the `-s` option (or `--server`) to specify you’re joining the beta platform:
 
@@ -101,17 +112,17 @@ Example output (user, organization, paths, and URLs vary):
 
 ## Import Artifact & Service
 
-Importing an artifact is the first step to exposing MCP endpoints for your API. Artifacts enable the discovery of Services as explained in **[Services & Artifacts](../explanations/services-and-artifacts.md)**. Let’s do that using the public **[Open-Meteo OpenAPI specification](https://github.com/open-meteo/open-meteo/blob/main/openapi/forecast.yml)**. For that we’ll need the **[Raw URL of this document](https://raw.githubusercontent.com/open-meteo/open-meteo/refs/heads/main/openapi/forecast.yml)** and we’ll use the `import` command:
+Importing an artifact is the first step to exposing MCP endpoints for your API. Artifacts enable the discovery of Services as explained in **[Services & Artifacts](../explanations/services-and-artifacts.md)**. Let’s do that using the public **[Open-Meteo 1.5.6 OpenAPI specification](https://github.com/open-meteo/open-meteo/blob/1.5.6/openapi/forecast.yml)** and its immutable raw URL:
 
 ```bash
-reshapr import -u https://raw.githubusercontent.com/open-meteo/open-meteo/refs/heads/main/openapi/forecast.yml
+reshapr import -u https://raw.githubusercontent.com/open-meteo/open-meteo/1.5.6/openapi/forecast.yml
 ```
 
 Example output (the generated identifier will differ):
 
 ```bash
 ✅ Import successful!
-ℹ️  Discovered Service Open-Meteo APIs with ID: 0PXEW1ZDWFCZS
+ℹ️  Discovered Service Open-Meteo Weather Forecast API with ID: 0PXEW1ZDWFCZS
 ```
 
 :::info
@@ -122,13 +133,13 @@ You can now list and check the discovered Service with the `service` command:
 
 ```bash
 ❯ reshapr service list
-ID             NAME             VERSION  TYPE  AGE
-0PXEW1ZDWFCZS  Open-Meteo APIs  1.0      REST  19h
+ID             NAME                             VERSION  TYPE  AGE
+0PXEW1ZDWFCZS  Open-Meteo Weather Forecast API  1.0      REST  19h
 
 ❯ reshapr service get 0PXEW1ZDWFCZS
 ℹ️  Service details
 ID          : 0PXEW1ZDWFCZS
-Name        : Open-Meteo APIs
+Name        : Open-Meteo Weather Forecast API
 Version     : 1.0
 Organization: yada
 Type        : REST
@@ -143,7 +154,7 @@ In case of a mistake or unused Service, you can delete a service using the `resh
 
 ## Configuring consumption
 
-**[Configuration Plan](../explanations/configuration-and-exposition.md)** will allow you to define how your Service will be consumed by MCP Clients. You’ll define the **backend endpoint** the MCP Gateway will target as well as the **security options** for future expositions. Let’s create a simple configuration plan for the  **[Open-Meteo Service](https://github.com/open-meteo/open-meteo/blob/main/openapi/forecast.yml)** we just imported.
+**[Configuration Plan](../explanations/configuration-and-exposition.md)** will allow you to define how your Service will be consumed by MCP Clients. You’ll define the **backend endpoint** the MCP Gateway will target as well as the **security options** for future expositions. Let’s create a simple configuration plan for the **[Open-Meteo Service](https://github.com/open-meteo/open-meteo/blob/1.5.6/openapi/forecast.yml)** we just imported.
 
 For that, we need the Service identifier we got just before (`0PXEW1ZDWFCZS`), and we need to know the public endpoint of this API (`https://api.open-meteo.com`). We’ll use the `config create` command and provide a basic name and description:
 
@@ -180,7 +191,7 @@ Created on  : 2026-03-29T12:44:22.327792751
 Organization: yada
 Service:
   ID     : 0PXEW1ZDWFCZS
-  Name   : Open-Meteo APIs
+  Name   : Open-Meteo Weather Forecast API
   Version: 1.0
   Type   : REST
 Configuration Plan
@@ -196,10 +207,10 @@ Gateway Group
 Gateway Endpoints
   - ID       : 0PX4AF0BM0H7Z
     Name     : prod-mcp-try-reshapr-proxy-7f8d7f6d89-c5jln
-    Endpoints: mcp.try.reshapr.io/mcp/yada/Open-Meteo+APIs/1.0
+    Endpoints: mcp.try.reshapr.io/mcp/yada/Open-Meteo+Weather+Forecast+API/1.0
   - ID       : 0PX4AF4200HQG
     Name     : prod-mcp-try-reshapr-proxy-7f8d7f6d89-jhvtd
-    Endpoints: mcp.try.reshapr.io/mcp/yada/Open-Meteo+APIs/1.0
+    Endpoints: mcp.try.reshapr.io/mcp/yada/Open-Meteo+Weather+Forecast+API/1.0
 ```
 
 > Like the `service` command, you can also use sub-commands like `list`, `get` or `delete` to manage your configurations.
@@ -211,10 +222,10 @@ Gateway Endpoints
 Set the exact endpoint URL returned by `reshapr expo create`:
 
 ```bash
-export MCP_URL='https://mcp.try.reshapr.io/mcp/<organization>/Open-Meteo+APIs/1.0'
+export MCP_URL='https://mcp.try.reshapr.io/mcp/<organization>/Open-Meteo+Weather+Forecast+API/1.0'
 ```
 
-Initialize a session using a supported session-based MCP version:
+Discover the server using the stateless MCP `2026-07-28` protocol:
 
 ```bash
 curl --silent --show-error \
@@ -222,8 +233,7 @@ curl --silent --show-error \
   --header 'Accept: application/json, text/event-stream' \
   --header 'MCP-Protocol-Version: 2026-07-28' \
   --header 'Mcp-Method: server/discover' \
-  --data '{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":
-  {"name":"reshapr-docs","version":"0.2.3"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"0.2.3"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
   "$MCP_URL" | jq '.result | {supportedVersions, capabilities, serverInfo: ._meta["io.modelcontextprotocol/serverInfo"]}'
 ```
 
@@ -234,9 +244,10 @@ List the available Tools and confirm the Open-Meteo operation is present:
 ```bash
 curl --silent --show-error \
   --header 'Content-Type: application/json' \
-  --header 'MCP-Protocol-Version: 2025-11-25' \
-  --header "MCP-Session-Id: $MCP_SESSION_ID" \
-  --data '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}' \
+  --header 'Accept: application/json, text/event-stream' \
+  --header 'MCP-Protocol-Version: 2026-07-28' \
+  --header 'Mcp-Method: tools/list' \
+  --data '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"0.2.3"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
   "$MCP_URL" | jq '.result.tools[].name'
 ```
 
@@ -249,11 +260,8 @@ curl --silent --show-error \
   --header 'MCP-Protocol-Version: 2026-07-28' \
   --header 'Mcp-Method: tools/call' \
   --header 'Mcp-Name: get_v1_forecast' \
-  --data '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"get_v1_forecast","arguments":{"latitude":48.8566,"longitude":2.3522,"current_weather":true,"timezone":"Europe/
-  Paris"},"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"0.2.3"},"io.modelcontextprotocol/
-  clientCapabilities":{}}}}' \
-  "$MCP_URL" |
-  jq -r '.result.content[0].text | fromjson | .current_weather'
+  --data '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"get_v1_forecast","arguments":{"latitude":"48.8566","longitude":"2.3522","current":["temperature_2m","weather_code","wind_speed_10m"],"timezone":"Europe/Paris"},"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"0.2.3"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
+  "$MCP_URL" | jq -r '.result.content[0].text | fromjson | .current'
 ```
 
 A JSON object containing the current temperature and weather values confirms that the Exposition, Gateway, and backend call work end to end.
@@ -267,24 +275,39 @@ reShapr also supports earlier MCP versions. Clients using `2025-11-25` or earlie
 In case you didn’t take the shortcut, here’s the all-in-one command that does the same as above:
 
 ```bash
-reshapr import -u https://raw.githubusercontent.com/open-meteo/open-meteo/refs/heads/main/openapi/forecast.yml --backendEndpoint https://api.open-meteo.com
+reshapr import -u https://raw.githubusercontent.com/open-meteo/open-meteo/1.5.6/openapi/forecast.yml --backendEndpoint https://api.open-meteo.com
 ```
 
 Example output (identifiers and endpoint will differ):
 
 ```bash
 ✅ Import successful!
-ℹ️  Discovered Service Open-Meteo APIs with ID: 0PXEW1ZDWFCZS
+ℹ️  Discovered Service Open-Meteo Weather Forecast API with ID: 0PXEW1ZDWFCZS
 ✅ Exposition done!
 ✅ Exposition is now active!
 Exposition ID  : 0PXPF1JQWFEF0
 Organization   : yada
 Created on     : 2026-03-29T12:48:03.775297
 Service ID     : 0PXEW1ZDWFCZS
-Service Name   : Open-Meteo APIs
+Service Name   : Open-Meteo Weather Forecast API
 Service Version: 1.0
 Service Type   : REST -> https://api.open-meteo.com
-Endpoints      : mcp.try.reshapr.io/mcp/yada/Open-Meteo+APIs/1.0
+Endpoints      : mcp.try.reshapr.io/mcp/yada/Open-Meteo+Weather+Forecast+API/1.0
 ```
 
 🎉 Congrats! You deployed an MCP Endpoint with just one CLI command! Use the returned endpoint with the verification steps above to confirm the one-command path end to end.
+
+## Result
+
+You imported a versioned OpenAPI contract, created the Service, Configuration Plan, and Exposition, then proved the endpoint works with `server/discover`, `tools/list`, and a live `tools/call` response from Open-Meteo.
+
+## Limits
+
+- The Configuration Plan in this tutorial leaves the MCP endpoint unauthenticated. Protect it before sharing its URL.
+- Open-Meteo is an external service with its own availability and usage terms; the returned weather values vary by time.
+- One successful Tool call validates this Exposition and operation, not every operation in the imported contract.
+
+## Next step
+
+- **[Test an MCP endpoint](../how-to-guides/test-mcp-endpoint.md)** with stateless or session-based clients and diagnose common errors.
+- **[Protect the endpoint with an API key](../how-to-guides/security/api-key.md)** and verify key rotation.

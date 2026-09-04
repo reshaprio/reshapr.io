@@ -58,7 +58,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'tutorials/getting-started',
-              label: 'Create an endpoint with the CLI',
+              label: 'Your first MCP endpoint',
             },
           ],
         },
@@ -71,6 +71,28 @@ const sidebars = {
       description: 'Task-oriented guides for specific goals',
       collapsed: false,
       items: [
+        {
+          type: 'category',
+          label: 'MCP endpoints',
+          items: [
+            {
+              type: 'doc',
+              id: 'how-to-guides/test-mcp-endpoint',
+              label: 'Test an MCP endpoint',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Security',
+          items: [
+            {
+              type: 'doc',
+              id: 'how-to-guides/security/api-key',
+              label: 'Protect with an API key',
+            },
+          ],
+        },
         {
           type: 'category',
           label: 'Local development',

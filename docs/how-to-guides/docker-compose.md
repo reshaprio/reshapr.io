@@ -84,7 +84,7 @@ reshapr login --server http://localhost:5555
 ✅ Configuration saved to /Users/you/.reshapr/config
 ```
 
-> From here, you can follow the **[Getting Started tutorial](../tutorials/getting-started.md)** to import services, create configuration plans, and expose MCP endpoints; just point everything at your local instance.
+> From here, follow **[Your First MCP Endpoint, End to End](../tutorials/getting-started.md)** to import a versioned API contract, expose it, and call a Tool through the local Gateway.
 
 ## Stop the containers
 
@@ -128,8 +128,18 @@ podman compose -f install/docker-compose-all-in-one.yml up -d
 docker compose -f install/docker-compose-all-in-one.yml down
 ```
 
-## Next steps
+## Result
 
-- **[Getting Started with CLI](../tutorials/getting-started.md)** — import services and expose MCP endpoints
+`reshapr status` reports the Compose services as running, the control plane responds at `http://localhost:5555`, and the Gateway accepts MCP requests at `http://localhost:7777`.
+
+## Limits
+
+- This topology is intended for local development and testing, not production availability or durability.
+- Local credentials and ports in this guide use the release defaults; change them before exposing the stack beyond your machine.
+- Stopping the stack does not remove its named volumes. Manage local data lifecycle with your container engine.
+
+## Next step
+
+- **[Your First MCP Endpoint, End to End](../tutorials/getting-started.md)** — import, expose, and call an API Tool
 - **[Helm Charts Overview](../references/helm-charts.md)** — choose a Kubernetes deployment topology
 - **[How it works](../overview/how-it-works.md)** — understand the reShapr architecture
