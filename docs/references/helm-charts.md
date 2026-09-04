@@ -56,5 +56,6 @@ For a reproducible installation, select an immutable version from the [Helm char
 
 ## Next step
 
+- Use **[Deploy reShapr on Kubernetes for Production](../how-to-guides/deploy-kubernetes-production.md)** to install all four charts with production-oriented settings.
 - Use **[Product Interfaces](./interfaces.md)** to find API and CLI contracts.
 - Use **[Kubernetes APIs and Controllers](./kubernetes-apis.md)** to choose CRDs or sidecar injection.

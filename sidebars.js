@@ -73,6 +73,17 @@ const sidebars = {
             },
           ],
         },
+        {
+          type: 'category',
+          label: 'Kubernetes',
+          items: [
+            {
+              type: 'doc',
+              id: 'tutorials/first-gitops-mcp-endpoint',
+              label: 'Your first GitOps-managed endpoint',
+            },
+          ],
+        },
       ],
     },
     {
@@ -130,6 +141,16 @@ const sidebars = {
           type: 'category',
           label: 'Kubernetes and deployment',
           items: [
+            {
+              type: 'doc',
+              id: 'how-to-guides/deploy-kubernetes-production',
+              label: 'Deploy on Kubernetes for production',
+            },
+            {
+              type: 'doc',
+              id: 'how-to-guides/manage-resources-with-gitops',
+              label: 'Manage resources with GitOps',
+            },
             {
               type: 'doc',
               id: 'how-to-guides/deploy-hybrid-gateway',

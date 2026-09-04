@@ -41,5 +41,7 @@ The webhook is fail-open by default through `failurePolicy: Ignore`. Its serving
 
 ## Next step
 
+- Use **[Your First GitOps-managed MCP Endpoint](../tutorials/first-gitops-mcp-endpoint.md)** to create and verify an endpoint from these APIs.
+- Use **[Manage reShapr Resources with GitOps](../how-to-guides/manage-resources-with-gitops.md)** to operate their update and deletion lifecycle.
 - Use **[Helm Charts Overview](./helm-charts.md)** to choose the controllers chart and its dependencies.
 - Use **[Product Interfaces](./interfaces.md)** to find the remaining reShapr contracts.
