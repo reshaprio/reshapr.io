@@ -42,10 +42,10 @@ Once reShapr discovers your services, you configure:
 - Exposition options (all operations, read-only operations, etc.)
 - Existing backend endpoint targets
 
-Then reShapr exposes your MCP server through gateways in a multi-tenant and secure way.
+Then reShapr exposes your MCP server through the Gateways selected by its Exposition.
 
 :::info Core Architecture
-At the core of reShapr is a robust architecture built to support service-level objectives and location constraints.
+reShapr separates configuration management from MCP request execution so that control-plane and Gateway placement can follow operational and network requirements.
 
 The platform has two major parts:
 
@@ -55,11 +55,12 @@ The platform has two major parts:
 
 This architecture supports multiple deployment models:
 
-1. **Cloud**: reShapr hosts both the control plane and the data plane.
-2. **Hybrid**: you host some gateways in your own trust domain while reShapr manages control.
-3. **On-premises**: both control and data planes in your own environment.
+1. **Local development**: control plane and Gateway run in one temporary environment.
+2. **Centralized**: control plane and Gateways run in one managed environment.
+3. **Hybrid or split**: control plane and Gateways run in different trust domains.
+4. **Self-hosted or on-premises**: the organization operates the complete platform and its dependencies.
 
-This is what flexibility means for enterprise MCP adoption.
+These names describe runtime topology, not commercial availability or service-level guarantees. See **[Deployment Models and Trust Boundaries](../explanations/deployment-models-trust-boundaries.md)** for the traffic flows and operational responsibilities of each model.
 
 See also:
 
@@ -67,4 +68,4 @@ See also:
 - **[Services and Artifacts](../explanations/services-and-artifacts.md)**
 - **[Configuration Plan and Exposition](../explanations/configuration-and-exposition.md)**
 - **[Security Options and Secrets](../explanations/security-model.md)**
-- **[Hybrid Deployment](../how-to-guides/deploy-hybrid-gateway.md)**
+- **[Deploy a Hybrid Gateway](../how-to-guides/deploy-hybrid-gateway.md)**

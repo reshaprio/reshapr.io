@@ -204,8 +204,18 @@ const sidebars = {
           items: [
             {
               type: 'doc',
+              id: 'explanations/deployment-models-trust-boundaries',
+              label: 'Deployment Models and Trust Boundaries',
+            },
+            {
+              type: 'doc',
               id: 'explanations/gateway-groups-and-gateways',
               label: 'Gateway Groups and Gateways',
+            },
+            {
+              type: 'doc',
+              id: 'explanations/control-plane-gateway-synchronization',
+              label: 'Control Plane to Gateway Synchronization',
             },
             {
               type: 'doc',

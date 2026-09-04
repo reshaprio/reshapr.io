@@ -6,11 +6,13 @@ import ThemedImage from '@theme/ThemedImage';
 
 # Gateway Group & Gateway
 
-Gateway Groups & Gateways are the last pieces to fully understand the reShapr possibilities from end-to-end!
+Gateway Groups connect desired MCP configuration to the Gateway processes that expose it. They let an organization target a changing set of Gateways without naming each process in every Exposition.
 
-As it has been introduced in **[Why reShapr?](../overview/why-reshapr.md)**, the reShapr architecture allows deployment on different types and locations of Gateways depending on your subscription plan. In the reShapr architecture, the Gateways are not typically known from the start and are presented in a static list. Gateways are made to be started and stopped in a highly dynamic way and advertise themselves to the control plane at startup. However, to define the exposition and deployment targets of your MCP server, the control plane can define its policies using abstract representations called *Gateway Groups*.
+## Gateway Groups are configuration targets
 
-A Gateway Group is a named resource owned and dedicated to an organization. The `reshapr` organization is a special one that shares its gateway groups with the reShapr users. A Gateway Group also defines a set of labels that represent **exposition policies and criteria**. Labels can represent a geographical region, a certain SLO and performance level, a lifecycle environment, or a combination of all of these. Depending on your subscription plan, you will have access to one or more Gateway Groups.
+A Gateway Group is a named, organization-owned resource with a set of labels. An Exposition targets one or more Gateway Groups instead of addressing individual Gateway processes.
+
+Labels can express deployment criteria such as `environment=production`, `region=eu-west`, or `organization=acme`. Their meaning is an operator convention: a label does not by itself enforce network isolation, data residency, capacity, or a service level.
 
 <ThemedImage
   alt="Gateway Groups and Gateways"
@@ -20,6 +22,22 @@ A Gateway Group is a named resource owned and dedicated to an organization. The 
   }}
 />
 
-During its bootstrap phase, a reShapr Gateway will advertise itself to the control plane and discover the MCP Servers it has to expose. This discovery is made according to the **[Exposition](configuration-and-exposition.md)** you previously created and the policies or Gateway Groups you choose. To do so, the Gateway presents **a set of selectors** that will be used during the discovery and throughout its lifetime to synchronize its **[Service](services-and-artifacts.md)** definitions and **[Configuration Plans](configuration-and-exposition.md)**. While it is alive, an ephemeral Gateway representation is tied to the Gateway Group in the control plane.
+## Gateways register dynamically
 
-A Gateway is not necessarily attached to a single Gateway Group; it can be attached to many of them as long as its selectors match the labels (exposition criteria) of the group! You could have a set of Gateways with a unique selector `org=acme` matching all Acme’s Gateway Groups.
+A Gateway is a runtime process that exposes MCP endpoints and dispatches Tool calls to backend APIs. It advertises its identity, labels, FQDNs, and version to the control plane when it starts. The control plane uses those labels to find matching Gateway Groups and returns the Expositions the Gateway must serve.
+
+This registration is ephemeral. Starting another Gateway with matching labels makes it eligible for the same configuration; stopping a Gateway does not delete the Gateway Groups or Expositions it matched.
+
+The synchronization unit delivered to the Gateway is the Exposition. Its referenced **[Service](services-and-artifacts.md)** and **[Configuration Plan](configuration-and-exposition.md)** determine the resulting MCP surface.
+
+## Matching is many-to-many
+
+A Gateway can match several Gateway Groups, and a Gateway Group can match several Gateways. For example, a Gateway with the labels `organization=acme`, `environment=production`, and `region=eu-west` can match groups that select any compatible combination of those labels.
+
+This many-to-many relationship supports several runtime layouts without changing an Exposition whenever an individual Gateway starts, stops, or is replaced. Duplicate or conflicting exposure behavior still depends on the routes, FQDNs, and Expositions configured by the operator.
+
+## Related concepts
+
+- **[Deployment Models and Trust Boundaries](./deployment-models-trust-boundaries.md)** explains where control planes and Gateways can run and which traffic crosses each boundary.
+- **[Control Plane to Gateway Synchronization](./control-plane-gateway-synchronization.md)** describes registration, initial discovery, change events, health, and recovery.
+- **[Deploy a Hybrid Gateway](../how-to-guides/deploy-hybrid-gateway.md)** applies this model to a Gateway running in another trust domain.
