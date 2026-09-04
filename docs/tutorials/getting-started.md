@@ -212,20 +212,22 @@ Set the exact endpoint URL returned by `reshapr expo create`:
 
 ```bash
 export MCP_URL='https://mcp.try.reshapr.io/mcp/<organization>/Open-Meteo+APIs/1.0'
-export MCP_HEADERS="$(mktemp)"
 ```
 
 Initialize a session using a supported session-based MCP version:
 
 ```bash
-curl --silent --show-error --dump-header "$MCP_HEADERS" \
+curl --silent --show-error \
   --header 'Content-Type: application/json' \
-  --data '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"reshapr-docs","version":"0.2.3"}}}' \
-  "$MCP_URL" | jq .result.serverInfo
-
-export MCP_SESSION_ID="$(awk 'tolower($1) == "mcp-session-id:" {print $2}' "$MCP_HEADERS" | tr -d '\r')"
-test -n "$MCP_SESSION_ID"
+  --header 'Accept: application/json, text/event-stream' \
+  --header 'MCP-Protocol-Version: 2026-07-28' \
+  --header 'Mcp-Method: server/discover' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":
+  {"name":"reshapr-docs","version":"0.2.3"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
+  "$MCP_URL" | jq '.result | {supportedVersions, capabilities, serverInfo: ._meta["io.modelcontextprotocol/serverInfo"]}'
 ```
+
+The response must include `2026-07-28` in `supportedVersions`.
 
 List the available Tools and confirm the Open-Meteo operation is present:
 
@@ -243,13 +245,22 @@ The list must contain `get_v1_forecast`. Call it and inspect the current weather
 ```bash
 curl --silent --show-error \
   --header 'Content-Type: application/json' \
-  --header 'MCP-Protocol-Version: 2025-11-25' \
-  --header "MCP-Session-Id: $MCP_SESSION_ID" \
-  --data '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"get_v1_forecast","arguments":{"latitude":48.8566,"longitude":2.3522,"current_weather":true,"timezone":"Europe/Paris"}}}' \
-  "$MCP_URL" | jq -r '.result.content[0].text | fromjson | .current_weather'
+  --header 'Accept: application/json, text/event-stream' \
+  --header 'MCP-Protocol-Version: 2026-07-28' \
+  --header 'Mcp-Method: tools/call' \
+  --header 'Mcp-Name: get_v1_forecast' \
+  --data '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"get_v1_forecast","arguments":{"latitude":48.8566,"longitude":2.3522,"current_weather":true,"timezone":"Europe/
+  Paris"},"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"0.2.3"},"io.modelcontextprotocol/
+  clientCapabilities":{}}}}' \
+  "$MCP_URL" |
+  jq -r '.result.content[0].text | fromjson | .current_weather'
 ```
 
 A JSON object containing the current temperature and weather values confirms that the Exposition, Gateway, and backend call work end to end.
+
+:::tip Compatibility
+reShapr also supports earlier MCP versions. Clients using `2025-11-25` or earlier use the legacy `initialize` handshake and a server-issued `MCP-Session-Id`. Session headers must not be used with stateless `2026-07-28` requests.
+:::
 
 ## All-in-one Magic command 🪄
 
