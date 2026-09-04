@@ -23,7 +23,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Overview',
+      label: 'Introduction',
       className: 'sidebar-icon-overview',
       collapsed: false,
       items: [
@@ -47,14 +47,20 @@ const sidebars = {
       collapsed: false,
       items: [
         {
-          type: 'doc',
-          id: 'tutorials/try-reshapr-online',
-          label: 'Try reShapr online',
-        },
-        {
-          type: 'doc',
-          id: 'tutorials/getting-started',
-          label: 'Getting Started with CLI',
+          type: 'category',
+          label: 'Getting started',
+          items: [
+            {
+              type: 'doc',
+              id: 'tutorials/try-reshapr-online',
+              label: 'Try reShapr online',
+            },
+            {
+              type: 'doc',
+              id: 'tutorials/getting-started',
+              label: 'Create an endpoint with the CLI',
+            },
+          ],
         },
       ],
     },
@@ -66,19 +72,26 @@ const sidebars = {
       collapsed: false,
       items: [
         {
-          type: 'doc',
-          id: 'how-to-guides/docker-compose',
-          label: 'Run using Docker Compose',
+          type: 'category',
+          label: 'Local development',
+          items: [
+            {
+              type: 'doc',
+              id: 'how-to-guides/docker-compose',
+              label: 'Run with Docker Compose',
+            },
+          ],
         },
         {
-          type: 'doc',
-          id: 'how-to-guides/kubernetes',
-          label: 'Install on Kubernetes',
-        },
-        {
-          type: 'doc',
-          id: 'how-to-guides/deploy-hybrid-gateway',
-          label: 'Deploy a Hybrid Gateway',
+          type: 'category',
+          label: 'Kubernetes and deployment',
+          items: [
+            {
+              type: 'doc',
+              id: 'how-to-guides/deploy-hybrid-gateway',
+              label: 'Deploy a hybrid Gateway',
+            },
+          ],
         },
       ],
     },
@@ -90,24 +103,36 @@ const sidebars = {
       collapsed: false,
       items: [
         {
-          type: 'doc',
-          id: 'explanations/services-and-artifacts',
-          label: 'Services and Artifacts',
+          type: 'category',
+          label: 'Core concepts',
+          items: [
+            {
+              type: 'doc',
+              id: 'explanations/services-and-artifacts',
+              label: 'Services and Artifacts',
+            },
+            {
+              type: 'doc',
+              id: 'explanations/configuration-and-exposition',
+              label: 'Configuration and Exposition',
+            },
+          ],
         },
         {
-          type: 'doc',
-          id: 'explanations/configuration-and-exposition',
-          label: 'Configuration and Exposition',
-        },
-        {
-          type: 'doc',
-          id: 'explanations/gateway-groups-and-gateways',
-          label: 'Gateway Groups and Gateways',
-        },
-        {
-          type: 'doc',
-          id: 'explanations/security-model',
-          label: 'Security Model',
+          type: 'category',
+          label: 'Architecture and trust',
+          items: [
+            {
+              type: 'doc',
+              id: 'explanations/gateway-groups-and-gateways',
+              label: 'Gateway Groups and Gateways',
+            },
+            {
+              type: 'doc',
+              id: 'explanations/security-model',
+              label: 'Security Model',
+            },
+          ],
         },
       ],
     },
@@ -121,32 +146,59 @@ const sidebars = {
         {
           type: 'doc',
           id: 'references/features',
-          label: 'Features Overview',
+          label: 'Features',
         },
         {
-          type: 'doc',
-          id: 'references/cli-commands',
-          label: 'CLI Commands',
+          type: 'category',
+          label: 'Interface references',
+          items: [
+            {
+              type: 'doc',
+              id: 'references/interfaces',
+              label: 'Product Interfaces',
+            },
+            {
+              type: 'doc',
+              id: 'references/cli-commands',
+              label: 'CLI Commands',
+            },
+            {
+              type: 'doc',
+              id: 'references/kubernetes-apis',
+              label: 'Kubernetes APIs and Controllers',
+            },
+            {
+              type: 'doc',
+              id: 'references/helm-charts',
+              label: 'Helm Charts',
+            },
+          ],
         },
         {
-          type: 'doc',
-          id: 'references/prompts-specification',
-          label: 'Prompts Specification',
-        },
-        {
-          type: 'doc',
-          id: 'references/custom-tools-specification',
-          label: 'Custom Tools Specification',
-        },
-        {
-          type: 'doc',
-          id: 'references/spec-outtools-filtering',
-          label: 'Tools Output Filtering',
-        },
-        {
-          type: 'doc',
-          id: 'references/resources-specification',
-          label: 'Resources Specification',
+          type: 'category',
+          label: 'Artifact specifications',
+          items: [
+            {
+              type: 'doc',
+              id: 'references/prompts-specification',
+              label: 'Prompts',
+            },
+            {
+              type: 'doc',
+              id: 'references/custom-tools-specification',
+              label: 'Custom Tools',
+            },
+            {
+              type: 'doc',
+              id: 'references/spec-outtools-filtering',
+              label: 'Tools Output Filtering',
+            },
+            {
+              type: 'doc',
+              id: 'references/resources-specification',
+              label: 'Resources',
+            },
+          ],
         },
       ],
     },

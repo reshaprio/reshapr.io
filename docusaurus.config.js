@@ -115,6 +115,17 @@ const config = {
 
   plugins: [
     [
+      '@docusaurus/plugin-client-redirects',
+      {
+        redirects: [
+          {
+            from: '/docs/how-to-guides/kubernetes',
+            to: '/docs/references/helm-charts',
+          },
+        ],
+      },
+    ],
+    [
       'docusaurus-plugin-llms',
       {
         generateLLMsTxt: true,
@@ -181,7 +192,7 @@ const config = {
             position: 'left'
           },
           {
-            to: '/docs/overview/why-reshapr',
+            to: '/docs/',
             position: 'left',
             label: 'Docs',
           },
@@ -228,7 +239,7 @@ const config = {
             items: [
               {
                 label: 'reShapr Docs',
-                to: '/docs/overview/why-reshapr',
+                to: '/docs/',
               },
             ],
           },

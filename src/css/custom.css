@@ -1252,6 +1252,24 @@ img.navbar__logo.navbar__logo-compact {
   margin-top: var(--reshapr-sidebar-item-gap);
 }
 
+/* Nested groups use a smaller, quieter chevron than the primary Diataxis sections. */
+.theme-doc-sidebar-container
+  .theme-doc-sidebar-item-category-level-2
+  > .menu__list-item-collapsible
+  .menu__caret::before,
+.theme-doc-sidebar-container
+  .theme-doc-sidebar-item-category-level-2
+  > .menu__list-item-collapsible
+  .menu__link--sublist-caret::after {
+  min-width: 0.75rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 0.75rem 0.75rem;
+  opacity: 0.6;
+}
+
 .theme-doc-sidebar-container .theme-doc-sidebar-item-category-level-1 + .theme-doc-sidebar-item-category-level-1,
 .theme-doc-sidebar-container .theme-doc-sidebar-item-category-level-1 + .theme-doc-sidebar-item-link-level-1,
 .theme-doc-sidebar-container .theme-doc-sidebar-item-link-level-1 + .theme-doc-sidebar-item-category-level-1 {
@@ -1320,6 +1338,20 @@ img.navbar__logo.navbar__logo-compact {
     width: 0.65rem !important;
     height: 0.65rem !important;
     background-size: 0.65rem 0.65rem !important;
+  }
+
+  .theme-doc-sidebar-container
+    .theme-doc-sidebar-item-category-level-2
+    > .menu__list-item-collapsible
+    .menu__caret::before,
+  .theme-doc-sidebar-container
+    .theme-doc-sidebar-item-category-level-2
+    > .menu__list-item-collapsible
+    .menu__link--sublist-caret::after {
+    min-width: 1.25rem !important;
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+    background-size: 1.25rem 1.25rem !important;
   }
 
   /* Doc content column width is controlled by DocItem/Layout/styles.module.css

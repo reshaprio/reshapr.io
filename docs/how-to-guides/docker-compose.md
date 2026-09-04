@@ -131,5 +131,5 @@ docker compose -f install/docker-compose-all-in-one.yml down
 ## Next steps
 
 - **[Getting Started with CLI](../tutorials/getting-started.md)** — import services and expose MCP endpoints
-- **[Install on Kubernetes](./kubernetes.md)** — deploy reShapr using Helm charts
+- **[Helm Charts Overview](../references/helm-charts.md)** — choose a Kubernetes deployment topology
 - **[How it works](../overview/how-it-works.md)** — understand the reShapr architecture

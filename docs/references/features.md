@@ -1,4 +1,6 @@
+---
 description: Verified reShapr capabilities, availability, scope, and canonical references.
+---
 
 # reShapr features
 

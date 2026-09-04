@@ -9,80 +9,68 @@ import DocCardList from '@theme/DocCardList';
 
 # Welcome to reShapr docs
 
-reShapr turns your existing APIs into **secure MCP endpoints** without rebuilding backends. Use these pages to install the CLI, learn the model, and ship faster.
+Choose the path that matches where you want to run reShapr. Each path starts with an existing environment, states the result you can reach now, and points to the next useful task.
 
 <div className="docs-home-root">
 
-## Start here
+## Choose your path
 
 <DocCardList
   items={[
     {
       type: 'link',
-      label: 'Why reShapr?',
-      href: '/docs/overview/why-reshapr',
-      docId: 'overview/why-reshapr',
-      description:
-        'Motivation, pitfalls of DIY MCP servers, and how reShapr fits your stack.',
-    },
-    {
-      type: 'link',
-      label: 'Getting Started with CLI',
-      href: '/docs/tutorials/getting-started',
-      docId: 'tutorials/getting-started',
-      description:
-        'Install reshapr-cli, verify the tool, and run your first flows.',
-    },
-    {
-      type: 'link',
-      label: 'How It Works',
-      href: '/docs/overview/how-it-works',
-      docId: 'overview/how-it-works',
-      description:
-        'Architecture overview — gateways, artifacts, and how translation fits together.',
-    },
-    {
-      type: 'link',
-      label: 'Try reShapr online',
+      label: 'Try online',
       href: '/docs/tutorials/try-reshapr-online',
       docId: 'tutorials/try-reshapr-online',
       description:
-        'Explore the product in the browser before you deploy locally.',
+        'Start in the hosted environment. Result: an authenticated dashboard and CLI. Next: create and call your first MCP endpoint.',
+    },
+    {
+      type: 'link',
+      label: 'Develop locally',
+      href: '/docs/how-to-guides/docker-compose',
+      docId: 'how-to-guides/docker-compose',
+      description:
+        'Start reShapr with Docker or Podman. Result: a local control plane and Gateway. Next: create an endpoint with the CLI.',
+    },
+    {
+      type: 'link',
+      label: 'Deploy and operate on Kubernetes',
+      href: '/docs/references/helm-charts',
+      docId: 'references/helm-charts',
+      description:
+        'Choose among four Helm charts. Result: a topology matched to your cluster. Next: select Kubernetes APIs or sidecar injection.',
     },
   ]}
 />
 
-## Explore
+## Design the right interface
 
 <DocCardList
   items={[
     {
       type: 'link',
-      label: 'Demos',
-      href: '/docs/demos',
-      docId: 'demos',
-      description: 'Video walkthroughs and example scenarios.',
+      label: 'Control context',
+      href: '/docs/references/spec-outtools-filtering',
+      docId: 'references/spec-outtools-filtering',
+      description:
+        'Retain, patch, or convert tool outputs before they reach the model.',
     },
     {
       type: 'link',
-      label: 'Features overview',
-      href: '/docs/references/features',
-      docId: 'references/features',
-      description: 'Capability matrix and product features at a glance.',
-    },
-    {
-      type: 'link',
-      label: 'Security model',
+      label: 'Choose a security model',
       href: '/docs/explanations/security-model',
       docId: 'explanations/security-model',
-      description: 'How credentials, policies, and exposure are handled.',
+      description:
+        'Understand endpoint authentication, backend credentials, trust boundaries, and current limits.',
     },
     {
       type: 'link',
-      label: 'CLI commands',
-      href: '/docs/references/cli-commands',
-      docId: 'references/cli-commands',
-      description: 'Reference for reshapr CLI commands and options.',
+      label: 'Find a product interface',
+      href: '/docs/references/interfaces',
+      docId: 'references/interfaces',
+      description:
+        'Open the canonical API, CLI, Kubernetes, or Helm contract without relying on copied details.',
     },
   ]}
 />

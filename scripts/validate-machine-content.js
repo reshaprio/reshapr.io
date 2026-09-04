@@ -94,6 +94,9 @@ for (const htmlPath of walkFiles(BUILD_DIR, 'index.html')) {
   if (!isContentRoute) continue;
 
   const html = fs.readFileSync(htmlPath, 'utf8');
+  const isRedirect = /<meta\s+http-equiv="refresh"\s+content="0;\s*url=/i.test(html);
+  if (isRedirect) continue;
+
   const toggle = html.match(/<a href="([^"]+)" class="agent-view-toggle"/);
   if (!toggle) {
     errors.push(`Missing Agent View toggle on ${route}`);
