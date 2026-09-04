@@ -10,6 +10,7 @@ const {
   routeMarkdownOutputPath,
   sitemapLocations,
   sourceOutputPath,
+  verificationDirective,
   walkMarkdown,
 } = require('./machine-content');
 
@@ -75,11 +76,23 @@ const generatedSources = [
 const expectedGenerated = generatedSources.map(source => ({
   source: path.relative(ROOT, source.sourcePath),
   output: sourceOutputPath(source.sourcePath, source.frontMatter),
+  verification: verificationDirective(source.frontMatter.verification),
 }));
 
 for (const item of expectedGenerated) {
   if (!outputExists(item.output)) {
     errors.push(`No generated Markdown for ${item.source}: /${item.output}`);
+    continue;
+  }
+
+  if (item.verification) {
+    const generatedMarkdown = fs.readFileSync(path.join(BUILD_DIR, item.output), 'utf8');
+    const occurrences = generatedMarkdown.split(item.verification).length - 1;
+    if (occurrences !== 1) {
+      errors.push(
+        `Expected one verification marker in /${item.output}, found ${occurrences}.`,
+      );
+    }
   }
 }
 

@@ -1,10 +1,12 @@
 ---
 description: Attach Prompts, Resources, Custom Tools, and output filters to a Service, then expose different Artifact selections through separate Plans.
+verification:
+  product: reShapr
+  version: 0.2.3
+  date: 2026-09-04
 ---
 
 # Attach and Select reShapr Artifacts
-
-**Last verified with reShapr 0.2.3 on September 4, 2026.**
 
 Attach reusable agent-oriented capabilities to one Service, then use `includedArtifacts` to decide which capabilities each Configuration Plan exposes.
 

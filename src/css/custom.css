@@ -1846,7 +1846,8 @@ html.docs-doc-page .theme-doc-markdown.markdown h4 {
   margin-bottom: var(--reshapr-space-2);
 }
 
-html.docs-doc-page .theme-doc-markdown.markdown h1 + p {
+html.docs-doc-page .theme-doc-markdown.markdown h1 + p,
+html.docs-doc-page .theme-doc-markdown.markdown h1 + .docs-verification-meta + p {
   font-size: 1.1rem;
   line-height: var(--reshapr-doc-body-line-height);
   color: color-mix(in srgb, var(--ifm-font-color-base) 82%, var(--ifm-font-color-secondary));

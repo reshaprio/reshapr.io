@@ -51,7 +51,15 @@ Prefer relative links between pages in this repository. Preserve published URLs 
 
 The current documentation baseline is reShapr `0.2.3`. Tutorials and how-to guides that contain commands must:
 
-- state `Last verified with reShapr 0.2.3 on <date>` near the top;
+- declare the verification target in frontmatter so the theme can render it below the page title:
+
+	```yaml
+	verification:
+		product: reShapr
+		version: 0.2.3
+		date: YYYY-MM-DD
+	```
+
 - use commands, options, images, outputs, and release links compatible with `0.2.3`;
 - label generated identifiers, timestamps, hostnames, and other changing output as examples;
 - include an observable success check;

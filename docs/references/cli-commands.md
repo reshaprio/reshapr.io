@@ -1,10 +1,12 @@
 ---
 description: Full reference for reShapr CLI commands — login, import, attach, config, expo, secrets, gateway management, and more.
+verification:
+  product: reShapr CLI
+  version: 0.2.3
+  date: 2026-09-03
 ---
 
 # reShapr CLI Reference
-
-**Last verified with reShapr CLI 0.2.3 on September 3, 2026.**
 
 ## Authentication commands
 

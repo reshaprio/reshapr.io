@@ -1,10 +1,12 @@
 ---
 description: Validate a reShapr MCP endpoint by negotiating a protocol mode, listing Tools, calling one Tool, and interpreting common errors.
+verification:
+  product: reShapr
+  version: 0.2.3
+  date: 2026-09-04
 ---
 
 # Test an MCP Endpoint with an MCP Client
-
-**Last verified with reShapr 0.2.3 on September 4, 2026.**
 
 Use these requests to validate an MCP endpoint before connecting it to an agent. The examples use `curl` so that the HTTP exchange remains visible.
 

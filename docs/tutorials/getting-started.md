@@ -1,12 +1,14 @@
 ---
 description: Turn a versioned Open-Meteo contract into a reShapr MCP endpoint, then discover, list, and call its generated Tool.
+verification:
+  product: reShapr
+  version: 0.2.3
+  date: 2026-09-04
 ---
 
 # Your First MCP Endpoint, End to End
 
 Import an OpenAPI contract, create a Configuration Plan and Exposition, then call a generated Tool and observe live weather data returned through reShapr.
-
-**Last verified with reShapr 0.2.3 on September 4, 2026.**
 
 ## Prerequisites
 

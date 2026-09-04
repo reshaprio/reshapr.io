@@ -51,6 +51,27 @@ function readSource(sourcePath) {
   return {sourcePath, frontMatter: parsed.data};
 }
 
+function verificationDirective(verification) {
+  if (verification == null) return null;
+
+  const {product, version, date} = verification;
+  if (!product || !version || !date) {
+    throw new Error('Verification frontmatter requires product, version, and date.');
+  }
+
+  const parsedDate = date instanceof Date ? date : new Date(`${date}T00:00:00Z`);
+  if (Number.isNaN(parsedDate.getTime())) {
+    throw new Error(`Invalid verification date: ${date}`);
+  }
+
+  const formattedDate = new Intl.DateTimeFormat('en-US', {
+    dateStyle: 'long',
+    timeZone: 'UTC',
+  }).format(parsedDate);
+
+  return `> Verified with ${product} \`${version}\` on ${formattedDate}.`;
+}
+
 function sourceOutputPath(sourcePath, frontMatter = {}) {
   let relativePath = path.relative(ROOT, sourcePath)
     .split(path.sep)
@@ -86,5 +107,6 @@ module.exports = {
   routeMarkdownOutputPath,
   sitemapLocations,
   sourceOutputPath,
+  verificationDirective,
   walkMarkdown,
 };

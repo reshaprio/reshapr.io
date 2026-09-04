@@ -1,8 +1,13 @@
+---
+verification:
+  product: reShapr
+  version: 0.2.3
+  date: 2026-09-03
+---
+
 # Docker Compose
 
 Learn how to run reShapr locally using Docker Compose for development and testing purposes.
-
-**Last verified with reShapr 0.2.3 on September 3, 2026.**
 
 ## Prerequisites
 

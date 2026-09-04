@@ -1,10 +1,12 @@
 ---
 description: Verified reShapr capabilities, availability, scope, and canonical references.
+verification:
+  product: reShapr
+  version: 0.2.3
+  date: 2026-09-03
 ---
 
 # reShapr features
-
-**Last verified with reShapr 0.2.3 on September 3, 2026.**
 
 `Available with limits` means that the capability requires configuration or has a narrower scope than its general name might suggest. Links point to the owning reference when implementation details change frequently.
 

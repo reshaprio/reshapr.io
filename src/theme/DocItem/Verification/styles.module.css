@@ -1,0 +1,28 @@
+.meta {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.65rem;
+  margin: 0 0 var(--reshapr-space-5);
+  padding: 0.4rem 0.65rem;
+  border: 1px solid var(--reshapr-doc-divider);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--ifm-color-primary) 4%, var(--ifm-background-color));
+  color: var(--ifm-font-color-secondary);
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
+.meta strong {
+  color: var(--ifm-font-color-base);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.meta time {
+  padding-left: 0.65rem;
+  border-left: 1px solid var(--reshapr-doc-divider);
+}

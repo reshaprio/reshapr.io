@@ -1,8 +1,13 @@
+---
+verification:
+  product: reShapr
+  version: 0.2.3
+  date: 2026-09-04
+---
+
 # Try reShapr online
 
 The fastest way to experience reShapr is through our hosted online environment: no installation required 🙌
-
-**Last verified with reShapr 0.2.3 on September 4, 2026.**
 
 Head over to **[try.reshapr.io](https://try.reshapr.io/)** to get started instantly.
 

@@ -12,6 +12,7 @@ import DocItemContent from '@theme/DocItem/Content';
 import DocBreadcrumbs from '@theme/DocBreadcrumbs';
 import ContentVisibility from '@theme/ContentVisibility';
 import PageMotionRoot, {LoadReveal} from '@site/src/components/PageMotion';
+import {DocVerificationProvider} from '@site/src/theme/DocItem/Verification';
 
 import styles from './styles.module.css';
 
@@ -38,28 +39,30 @@ function useDocTOC() {
 
 export default function DocItemLayout({children}) {
   const docTOC = useDocTOC();
-  const {metadata} = useDoc();
+  const {frontMatter, metadata} = useDoc();
   return (
-    <PageMotionRoot>
-      <div className="row">
-        <div className={clsx('col', !docTOC.hidden && styles.docItemCol)}>
-          <ContentVisibility metadata={metadata} />
-          <DocVersionBanner />
-          <div className={styles.docItemContainer}>
-            <article>
-              <DocBreadcrumbs />
-              <DocVersionBadge />
-              {docTOC.mobile}
-              <DocItemContent>
-                <LoadReveal>{children}</LoadReveal>
-              </DocItemContent>
-              <DocItemFooter />
-            </article>
-            <DocItemPaginator />
+    <DocVerificationProvider value={frontMatter.verification}>
+      <PageMotionRoot>
+        <div className="row">
+          <div className={clsx('col', !docTOC.hidden && styles.docItemCol)}>
+            <ContentVisibility metadata={metadata} />
+            <DocVersionBanner />
+            <div className={styles.docItemContainer}>
+              <article>
+                <DocBreadcrumbs />
+                <DocVersionBadge />
+                {docTOC.mobile}
+                <DocItemContent>
+                  <LoadReveal>{children}</LoadReveal>
+                </DocItemContent>
+                <DocItemFooter />
+              </article>
+              <DocItemPaginator />
+            </div>
           </div>
+          {docTOC.desktop && <div className="col col--3">{docTOC.desktop}</div>}
         </div>
-        {docTOC.desktop && <div className="col col--3">{docTOC.desktop}</div>}
-      </div>
-    </PageMotionRoot>
+      </PageMotionRoot>
+    </DocVerificationProvider>
   );
 }

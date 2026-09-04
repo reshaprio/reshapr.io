@@ -1,10 +1,12 @@
 ---
 description: Turn the Open-Meteo endpoint into one agent-oriented action, filter its result, and measure the change using two Configuration Plans.
+verification:
+  product: reShapr
+  version: 0.2.3
+  date: 2026-09-04
 ---
 
 # Context Control in Practice
-
-> **Last verified with reShapr 0.2.3 on September 4, 2026.**
 
 Start from the Open-Meteo Service created in the first endpoint tutorial. You will attach a declarative Custom Tool and an output filter, expose two Plans, and compare the same live weather call before and after filtering.
 

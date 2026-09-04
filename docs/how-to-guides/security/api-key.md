@@ -1,10 +1,12 @@
 ---
 description: Protect a reShapr MCP endpoint with an API key, verify access, and rotate the key without restarting the Gateway.
+verification:
+  product: reShapr
+  version: 0.2.3
+  date: 2026-09-04
 ---
 
 # Protect an MCP Endpoint with an API Key
-
-**Last verified with reShapr 0.2.3 on September 4, 2026.**
 
 An API key restricts the client-to-Gateway boundary of an MCP endpoint. reShapr stores the key on the Configuration Plan and applies it to every Exposition created from that plan.
 
