@@ -99,4 +99,4 @@ The tracked [Gateway runtime](https://github.com/reshaprio/reshapr/blob/0.2.3/pr
 
 ## Next step
 
-Use **[Deployment Models and Trust Boundaries](./deployment-models-trust-boundaries.md)** to place this synchronization channel in its wider network context. Then use **[Deploy a Hybrid Gateway](../how-to-guides/deploy-hybrid-gateway.md)** to register and verify a Gateway with a published runtime image.
+Use **[Deployment Models and Trust Boundaries](./deployment-models-trust-boundaries.md)** to place this synchronization channel in its wider network context. Then use **[Deploy a Hybrid Gateway](../how-to-guides/deploy-hybrid-gateway.md)** to register a Gateway, or **[Troubleshoot an Exposition or Gateway](../how-to-guides/operations/troubleshoot.md)** to diagnose registration and propagation failures.

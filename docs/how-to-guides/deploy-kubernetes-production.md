@@ -362,4 +362,6 @@ The four chart releases are installed from `0.0.11`, the runtime workloads use `
 
 ## Next step
 
-Use **[Manage reShapr Resources with GitOps](./manage-resources-with-gitops.md)** to operate endpoint desired state and cleanup. Use the release-tagged [chart READMEs and values](https://github.com/reshaprio/reshapr-helm-charts/tree/0.0.11) when adapting this bounded topology.
+Use **[Observe the reShapr Gateway](./operations/observe-and-audit.md)** to connect the Gateway to your telemetry pipeline. Use **[Upgrade reShapr and Rotate Runtime Secrets](./operations/upgrade-and-rotate.md)** to prepare the next maintenance window, or **[Manage reShapr Resources with GitOps](./manage-resources-with-gitops.md)** to operate endpoint desired state and cleanup.
+
+Use the release-tagged [chart READMEs and values](https://github.com/reshaprio/reshapr-helm-charts/tree/0.0.11) when adapting this bounded topology.

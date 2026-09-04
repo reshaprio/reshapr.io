@@ -113,6 +113,11 @@ const sidebars = {
               id: 'how-to-guides/test-mcp-endpoint',
               label: 'Test an MCP endpoint',
             },
+            {
+              type: 'doc',
+              id: 'how-to-guides/audit-mcp-endpoint',
+              label: 'Audit MCP endpoint calls',
+            },
           ],
         },
         {
@@ -144,6 +149,27 @@ const sidebars = {
               type: 'doc',
               id: 'how-to-guides/docker-compose',
               label: 'Run with Docker Compose',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Operations',
+          items: [
+            {
+              type: 'doc',
+              id: 'how-to-guides/operations/observe-and-audit',
+              label: 'Observe the reShapr Gateway',
+            },
+            {
+              type: 'doc',
+              id: 'how-to-guides/operations/troubleshoot',
+              label: 'Troubleshoot an Exposition or Gateway',
+            },
+            {
+              type: 'doc',
+              id: 'how-to-guides/operations/upgrade-and-rotate',
+              label: 'Upgrade and rotate runtime secrets',
             },
           ],
         },
