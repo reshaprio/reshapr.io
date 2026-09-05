@@ -43,6 +43,8 @@ For non-interactive environments (CI/CD), you can pipe the password from stdin:
 echo "$RESHAPR_PASSWORD" | reshapr login -u admin --password-stdin --server http://localhost:5555
 ```
 
+Use **[Automate reShapr with the CLI in CI/CD](../how-to-guides/automate-with-cli-in-cicd.md)** for a complete structured-output workflow with explicit postconditions and controlled deletion.
+
 ### `reshapr logout` command
 
 The logout command clears your local authentication session.
@@ -852,10 +854,12 @@ reshapr quotas
 
 ```bash
 ORG       METRIC                   ENABLED  LIMIT  REMAINING
-my-org    services                 Y        5      3
-my-org    expositions              Y        10     8
-my-org    gateway-groups           Y        3      2
+my-org    exposition.count         Y        10     8
+my-org    gateway-group.count      Y        3      2
+my-org    gateway.count            Y        3      2
 ```
+
+Use **[Assign and Monitor Organization Quotas](../how-to-guides/administration/organization-quotas.md)** for the administrative Web UI, CLI, and API workflows.
 
 ## Local execution commands
 
@@ -939,7 +943,7 @@ The `reshapr admin` command manages control-plane users, organizations, quotas, 
 reshapr admin [--admin-api-key <key>] [--server <url>] <command>
 ```
 
-Prefer the `RESHAPR_ADMIN_API_KEY` environment variable to placing the key in shell history. See the **[Admin CLI guide](https://github.com/reshaprio/reshapr/blob/main/cli/ADMIN_CLI.md)** for the current subcommands and examples, or run `reshapr admin --help`.
+Prefer the `RESHAPR_ADMIN_API_KEY` environment variable to placing the key in shell history. See **[Manage Organizations, Owners, and Memberships](../how-to-guides/administration/organizations-and-memberships.md)** and **[Assign and Monitor Organization Quotas](../how-to-guides/administration/organization-quotas.md)** for applied workflows, the **[Admin CLI guide](https://github.com/reshaprio/reshapr/blob/main/cli/ADMIN_CLI.md)** for the current subcommands and examples, or run `reshapr admin --help`.
 
 ## Structured output
 

@@ -19,7 +19,7 @@ The [`reshapr`](https://github.com/reshaprio/reshapr) repository owns the contro
 | Interface | Purpose | Current contract |
 |---|---|---|
 | Public API | Manage Services, artifacts, Configuration Plans, Expositions, Secrets, Gateway Groups, and API tokens | [Public OpenAPI](https://github.com/reshaprio/reshapr/blob/main/reshapr-public-openapi-v0.1.yaml) |
-| Administration API | Manage users, organizations, memberships, quotas, and service accounts | [Admin OpenAPI](https://github.com/reshaprio/reshapr/blob/main/reshapr-admin-ctrl-openapi-v0.1.yaml) |
+| Administration API | Manage users, organizations, memberships, quotas, and service accounts | [Admin OpenAPI](https://github.com/reshaprio/reshapr/blob/main/reshapr-admin-ctrl-openapi-v0.1.yaml), [organization guide](../how-to-guides/administration/organizations-and-memberships.md), and [quota guide](../how-to-guides/administration/organization-quotas.md) |
 | Authentication API | Authenticate users and establish CLI or browser sessions | [Authentication OpenAPI](https://github.com/reshaprio/reshapr/blob/main/reshapr-authentication-openapi-v0.1.yaml) |
 
 ## Command-line interfaces
@@ -27,6 +27,8 @@ The [`reshapr`](https://github.com/reshaprio/reshapr) repository owns the contro
 - **[CLI reference](./cli-commands.md)** provides the user-facing command index and bounded examples on this site.
 - **[CLI source](https://github.com/reshaprio/reshapr/tree/main/cli)** is the current owner for registered commands and embedded help.
 - **[Admin CLI guide](https://github.com/reshaprio/reshapr/blob/main/cli/ADMIN_CLI.md)** owns exhaustive administration workflows.
+- **[Organization and membership guide](../how-to-guides/administration/organizations-and-memberships.md)** covers organization creation, ownership, and user access.
+- **[Organization quota guide](../how-to-guides/administration/organization-quotas.md)** applies the Web UI, CLI, and administration API to one bounded governance task.
 
 Use `reshapr --help` or `reshapr <command> --help` for the command set installed on your machine.
 

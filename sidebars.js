@@ -154,6 +154,33 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'Automation',
+          items: [
+            {
+              type: 'doc',
+              id: 'how-to-guides/automate-with-cli-in-cicd',
+              label: 'Automate with the CLI in CI/CD',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Administration',
+          items: [
+            {
+              type: 'doc',
+              id: 'how-to-guides/administration/organizations-and-memberships',
+              label: 'Manage organizations and memberships',
+            },
+            {
+              type: 'doc',
+              id: 'how-to-guides/administration/organization-quotas',
+              label: 'Assign organization quotas',
+            },
+          ],
+        },
+        {
+          type: 'category',
           label: 'Operations',
           items: [
             {
@@ -242,6 +269,11 @@ const sidebars = {
               type: 'doc',
               id: 'explanations/deployment-models-trust-boundaries',
               label: 'Deployment Models and Trust Boundaries',
+            },
+            {
+              type: 'doc',
+              id: 'explanations/multi-tenancy-administrative-governance',
+              label: 'Multi-tenancy and Administrative Governance',
             },
             {
               type: 'doc',

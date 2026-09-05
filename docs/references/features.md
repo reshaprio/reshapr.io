@@ -48,16 +48,16 @@ Methods such as roots, sampling, and subscriptions are not exposed as server cap
 | Backend authentication | Available with limits | Basic, token/header, certificate, and OAuth credentials depend on the backend protocol and Secret configuration. | [Backend authentication and elicitation](../how-to-guides/security/backend-auth-and-elicitation.md) |
 | Local secret references | Available with limits | Hybrid Gateways resolve `${env:VARIABLE}` references locally on each backend call. `env` is the provided resolver. | [Backend authentication and elicitation](../how-to-guides/security/backend-auth-and-elicitation.md#create-a-locally-resolved-secret) |
 | Audit events | Available with limits | A Gateway emits structured MCP-call and authentication-failure events when audit is enabled on the Configuration Plan. | [Audit MCP endpoint calls](../how-to-guides/audit-mcp-endpoint.md) |
-| Multi-tenancy | Available | Control-plane data is isolated by organization through application-level discriminator tenancy. | [Project architecture](https://github.com/reshaprio/reshapr/blob/main/AGENTS.md) |
-| Organization quotas | Available with limits | Quotas limit governance resources such as Expositions and Gateways. They are not request-rate limits. | [Public API](https://github.com/reshaprio/reshapr/blob/main/reshapr-public-openapi-v0.1.yaml) |
-| Administrative identities | Available | Users, organizations, memberships, service accounts, and Gateway API tokens are managed through dedicated control-plane surfaces. | [Admin API](https://github.com/reshaprio/reshapr/blob/main/reshapr-admin-ctrl-openapi-v0.1.yaml) |
+| Multi-tenancy | Available | Control-plane data is isolated by organization through application-level discriminator tenancy. | [Multi-tenancy and Administrative Governance](../explanations/multi-tenancy-administrative-governance.md) |
+| Organization quotas | Available with limits | Quotas limit governance resources such as Expositions and Gateways. They are not request-rate limits. | [Assign and monitor quotas](../how-to-guides/administration/organization-quotas.md) and [governance model](../explanations/multi-tenancy-administrative-governance.md#quotas-govern-resource-counts) |
+| Administrative identities | Available | Users, organizations, memberships, service accounts, and Gateway API tokens are managed through dedicated control-plane surfaces. | [Manage organizations and memberships](../how-to-guides/administration/organizations-and-memberships.md) and [governance model](../explanations/multi-tenancy-administrative-governance.md#keep-identity-types-separate) |
 
 ## Product interfaces
 
 | Capability | Availability | Scope | Reference |
 |---|---|---|---|
 | Public and administrative APIs | Available | OpenAPI contracts cover product resources, authentication, and administration. | [reShapr API contracts](https://github.com/reshaprio/reshapr) |
-| CLI | Available | The CLI covers login, import, Services, artifacts, Secrets, Plans, Expositions, Gateway Groups, tokens, quotas, and administrative workflows. | [CLI](https://github.com/reshaprio/reshapr/tree/main/cli) |
+| CLI | Available | The CLI covers login, import, Services, artifacts, Secrets, Plans, Expositions, Gateway Groups, tokens, quotas, and administrative workflows. | [CLI reference](cli-commands.md) and [CI/CD automation](../how-to-guides/automate-with-cli-in-cicd.md) |
 | Web UI | Available | The Web UI covers the main import-to-Exposition workflow and organization administration. | [Web UI](https://github.com/reshaprio/reshapr/tree/main/web-ui) |
 | Live configuration propagation | Available | Configuration events are streamed to connected Gateways without requiring a Gateway restart. This is not a general zero-downtime or rollback guarantee. | [Control Plane to Gateway Synchronization](../explanations/control-plane-gateway-synchronization.md) |
 | Gateway observability | Available with limits | The Gateway can export OpenTelemetry traces, metrics, and logs; audit events remain conditional. Equivalent coverage is not provided across every component. | [Observe the reShapr Gateway](../how-to-guides/operations/observe-and-audit.md) |

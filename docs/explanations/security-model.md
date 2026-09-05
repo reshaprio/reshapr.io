@@ -112,6 +112,7 @@ When audit is enabled on a Configuration Plan, the Gateway emits structured even
 - **[Audit MCP Endpoint Calls](../how-to-guides/audit-mcp-endpoint.md)** to enable audit on a Configuration Plan and inspect its event attributes.
 - **[Observe the reShapr Gateway](../how-to-guides/operations/observe-and-audit.md)** to export telemetry and route audit logs to a dedicated sink.
 - **[Upgrade reShapr and Rotate Runtime Secrets](../how-to-guides/operations/upgrade-and-rotate.md)** to renew API keys, Gateway tokens, and local backend credentials.
+- **[Multi-tenancy and Administrative Governance](./multi-tenancy-administrative-governance.md)** to distinguish users, service accounts, administrative credentials, Gateway tokens, and organization boundaries.
 - **[Deployment Models and Trust Boundaries](./deployment-models-trust-boundaries.md)** to place these controls in their network context.
 - **[Control Plane to Gateway Synchronization](./control-plane-gateway-synchronization.md)** for configuration propagation and recovery behavior.
 
