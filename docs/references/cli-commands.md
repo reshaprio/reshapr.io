@@ -89,6 +89,8 @@ reshapr switch-org <target-org>
 
 The import command allows you to push (or have reShapr pull) a new artifact into reShapr. This will allow it to discover a new Service as explained in **[Services & Artifacts](../explanations/services-and-artifacts.md)**.
 
+For a task-oriented comparison of supported formats, local files, remote URLs, and dependency resolution, see **[Import OpenAPI, GraphQL, or Protobuf Artifacts](../how-to-guides/import-api-artifacts.md)**.
+
 First, you have to tell reShapr how to proceed with retrieving this artifact. You can use:
 
 - `-f, --file <path>` to reference a local file you want to upload,

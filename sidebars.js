@@ -60,6 +60,11 @@ const sidebars = {
               id: 'tutorials/getting-started',
               label: 'Your first MCP endpoint',
             },
+            {
+              type: 'doc',
+              id: 'tutorials/web-ui-quickstart',
+              label: 'Quickstart with the Web UI',
+            },
           ],
         },
         {
@@ -97,6 +102,11 @@ const sidebars = {
           type: 'category',
           label: 'Create and optimize',
           items: [
+            {
+              type: 'doc',
+              id: 'how-to-guides/import-api-artifacts',
+              label: 'Import API Artifacts',
+            },
             {
               type: 'doc',
               id: 'how-to-guides/select-reshapr-artifacts',

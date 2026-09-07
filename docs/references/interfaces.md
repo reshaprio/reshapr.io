@@ -25,6 +25,7 @@ The [`reshapr`](https://github.com/reshaprio/reshapr) repository owns the contro
 ## Command-line interfaces
 
 - **[CLI reference](./cli-commands.md)** provides the user-facing command index and bounded examples on this site.
+- **[Artifact import guide](../how-to-guides/import-api-artifacts.md)** applies the Web UI and CLI to OpenAPI, GraphQL, and Protobuf sources.
 - **[CLI source](https://github.com/reshaprio/reshapr/tree/main/cli)** is the current owner for registered commands and embedded help.
 - **[Admin CLI guide](https://github.com/reshaprio/reshapr/blob/main/cli/ADMIN_CLI.md)** owns exhaustive administration workflows.
 - **[Organization and membership guide](../how-to-guides/administration/organizations-and-memberships.md)** covers organization creation, ownership, and user access.

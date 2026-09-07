@@ -79,6 +79,7 @@ The last case needs particular care. If removing an Artifact leaves a Plan with 
 
 ## Apply the model
 
+- **[Import OpenAPI, GraphQL, or Protobuf Artifacts](../how-to-guides/import-api-artifacts.md)** covers format recognition, Service identity, source selection, and dependency failures.
 - **[Attach and Select reShapr Artifacts](../how-to-guides/select-reshapr-artifacts.md)** shows how to inspect capabilities and create two Plan-specific selections.
 - **[Context Control](./context-control.md)** compares operation selection, Artifact selection, Custom Tools, and output transformations.
 - **[CLI Commands](../references/cli-commands.md)** documents Artifact inspection commands and options.
