@@ -22,7 +22,12 @@ jobs:
           ref: 0.2.3
           path: owner/reshapr
 
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+
       - name: Verify MCP support matrix
         env:
           RESHAPR_SOURCE_DIR: ${{ github.workspace }}/owner/reshapr
-        run: node --test ./tests/mcp-support.test.mjs
+        run: npm run test:mcp-support
