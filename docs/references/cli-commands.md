@@ -722,7 +722,7 @@ reshapr expo delete <id>
 
 ### `reshapr gateway-group list` command
 
-Lists all gateway groups in your organization.
+Lists all Gateway Groups in your organization.
 
 ```bash
 reshapr gateway-group list [options]
@@ -744,7 +744,7 @@ ID             ORG       NAME       LABELS
 
 ### `reshapr gateway-group create` command
 
-Creates a new gateway group with an optional set of labels for gateway matching.
+Creates a new Gateway Group with an optional set of labels for Gateway matching.
 
 ```bash
 reshapr gateway-group create <name> [options]
@@ -752,7 +752,7 @@ reshapr gateway-group create <name> [options]
 
 Available options:
 
-- `-l, --labels <labels>` : JSON map of key-value labels for the gateway group
+- `-l, --labels <labels>` : JSON map of key-value labels for the Gateway Group
 - `-o, --output <format>` : Output format (`json`, `yaml`)
 
 ```bash
@@ -765,7 +765,7 @@ reshapr gateway-group create production -l '{"env":"production","region":"eu-wes
 
 ### `reshapr gateway-group delete` command
 
-Deletes a gateway group by its ID.
+Deletes a Gateway Group by its ID.
 
 ```bash
 reshapr gateway-group delete <id>

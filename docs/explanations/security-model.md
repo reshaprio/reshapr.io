@@ -8,9 +8,9 @@ import ThemedImage from '@theme/ThemedImage';
 
 reShapr separates three trust boundaries that require independent controls:
 
-1. **MCP client to Gateway:** the Gateway decides whether a client can access an Exposition.
-2. **Gateway to backend API:** after accepting the MCP request, the Gateway authenticates to the REST, GraphQL, or gRPC backend with the credentials configured for that Service.
-3. **Gateway to control plane:** the Gateway uses a dedicated API token to register, advertise health, and synchronize configuration.
+1. **MCP client to proxy:** the proxy decides whether a client can access an Exposition.
+2. **Proxy to backend API:** after accepting the MCP request, the proxy authenticates to the REST, GraphQL, or gRPC backend with the credentials configured for that Service.
+3. **Proxy to control plane:** the proxy uses a dedicated Gateway API token to register its logical Gateway, advertise health, and synchronize configuration.
 
 Protecting one boundary does not protect the others. For example, an API key can restrict access to the MCP endpoint while a separate Secret authorizes the resulting backend call. The Gateway API token authenticates synchronization, not MCP clients or backend requests.
 
@@ -26,28 +26,28 @@ Protecting one boundary does not protect the others. For example, an API key can
 
 | Boundary | Available control | What it establishes | Important limit |
 |---|---|---|---|
-| MCP client to Gateway | None | No authentication is performed by reShapr | Appropriate only when another trusted layer controls access or for a bounded test |
-| MCP client to Gateway | API key | Possession of the Configuration Plan key | No user identity or scopes; the policy covers the complete Exposition |
-| MCP client to Gateway | OAuth 2.0 bearer JWT | Signed token, accepted issuer, required claims, and configured scopes | Scopes cover the complete Exposition, not individual Tools, Prompts, or Resources |
-| Gateway to HTTP backend | Token or username/password Secret | Bearer or custom-header token, or HTTP Basic authentication | Independent from MCP endpoint authentication |
-| Gateway to gRPC backend | Token Secret | Authorization metadata or a configured metadata key | Username/password is not applied as gRPC Basic authentication |
-| Gateway to gRPC backend | CA certificate Secret | Trust material for the backend TLS channel | This is a custom trust anchor, not a client certificate identity |
-| Gateway to backend | Elicited credential | A credential associated with the requesting MCP session or authenticated user | Requires a compatible client flow and does not replace MCP endpoint authentication |
-| Gateway to control plane | Gateway API token | Gateway registration, discovery, and health authorization | Separate from an MCP API key and backend Secret |
+| MCP client to proxy | None | No authentication is performed by reShapr | Appropriate only when another trusted layer controls access or for a bounded test |
+| MCP client to proxy | API key | Possession of the Configuration Plan key | No user identity or scopes; the policy covers the complete Exposition |
+| MCP client to proxy | OAuth 2.0 bearer JWT | Signed token, accepted issuer, required claims, and configured scopes | Scopes cover the complete Exposition, not individual Tools, Prompts, or Resources |
+| Proxy to HTTP backend | Token or username/password Secret | Bearer or custom-header token, or HTTP Basic authentication | Independent from MCP endpoint authentication |
+| Proxy to gRPC backend | Token Secret | Authorization metadata or a configured metadata key | Username/password is not applied as gRPC Basic authentication |
+| Proxy to gRPC backend | CA certificate Secret | Trust material for the backend TLS channel | This is a custom trust anchor, not a client certificate identity |
+| Proxy to backend | Elicited credential | A credential associated with the requesting MCP session or authenticated user | Requires a compatible client flow and does not replace MCP endpoint authentication |
+| Proxy to control plane | Gateway API token | Gateway registration, discovery, and health authorization | Separate from an MCP API key and backend Secret |
 
 ## MCP endpoint controls
 
 A Configuration Plan selects one endpoint access mode:
 
-- **None:** the Gateway does not authenticate the MCP client. Use this only when access is controlled elsewhere or for a bounded test environment.
-- **API key:** the Gateway compares the `x-reshapr-key` request header with the key assigned to the Configuration Plan. A renewed key is propagated to connected Gateways.
-- **OAuth 2.0 bearer JWT:** the Gateway verifies RSA and RSA-PSS signatures with a configured JWKS, accepts configured issuers, checks the required `sub`, `iat`, and `exp` claims, and, when scopes are configured, requires them for the Exposition. This policy applies to the entire Exposition, not to individual Tools, Prompts, or Resources.
+- **None:** the proxy does not authenticate the MCP client. Use this only when access is controlled elsewhere or for a bounded test environment.
+- **API key:** the proxy compares the `x-reshapr-key` request header with the key assigned to the Configuration Plan. A renewed key is propagated to connected proxies.
+- **OAuth 2.0 bearer JWT:** the proxy verifies RSA and RSA-PSS signatures with a configured JWKS, accepts configured issuers, checks the required `sub`, `iat`, and `exp` claims, and, when scopes are configured, requires them for the Exposition. This policy applies to the entire Exposition, not to individual Tools, Prompts, or Resources.
 
-The Gateway publishes OAuth 2.0 Protected Resource Metadata as defined by [RFC 9728](https://datatracker.ietf.org/doc/html/rfc9728). A missing or invalid bearer token produces a `401` response; a mismatched optional `resource` or `serviceId` claim, or a missing required scope, produces `403`.
+The proxy publishes OAuth 2.0 Protected Resource Metadata as defined by [RFC 9728](https://datatracker.ietf.org/doc/html/rfc9728). A missing or invalid bearer token produces a `401` response; a mismatched optional `resource` or `serviceId` claim, or a missing required scope, produces `403`.
 
 Its OAuth configuration refers to Authorization Server URLs and a JWKS URI. reShapr does not host an Authorization Server Metadata endpoint defined by [RFC 8414](https://datatracker.ietf.org/doc/html/rfc8414). When a JWT contains a `resource` claim, the Gateway compares it with the called MCP endpoint. This check is related to [RFC 8707](https://www.rfc-editor.org/rfc/rfc8707.html), but does not implement the complete token-request flow defined by that RFC. The standard `aud` claim is not verified by this validation path.
 
-TLS for the client-to-Gateway connection is a deployment responsibility. For example, a Kubernetes Ingress can terminate TLS when configured with a certificate; TLS is not enabled merely by choosing API key or OAuth authentication.
+TLS for the client-to-proxy connection is a deployment responsibility. For example, a Kubernetes Ingress can terminate TLS when configured with a certificate; TLS is not enabled merely by choosing API key or OAuth authentication.
 
 ## Backend authentication {#gateway-access-to-backend-apis}
 
@@ -57,7 +57,7 @@ The Secret fields are not a promise that every combination applies to every back
 
 ### Secret references
 
-Backend Secrets can contain literal values stored by the control plane or references resolved locally by a Gateway. The `${env:VARIABLE}` scheme lets a hybrid Gateway retrieve a sensitive value from its own environment when preparing a backend call, so the control plane stores and propagates only the reference. A value can contain several placeholders, and literal text can surround them.
+Backend Secrets can contain literal values stored by the control plane or references resolved locally by a proxy. The `${env:VARIABLE}` scheme lets a hybrid proxy retrieve a sensitive value from its own environment when preparing a backend call, so the control plane stores and propagates only the reference. A value can contain several placeholders, and literal text can surround them.
 
 The current implementation provides only the `env` resolver. An unknown scheme or missing environment variable fails resolution rather than falling back to a literal credential. The release-tagged [public API contract](https://github.com/reshaprio/reshapr/blob/0.2.3/reshapr-public-openapi-v0.1.yaml) defines the Secret fields, while the [secret resolver](https://github.com/reshaprio/reshapr/blob/0.2.3/proxy/src/main/java/io/reshapr/proxy/secret/SecretReferenceResolver.java) defines `0.2.3` resolution behavior.
 
@@ -69,13 +69,13 @@ Sensitive credentials must not use MCP form mode because that would expose them 
 
 ### Collect a backend credential
 
-For a backend API key or token, the Gateway returns a URL for its own elicitation page. After the user consents to opening it, the browser sends the credential directly to the Gateway. The Gateway stores the value for the initiating session or authenticated user and applies it to subsequent backend calls. This follows the specification's [URL mode pattern for sensitive data](https://modelcontextprotocol.io/specification/2025-11-25/client/elicitation#url-mode-elicitation-for-sensitive-data).
+For a backend API key or token, the proxy returns a URL for its own elicitation page. After the user consents to opening it, the browser sends the credential directly to the proxy. The proxy stores the value for the initiating session or authenticated user and applies it to subsequent backend calls. This follows the specification's [URL mode pattern for sensitive data](https://modelcontextprotocol.io/specification/2025-11-25/client/elicitation#url-mode-elicitation-for-sensitive-data).
 
 The MCP client receives neither the submitted credential nor a form-mode response containing it. It only coordinates opening the URL and retrying or resuming the Tool call.
 
 ### Authorize access through OAuth 2.0
 
-When the Secret contains an OAuth client configuration, the elicitation URL starts an OAuth 2.0 authorization-code flow instead of displaying a credential form. The browser follows the Gateway redirect to the backend's Authorization Server, where the user authenticates and grants access. The Authorization Server returns the code to the Gateway callback, and the Gateway exchanges it for an access token and stores that token for backend calls.
+When the Secret contains an OAuth client configuration, the elicitation URL starts an OAuth 2.0 authorization-code flow instead of displaying a credential form. The browser follows the proxy redirect to the backend's Authorization Server, where the user authenticates and grants access. The Authorization Server returns the code to the proxy callback, and the proxy exchanges it for an access token and stores that token for backend calls.
 
 The authorization UI, authorization code, and resulting access token do not pass through the MCP client or LLM context. This is the [URL mode pattern for third-party OAuth authorization](https://modelcontextprotocol.io/specification/2025-11-25/client/elicitation#url-mode-elicitation-for-oauth-flows), not the OAuth flow that authenticates the MCP client to the Gateway. The two tokens protect different boundaries and are not interchangeable.
 
@@ -83,7 +83,7 @@ The authorization UI, authorization code, and resulting access token do not pass
 
 The storage boundary depends on the negotiated MCP version. Protocol versions before `2026-07-28` bind the elicited value to a replicated MCP session and return a `URL_ELICITATION_REQUIRED` error when input is needed. The public `2026-07-28` protocol follows the current [multi-round-trip elicitation model](https://modelcontextprotocol.io/specification/draft/client/elicitation): it returns an `input_required` result containing `elicitation/create` requests and binds the resulting value to the authenticated user's JWT issuer and subject. Stateless elicitation therefore requires a stable authenticated identity. **[MCP Compatibility](./mcp-compatibility.md)** compares both state models and their response dialects.
 
-In `0.2.3`, the Gateway associates the completed interaction with the initiating session or MCP identity and validates the opaque OAuth `state` value in stateless callbacks. Its elicitation web routes do not independently reauthenticate the browser user as that same identity. Treat the elicitation URL and identifier as sensitive, show the complete target domain before opening it, never share the URL, and use HTTPS outside local development.
+In `0.2.3`, the proxy associates the completed interaction with the initiating session or MCP identity and validates the opaque OAuth `state` value in stateless callbacks. Its elicitation web routes do not independently reauthenticate the browser user as that same identity. Treat the elicitation URL and identifier as sensitive, show the complete target domain before opening it, never share the URL, and use HTTPS outside local development.
 
 ## Storage, propagation, and audit
 
@@ -93,9 +93,9 @@ The control plane encrypts selected sensitive Configuration Plan and Secret fiel
 These limitations are meant to be removed towards the `1.0` release of Reshapr.
 :::
 
-Configuration updates, including API key renewal, are propagated to connected Gateways over the control-plane discovery stream. Applying a configuration change does not require a Gateway restart, but this is not an immediate-propagation guarantee.
+Configuration updates, including API key renewal, are propagated to connected proxies over the control-plane discovery stream. Applying a configuration change does not require a proxy restart, but this is not an immediate-propagation guarantee.
 
-When audit is enabled on a Configuration Plan, the Gateway emits structured events for MCP calls and authentication failures. OpenTelemetry export for Gateway traces, metrics, and logs must also be configured. This is made to be fully pluggable with the OpemTelemetry collector or solution of your choice. You'll have to built dashboards or equivalent telemetry coverage for the control plane, Web UI, operator, and admission controller using your solution of choice.
+When audit is enabled on a Configuration Plan, the proxy emits structured events for MCP calls and authentication failures. OpenTelemetry export for proxy traces, metrics, and logs must also be configured. This is fully pluggable with the OpenTelemetry Collector or solution of your choice. You must build dashboards or equivalent telemetry coverage for the control plane, Web UI, operator, and admission controller using your chosen solution.
 
 ## Canonical sources
 
@@ -110,9 +110,9 @@ When audit is enabled on a Configuration Plan, the Gateway emits structured even
 - **[Protect an MCP Endpoint with OAuth 2.0](../how-to-guides/security/oauth.md)** to configure issuers, JWKS, scopes, and rejection checks.
 - **[Authenticate Backend Calls and Use Elicitation](../how-to-guides/security/backend-auth-and-elicitation.md)** to apply stored, local, or user-provided backend credentials.
 - **[Audit MCP Endpoint Calls](../how-to-guides/audit-mcp-endpoint.md)** to enable audit on a Configuration Plan and inspect its event attributes.
-- **[Observe the reShapr Gateway](../how-to-guides/operations/observe-and-audit.md)** to export telemetry and route audit logs to a dedicated sink.
+- **[Observe the reShapr Proxy](../how-to-guides/operations/observe-and-audit.md)** to export telemetry and route audit logs to a dedicated sink.
 - **[Upgrade reShapr and Rotate Runtime Secrets](../how-to-guides/operations/upgrade-and-rotate.md)** to renew API keys, Gateway tokens, and local backend credentials.
 - **[Multi-tenancy and Administrative Governance](./multi-tenancy-administrative-governance.md)** to distinguish users, service accounts, administrative credentials, Gateway tokens, and organization boundaries.
 - **[Deployment Models and Trust Boundaries](./deployment-models-trust-boundaries.md)** to place these controls in their network context.
-- **[Control Plane to Gateway Synchronization](./control-plane-gateway-synchronization.md)** for configuration propagation and recovery behavior.
+- **[Control Plane to Proxy Synchronization](./control-plane-gateway-synchronization.md)** for configuration propagation and recovery behavior.
 

@@ -8,6 +8,10 @@ As explained in **[Why reShapr?](../overview/why-reshapr.md)**, reShapr can crea
 
 Contrary to tools, **prompts can’t - and shouldn’t - be directly inferred from an API contract**. They should be designed to provide users with accelerators on how to interact with the model, offer additional instructions and guardrails on how to use tools for a specific use case, or provide additional details on how to orchestrate tool calls.
 
+:::tip Watch Prompts in context
+See [Prompts attached to a controlled GitHub GraphQL service](https://youtu.be/VONwzZ55Jvc) and [Prompts used with an MCP App](https://youtu.be/PVfznWFvKTI). This page remains the canonical specification reference.
+:::
+
 reShapr provides **an easy way to design and specify your Prompts using a simple YAML description,** called the `Prompts` specification. To provide these Prompts to a reShapr-powered MCP endpoint, write this file and attach it to an existing Service. Here is a minimal example:
 
 ```yaml

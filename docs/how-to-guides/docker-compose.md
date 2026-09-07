@@ -9,6 +9,10 @@ verification:
 
 Learn how to run reShapr locally using Docker Compose for development and testing purposes.
 
+:::tip Watch the setup
+The [11-second local Docker demo](https://youtu.be/ECZAiXbSwDc) previews the startup flow. Use this guide for version-pinned commands and verification.
+:::
+
 ## Prerequisites
 
 Before you begin, make sure you have the following installed on your machine:
@@ -61,7 +65,7 @@ reshapr status
 
 The output identifies the selected release and container engine, then reports the Compose service status. Names and timestamps depend on your local engine and are not stable identifiers.
 
-The control plane is available at **`http://localhost:5555`** and the MCP gateway at **`http://localhost:7777`**.
+The control plane is available at **`http://localhost:5555`** and the MCP proxy at **`http://localhost:7777`**.
 
 ## Log in with the CLI
 
@@ -89,7 +93,7 @@ reshapr login --server http://localhost:5555
 ✅ Configuration saved to /Users/you/.reshapr/config
 ```
 
-> From here, follow **[Your First MCP Endpoint, End to End](../tutorials/getting-started.md)** to import a versioned API contract, expose it, and call a Tool through the local Gateway.
+> From here, follow **[Your First MCP Endpoint, End to End](../tutorials/getting-started.md)** to import a versioned API contract, expose it, and call a Tool through the local proxy.
 
 ## Stop the containers
 
@@ -110,7 +114,7 @@ git clone --branch 0.2.3 --depth 1 https://github.com/reshaprio/reshapr.git
 cd reshapr
 ```
 
-Start all services (control plane, gateway, and database) at once:
+Start all services (control plane, proxy, and database) at once:
 
 ```bash
 docker compose -f install/docker-compose-all-in-one.yml up -d
@@ -135,7 +139,7 @@ docker compose -f install/docker-compose-all-in-one.yml down
 
 ## Result
 
-`reshapr status` reports the Compose services as running, the control plane responds at `http://localhost:5555`, and the Gateway accepts MCP requests at `http://localhost:7777`.
+`reshapr status` reports the Compose services as running, the control plane responds at `http://localhost:5555`, and the proxy accepts MCP requests at `http://localhost:7777`.
 
 ## Limits
 

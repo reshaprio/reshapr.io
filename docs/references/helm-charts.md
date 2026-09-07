@@ -17,7 +17,7 @@ The current charts declare Kubernetes 1.25 or later and require Helm 3.8 or late
 | Chart | Role | Typical placement | Canonical documentation |
 |---|---|---|---|
 | `reshapr-control-plane` | Control plane API and configuration management | Core platform namespace | [README](https://github.com/reshaprio/reshapr-helm-charts/blob/main/control-plane/README.md) and [commands](https://github.com/reshaprio/reshapr-helm-charts/blob/main/control-plane/COMMANDS.md) |
-| `reshapr-proxy` | MCP Gateway and data plane | Dedicated proxy namespace or close to workloads | [README](https://github.com/reshaprio/reshapr-helm-charts/blob/main/proxy/README.md) and [commands](https://github.com/reshaprio/reshapr-helm-charts/blob/main/proxy/COMMANDS.md) |
+| `reshapr-proxy` | MCP server and data plane | Dedicated proxy namespace or close to workloads | [README](https://github.com/reshaprio/reshapr-helm-charts/blob/main/proxy/README.md) and [commands](https://github.com/reshaprio/reshapr-helm-charts/blob/main/proxy/COMMANDS.md) |
 | `reshapr-web-ui` | Administration dashboard | Platform namespace, connected to the control plane | [README](https://github.com/reshaprio/reshapr-helm-charts/blob/main/web-ui/README.md) and [commands](https://github.com/reshaprio/reshapr-helm-charts/blob/main/web-ui/COMMANDS.md) |
 | `reshapr-controllers` | Kubernetes operator and admission webhook | `reshapr-system` by default | [README](https://github.com/reshaprio/reshapr-helm-charts/blob/main/controllers/README.md) and [commands](https://github.com/reshaprio/reshapr-helm-charts/blob/main/controllers/COMMANDS.md) |
 

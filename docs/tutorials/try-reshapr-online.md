@@ -11,6 +11,10 @@ The fastest way to experience reShapr is through our hosted online environment: 
 
 Head over to **[try.reshapr.io](https://try.reshapr.io/)** to get started instantly.
 
+:::tip Watch the CLI setup
+The [11-second CLI installation demo](https://youtu.be/bmSPkisbqJo) previews the install command. Use this tutorial for the current authentication flow and verification.
+:::
+
 ## Prerequisites
 
 - A GitHub or Google account

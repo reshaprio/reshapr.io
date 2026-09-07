@@ -12,7 +12,7 @@ As of today, reShapr supports ingesting:
 
 ## From API artifact to MCP endpoint
 
-An imported API artifact defines a versioned Service and its operations. A Configuration Plan then selects the operations and attached reShapr Artifacts to expose, identifies the backend, and applies endpoint policies. An Exposition assigns that Plan to a Gateway Group, whose running Gateways serve the resulting MCP endpoint.
+An imported API artifact defines a versioned Service and its operations. A Configuration Plan then selects the operations and attached reShapr Artifacts to expose, identifies the backend, and applies endpoint policies. An Exposition assigns that Plan to a Gateway Group. Running proxies register logical Gateways in that group and serve the resulting MCP endpoint.
 
 ```mermaid
 flowchart LR
@@ -25,8 +25,10 @@ flowchart LR
 	ExpositionB --> Group
 	Group --> GatewayA[Gateway]
 	Group --> GatewayB[Gateway]
-	GatewayA --> Backend[Backend API]
-	GatewayB --> Backend
+	GatewayA --> ProxyA[reShapr proxy]
+	GatewayB --> ProxyB[reShapr proxy]
+	ProxyA --> Backend[Backend API]
+	ProxyB --> Backend
 ```
 
 One Service can therefore produce multiple MCP surfaces. For example, one Plan can expose a small read-only surface while another includes a business-oriented Custom Tool and an output filter.
@@ -42,22 +44,22 @@ Once reShapr discovers your services, you configure:
 - Exposition options (all operations, read-only operations, etc.)
 - Existing backend endpoint targets
 
-Then reShapr exposes your MCP server through the Gateways selected by its Exposition.
+Then reShapr exposes your MCP server through the proxies whose registered Gateways are selected by its Exposition.
 
 :::info Core Architecture
-reShapr separates configuration management from MCP request execution so that control-plane and Gateway placement can follow operational and network requirements.
+reShapr separates configuration management from MCP request execution so that control-plane and proxy placement can follow operational and network requirements.
 
 The platform has two major parts:
 
 - **Control plane**: centralizes exposition configuration and policies.
-- **Data plane**: gateways that expose MCP servers and route runtime traffic.
+- **Data plane**: proxies that expose MCP servers and route runtime traffic.
 :::
 
 This architecture supports multiple deployment models:
 
-1. **Local development**: control plane and Gateway run in one temporary environment.
-2. **Centralized**: control plane and Gateways run in one managed environment.
-3. **Hybrid or split**: control plane and Gateways run in different trust domains.
+1. **Local development**: control plane and proxy run in one temporary environment.
+2. **Centralized**: control plane and proxies run in one managed environment.
+3. **Hybrid or split**: control plane and proxies run in different trust domains.
 4. **Self-hosted or on-premises**: the organization operates the complete platform and its dependencies.
 
 These names describe runtime topology, not commercial availability or service-level guarantees. See **[Deployment Models and Trust Boundaries](../explanations/deployment-models-trust-boundaries.md)** for the traffic flows and operational responsibilities of each model.
@@ -68,4 +70,4 @@ See also:
 - **[Services and Artifacts](../explanations/services-and-artifacts.md)**
 - **[Configuration Plan and Exposition](../explanations/configuration-and-exposition.md)**
 - **[Security Capabilities and Limits](../explanations/security-model.md)**
-- **[Deploy a Hybrid Gateway](../how-to-guides/deploy-hybrid-gateway.md)**
+- **[Deploy a Hybrid reShapr Proxy](../how-to-guides/deploy-hybrid-gateway.md)**

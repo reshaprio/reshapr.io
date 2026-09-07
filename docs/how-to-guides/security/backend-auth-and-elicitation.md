@@ -1,5 +1,5 @@
 ---
-description: Authenticate reShapr Gateway calls to backend APIs with stored, locally resolved, or elicited credentials.
+description: Authenticate reShapr proxy calls to backend APIs with stored, locally resolved, or elicited credentials.
 verification:
   product: reShapr
   version: 0.2.3
@@ -8,9 +8,13 @@ verification:
 
 # Authenticate Backend Calls and Use Elicitation
 
-Backend authentication controls the Gateway-to-backend boundary. It is independent from the API key or OAuth policy that protects an MCP endpoint.
+Backend authentication controls the proxy-to-backend boundary. It is independent from the API key or OAuth policy that protects an MCP endpoint.
 
 Use this guide to choose a backend Secret, attach it to a Configuration Plan, and verify a non-destructive Tool call. The main procedure uses a local environment reference so that the credential value does not enter control-plane storage.
+
+:::tip Watch the security flows
+See [token elicitation with GitHub GraphQL](https://youtu.be/y38__Uj5gWo), [OAuth URL elicitation with Keycloak](https://youtu.be/dC41-ieQIqk), and [separate endpoint and backend OAuth flows](https://youtu.be/_DTf34OaLr0). Use this guide for the verified configuration and security boundaries.
+:::
 
 ## Prerequisites
 
@@ -18,7 +22,7 @@ You need:
 
 - the reShapr `0.2.3` CLI, authenticated with `reshapr login`;
 - an imported Service for a protected test backend;
-- a Gateway Group and a Gateway whose runtime configuration you control;
+- a Gateway Group and a proxy instance whose runtime configuration you control;
 - a read-only backend operation and its expected successful response;
 - `curl` and `jq`;
 - the backend credential stored in a secret manager rather than shell history.
@@ -33,7 +37,7 @@ export GATEWAY_GROUP_ID='<gateway-group-id>'
 
 ## Choose a backend authentication mode
 
-| Backend | Secret fields | Gateway behavior |
+| Backend | Secret fields | Proxy behavior |
 |---|---|---|
 | REST or GraphQL with bearer token | `token` | Sends `Authorization: Bearer <token>` |
 | REST or GraphQL with API key | `token` and `tokenHeader` | Sends the token through the named HTTP header |
@@ -61,7 +65,7 @@ export BACKEND_SECRET_ID="$(
   reshapr secret create hybrid-backend-token \
     --backend \
     --token '${env:BACKEND_API_TOKEN}' \
-    --description 'Resolved by the target Gateway' \
+    --description 'Resolved by the target proxy' \
     --output json \
     | jq -er '.id'
 )"
@@ -74,19 +78,19 @@ For a backend API key carried by a custom header, add `--tokenHeader '<header-na
 --password '${env:BACKEND_PASSWORD}'
 ```
 
-The Gateway resolves each placeholder when preparing a backend call. Release `0.2.3` provides the `env` scheme; an unknown scheme or missing value fails the call.
+The proxy resolves each placeholder when preparing a backend call. Release `0.2.3` provides the `env` scheme; an unknown scheme or missing value fails the call.
 
-## Make the value available to the Gateway
+## Make the value available to the proxy
 
-Inject the variable through the workload's secret mechanism. For the Docker command in **[Deploy a Hybrid Gateway](../deploy-hybrid-gateway.md)**, add this option when creating the container:
+Inject the variable through the workload's secret mechanism. For the Docker command in **[Deploy a Hybrid reShapr Proxy](../deploy-hybrid-gateway.md)**, add this option when creating the container:
 
 ```bash
 --env BACKEND_API_TOKEN
 ```
 
-This form passes the value from the current environment without placing it in the `docker run` arguments. For Kubernetes, map a Secret key to an environment variable in the Gateway container instead of committing the value to a manifest.
+This form passes the value from the current environment without placing it in the `docker run` arguments. For Kubernetes, map a Secret key to an environment variable in the proxy container instead of committing the value to a manifest.
 
-Check the Gateway logs after startup. A missing variable is reported when the first matching backend call tries to resolve it.
+Check the proxy logs after startup. A missing variable is reported when the first matching backend call tries to resolve it.
 
 ## Attach the Secret to a Configuration Plan
 
@@ -147,16 +151,16 @@ curl --silent --show-error \
   "${MCP_URL}" | jq '.result'
 ```
 
-An expected backend response confirms that the Gateway resolved the reference and applied the credential. A backend `401` usually means the value is missing, expired, or sent through the wrong header.
+An expected backend response confirms that the proxy resolved the reference and applied the credential. A backend `401` usually means the value is missing, expired, or sent through the wrong header.
 
 ## Rotate a local value
 
-reShapr does not cache the resolved Secret value between backend calls. Whether a changed value becomes visible without replacing the Gateway depends on the configuration source.
+reShapr does not cache the resolved Secret value between backend calls. Whether a changed value becomes visible without replacing the proxy depends on the configuration source.
 
 Environment variables of an existing Docker container cannot be changed in place. To rotate this example:
 
 1. replace `BACKEND_API_TOKEN` in the secret manager or deployment environment;
-2. recreate the Gateway container with the same Gateway ID, labels, and `--env BACKEND_API_TOKEN` option;
+2. recreate the proxy container with the same Gateway ID, labels, and `--env BACKEND_API_TOKEN` option;
 3. wait for readiness and registration;
 4. repeat the read-only Tool call and confirm that the backend accepts the new value;
 5. revoke the previous backend token.
@@ -165,7 +169,7 @@ The Secret stored by the control plane remains `${env:BACKEND_API_TOKEN}` throug
 
 ## Use direct credential elicitation
 
-Use elicitation when each MCP user must provide a backend credential instead of sharing one provisioned for the Gateway. Stateless elicitation with MCP `2026-07-28` requires an OAuth-protected Exposition because reShapr associates the elicited value with the bearer token's `iss` and `sub` claims.
+Use elicitation when each MCP user must provide a backend credential instead of sharing one provisioned for the proxy. Stateless elicitation with MCP `2026-07-28` requires an OAuth-protected Exposition because reShapr associates the elicited value with the bearer token's `iss` and `sub` claims.
 
 Create an elicitation Secret whose `--token` option names the backend header that will receive the user-provided value:
 
@@ -222,9 +226,9 @@ reshapr secret create-elicitation backend-oauth \
   --oauth2TokenEndpoint 'https://idp.example.com/token'
 ```
 
-Register `https://<gateway-host>/elicitation/callback` as an allowed redirect base with the backend Authorization Server. The Gateway adds the elicitation identifier, `client_id`, `redirect_uri`, `response_type=code`, and stateless `state` parameters. It resolves the optional client-secret reference locally before exchanging the authorization code.
+Register `https://<gateway-host>/elicitation/callback` as an allowed redirect base with the backend Authorization Server. The proxy adds the elicitation identifier, `client_id`, `redirect_uri`, `response_type=code`, and stateless `state` parameters. It resolves the optional client-secret reference locally before exchanging the authorization code.
 
-This flow cannot be validated without a real Authorization Server, a compatible MCP client, and a callback URL reachable through the Gateway. Test it in an isolated identity-provider tenant before production use.
+This flow cannot be validated without a real Authorization Server, a compatible MCP client, and a callback URL reachable through the proxy. Test it in an isolated identity-provider tenant before production use.
 
 ## Roll back
 
@@ -240,7 +244,7 @@ Delete any additional elicitation Secrets and their Configuration Plans after re
 
 ## Result
 
-The Gateway authenticates a read-only backend call with a locally resolved credential. You can distinguish that shared runtime credential from a user-specific elicited credential and from the independent policy protecting the MCP endpoint.
+The proxy authenticates a read-only backend call with a locally resolved credential. You can distinguish that shared runtime credential from a user-specific elicited credential and from the independent policy protecting the MCP endpoint.
 
 ## Limits
 
@@ -253,5 +257,5 @@ The Gateway authenticates a read-only backend call with a locally resolved crede
 ## Next step
 
 - **[Security Capabilities and Limits](../../explanations/security-model.md)** compares the controls and their boundaries.
-- **[Deploy a Hybrid Gateway](../deploy-hybrid-gateway.md)** shows where to inject Gateway-local environment variables.
+- **[Deploy a Hybrid reShapr Proxy](../deploy-hybrid-gateway.md)** shows where to inject proxy-local environment variables.
 - **[Test an MCP Endpoint](../test-mcp-endpoint.md)** covers stateless and session-based MCP requests.

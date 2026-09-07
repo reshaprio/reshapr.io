@@ -39,7 +39,7 @@ This guide shows all four charts as separate Helm releases. Select the optional 
 | `reshapr-proxy` | `reshapr-proxies` | MCP data plane and backend dispatch |
 
 :::info
-These are the default namespaces, not fixed requirements. You can change them to match your cluster conventions and deploy multiple proxy releases in different namespaces, for example to isolate environments, teams, or gateway groups.
+These are the default namespaces, not fixed requirements. You can change them to match your cluster conventions and deploy multiple proxy releases in different namespaces, for example to isolate environments, teams, or Gateway Groups.
 :::
 
 `reshapr-ui` is optional when administrators use the CLI or APIs instead. Consider `reshapr-controllers` when you want to reconcile reShapr resources from Kubernetes manifests as part of a **[GitOps workflow](../tutorials/first-gitops-mcp-endpoint.md)**, or when you want the admission webhook to inject a reShapr proxy as a sidecar container into application Pods. See **[Kubernetes APIs and Controllers](../references/kubernetes-apis.md#admission-controller)** for the boundaries of both controller modes.
@@ -362,6 +362,6 @@ The four chart releases are installed from `0.0.11`, the runtime workloads use `
 
 ## Next step
 
-Use **[Observe the reShapr Gateway](./operations/observe-and-audit.md)** to connect the Gateway to your telemetry pipeline. Use **[Upgrade reShapr and Rotate Runtime Secrets](./operations/upgrade-and-rotate.md)** to prepare the next maintenance window, or **[Manage reShapr Resources with GitOps](./manage-resources-with-gitops.md)** to operate endpoint desired state and cleanup.
+Use **[Observe the reShapr Proxy](./operations/observe-and-audit.md)** to connect the proxy to your telemetry pipeline. Use **[Upgrade reShapr and Rotate Runtime Secrets](./operations/upgrade-and-rotate.md)** to prepare the next maintenance window, or **[Manage reShapr Resources with GitOps](./manage-resources-with-gitops.md)** to operate endpoint desired state and cleanup.
 
 Use the release-tagged [chart READMEs and values](https://github.com/reshaprio/reshapr-helm-charts/tree/0.0.11) when adapting this bounded topology.

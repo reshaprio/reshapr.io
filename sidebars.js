@@ -196,12 +196,12 @@ const sidebars = {
             {
               type: 'doc',
               id: 'how-to-guides/operations/observe-and-audit',
-              label: 'Observe the reShapr Gateway',
+              label: 'Observe the reShapr Proxy',
             },
             {
               type: 'doc',
               id: 'how-to-guides/operations/troubleshoot',
-              label: 'Troubleshoot an Exposition or Gateway',
+              label: 'Troubleshoot an Exposition or Proxy',
             },
             {
               type: 'doc',
@@ -227,7 +227,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'how-to-guides/deploy-hybrid-gateway',
-              label: 'Deploy a hybrid Gateway',
+              label: 'Deploy a hybrid Proxy',
             },
           ],
         },
@@ -298,7 +298,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'explanations/control-plane-gateway-synchronization',
-              label: 'Control Plane to Gateway Synchronization',
+              label: 'Control Plane to Proxy Synchronization',
             },
             {
               type: 'doc',

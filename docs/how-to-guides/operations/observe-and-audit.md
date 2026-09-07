@@ -1,23 +1,23 @@
 ---
-description: Export reShapr Gateway telemetry, follow distributed traces, route audit logs, and expose proxy metrics to Prometheus.
+description: Export reShapr proxy telemetry, follow distributed traces, route audit logs, and expose proxy metrics to Prometheus.
 verification:
   product: reShapr stack
   version: 0.2.3 / charts 0.0.11
   date: 2026-09-04
 ---
 
-# Observe the reShapr Gateway
+# Observe the reShapr Proxy
 
-Use this guide to export Gateway traces, metrics, and logs with [OpenTelemetry](https://opentelemetry.io/) to an [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/). You will also verify trace propagation to backends, route audit log records independently, and expose the proxy metrics scrape target.
+Use this guide to export proxy traces, metrics, and logs with [OpenTelemetry](https://opentelemetry.io/) to an [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/). You will also verify trace propagation to backends, route audit log records independently, and expose the proxy metrics scrape target.
 
-This procedure configures the Gateway telemetry pipeline. Enabling audit for a particular MCP endpoint is a separate Configuration Plan decision.
+This procedure configures the proxy telemetry pipeline. Enabling audit for a particular MCP endpoint is a separate Configuration Plan decision.
 
 ## Prerequisites
 
 You need:
 
-- a reShapr Gateway `0.2.3` deployed with the proxy chart `0.0.11`;
-- an OpenTelemetry Collector endpoint reachable from the Gateway namespace;
+- a reShapr proxy `0.2.3` deployed with the proxy chart `0.0.11`;
+- an OpenTelemetry Collector endpoint reachable from the proxy namespace;
 - a telemetry backend where you can search exported logs and traces;
 - an existing MCP endpoint and an instrumented backend for end-to-end trace verification;
 - `kubectl`, Helm, `curl`, and `jq`;
@@ -33,7 +33,7 @@ export PROXY_RELEASE='reshapr-proxy'
 export OTEL_ENDPOINT='http://otel-collector.observability.svc.cluster.local:4318'
 ```
 
-## Configure Gateway telemetry
+## Configure proxy telemetry
 
 Create a focused Helm values file:
 
@@ -54,7 +54,7 @@ serviceMonitor:
   scrapeTimeout: 10s
 ```
 
-The proxy chart disables the OpenTelemetry SDK by default to avoid connection errors when no collector is available. The override enables the SDK; the Gateway application enables traces, metrics, and logs in its production profile.
+The proxy chart disables the OpenTelemetry SDK by default to avoid connection errors when no collector is available. The override enables the SDK; the proxy application enables traces, metrics, and logs in its production profile.
 
 Apply the values to the existing release:
 
@@ -82,7 +82,7 @@ kubectl get deployment/reshapr-proxy \
       | map({name, value})'
 ```
 
-The output must show `QUARKUS_OTEL_SDK_DISABLED=false`, the collector endpoint, and `http/protobuf`. Inspect Gateway logs if the collector cannot be reached:
+The output must show `QUARKUS_OTEL_SDK_DISABLED=false`, the collector endpoint, and `http/protobuf`. Inspect proxy logs if the collector cannot be reached:
 
 ```bash
 kubectl logs deployment/reshapr-proxy \
@@ -97,27 +97,27 @@ When an MCP caller supplies a valid W3C trace context, the Gateway continues tha
 ```mermaid
 sequenceDiagram
   participant Client as MCP client
-  participant Gateway as reShapr Gateway
+  participant Proxy as reShapr proxy
   participant Backend as Backend API
   participant Collector as OTEL Collector
 
-  Client->>Gateway: MCP request + traceparent
-  Note over Gateway: MCP and Tool spans
-  Gateway->>Backend: API request + traceparent + baggage
-  Note over Gateway,Backend: Gateway backend-client span
-  Gateway-->>Collector: Gateway spans
+  Client->>Proxy: MCP request + traceparent
+  Note over Proxy: MCP and Tool spans
+  Proxy->>Backend: API request + traceparent + baggage
+  Note over Proxy,Backend: Proxy backend-client span
+  Proxy-->>Collector: Proxy spans
   Backend-->>Collector: Backend spans, when instrumented
 ```
 
 The backend must be instrumented and configured to extract the propagated context before it can contribute its own spans. Collector connectivity alone does not instrument the backend.
 
-Send a known read-only `tools/call` from a client that injects `traceparent`, then search your tracing backend for that trace ID. A complete trace should connect the inbound Gateway request to its Tool and backend-client spans; an instrumented backend should continue the same trace. Use **[Test an MCP endpoint](../test-mcp-endpoint.md)** for the request shape.
+Send a known read-only `tools/call` from a client that injects `traceparent`, then search your tracing backend for that trace ID. A complete trace should connect the inbound proxy request to its Tool and backend-client spans; an instrumented backend should continue the same trace. Use **[Test an MCP endpoint](../test-mcp-endpoint.md)** for the request shape.
 
-These spans let platform engineers separate Gateway processing time from the backend call duration and locate failures at the relevant boundary. Sampling still determines whether all participating spans are retained.
+These spans let platform engineers separate proxy processing time from the backend call duration and locate failures at the relevant boundary. Sampling still determines whether all participating spans are retained.
 
 ## Route audit logs separately
 
-Audit events use the Gateway's OpenTelemetry Logs pipeline. Every audit record carries `log.type=audit`, allowing the Collector to route it independently from regular application logs. The Gateway does not provide a separate audit database or SIEM integration.
+Audit events use the proxy's OpenTelemetry Logs pipeline. Every audit record carries `log.type=audit`, allowing the Collector to route it independently from regular application logs. The proxy does not provide a separate audit database or SIEM integration.
 
 The following bounded Collector example sends non-audit logs to an observability backend and audit logs to a dedicated sink. Adapt exporter endpoints, authentication, TLS, batching, and component availability to your Collector distribution:
 
@@ -200,11 +200,11 @@ To stop exporting telemetry, remove the observability overrides from the release
 
 ## Result
 
-The Gateway exports traces, metrics, and logs to your Collector, continues distributed traces across HTTP backend calls, and exposes a Prometheus scrape target. Audit records can follow a dedicated Collector pipeline based on `log.type=audit`.
+The proxy exports traces, metrics, and logs to your Collector, continues distributed traces across HTTP backend calls, and exposes a Prometheus scrape target. Audit records can follow a dedicated Collector pipeline based on `log.type=audit`.
 
 ## Limits
 
-- Release `0.2.3` proves OpenTelemetry behavior for the Gateway. It does not establish equivalent coverage for the control plane, Web UI, operator, or admission controller.
+- Release `0.2.3` proves OpenTelemetry behavior for the proxy. It does not establish equivalent coverage for the control plane, Web UI, operator, or admission controller.
 - End-to-end traces require callers and backends to propagate compatible trace context and export their own spans.
 - Telemetry export depends on the OpenTelemetry SDK, Collector connectivity, configured pipelines, sampling, and backend retention.
 - Audit records appear only for Configuration Plans where audit is enabled.
@@ -213,6 +213,6 @@ The Gateway exports traces, metrics, and logs to your Collector, continues distr
 
 ## Next step
 
-Use **[Audit MCP Endpoint Calls](../audit-mcp-endpoint.md)** to enable audit on a Configuration Plan. Use **[Troubleshoot an Exposition or Gateway](./troubleshoot.md)** to choose the relevant signal for a failed request.
+Use **[Audit MCP Endpoint Calls](../audit-mcp-endpoint.md)** to enable audit on a Configuration Plan. Use **[Troubleshoot an Exposition or Proxy](./troubleshoot.md)** to choose the relevant signal for a failed request.
 
-The release-tagged [Gateway telemetry configuration](https://github.com/reshaprio/reshapr/blob/0.2.3/proxy/src/main/resources/application.properties) and [proxy chart values](https://github.com/reshaprio/reshapr-helm-charts/blob/0.0.11/proxy/values.yaml) remain the canonical configuration references.
+The release-tagged [proxy telemetry configuration](https://github.com/reshaprio/reshapr/blob/0.2.3/proxy/src/main/resources/application.properties) and [proxy chart values](https://github.com/reshaprio/reshapr-helm-charts/blob/0.0.11/proxy/values.yaml) remain the canonical configuration references.

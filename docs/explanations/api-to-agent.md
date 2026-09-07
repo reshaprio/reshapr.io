@@ -12,7 +12,7 @@ An API operation and an MCP Tool are related, but they are not the same contract
 sequenceDiagram
   participant Owner as API owner
   participant Control as Control plane
-  participant Gateway as Gateway
+  participant Proxy as reShapr proxy
   participant Client as MCP client
   participant API as Backend API
 
@@ -20,14 +20,14 @@ sequenceDiagram
   Control->>Control: Discover Service and operations
   Owner->>Control: Attach reShapr Artifacts
   Owner->>Control: Create Plan and Exposition
-  Control-->>Gateway: Synchronize selected configuration
-  Client->>Gateway: tools/list
-  Gateway-->>Client: Selected generated and custom Tools
-  Client->>Gateway: tools/call with arguments
-  Gateway->>API: Protocol-specific backend request
-  API-->>Gateway: Backend response
-  Gateway->>Gateway: Apply selected output filter and encoding
-  Gateway-->>Client: MCP Tool result
+  Control-->>Proxy: Synchronize selected configuration
+  Client->>Proxy: tools/list
+  Proxy-->>Client: Selected generated and custom Tools
+  Client->>Proxy: tools/call with arguments
+  Proxy->>API: Protocol-specific backend request
+  API-->>Proxy: Backend response
+  Proxy->>Proxy: Apply selected output filter and encoding
+  Proxy-->>Client: MCP Tool result
 ```
 
 ## 1. Import discovers the backend contract
@@ -46,13 +46,13 @@ This allows two Plans for the same Service to expose different contracts. The ba
 
 ## 4. `tools/list` describes the selected contract
 
-When a client lists Tools, the Gateway converts selected Service operations into MCP Tool schemas and includes selected Custom Tools. Tool names, descriptions, and input schemas are context sent to the client; reducing this list reduces the contract the client must inspect.
+When a client lists Tools, the proxy converts selected Service operations into MCP Tool schemas and includes selected Custom Tools. Tool names, descriptions, and input schemas are context sent to the client; reducing this list reduces the contract the client must inspect.
 
 The Tool list is not an authorization decision by itself. Endpoint authentication protects the Exposition, and backend credentials protect the backend boundary. reShapr does not apply different OAuth scopes to individual Tools in a single Exposition.
 
 ## 5. `tools/call` dispatches to the backend
 
-The Gateway validates the requested Tool and arguments, maps the call to the REST, GraphQL, or gRPC backend contract, and applies configured backend credentials. A declarative Custom Tool still targets a generated operation; its stable agent-facing contract can remain unchanged while mapping details evolve with the Plan and Artifact.
+The proxy validates the requested Tool and arguments, maps the call to the REST, GraphQL, or gRPC backend contract, and applies configured backend credentials. A declarative Custom Tool still targets a generated operation; its stable agent-facing contract can remain unchanged while mapping details evolve with the Plan and Artifact.
 
 ## 6. Response treatment happens before MCP delivery
 
@@ -68,10 +68,10 @@ Filtering changes the content returned by a call. TOON changes its encoding. Nei
 
 | Flow | Content | Controlled by |
 |---|---|---|
-| Control plane to Gateway | Exposition configuration and selected Artifacts | Organization, Plan, and Gateway Group |
-| MCP client to Gateway | Tool discovery and calls | Exposition authentication and MCP protocol |
-| Gateway to backend | Translated API request | Backend endpoint and Secret |
-| Gateway to MCP client | Tool result after selected treatment | Output filter and encoding |
+| Control plane to proxy | Exposition configuration and selected Artifacts | Organization, Plan, and Gateway Group |
+| MCP client to proxy | Tool discovery and calls | Exposition authentication and MCP protocol |
+| Proxy to backend | Translated API request | Backend endpoint and Secret |
+| Proxy to MCP client | Tool result after selected treatment | Output filter and encoding |
 
 Protecting one boundary does not protect another. See **[Security Capabilities and Limits](./security-model.md)** for the separation between endpoint and backend credentials.
 

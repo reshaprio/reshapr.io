@@ -17,11 +17,11 @@ reShapr provides scriptable CLI and API operations. It does not provide a native
 You need:
 
 - Node.js 20 or later and reShapr CLI `0.2.3` installed in the job image;
-- a reShapr `0.2.3` control plane and a running Gateway in the default Gateway Group;
+- a reShapr `0.2.3` control plane and a running proxy registered as a Gateway in the default Gateway Group;
 - a dedicated automation identity restricted to the target organization;
 - the identity password stored as a masked CI secret;
 - an OpenAPI 3, GraphQL, or Protobuf source tracked by the build;
-- a backend endpoint reachable from the selected Gateway;
+- a backend endpoint reachable from the selected proxy;
 - Bash and `jq`.
 
 This example uses password authentication for an on-premises control plane. Adapt the authentication stage when your deployment uses another supported identity flow.

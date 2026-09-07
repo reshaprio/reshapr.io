@@ -15,7 +15,7 @@ Attach reusable agent-oriented capabilities to one Service, then use `includedAr
 - The Open-Meteo Service from **[Your First MCP Endpoint](../tutorials/getting-started.md)**
 - reShapr CLI `0.2.3`, authenticated against the target environment
 - `curl` and `jq`
-- A running Gateway in Gateway Group `1`
+- A running proxy registered as a Gateway in Gateway Group `1`
 
 Locate the Service:
 

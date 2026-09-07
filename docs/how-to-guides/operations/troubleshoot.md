@@ -1,14 +1,14 @@
 ---
-description: Diagnose inactive Expositions, unsynchronized Gateways, MCP errors, backend failures, and unresolved Secrets.
+description: Diagnose inactive Expositions, unsynchronized proxies, MCP errors, backend failures, and unresolved Secrets.
 verification:
   product: reShapr stack
   version: 0.2.3 / controllers 0.0.1
   date: 2026-09-04
 ---
 
-# Troubleshoot an Exposition or Gateway
+# Troubleshoot an Exposition or Proxy
 
-Use this guide when an Exposition has no endpoint, a Gateway does not receive a change, or an MCP request fails. Start with the first failing layer and stop when its recovery check succeeds.
+Use this guide when an Exposition has no endpoint, a proxy does not receive a change, or an MCP request fails. Start with the first failing layer and stop when its recovery check succeeds.
 
 ## Prerequisites
 
@@ -16,7 +16,7 @@ You need:
 
 - reShapr runtime `0.2.3` and, for Kubernetes-managed resources, controllers `0.0.1`;
 - `reshapr login` completed for the affected organization;
-- access to Gateway and operator logs;
+- access to proxy and operator logs;
 - `curl`, `jq`, and `kubectl` when the workload runs on Kubernetes;
 - the Exposition ID, expected Gateway Group, Gateway labels, and MCP URL.
 
@@ -35,12 +35,12 @@ export PLATFORM_NAMESPACE='reshapr-system'
 Run these checks in order:
 
 1. `reshapr expo get "${EXPOSITION_ID}"` must show the expected Gateway Group and at least one endpoint.
-2. The Gateway readiness endpoint must return `UP`.
+2. The proxy readiness endpoint must return `UP`.
 3. A `server/discover` request must reach the expected Exposition.
 4. `tools/list` must contain the expected Tool.
 5. A read-only `tools/call` must reach and be accepted by the backend.
 
-An Exposition can be ready in the control plane while no running Gateway matches its group. Gateway readiness can also be `UP` while a particular Exposition is absent. Keep these checks separate.
+An Exposition can be ready in the control plane while no running proxy has registered a matching Gateway. Proxy readiness can also be `UP` while a particular Exposition is absent. Keep these checks separate.
 
 ## Exposition has no active endpoint
 
@@ -51,7 +51,7 @@ reshapr expo get "${EXPOSITION_ID}"
 reshapr gateway-group list
 ```
 
-If no endpoint is listed, compare the target Gateway Group labels with the labels advertised by the intended Gateway. For a Kubernetes Gateway, inspect the rendered environment:
+If no endpoint is listed, compare the target Gateway Group labels with the labels advertised by the intended proxy. For a Kubernetes proxy, inspect the rendered environment:
 
 ```bash
 kubectl get deployment/reshapr-proxy \
@@ -62,15 +62,15 @@ kubectl get deployment/reshapr-proxy \
       | .value'
 ```
 
-For a standalone container, inspect its startup configuration or logs. A Gateway must advertise labels compatible with the target group. Labels are selection criteria; a mismatch does not set the Exposition or GatewayGroup CR to `ERROR`.
+For a standalone container, inspect its startup configuration or logs. A proxy must register a Gateway with labels compatible with the target group. Labels are selection criteria; a mismatch does not set the Exposition or GatewayGroup CR to `ERROR`.
 
-Correct either the Gateway labels or the intended Gateway Group, roll out the affected workload, and wait for registration. Then repeat:
+Correct either the advertised Gateway labels or the intended Gateway Group, roll out the affected proxy, and wait for registration. Then repeat:
 
 ```bash
 reshapr expo get "${EXPOSITION_ID}"
 ```
 
-Recovery is complete when the expected Gateway hostname appears in `ENDPOINTS`.
+Recovery is complete when the expected hostname advertised by the registered Gateway appears in `ENDPOINTS`.
 
 ## Kubernetes resource is not ready
 
@@ -115,7 +115,7 @@ kubectl logs \
 
 After correcting the resource, rerun the first status command. Recovery requires `READY` with matching generations, followed by an endpoint in `reshapr expo get`.
 
-## Gateway is not ready or registered
+## Proxy is not ready or Gateway is not registered
 
 Inspect the workload before changing registration settings:
 
@@ -128,13 +128,13 @@ kubectl logs deployment/reshapr-proxy \
 
 Check, in this order:
 
-- DNS and TCP reachability from the Gateway to the configured control-plane host and port;
+- DNS and TCP reachability from the proxy to the configured control-plane host and port;
 - whether the control-plane connection expects TLS or plaintext;
 - the presence and validity of the Gateway API token;
 - uniqueness of the Gateway ID among running instances;
 - syntactic correctness of advertised FQDNs and labels.
 
-Port-forward the Gateway service and query readiness locally:
+Port-forward the proxy service and query readiness locally:
 
 ```bash
 kubectl port-forward \
@@ -150,11 +150,11 @@ curl --fail --silent http://localhost:7777/q/health/ready | jq -er '.status'
 
 Recovery requires `UP`, followed by the expected endpoint in `reshapr expo get`. Readiness proves initial control-plane connectivity, not backend reachability.
 
-Gateways advertise health every two minutes. The control plane considers a registration stale after five minutes without an advertisement, and cleanup runs periodically. Do not use the stale-registration window as a readiness test.
+Proxies advertise health for their registered Gateways every two minutes. The control plane considers a registration stale after five minutes without an advertisement, and cleanup runs periodically. Do not use the stale-registration window as a readiness test.
 
-## Gateway did not receive a recent change
+## Proxy did not receive a recent change
 
-First verify that the Kubernetes generation, when applicable, has been observed and that the control-plane representation has the expected values. Then inspect Gateway logs for change-stream or re-registration errors:
+First verify that the Kubernetes generation, when applicable, has been observed and that the control-plane representation has the expected values. Then inspect proxy logs for change-stream or re-registration errors:
 
 ```bash
 kubectl logs deployment/reshapr-proxy \
@@ -162,9 +162,9 @@ kubectl logs deployment/reshapr-proxy \
   --since 15m
 ```
 
-An initialized Gateway keeps the last configuration it fetched while synchronization is unavailable. During that interval, new or updated Expositions can be absent and deleted ones can remain locally.
+An initialized proxy keeps the last configuration it fetched while synchronization is unavailable. During that interval, new or updated Expositions can be absent and deleted ones can remain locally.
 
-Restore Gateway-to-control-plane connectivity and wait for stream retry or health-triggered re-registration. If the process cannot recover, perform a controlled rollout after preserving its logs:
+Restore proxy-to-control-plane connectivity and wait for stream retry or health-triggered re-registration. If the process cannot recover, perform a controlled rollout after preserving its logs:
 
 ```bash
 kubectl rollout restart deployment/reshapr-proxy \
@@ -203,7 +203,7 @@ For an audited Configuration Plan, search the exported audit logs for `event.act
 
 ## Tool reaches reShapr but the backend fails
 
-A Tool execution failure normally appears in the JSON-RPC result rather than as an endpoint-authentication status. Inspect the full result and correlate it with Gateway logs:
+A Tool execution failure normally appears in the JSON-RPC result rather than as an endpoint-authentication status. Inspect the full result and correlate it with proxy logs:
 
 ```bash
 kubectl logs deployment/reshapr-proxy \
@@ -211,7 +211,7 @@ kubectl logs deployment/reshapr-proxy \
   --since 5m
 ```
 
-Check the configured backend URL, DNS, egress policy, TLS trust, backend timeout, and backend credential independently. A Gateway-generated `504` result indicates that the backend exceeded the configured timeout. Other backend HTTP statuses can be propagated into the Tool result.
+Check the configured backend URL, DNS, egress policy, TLS trust, backend timeout, and backend credential independently. A proxy-generated `504` result indicates that the backend exceeded the configured timeout. Other backend HTTP statuses can be propagated into the Tool result.
 
 Run a direct request from an approved diagnostic workload in the same network boundary when policy permits. Do not print credentials or weaken TLS to make the test pass.
 
@@ -257,18 +257,18 @@ When a previously working elicited credential causes a backend `401`, reShapr ev
 
 ## Result
 
-The first failing layer now has an observable recovery check: reconciled desired state, a matching and ready Gateway, a synchronized MCP surface, accepted endpoint credentials, or a successful backend call.
+The first failing layer now has an observable recovery check: reconciled desired state, a matching and ready proxy, a synchronized MCP surface, accepted endpoint credentials, or a successful backend call.
 
 ## Limits
 
-- A `READY` custom resource proves control-plane reconciliation, not Gateway selection, synchronization, ingress, or backend health.
-- Gateway readiness proves initial control-plane connectivity, not that every Exposition is loaded or every backend is reachable.
+- A `READY` custom resource proves control-plane reconciliation, not Gateway selection, proxy synchronization, ingress, or backend health.
+- Proxy readiness proves initial control-plane connectivity, not that every Exposition is loaded or every backend is reachable.
 - Release `0.2.3` retains the last fetched local registry during synchronization loss; this is not an offline-operation guarantee.
 - Controllers `0.0.1` do not expose one uniform status contract for all custom resources.
 - Logs and telemetry depend on the deployment's collection and retention configuration.
 
 ## Next step
 
-Use **[Observe the reShapr Gateway](./observe-and-audit.md)** to export the signals used here. Review **[Control Plane to Gateway Synchronization](../../explanations/control-plane-gateway-synchronization.md)** for the registration, streaming, heartbeat, and recovery model.
+Use **[Observe the reShapr Proxy](./observe-and-audit.md)** to export the signals used here. Review **[Control Plane to Proxy Synchronization](../../explanations/control-plane-gateway-synchronization.md)** for the registration, streaming, heartbeat, and recovery model.
 
 The release-tagged [reShapr runtime](https://github.com/reshaprio/reshapr/tree/0.2.3) and [controllers documentation](https://github.com/reshaprio/reshapr-controllers/tree/0.0.1/documentation) remain the canonical behavioral references.

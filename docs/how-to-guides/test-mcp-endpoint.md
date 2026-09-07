@@ -135,7 +135,7 @@ These headers protect access to the MCP endpoint. Backend authentication is conf
 | HTTP `403` | Authenticated token lacks an accepted issuer or required Exposition scope | Inspect the OAuth configuration and token claims |
 | HTTP `404` | Unknown Exposition or method unavailable in the selected protocol | Check the endpoint URL and protocol mode |
 | JSON-RPC `error` | The MCP request reached the server but could not be processed | Read `error.code`, `error.message`, and `error.data` |
-| `result.isError: true` | The Tool ran but the backend or Tool execution failed | Inspect `result.content` and Gateway logs |
+| `result.isError: true` | The Tool ran but the backend or Tool execution failed | Inspect `result.content` and proxy logs |
 
 Use `curl --include` when you need to inspect the HTTP status and response headers together.
 
@@ -155,4 +155,4 @@ The endpoint is ready for an MCP client when negotiation succeeds, `tools/list` 
 - **[Create your first MCP endpoint](../tutorials/getting-started.md)** if you do not have one yet.
 - **[Protect an MCP endpoint with an API key](./security/api-key.md)** before sharing an unprotected endpoint.
 - **[Protect an MCP Endpoint with OAuth 2.0](./security/oauth.md)** when clients need authenticated identity and scopes.
-- **[Security Capabilities and Limits](../explanations/security-model.md)** explains the client-to-Gateway and Gateway-to-backend trust boundaries.
+- **[Security Capabilities and Limits](../explanations/security-model.md)** explains the client-to-proxy and proxy-to-backend trust boundaries.

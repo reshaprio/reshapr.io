@@ -1,24 +1,24 @@
 ---
-description: Run a reShapr Gateway in another trust domain and connect it to an existing control plane.
+description: Run a reShapr proxy in another trust domain and connect it to an existing control plane.
 verification:
   product: reShapr
   version: 0.2.3
   date: 2026-09-04
 ---
 
-# Deploy a Hybrid Gateway
+# Deploy a Hybrid reShapr Proxy
 
-Use this procedure to run a reShapr Gateway close to MCP clients or backend APIs while its configuration remains managed by an existing control plane.
+Use this procedure to run a reShapr proxy close to MCP clients or backend APIs while its configuration remains managed by an existing control plane.
 
-The Gateway initiates the control-plane connection. MCP requests and backend API calls use the routes you configure; they are not relayed through the control plane as part of Gateway synchronization.
+The proxy initiates the control-plane connection and registers a logical Gateway. MCP requests and backend API calls use the routes you configure; they are not relayed through the control plane as part of proxy synchronization.
 
 ## Prerequisites
 
 You need:
 
-- a reShapr `0.2.3` control plane reachable from the Gateway over gRPC;
+- a reShapr `0.2.3` control plane reachable from the proxy over gRPC;
 - the reShapr `0.2.3` CLI, authenticated with `reshapr login`;
-- Docker or Podman on the Gateway host;
+- Docker or Podman on the proxy host;
 - `curl` and `jq` for verification;
 - a Service and Configuration Plan for a non-destructive backend operation;
 - local access to port `7777` for this verification, or a separately configured TLS proxy for remote MCP clients.
@@ -50,7 +50,7 @@ The command returns a generated ID. Store that value for later commands:
 export GATEWAY_GROUP_ID='<gateway-group-id>'
 ```
 
-The Gateway labels in step 3 must match this group's labels. Labels select configuration; they do not establish network or security boundaries.
+The labels advertised for the proxy's Gateway in step 3 must match this group's labels. Labels select configuration; they do not establish network or security boundaries.
 
 ## 2. Create a dedicated Gateway token
 
@@ -68,11 +68,11 @@ export RESHAPR_CTRL_TOKEN
 printf '\n'
 ```
 
-Use a dedicated token per operational boundary so that it can be rotated or revoked without affecting unrelated Gateways.
+Use a dedicated token per operational boundary so that it can be rotated or revoked without affecting unrelated proxy deployments.
 
-## 3. Start the Gateway
+## 3. Start the proxy
 
-Set the control-plane address. This procedure advertises `localhost:7777` and verifies the MCP endpoint from the Gateway host over HTTP. Do not include a URL scheme in either hostname value.
+Set the control-plane address. This procedure advertises `localhost:7777` and verifies the MCP endpoint from the proxy host over HTTP. Do not include a URL scheme in either hostname value.
 
 ```bash
 export RESHAPR_CTRL_HOST='<control-plane-host>'
@@ -97,11 +97,11 @@ docker run --detach \
   "${RESHAPR_IMAGE}"
 ```
 
-Use a unique `RESHAPR_GATEWAY_ID` for each running Gateway. If the host cannot reach the control plane, check DNS, egress firewall rules, the configured port, and the TLS mode before changing the registration settings.
+Use a unique `RESHAPR_GATEWAY_ID` for each running proxy. This value identifies the logical Gateway registered by that proxy. If the host cannot reach the control plane, check DNS, egress firewall rules, the configured port, and the TLS mode before changing the registration settings.
 
 ## 4. Check readiness
 
-Query the Gateway locally:
+Query the proxy locally:
 
 ```bash
 curl --fail --silent http://localhost:7777/q/health/ready | jq '.status'
@@ -113,7 +113,7 @@ The expected status is `"UP"`. If readiness fails, inspect the startup and regis
 docker logs --tail 100 reshapr-hybrid-gateway
 ```
 
-Readiness confirms that the Gateway completed its initial connection. It does not confirm that a particular Exposition targets this Gateway.
+Readiness confirms that the proxy completed its initial connection and Gateway registration. It does not confirm that a particular Exposition targets this Gateway.
 
 ## 5. Target the Gateway Group
 
@@ -134,14 +134,14 @@ Record the generated Exposition ID:
 export EXPOSITION_ID='<exposition-id>'
 ```
 
-Confirm that the Exposition is active and that `ENDPOINTS` contains the hostname advertised by this Gateway:
+Confirm that the Exposition is active and that `ENDPOINTS` contains the hostname advertised by the proxy's registered Gateway:
 
 ```bash
 reshapr expo list
 reshapr expo get "${EXPOSITION_ID}"
 ```
 
-If the Exposition remains inactive, compare the Gateway's `RESHAPR_GATEWAY_LABELS` with the labels shown by `reshapr gateway-group list`, then inspect the Gateway logs.
+If the Exposition remains inactive, compare the proxy's `RESHAPR_GATEWAY_LABELS` with the labels shown by `reshapr gateway-group list`, then inspect the proxy logs.
 
 ## 6. Verify the MCP endpoint
 
@@ -195,7 +195,7 @@ curl --silent --show-error \
   "${MCP_URL}" | jq '.result'
 ```
 
-A successful, expected backend response verifies the client-to-Gateway and Gateway-to-backend paths. It does not prove that other Tools or network routes are correctly configured.
+A successful, expected backend response verifies the client-to-proxy and proxy-to-backend paths. It does not prove that other Tools or network routes are correctly configured.
 
 ## Roll back
 
@@ -219,22 +219,22 @@ If you created the Gateway Group only for this procedure and no other Exposition
 reshapr gateway-group delete "${GATEWAY_GROUP_ID}"
 ```
 
-Deleting the token prevents later registration with that credential. A Gateway that is already running can retain its last synchronized configuration during a control-plane connectivity loss, so stop the container as well when access must end immediately.
+Deleting the token prevents later registration with that credential. A proxy that is already running can retain its last synchronized configuration during a control-plane connectivity loss, so stop the container as well when access must end immediately.
 
 ## Result
 
-You now have a reShapr `0.2.3` Gateway running in another trust domain, registered with a dedicated credential, selected through Gateway Group labels, and verified through its MCP endpoint.
+You now have a reShapr `0.2.3` proxy running in another trust domain, registered as a logical Gateway with a dedicated credential, selected through Gateway Group labels, and verified through its MCP endpoint.
 
 ## Limits
 
 - The topology does not by itself prove data residency or compliance. Validate DNS, routing, proxies, identity providers, observability exporters, and backend dependencies.
-- Gateway-to-control-plane TLS depends on `RESHAPR_CTRL_TLS_PLAINTEXT=false` and a correctly configured control-plane TLS endpoint. MCP client ingress and backend TLS are separate boundaries.
+- Proxy-to-control-plane TLS depends on `RESHAPR_CTRL_TLS_PLAINTEXT=false` and a correctly configured control-plane TLS endpoint. MCP client ingress and backend TLS are separate boundaries.
 - Remote MCP clients need a TLS ingress, load balancer, or reverse proxy. Configure it first, then advertise its host and optional port through `RESHAPR_GATEWAY_FQDNS` instead of `localhost:7777`.
 - Live configuration propagation is not a zero-downtime upgrade or rollback guarantee.
 - A production deployment also needs durable secret injection, ingress TLS, resource limits, health supervision, logging, and an image update policy.
 
 ## Next step
 
-Read **[Deployment Models and Trust Boundaries](../explanations/deployment-models-trust-boundaries.md)** for the complete traffic map and **[Control Plane to Gateway Synchronization](../explanations/control-plane-gateway-synchronization.md)** for registration and recovery behavior.
+Read **[Deployment Models and Trust Boundaries](../explanations/deployment-models-trust-boundaries.md)** for the complete traffic map and **[Control Plane to Proxy Synchronization](../explanations/control-plane-gateway-synchronization.md)** for registration and recovery behavior.
 
 For production Kubernetes controls, continue with **[Deploy reShapr on Kubernetes for Production](./deploy-kubernetes-production.md)**.

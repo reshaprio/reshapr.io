@@ -10,6 +10,10 @@ verification:
 
 Import an OpenAPI contract, create a Configuration Plan and Exposition, then call a generated Tool and observe live weather data returned through reShapr.
 
+:::tip Watch the journey
+The [43-second Open-Meteo demo](https://youtu.be/EmBNZfUceTI) previews this workflow. Use the steps below for the current, verified procedure.
+:::
+
 ## Prerequisites
 
 - Node.js 20 or later
@@ -175,9 +179,9 @@ Example output (the generated identifier will differ):
 
 ## Exposing an MCP Endpoint
 
-Exposing a Configuration Plan will allow you to define where your Service will be made available to MCP Clients. By creating an exposition, you’ll define the **group of gateways** that will receive all the configuration information and will be in charge of exposing the MCP Endpoints.
+Exposing a Configuration Plan will allow you to define where your Service will be made available to MCP Clients. By creating an exposition, you’ll define the **Gateway Group** whose matching proxies will receive the configuration and expose the MCP endpoints.
 
-To create an exposition, we need the Configuration Plan identifier we got earlier (`0PXPDMB4MFE6H`), and we identify the group of gateways we want to deploy on. The default gateway group has the id `1`. We can then use the `expo create` command for that:
+To create an exposition, we need the Configuration Plan identifier we got earlier (`0PXPDMB4MFE6H`) and the Gateway Group we want to target. The Default Gateway Group has the ID `1`. We can then use the `expo create` command for that:
 
 ```bash
 reshapr expo create --configuration 0PXPDMB4MFE6H --gateway-group 1

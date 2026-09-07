@@ -36,9 +36,9 @@ reShapr uses different credentials at different boundaries:
 | User JWT | User or CLI to public control-plane APIs | Represents one user in one current organization context |
 | Control-plane admin API key | Administrator to admin APIs | Authorizes global administration across organizations |
 | Kubernetes service account exchange | Kubernetes workload to public control-plane APIs | Produces a short-lived reShapr JWT for one allowed organization |
-| Gateway API token | Gateway to control plane | Registers a Gateway and authorizes discovery and health traffic for its organization |
-| MCP endpoint API key | MCP client to Gateway | Protects Expositions created from one Configuration Plan |
-| MCP OAuth bearer JWT | MCP client to Gateway | Authenticates a caller and enforces the issuer, claim, and Exposition-scope policy |
+| Gateway API token | Proxy to control plane | Registers a Gateway and authorizes discovery and health traffic for its organization |
+| MCP endpoint API key | MCP client to proxy | Protects Expositions created from one Configuration Plan |
+| MCP OAuth bearer JWT | MCP client to proxy | Authenticates a caller and enforces the issuer, claim, and Exposition-scope policy |
 
 These credentials are not interchangeable. In particular, a Gateway API token does not authorize an MCP client, and a Configuration Plan API key does not grant administrative access to the control plane.
 
@@ -93,11 +93,11 @@ Deleting a service-account record prevents future exchanges. Already issued reSh
 
 ## Gateway API tokens are infrastructure credentials
 
-Gateway API tokens are created, listed, and deleted within an organization. A Gateway uses the generated token to authenticate registration, configuration discovery, and health advertisements to the control plane.
+Gateway API tokens are created, listed, and deleted within an organization. A proxy uses the generated token to register its logical Gateway and authenticate configuration discovery and health advertisements to the control plane.
 
-Use a separate token for each operational boundary or Gateway fleet so one rotation does not interrupt unrelated deployments. The generated token is shown once, has an explicit validity period, and must be delivered through a secret manager or workload Secret.
+Use a separate token for each operational boundary or proxy fleet so one rotation does not interrupt unrelated deployments. The generated token is shown once, has an explicit validity period, and must be delivered through a secret manager or workload Secret.
 
-Deleting a token prevents Gateways using it from authenticating future control-plane connections. Rotate by creating a replacement, updating and verifying every affected Gateway, then deleting the old token. **[Upgrade reShapr and Rotate Runtime Secrets](../how-to-guides/operations/upgrade-and-rotate.md#rotate-a-gateway-registration-token)** provides the applied procedure.
+Deleting a token prevents proxies using it from authenticating future control-plane connections. Rotate by creating a replacement, updating and verifying every affected proxy, then deleting the old token. **[Upgrade reShapr and Rotate Runtime Secrets](../how-to-guides/operations/upgrade-and-rotate.md#rotate-a-gateway-registration-token)** provides the applied procedure.
 
 ## Quotas govern resource counts
 

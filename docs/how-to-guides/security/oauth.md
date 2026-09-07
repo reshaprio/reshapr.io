@@ -8,12 +8,12 @@ verification:
 
 # Protect an MCP Endpoint with OAuth 2.0
 
-Use OAuth 2.0 when an MCP endpoint needs authenticated user identity and scopes rather than a shared API key. reShapr validates bearer JWTs at the client-to-Gateway boundary and applies the policy to the complete Exposition.
+Use OAuth 2.0 when an MCP endpoint needs authenticated user identity and scopes rather than a shared API key. reShapr validates bearer JWTs at the client-to-proxy boundary and applies the policy to the complete Exposition.
 
 :::info Client ID Metadata Document compatibility
 reShapr accepts bearer JWTs issued after an MCP client registers through a [Client ID Metadata Document (CIMD)](https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization#client-id-metadata-documents). CIMD lets the Authorization Server identify the MCP client from a metadata document hosted at its HTTPS `client_id` URL; the Authorization Server, not CIMD, issues the access token.
 
-The Gateway does not participate in that client-registration step. It validates the resulting JWT in the same way as any other bearer token: against the configured issuer, JWKS, required claims, expiration, and scopes.
+The proxy does not participate in that client-registration step. It validates the resulting JWT in the same way as any other bearer token: against the configured issuer, JWKS, required claims, expiration, and scopes.
 :::
 
 ## Prerequisites
@@ -22,7 +22,7 @@ You need:
 
 - the reShapr `0.2.3` CLI, authenticated with `reshapr login`;
 - an imported Service, its backend endpoint, and a Gateway Group ID;
-- an OAuth 2.0 test issuer and HTTPS JWKS endpoint reachable by the Gateway;
+- an OAuth 2.0 test issuer and HTTPS JWKS endpoint reachable by the proxy;
 - `curl` and `jq`;
 - RSA- or RSA-PSS-signed test access tokens containing `sub`, `iat`, `exp`, and `iss`.
 

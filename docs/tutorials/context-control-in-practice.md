@@ -10,12 +10,16 @@ verification:
 
 Start from the Open-Meteo Service created in the first endpoint tutorial. You will attach a declarative Custom Tool and an output filter, expose two Plans, and compare the same live weather call before and after filtering.
 
+:::tip Watch related demos
+See [Context Control applied to GitHub GraphQL](https://youtu.be/OjsSAt0JdOY) and [the resulting surface used by an MCP App](https://youtu.be/5ewU51_oM_8). The examples use a different API; the tutorial below remains the reproducible `0.2.3` procedure.
+:::
+
 ## Prerequisites
 
 - The **[first MCP endpoint tutorial](./getting-started.md)** completed against reShapr `0.2.3`
 - reShapr CLI `0.2.3`, authenticated against that environment
 - `curl` and `jq`
-- A running Gateway in Gateway Group `1`
+- A running proxy registered as a Gateway in Gateway Group `1`
 
 The example endpoint is intentionally unauthenticated. Add the authentication header required by your Exposition if you apply the procedure elsewhere.
 

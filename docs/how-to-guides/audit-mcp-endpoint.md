@@ -8,16 +8,16 @@ verification:
 
 # Audit MCP Endpoint Calls
 
-Use this guide to enable audit on one Configuration Plan and verify the records produced by successful and rejected MCP requests. Audit is an endpoint policy: enabling Gateway telemetry alone does not cause every Exposition to emit audit events.
+Use this guide to enable audit on one Configuration Plan and verify the records produced by successful and rejected MCP requests. Audit is an endpoint policy: enabling proxy telemetry alone does not cause every Exposition to emit audit events.
 
-Audit events are [OpenTelemetry](https://opentelemetry.io/) log records marked with `log.type=audit`. The Gateway exports them through its OpenTelemetry Logs pipeline; storage, routing, retention, and access control belong to the configured Collector and telemetry backends.
+Audit events are [OpenTelemetry](https://opentelemetry.io/) log records marked with `log.type=audit`. The proxy exports them through its OpenTelemetry Logs pipeline; storage, routing, retention, and access control belong to the configured Collector and telemetry backends.
 
 ## Prerequisites
 
 You need:
 
-- a reShapr Gateway and CLI at version `0.2.3`;
-- Gateway OpenTelemetry logs configured with **[Observe the reShapr Gateway](./operations/observe-and-audit.md)**;
+- a reShapr proxy and CLI at version `0.2.3`;
+- proxy OpenTelemetry logs configured with **[Observe the reShapr Proxy](./operations/observe-and-audit.md)**;
 - a telemetry or audit backend where you can search exported records;
 - `reshapr login` completed for the target organization;
 - an imported Service, its backend endpoint, and a Gateway Group ID;
@@ -170,6 +170,6 @@ The Configuration Plan enables audit for its Expositions, and the audit sink con
 
 ## Next step
 
-Use **[Observe the reShapr Gateway](./operations/observe-and-audit.md)** to route records with `log.type=audit` to a dedicated sink. Use **[Security Capabilities and Limits](../explanations/security-model.md)** to review endpoint authentication and audit boundaries.
+Use **[Observe the reShapr Proxy](./operations/observe-and-audit.md)** to route records with `log.type=audit` to a dedicated sink. Use **[Security Capabilities and Limits](../explanations/security-model.md)** to review endpoint authentication and audit boundaries.
 
 The release-tagged [audit implementation](https://github.com/reshaprio/reshapr/tree/0.2.3/proxy/src/main/java/io/reshapr/proxy/audit) and [public API contract](https://github.com/reshaprio/reshapr/blob/0.2.3/reshapr-public-openapi-v0.1.yaml) remain the canonical references.

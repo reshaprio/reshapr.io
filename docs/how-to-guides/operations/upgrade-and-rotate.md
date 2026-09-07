@@ -1,5 +1,5 @@
 ---
-description: Upgrade a Kubernetes reShapr deployment and rotate endpoint, Gateway, and backend credentials with explicit recovery boundaries.
+description: Upgrade a Kubernetes reShapr deployment and rotate endpoint, proxy registration, and backend credentials with explicit recovery boundaries.
 verification:
   product: reShapr stack
   version: 0.2.3 / controllers 0.0.1 / charts 0.0.11
@@ -20,7 +20,7 @@ You need:
 - tracked and reviewable Helm values for every installed release;
 - access to the [reShapr `0.2.3` release](https://github.com/reshaprio/reshapr/releases/tag/0.2.3) and [charts `0.0.11` release](https://github.com/reshaprio/reshapr-helm-charts/releases/tag/0.0.11);
 - an externally managed PostgreSQL service with a tested backup and restore procedure;
-- maintenance authority for Gateway and client credentials;
+- maintenance authority for Gateway registration and client credentials;
 - one active Exposition and one non-destructive Tool for post-upgrade checks;
 - Helm, `kubectl`, `curl`, `jq`, and reShapr CLI `0.2.3`.
 
@@ -194,7 +194,7 @@ kubectl get services.reshapr.io,gatewaygroups.reshapr.io,configurationplans.resh
 
 Helm retains CRDs and does not treat them like ordinary release templates. Never delete a CRD as an upgrade or rollback step: deletion removes every custom resource of that kind across namespaces. Follow release-specific CRD instructions when a target changes their schemas.
 
-## Upgrade the Gateways
+## Upgrade the proxies
 
 Apply the reviewed proxy values and wait for the rollout:
 
@@ -244,7 +244,7 @@ curl --fail --silent --show-error \
   "${MCP_URL}" | jq -er '.result.supportedVersions'
 ```
 
-Repeat the baseline read-only Tool call and compare its result. Also inspect error rate, latency, Gateway logs, and audit signals through at least one normal telemetry interval before closing the maintenance window.
+Repeat the baseline read-only Tool call and compare its result. Also inspect error rate, latency, proxy logs, and audit signals through at least one normal telemetry interval before closing the maintenance window.
 
 ## Recover from a failed upgrade
 
@@ -264,7 +264,7 @@ For a control-plane failure:
 2. determine from the release notes whether the previous runtime is compatible with the migrated schema;
 3. if it is compatible, roll back the control-plane Helm revision and verify it;
 4. if it is not compatible, follow the database owner's tested restore procedure for `${DATABASE_BACKUP_ID}` and restore the matching Helm revision;
-5. verify control-plane readiness, Gateway registration, the Exposition, and the read-only Tool call.
+5. verify control-plane readiness, proxy readiness and Gateway registration, the Exposition, and the read-only Tool call.
 
 These are manual recovery decisions. reShapr does not provide automated application rollback, schema rollback, or database restore.
 
@@ -318,11 +318,11 @@ reshapr api-token list
 reshapr api-token delete '<old-token-id>'
 ```
 
-Repeat this sequence for every Gateway release that uses the old token. Token creation, workload replacement, verification, and old-token revocation are operator-managed steps.
+Repeat this sequence for every proxy release that uses the old token. Token creation, workload replacement, verification, and old-token revocation are operator-managed steps.
 
 ## Rotate a backend `${env:...}` credential
 
-When a control-plane Secret stores a reference such as `${env:BACKEND_API_TOKEN}`, update `BACKEND_API_TOKEN` in the secret manager that supplies the Gateway workload. Keep the reference itself unchanged.
+When a control-plane Secret stores a reference such as `${env:BACKEND_API_TOKEN}`, update `BACKEND_API_TOKEN` in the secret manager that supplies the proxy workload. Keep the reference itself unchanged.
 
 Kubernetes environment variables are fixed for the lifetime of a container. Trigger a rollout so new pods receive the new value:
 
@@ -334,7 +334,7 @@ kubectl rollout status deployment/reshapr-proxy \
   --timeout 5m
 ```
 
-Verify Gateway readiness and repeat a read-only Tool call that requires the backend credential. Revoke the previous backend credential only after the new value is accepted. Coordinate an overlap in the backend credential system when uninterrupted calls are required.
+Verify proxy readiness and Gateway registration, then repeat a read-only Tool call that requires the backend credential. Revoke the previous backend credential only after the new value is accepted. Coordinate an overlap in the backend credential system when uninterrupted calls are required.
 
 ## Result
 
@@ -351,6 +351,6 @@ The Helm releases use charts `0.0.11`, runtime workloads use `0.2.3`, controller
 
 ## Next step
 
-Use **[Troubleshoot an Exposition or Gateway](./troubleshoot.md)** when a post-upgrade check fails, and **[Observe the reShapr Gateway](./observe-and-audit.md)** to compare telemetry across the maintenance window.
+Use **[Troubleshoot an Exposition or Proxy](./troubleshoot.md)** when a post-upgrade check fails, and **[Observe the reShapr Proxy](./observe-and-audit.md)** to compare telemetry across the maintenance window.
 
 The release-tagged [Helm chart documentation](https://github.com/reshaprio/reshapr-helm-charts/tree/0.0.11) and [reShapr runtime](https://github.com/reshaprio/reshapr/tree/0.2.3) remain the canonical references.

@@ -4,13 +4,17 @@ description: Understand how reShapr negotiates historical session-based MCP vers
 
 # MCP Compatibility: Session and Stateless Modes
 
-reShapr supports several MCP protocol versions through one Streamable HTTP endpoint. The negotiated version determines how the client establishes context, which state it must carry, and which response shape the Gateway returns.
+reShapr supports several MCP protocol versions through one Streamable HTTP endpoint. The negotiated version determines how the client establishes context, which state it must carry, and which response shape the proxy returns.
 
 The important boundary is MCP `2026-07-28`. Earlier versions use a server-managed session. Version `2026-07-28` uses a stateless request model and a modern response dialect.
 
+:::tip Watch protocol negotiation
+The [MCP 2026-07-28 protocol demo](https://youtu.be/iqk3lcuASD8) shows the stateless mode in use. This explanation and the support matrix remain the canonical compatibility references.
+:::
+
 ## Two modes share one endpoint
 
-The Gateway selects a mode from the request and its headers:
+The proxy selects a mode from the request and its headers:
 
 | Mode | Supported versions | Negotiation | State on later requests |
 |---|---|---|---|
@@ -23,11 +27,11 @@ The five entries are versions reShapr `0.2.3` explicitly recognizes. This does n
 
 ## Historical clients establish a session
 
-For a version before `2026-07-28`, `initialize` negotiates the protocol and creates an MCP session. The response includes `MCP-Session-Id`, and the Gateway stores the negotiated version with that session.
+For a version before `2026-07-28`, `initialize` negotiates the protocol and creates an MCP session. The response includes `MCP-Session-Id`, and the proxy stores the negotiated version with that session.
 
-Later requests return the session ID. The Gateway reads the pinned protocol version from its session store and selects the legacy response dialect. If a client sends a historical version on a non-handshake request without a valid session, the Gateway rejects the request rather than silently creating one.
+Later requests return the session ID. The proxy reads the pinned protocol version from its session store and selects the legacy response dialect. If a client sends a historical version on a non-handshake request without a valid session, the proxy rejects the request rather than silently creating one.
 
-The session can be shared across clustered Gateway replicas through the configured runtime state store. This is protocol state, not an application login session and not a guarantee that a session survives every deployment or administrative operation.
+The session can be shared across clustered proxy replicas through the configured runtime state store. This is protocol state, not an application login session and not a guarantee that a session survives every deployment or administrative operation.
 
 ## The public 2026-07-28 mode is stateless
 
@@ -54,7 +58,7 @@ The modern dialect adds `resultType: complete` to completed results. When a Conf
 - `ttlMs`, the suggested cache lifetime in milliseconds;
 - `cacheScope`, the suggested sharing scope.
 
-These values are hints for compatible clients. They do not create a Gateway response cache, and historical dialects ignore them.
+These values are hints for compatible clients. They do not create a proxy response cache, and historical dialects ignore them.
 
 ## Elicitation follows the state model
 
@@ -73,7 +77,7 @@ See **[Authenticate Backend Calls and Use Elicitation](../how-to-guides/security
 
 The MCP schema contains names for methods used in requests, responses, and client/server interactions. A constant alone does not mean that reShapr implements that method as a server capability.
 
-The Gateway dispatcher in `0.2.3` handles:
+The proxy dispatcher in `0.2.3` handles:
 
 - `initialize` and `server/discover` for the applicable lifecycle mode;
 - `tools/list` and `tools/call`;

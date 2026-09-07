@@ -31,6 +31,14 @@ Keep introductions, decisions, and the first useful example on `reshapr.io`. Kee
 
 Do not copy complete CLI help, OpenAPI schemas, CRD schemas, Helm values tables, or deployment manifests into this site. Summarize the decision a reader must make, show the first useful example, and link to the canonical owner.
 
+### Product terminology
+
+Use **Gateway** for the logical resource represented in the database and exposed through the APIs, CLI, and Web UI. A Gateway records the identity, labels, addresses, version, and health advertised by one running proxy. Use **Gateway Group** for the logical selection target assigned to an Exposition.
+
+Use **reShapr proxy**, or **proxy** after the first mention, for the deployable data-plane component: its process, runtime, container, image, workload, Helm release, configuration, logs, and metrics. A proxy registers a Gateway with the control plane and serves the MCP endpoints selected for that Gateway.
+
+Do not describe the reShapr proxy as an AI Gateway. AI Gateways are broader, complementary products; when appropriate, one can be deployed in front of an MCP endpoint served by a reShapr proxy. Preserve literal identifiers such as `Gateway`, `GatewayGroup`, `Gateway API token`, `RESHAPR_GATEWAY_ID`, and `reshapr-proxy`.
+
 ## Evidence and Links
 
 Every technical capability or limitation must be supported by a public, tracked source such as code, a contract, a test, a release artifact, or owner documentation.

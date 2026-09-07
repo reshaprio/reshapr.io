@@ -8,13 +8,13 @@ verification:
 
 # Web UI Quickstart: From Import to Exposition
 
-Use the Web UI Quick Start to turn a public OpenAPI 3 contract into an MCP endpoint. Along the way, you will inspect the imported Service, configure its backend, and expose it through a running Gateway.
+Use the Web UI Quick Start to turn a public OpenAPI 3 contract into an MCP endpoint. Along the way, you will inspect the imported Service, configure its backend, and expose it through a running proxy.
 
 ## Prerequisites
 
 - Access to a reShapr `0.2.3` Web UI and an account that can create Services, Configuration Plans, and Expositions
-- At least one running Gateway registered in the **Default Gateway Group**
-- Outbound access from the control plane to GitHub and from the Gateway to `https://api.open-meteo.com`
+- At least one running proxy registered as a Gateway in the **Default Gateway Group**
+- Outbound access from the control plane to GitHub and from the proxy to `https://api.open-meteo.com`
 
 This tutorial uses the immutable Open-Meteo `1.5.6` OpenAPI 3 contract:
 
@@ -61,7 +61,7 @@ Keep all discovered operations included and continue. Quick Start creates a Conf
 
 ![Quick Start Plan stage with the Open-Meteo backend endpoint and endpoint security disabled](/img/docs/web-ui-quickstart-plan.png)
 
-The backend endpoint is where the Gateway sends generated Tool calls. It is distinct from the OpenAPI contract URL used during import.
+The backend endpoint is where the proxy sends generated Tool calls. It is distinct from the OpenAPI contract URL used during import.
 
 For fine-grained operation or Artifact selection, use the advanced Plan editor instead of completing that configuration in Quick Start.
 
@@ -73,7 +73,7 @@ On the **Expose** stage:
 2. Leave endpoint security disabled for this first endpoint.
 3. Confirm the Exposition.
 
-Quick Start targets Gateway Group ID `1`, the **Default Gateway Group**. The completed view should show the created Exposition and one or more MCP endpoint URLs supplied by connected Gateways.
+Quick Start targets Gateway Group ID `1`, the **Default Gateway Group**. The completed view should show the created Exposition and one or more MCP endpoint URLs supplied by connected proxies through their Gateway registrations.
 
 Endpoint URLs and resource identifiers are generated for your organization. A displayed URL can resemble this example:
 
@@ -83,7 +83,7 @@ https://mcp.example.com/mcp/acme/Open-Meteo+Weather+Forecast+API/1.0
 
 ![Active Open-Meteo MCP Server showing the default Plan, connected Gateway, backend, and endpoint URLs](/img/docs/web-ui-quickstart-result.png)
 
-If no endpoint appears, verify that a Gateway is running and registered in the Default Gateway Group. Creating an Exposition stores the intended deployment, but only a connected Gateway can publish a usable endpoint.
+If no endpoint appears, verify that a proxy is running and registered as a Gateway in the Default Gateway Group. Creating an Exposition stores the intended deployment, but only a connected proxy can publish a usable endpoint.
 
 :::info Optional endpoint security
 Quick Start can protect the endpoint with an API key or OAuth 2.0. An API key is displayed only when it is generated, so store it before leaving the completion view. Add security after this tutorial by following **[Protect an MCP Endpoint with an API Key](../how-to-guides/security/api-key.md)** or **[Protect an MCP Endpoint with OAuth 2.0](../how-to-guides/security/oauth.md)**.
@@ -98,7 +98,7 @@ Open the published MCP Server from the completion view or the dashboard's **MCP 
 - the Default Gateway Group;
 - at least one MCP endpoint URL.
 
-This confirms that the Web UI created the complete Service-to-Exposition resource chain. To verify MCP discovery and call the generated weather Tool, continue with **[Test an MCP Endpoint](../how-to-guides/test-mcp-endpoint.md)** and use the exact endpoint URL displayed by your Gateway.
+This confirms that the Web UI created the complete Service-to-Exposition resource chain. To verify MCP discovery and call the generated weather Tool, continue with **[Test an MCP Endpoint](../how-to-guides/test-mcp-endpoint.md)** and use the exact endpoint URL displayed for the registered Gateway.
 
 ## What you learned
 
