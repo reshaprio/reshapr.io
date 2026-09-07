@@ -269,6 +269,11 @@ const sidebars = {
               id: 'explanations/context-control',
               label: 'Context Control',
             },
+            {
+              type: 'doc',
+              id: 'explanations/mcp-compatibility',
+              label: 'MCP Compatibility',
+            },
           ],
         },
         {
@@ -324,6 +329,11 @@ const sidebars = {
               type: 'doc',
               id: 'references/interfaces',
               label: 'Product Interfaces',
+            },
+            {
+              type: 'doc',
+              id: 'references/mcp-support',
+              label: 'MCP Support Matrix',
             },
             {
               type: 'doc',

@@ -32,6 +32,8 @@ export MCP_URL='https://<gateway-host>/mcp/<endpoint-path>'
 
 Use one mode consistently. Do not send a legacy session ID with a stateless request.
 
+See **[MCP Compatibility: Session and Stateless Modes](../explanations/mcp-compatibility.md)** for negotiation, state, dialect, and elicitation differences. The **[MCP Support Matrix](../references/mcp-support.md)** lists exact version and method support.
+
 ## Test the stateless protocol
 
 ### Discover the server
@@ -149,6 +151,7 @@ The endpoint is ready for an MCP client when negotiation succeeds, `tools/list` 
 
 ## Next step
 
+- **[Review MCP compatibility](../explanations/mcp-compatibility.md)** before integrating a client that supports several protocol versions.
 - **[Create your first MCP endpoint](../tutorials/getting-started.md)** if you do not have one yet.
 - **[Protect an MCP endpoint with an API key](./security/api-key.md)** before sharing an unprotected endpoint.
 - **[Protect an MCP Endpoint with OAuth 2.0](./security/oauth.md)** when clients need authenticated identity and scopes.

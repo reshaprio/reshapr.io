@@ -1,0 +1,28 @@
+name: MCP support contract
+
+on:
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out documentation
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Check out reShapr 0.2.3
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: reshaprio/reshapr
+          ref: 0.2.3
+          path: owner/reshapr
+
+      - name: Verify MCP support matrix
+        env:
+          RESHAPR_SOURCE_DIR: ${{ github.workspace }}/owner/reshapr
+        run: node --test ./tests/mcp-support.test.mjs

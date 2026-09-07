@@ -11,7 +11,7 @@ In a nutshell, a Configuration Plan will allow you to define:
 - The backend endpoint URL of the existing service or API implementation you’re targeting,
 - The list of the Service operations you’d like to expose - you can choose, for example, to restrict access to read-only operations only, or to hide non-relevant operations,
 - The attached Prompts, Resources, Custom Tools, and output filters to include. When no artifact is selected, all artifacts attached to the Service are included,
-- The client cache policy for MCP `2026-07-28`, when clients support the corresponding cache hints,
+- The client cache policy for MCP `2026-07-28`, when clients support the corresponding **[modern response dialect](./mcp-compatibility.md#dialects-change-the-result-shape)**,
 - Whether the Gateway emits audit events for calls made through the Plan,
 - The **[security options](security-model.md)** you’d like to enable for securing the access of the MCP endpoints - you can choose to secure access with an API key or using an OAuth Authorization Server,
 - The OAuth scopes required to access an Exposition. These scopes protect the Exposition as a whole; reShapr does not apply different OAuth scopes or claims to individual tools, Resources, or Prompts,

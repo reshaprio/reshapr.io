@@ -22,6 +22,13 @@ The [`reshapr`](https://github.com/reshaprio/reshapr) repository owns the contro
 | Administration API | Manage users, organizations, memberships, quotas, and service accounts | [Admin OpenAPI](https://github.com/reshaprio/reshapr/blob/main/reshapr-admin-ctrl-openapi-v0.1.yaml), [organization guide](../how-to-guides/administration/organizations-and-memberships.md), and [quota guide](../how-to-guides/administration/organization-quotas.md) |
 | Authentication API | Authenticate users and establish CLI or browser sessions | [Authentication OpenAPI](https://github.com/reshaprio/reshapr/blob/main/reshapr-authentication-openapi-v0.1.yaml) |
 
+## MCP interface
+
+- **[MCP Compatibility](../explanations/mcp-compatibility.md)** explains session-based and stateless negotiation, state, response dialects, and elicitation.
+- **[MCP Support Matrix](./mcp-support.md)** records the exact versions and server methods verified for reShapr `0.2.3`.
+- **[MCP implementation](https://github.com/reshaprio/reshapr/tree/main/proxy/src/main/java/io/reshapr/proxy/mcp)** is the current owner for Gateway protocol behavior.
+- **[Official MCP specification](https://modelcontextprotocol.io/specification/)** owns the protocol beyond reShapr's implementation boundary.
+
 ## Command-line interfaces
 
 - **[CLI reference](./cli-commands.md)** provides the user-facing command index and bounded examples on this site.

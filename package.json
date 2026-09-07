@@ -10,6 +10,7 @@
     "prebuild": "npm run generate:video-placeholders",
     "build": "docusaurus build && node ./scripts/generate-blog-index.js && node ./scripts/generate-route-markdown.js && node ./scripts/inject-machine-directives.js && node ./scripts/validate-machine-content.js",
     "test:content-negotiation": "node --test ./tests/content-negotiation.test.mjs",
+    "test:mcp-support": "node --test ./tests/mcp-support.test.mjs",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",

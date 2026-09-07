@@ -28,16 +28,16 @@ verification:
 
 | Capability | Availability | Scope | Reference |
 |---|---|---|---|
-| Protocol versions | Available | `2024-11-05`, `2025-03-26`, `2025-06-18`, `2025-11-25`, and the public `2026-07-28` version are negotiated by the Gateway. | [MCP specification](https://modelcontextprotocol.io/specification/) |
+| Protocol versions | Available | `2024-11-05`, `2025-03-26`, `2025-06-18`, `2025-11-25`, and the public `2026-07-28` version are negotiated by the Gateway. | [MCP Support Matrix](./mcp-support.md) |
 | Streamable HTTP | Available | Expositions provide MCP endpoints over HTTP; TLS termination depends on the deployment. WebSocket transport is not provided. | [Configuration Plan and Exposition](../explanations/configuration-and-exposition.md) |
-| Session and stateless modes | Available | Versions before `2026-07-28` use a server-issued session ID. `2026-07-28` uses stateless requests and `server/discover`. | [MCP specification](https://modelcontextprotocol.io/specification/) |
+| Session and stateless modes | Available | Versions before `2026-07-28` use a server-issued session ID. `2026-07-28` uses stateless requests and `server/discover`. | [MCP Compatibility](../explanations/mcp-compatibility.md) |
 | Tools | Available | `tools/list` and `tools/call` dispatch to REST, GraphQL, gRPC, or Custom Tools selected by the Plan. | [Custom Tools specification](custom-tools-specification.md) |
 | Prompts | Available | `prompts/list` and `prompts/get` serve Prompts artifacts selected by the Plan. | [Prompts specification](prompts-specification.md) |
 | Resources | Available | Static and templated Resources support list, template list, and read operations. | [Resources specification](resources-specification.md) |
 | URL elicitation | Available with limits | Backend credentials can be requested through legacy session-bound errors or `2026-07-28` stateless elicitation bound to an authenticated user. | [Backend authentication and elicitation](../how-to-guides/security/backend-auth-and-elicitation.md) |
 | Client cache hints | Available with limits | `ttlMs` and `cacheScope` are returned only for the `2026-07-28` protocol shape. | [Configuration Plan and Exposition](../explanations/configuration-and-exposition.md) |
 
-Methods such as roots, sampling, and subscriptions are not exposed as server capabilities. A dedicated compatibility matrix will document method-level behavior separately.
+Methods such as roots, sampling, and subscriptions are not exposed as server capabilities. The **[MCP Support Matrix](./mcp-support.md)** distinguishes implemented, removed, and unimplemented methods.
 
 ## Security and governance
 
