@@ -39,6 +39,10 @@ npm run build
 
 Do not manually edit `build/**`, `llms.txt`, `llms-full.txt`, generated route Markdown, or `.docusaurus/**`. Edit the authored source and regenerate with `npm run build`.
 
+## Maintenance Registry
+
+Use [`docs-maintenance/README.md`](./docs-maintenance/README.md) when product capabilities, limitations, persona journeys, or the authored corpus change. Keep this private registry outside Docusaurus and run `npm run docs:audit` after updating it.
+
 ## Change Discipline
 
 - Preserve unrelated user changes in a dirty worktree.

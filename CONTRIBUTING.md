@@ -20,6 +20,8 @@ Write documentation in English and give each page one primary [Diátaxis](https:
 
 Keep introductions, decisions, and the first useful example on `reshapr.io`. Keep exhaustive or volatile implementation details in the repository that owns them.
 
+The private [`docs-maintenance/`](docs-maintenance/README.md) registry tracks the released product baseline, documentation coverage, and update workflow. Update it when a capability, limitation, persona journey, or authored page changes; it is maintenance input and must not be published by Docusaurus.
+
 ### Content ownership
 
 | Content | Canonical owner |
@@ -114,7 +116,8 @@ Before opening a pull request:
 1. Recheck technical claims against their canonical owner.
 2. Verify local, GitHub, and external links.
 3. Replay changed executable steps against their stated release.
-4. Run `npm run build`.
-5. Review generated human-facing and machine-readable content for contradictory claims.
+4. Run `npm run docs:audit`.
+5. Run `npm run build`.
+6. Review generated human-facing and machine-readable content for contradictory claims.
 
 The build must complete successfully before the documentation change is ready for review.
