@@ -88,4 +88,4 @@ Filters fail open in `0.2.3`: if a selected filter cannot parse or transform the
 
 Measure the exact Tool list or response produced by two named configurations. Record the request, protocol version, filter, encoding, date, and byte-counting command. A reduction observed for one API response does not establish a universal token reduction or improved model accuracy.
 
-Continue with **[From API Contract to Agent Action](./api-to-agent.md)** for the complete request flow. The **[Custom Tools](../references/custom-tools-specification.md)** and **[Tools Output Filtering](../references/spec-outtools-filtering.md)** pages remain the syntax references.
+Continue with **[From API Contract to Agent Action](./api-to-agent.md)** for the complete request flow or **[Build a Scripted Custom Tool](../how-to-guides/build-scripted-custom-tool.md)** to implement a composed action. The **[Custom Tools](../references/custom-tools-specification.md)** and **[Tools Output Filtering](../references/spec-outtools-filtering.md)** pages remain the syntax references.

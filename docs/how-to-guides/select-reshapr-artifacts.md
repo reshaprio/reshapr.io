@@ -234,6 +234,7 @@ One Service now has four reusable attached Artifact types and two Configuration 
 
 ## Next step
 
+- **[Build a Scripted Custom Tool](./build-scripted-custom-tool.md)** composes same-Service and cross-Service calls behind one action.
 - **[Context Control in Practice](../tutorials/context-control-in-practice.md)** measures a filtered Tool result.
 - **[Services and Artifacts](../explanations/services-and-artifacts.md)** explains main, attached, and derived capabilities.
 - **[Context Control](../explanations/context-control.md)** compares the available mechanisms and trade-offs.

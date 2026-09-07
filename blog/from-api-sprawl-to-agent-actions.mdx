@@ -146,10 +146,10 @@ A scripted Custom Tool lets reShapr expose **one MCP tool** while running a smal
 
 That matters because the usual reShapr controls still apply to **every underlying call**:
 
-- **Tool authorization.**
+- **The script-declared Tool allow-list.** This restricts script calls; it is not per-Tool OAuth authorization.
 - **Backend secrets and elicitation.**
 - **Output filtering.**
-- **Audit and tracing.**
+- **Audit and distributed tracing when configured.**
 - **Gateway execution limits.**
 - **Cross-service boundaries** inside the same organization.
 

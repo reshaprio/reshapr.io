@@ -1,0 +1,130 @@
+apiVersion: reshapr.io/v1alpha1
+kind: CustomTools
+service:
+  name: Scripted Todos API
+  version: 1.0.0
+customTools:
+  inspect_todo_and_owner:
+    description: Fetch a todo and its expected owner in parallel, then return one compact result.
+    input:
+      type: object
+      properties:
+        todoId:
+          type: integer
+          description: Todo identifier to inspect.
+        userId:
+          type: integer
+          description: Expected owner identifier to retrieve.
+      required:
+        - todoId
+        - userId
+    tools:
+      - tool: get_todos_todoid
+      - service: Scripted Users API:1.0.0
+        tool: get_users_userid
+    script: |
+      const todoPromise = rs.callToolAsync('get_todos_todoid', { todoId: input.todoId });
+      const userPromise = rs.callToolAsync(
+        'Scripted Users API:1.0.0',
+        'get_users_userid',
+        { userId: input.userId }
+      );
+      const results = rs.awaitPromises([todoPromise, userPromise]);
+      const todo = results[0];
+      const user = results[1];
+
+      function failureDetails(result) {
+        return result.error || result.content || {
+          message: 'The backend Tool returned a fault without details'
+        };
+      }
+
+      if (!todo.ok) {
+        rs.fail('Unable to fetch the requested todo', {
+          todoId: input.todoId,
+          cause: failureDetails(todo)
+        });
+      }
+
+      return {
+        todo: {
+          id: todo.content.id,
+          title: todo.content.title,
+          completed: todo.content.completed
+        },
+        owner: user.ok ? {
+          id: user.content.id,
+          name: user.content.name,
+          username: user.content.username
+        } : null,
+        ownerMatches: user.ok && todo.content.userId === user.content.id,
+        warnings: user.ok ? [] : [{
+          message: 'Owner lookup failed',
+          cause: failureDetails(user)
+        }]
+      };
+
+  probe_undeclared_tool:
+    description: Show that a script cannot call a Tool absent from its declared allow-list.
+    input:
+      type: object
+      properties: {}
+    tools:
+      - tool: get_todos_todoid
+    script: |
+      const result = rs.callTool(
+        'Scripted Users API:1.0.0',
+        'get_users_userid',
+        { userId: 1 }
+      );
+      return {
+        blocked: !result.ok,
+        error: result.error
+      };
+
+  exceed_call_limit:
+    description: Make eleven calls so the default ten-call script guardrail can be observed.
+    input:
+      type: object
+      properties: {}
+    tools:
+      - tool: get_todos_todoid
+    script: |
+      for (let attempt = 1; attempt <= 11; attempt++) {
+        const result = rs.callTool('get_todos_todoid', { todoId: attempt });
+        if (!result.ok) {
+          return {
+            completedCalls: attempt - 1,
+            blockedAt: attempt,
+            error: result.error
+          };
+        }
+      }
+      return { completedCalls: 11, blockedAt: null };
+
+  recurse_until_limited:
+    description: Recurse through a scripted Tool so the default depth guardrail can be observed.
+    input:
+      type: object
+      properties:
+        remaining:
+          type: integer
+          minimum: 0
+      required:
+        - remaining
+    tools:
+      - tool: recurse_until_limited
+    script: |
+      if (input.remaining === 0) {
+        return { reachedGuardrail: false, remaining: 0 };
+      }
+      const result = rs.callTool('recurse_until_limited', {
+        remaining: input.remaining - 1
+      });
+      if (!result.ok) {
+        return {
+          reachedGuardrail: true,
+          detail: result.error || result.content
+        };
+      }
+      return result.content;

@@ -65,6 +65,8 @@ In the case of custom tools using `arguments`, the value **can** be expressed us
 
 Available since reShapr `0.0.14`, a Custom Tool can also define its behavior with a JavaScript `script`. This is useful when a single business action needs to orchestrate several existing tools, possibly from different Services of the same organization, and return a compact result that is easier for an Agent to use.
 
+Use **[Build a Scripted Custom Tool](../how-to-guides/build-scripted-custom-tool.md)** for an end-to-end procedure covering cross-Service calls, asynchronous orchestration, failures, and runtime guardrails.
+
 A custom tool item is now **either** declarative **or** scripted:
 
 | Form | Main fields | Purpose |
@@ -172,7 +174,7 @@ Script execution is bounded by gateway settings:
 | Setting | Default | Description |
 | --- | --- | --- |
 | `reshapr.gateway.scripting.timeout` | `10000` ms | Maximum script execution time. `0` disables the timeout. |
-| `reshapr.gateway.scripting.max-tool-calls` | `50` | Maximum number of tool calls per script execution. |
+| `reshapr.gateway.scripting.max-tool-calls` | `10` | Maximum number of tool calls per script execution. |
 | `reshapr.gateway.scripting.max-depth` | `5` | Maximum nesting depth when a scripted tool calls another scripted tool. |
 
 The timeout cancels interruptible work such as backend calls and waits. Keep scripts simple and avoid unbounded CPU loops.

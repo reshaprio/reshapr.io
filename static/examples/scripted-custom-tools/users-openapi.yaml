@@ -1,0 +1,46 @@
+openapi: 3.0.3
+info:
+  title: Scripted Users API
+  version: 1.0.0
+  description: Minimal JSONPlaceholder contract used by the reShapr scripted Custom Tool guide.
+servers:
+  - url: https://jsonplaceholder.typicode.com
+paths:
+  /users/{userId}:
+    get:
+      summary: Get one user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - name
+        - username
+        - email
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+          format: email

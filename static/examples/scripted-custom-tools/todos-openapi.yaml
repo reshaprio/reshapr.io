@@ -1,0 +1,45 @@
+openapi: 3.0.3
+info:
+  title: Scripted Todos API
+  version: 1.0.0
+  description: Minimal JSONPlaceholder contract used by the reShapr scripted Custom Tool guide.
+servers:
+  - url: https://jsonplaceholder.typicode.com
+paths:
+  /todos/{todoId}:
+    get:
+      summary: Get one todo
+      parameters:
+        - name: todoId
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Todo found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        '404':
+          description: Todo not found
+components:
+  schemas:
+    Todo:
+      type: object
+      required:
+        - id
+        - userId
+        - title
+        - completed
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        title:
+          type: string
+        completed:
+          type: boolean

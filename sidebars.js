@@ -112,6 +112,11 @@ const sidebars = {
               id: 'how-to-guides/select-reshapr-artifacts',
               label: 'Attach and select Artifacts',
             },
+            {
+              type: 'doc',
+              id: 'how-to-guides/build-scripted-custom-tool',
+              label: 'Build a Scripted Custom Tool',
+            },
           ],
         },
         {
