@@ -18,7 +18,8 @@ flowchart LR
   Call --> Response[Backend response]
   Response --> Retain[Retain JSON branches]
   Retain --> Patch[Apply JSON patches]
-  Patch --> Toon[Encode as TOON]
+  Patch --> Compact[Remove empty values]
+  Compact --> Toon[Encode as TOON]
   Toon --> Result[MCP Tool result]
 ```
 
@@ -30,6 +31,7 @@ flowchart LR
 | **Scripted Custom Tool** | A composed action that can invoke allowed Tools | One action requires orchestration or conditional logic | Adds code, runtime limits, and a larger maintenance surface |
 | **`jsonRetain`** | Branches present in a JSON Tool result | The backend returns useful data mixed with large irrelevant branches | Required fields can be removed accidentally |
 | **`jsonPatches`** | Shape or values of a JSON Tool result | The client needs a stable response shape or small transformation | Patch paths depend on the backend response structure |
+| **`compact`** | Recursively empty values in a JSON Tool result | Nulls and empty strings or containers add noise without meaning | Empty values that carry domain meaning are removed |
 | **TOON** | Encoding of the treated result | Repetitive structured data benefits from a more compact representation | The client or model must interpret TOON; semantics are unchanged |
 
 ## Reduce the advertised operation surface
@@ -59,9 +61,9 @@ These capability names are composition metadata. They help a user choose Artifac
 
 ## Treat the response after the call
 
-Use `jsonRetain` to keep only required branches, then `jsonPatches` for explicit RFC 6902 transformations. Enable TOON only after the JSON result has the intended information and shape. In the `0.2.3` runtime, the order is fixed: retain, patch, then encode.
+Use `jsonRetain` to keep only required branches, then `jsonPatches` for explicit RFC 6902 transformations. Set `compact: true` only when nulls, empty strings, empty arrays, and empty objects carry no useful domain meaning. Enable TOON only after the JSON result has the intended information and shape. In the `1.0.0-rc1` runtime, the order is fixed: retain, patch, compact, then encode.
 
-Filters fail open in `0.2.3`: if a selected filter cannot parse or transform the response, the Gateway returns the original response. This avoids replacing a successful backend call with a filtering failure, but it means filtering must not be treated as a security boundary for removing sensitive fields.
+Filters fail open in `1.0.0-rc1`: if a selected filter cannot parse or transform the response, the Gateway returns the original response. This avoids replacing a successful backend call with a filtering failure, but it means filtering must not be treated as a security boundary for removing sensitive fields.
 
 ## Three common decisions
 

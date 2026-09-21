@@ -13,7 +13,7 @@ This supports two common requirements:
 - **Response scope.** A GraphQL node with many scalar properties or a REST endpoint returning a deeply nested JSON tree can expose fields that are irrelevant to the task. Filtering at the gateway retains only the required response shape.
 - **Stable response shape.** Retaining and patching known fields gives the Agent a smaller, more predictable result independent of the underlying API protocol.
 
-In reShapr `0.2.3`, a filter-processing error returns the original Tool response. Treat `ToolsOutputFilters` as response shaping, **not as a security or data-loss-prevention boundary**. Prevent access to sensitive fields in the backend contract and authorization layer.
+In reShapr `1.0.0-rc1`, a filter-processing error returns the original Tool response. Treat `ToolsOutputFilters` as response shaping, **not as a security or data-loss-prevention boundary**. Prevent access to sensitive fields in the backend contract and authorization layer.
 
 reShapr applies filtering universally, regardless of the source protocol (REST, GraphQL, gRPC), because filters operate on the canonical JSON response produced by reShapr's protocol converters.
 
@@ -49,9 +49,9 @@ A `ToolsOutputFilters` artifact follows some simple rules:
 - It **must** be bound to a specific reShapr **[Service](../explanations/services-and-artifacts.md)** using the **`service.name`** and `service.version` properties whose values **must** match an already discovered Service,
 - The `filters` section then defines the filters, keyed by tool name:
   - The key (here `get_user_with_latest_followers`) **must** match an existing tool on the Service, either an imported tool or a **[Custom Tool](./custom-tools-specification.md)** previously attached to that Service,
-  - A filter entry **must** specify at least one of `jsonRetain`, `jsonPatches`, or `convertToToon`,
+  - A filter entry **must** specify at least one of `jsonRetain`, `jsonPatches`, `compact`, or `convertToToon`,
   - When both `jsonRetain` and `jsonPatches` are present, `jsonRetain` **is always applied first**, as a pre-processing step that narrows the response, before `jsonPatches` are applied in order,
-  - `convertToToon` is applied last, after `jsonRetain` and `jsonPatches`.
+  - `compact` is applied after `jsonPatches`, and `convertToToon` is applied last.
 
 You can specify as many tool filters as you want in the same `ToolsOutputFilters` artifact, as long as each key targets a distinct tool of the bound Service.
 
@@ -87,12 +87,23 @@ reShapr supports the six standard JSON Patch operations:
 
 For the precise semantics of each operation, refer to **[RFC 6902: JavaScript Object Notation (JSON) Patch](https://datatracker.ietf.org/doc/html/rfc6902)**.
 
+## The `compact` operation
+
+Set `compact: true` to recursively remove sparse values from the filtered JSON response:
+
+- `null` values;
+- empty strings;
+- empty arrays;
+- empty objects.
+
+Compaction also removes a parent array or object when pruning its children leaves it empty. It runs after `jsonRetain` and `jsonPatches`, and before `convertToToon`. Omit `compact` or set it to `false` when an empty value carries domain meaning that the client must preserve.
+
 ## The `convertToToon` operation
 
 `convertToToon` converts the final filtered JSON output into **[Toon format](https://toonformat.dev/)**, a compact representation intended for LLM consumption.
 
 - The value of `convertToToon` **must** be `true`,
-- It is applied **last**, after `jsonRetain` and `jsonPatches` have run,
+- It is applied **last**, after `jsonRetain`, `jsonPatches`, and `compact` have run,
 - It can be used **alone** — without any `jsonRetain` or `jsonPatches` — and it will compact the full raw tool response as-is,
 - It works **regardless of the backend protocol**: REST, GraphQL, and gRPC tool responses are all converted to canonical JSON before filters run, so `convertToToon` applies uniformly across all three.
 
@@ -150,7 +161,7 @@ For a given MCP tool call, reShapr applies transformations in this order:
 1. The incoming MCP tool call is validated against the tool's input schema (the imported one, or the one defined by a **[Custom Tool](./custom-tools-specification.md)**).
 2. The call is converted to a protocol-specific request (REST, GraphQL, gRPC) and dispatched to the backend.
 3. The backend response is converted back into a canonical JSON response by reShapr's converters.
-4. **If a `ToolsOutputFilters` artifact is attached to the Service and declares a filter for this tool, the filter is applied here: `jsonRetain` first, then `jsonPatches`, then `convertToToon` if set.**
+4. **If a `ToolsOutputFilters` artifact is attached to the Service and declares a filter for this tool, the filter is applied here: `jsonRetain` first, then `jsonPatches`, then `compact`, and finally `convertToToon` if set.**
 5. The filtered response is wrapped into the JSON-RPC MCP envelope and returned to the client.
 
 Because filtering happens after the converter step and before the MCP envelope, the same `ToolsOutputFilters` artifact applies uniformly whether the underlying tool is backed by REST, GraphQL, or gRPC.

@@ -1,8 +1,8 @@
 ---
 verification:
   product: reShapr
-  version: 0.2.3
-  date: 2026-09-03
+  version: 1.0.0-rc1
+  date: 2026-09-18
 ---
 
 # Docker Compose
@@ -30,10 +30,10 @@ npm install -g @reshapr/reshapr-cli --allow-scripts=@scarf/scarf
 The simplest way to run reShapr locally is through `reshapr run`. Pin the release so the downloaded Compose file, container images, and this guide use the same version:
 
 ```bash
-reshapr run --release 0.2.3
+reshapr run --release 1.0.0-rc1
 ```
 
-The CLI downloads the release-owned [`docker-compose-all-in-one.yml`](https://github.com/reshaprio/reshapr/blob/0.2.3/install/docker-compose-all-in-one.yml), updates its reShapr image tags to `0.2.3`, caches it under `~/.reshapr/`, and starts the stack in the background.
+The CLI downloads the release-owned [`docker-compose-all-in-one.yml`](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/install/docker-compose-all-in-one.yml), updates its reShapr image tags to `1.0.0-rc1`, caches it under `~/.reshapr/`, and starts the stack in the background.
 
 Without `--release`, the CLI resolves `latest` through GitHub Releases. Use an explicit release for a reproducible environment. Use `nightly` only when you deliberately want artifacts from the `main` branch:
 
@@ -44,13 +44,13 @@ reshapr run --release nightly
 The CLI auto-detects Docker or Podman. To select one explicitly, use `--engine`:
 
 ```bash
-reshapr run --release 0.2.3 --engine podman
+reshapr run --release 1.0.0-rc1 --engine podman
 ```
 
 Add the optional Web UI with `--ui`:
 
 ```bash
-reshapr run --release 0.2.3 --ui
+reshapr run --release 1.0.0-rc1 --ui
 ```
 
 The Web UI addon is downloaded from the same release and becomes available at `http://localhost:3333`. The compose files are cached at `~/.reshapr/docker-compose-<release>.yml` and `~/.reshapr/docker-compose-ui-addon-<release>.yml`.
@@ -110,7 +110,7 @@ This runs the selected engine's Compose `down` command on every saved compose fi
 If you prefer to manage Docker Compose directly, check out the same release used by this guide:
 
 ```bash
-git clone --branch 0.2.3 --depth 1 https://github.com/reshaprio/reshapr.git
+git clone --branch 1.0.0-rc1 --depth 1 https://github.com/reshaprio/reshapr.git
 cd reshapr
 ```
 

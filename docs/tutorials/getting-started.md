@@ -2,8 +2,8 @@
 description: Turn a versioned Open-Meteo contract into a reShapr MCP endpoint, then discover, list, and call its generated Tool.
 verification:
   product: reShapr
-  version: 0.2.3
-  date: 2026-09-04
+  version: 1.0.0-rc1
+  date: 2026-09-18
 ---
 
 # Your First MCP Endpoint, End to End
@@ -18,7 +18,7 @@ The [43-second Open-Meteo demo](https://youtu.be/EmBNZfUceTI) previews this work
 
 - Node.js 20 or later
 - `curl` and `jq`
-- Access to the **[reShapr Online Try](./try-reshapr-online.md)** or a **[local reShapr 0.2.3 environment](../how-to-guides/docker-compose.md)**
+- Access to the **[reShapr Online Try](./try-reshapr-online.md)** or a **[local reShapr 1.0.0-rc1 environment](../how-to-guides/docker-compose.md)**
 - Outbound access to GitHub and `https://api.open-meteo.com`
 
 ## Installation
@@ -106,7 +106,7 @@ Example output (user, organization, paths, and URLs vary):
   Organization: yada
   Server      : https://app.try.reshapr.io
 ℹ️  Server Information
-  Version     : 0.2.3
+  Version     : 1.0.0-rc1
   Build time  : <build timestamp>
   Mode        : on-premises
   Internal IDP: undefined
@@ -239,7 +239,7 @@ curl --silent --show-error \
   --header 'Accept: application/json, text/event-stream' \
   --header 'MCP-Protocol-Version: 2026-07-28' \
   --header 'Mcp-Method: server/discover' \
-  --data '{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"0.2.3"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"1.0.0-rc1"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
   "$MCP_URL" | jq '.result | {supportedVersions, capabilities, serverInfo: ._meta["io.modelcontextprotocol/serverInfo"]}'
 ```
 
@@ -253,7 +253,7 @@ curl --silent --show-error \
   --header 'Accept: application/json, text/event-stream' \
   --header 'MCP-Protocol-Version: 2026-07-28' \
   --header 'Mcp-Method: tools/list' \
-  --data '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"0.2.3"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
+  --data '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"1.0.0-rc1"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
   "$MCP_URL" | jq '.result.tools[].name'
 ```
 
@@ -266,7 +266,7 @@ curl --silent --show-error \
   --header 'MCP-Protocol-Version: 2026-07-28' \
   --header 'Mcp-Method: tools/call' \
   --header 'Mcp-Name: get_v1_forecast' \
-  --data '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"get_v1_forecast","arguments":{"latitude":"48.8566","longitude":"2.3522","current":["temperature_2m","weather_code","wind_speed_10m"],"timezone":"Europe/Paris"},"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"0.2.3"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
+  --data '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"get_v1_forecast","arguments":{"latitude":"48.8566","longitude":"2.3522","current":["temperature_2m","weather_code","wind_speed_10m"],"timezone":"Europe/Paris"},"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"1.0.0-rc1"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
   "$MCP_URL" | jq -r '.result.content[0].text | fromjson | .current'
 ```
 

@@ -5,7 +5,7 @@ service:
   version: '1.0'
 customTools:
   current_weather:
-    tool: get_v1_forecast
+    tool: GET /v1/forecast
     description: Get the current temperature, weather code, and wind speed for one location.
     input:
       type: object

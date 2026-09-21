@@ -127,7 +127,7 @@ For every changed `CAP-*` and `LIM-*` ID, update [`coverage-matrix.md`](coverage
 - use `partial` and name the exact gap instead of creating placeholder prose;
 - use `missing` when a released capability has no meaningful page;
 - use `not-documentable` for unsupported behavior, while retaining boundary mentions that prevent overclaiming;
-- update the 48-page corpus inventory when pages are added, moved, or removed;
+- update the 52-page corpus inventory when pages are added, moved, or removed;
 - preserve published URLs with redirects or aliases when content moves;
 - reassess persona entry points when a journey changes.
 
@@ -156,6 +156,8 @@ Follow [`CONTRIBUTING.md`](../CONTRIBUTING.md). In particular:
 - keep volatile exhaustive contracts in their owner repositories;
 - state relevant limitations next to the claims they qualify;
 - do not edit generated files.
+
+Reuse the scripts in [`replay/`](replay/README.md) for release artifact, chart rendering, and bounded live checks. Their default mode is non-mutating. Set `APPLY=true` only for an isolated or explicitly approved environment, and keep environment-specific manual checks from the public procedure in the replay evidence.
 
 Run the narrowest relevant test immediately after the first content edit. Then run:
 
@@ -190,5 +192,6 @@ The maintenance directory must remain private source material:
 - [ ] Coverage and persona journeys match the authored corpus.
 - [ ] Blogs remain `historical-only` and non-normative.
 - [ ] Executable docs were replayed against their declared release.
+- [ ] Relevant `docs-maintenance/replay/` preflights pass and any required live checks are recorded.
 - [ ] `npm run docs:audit` and `npm run build` pass.
 - [ ] No `docs-maintenance/` content appears in published output.

@@ -2,8 +2,8 @@
 description: Turn the Open-Meteo endpoint into one agent-oriented action, filter its result, and measure the change using two Configuration Plans.
 verification:
   product: reShapr
-  version: 0.2.3
-  date: 2026-09-04
+  version: 1.0.0-rc1
+  date: 2026-09-18
 ---
 
 # Context Control in Practice
@@ -11,13 +11,13 @@ verification:
 Start from the Open-Meteo Service created in the first endpoint tutorial. You will attach a declarative Custom Tool and an output filter, expose two Plans, and compare the same live weather call before and after filtering.
 
 :::tip Watch related demos
-See [Context Control applied to GitHub GraphQL](https://youtu.be/OjsSAt0JdOY) and [the resulting surface used by an MCP App](https://youtu.be/5ewU51_oM_8). The examples use a different API; the tutorial below remains the reproducible `0.2.3` procedure.
+See [Context Control applied to GitHub GraphQL](https://youtu.be/OjsSAt0JdOY) and [the resulting surface used by an MCP App](https://youtu.be/5ewU51_oM_8). The examples use a different API; the tutorial below remains the reproducible `1.0.0-rc1` procedure.
 :::
 
 ## Prerequisites
 
-- The **[first MCP endpoint tutorial](./getting-started.md)** completed against reShapr `0.2.3`
-- reShapr CLI `0.2.3`, authenticated against that environment
+- The **[first MCP endpoint tutorial](./getting-started.md)** completed against reShapr `1.0.0-rc1`
+- reShapr CLI `1.0.0-rc1`, authenticated against that environment
 - `curl` and `jq`
 - A running proxy registered as a Gateway in Gateway Group `1`
 
@@ -37,7 +37,7 @@ export RESHAPR_SERVICE_ID
 
 ## Attach an agent-oriented Tool
 
-The sample **[Custom Tool definition](/examples/context-control/open-meteo-current-weather.yaml)** maps the broad generated `get_v1_forecast` Tool to one action named `current_weather`. Its three inputs fix the requested weather fields while keeping the location explicit.
+The sample **[Custom Tool definition](/examples/context-control/open-meteo-current-weather.yaml)** maps the canonical `GET /v1/forecast` operation, exposed by default as `get_v1_forecast`, to one action named `current_weather`. Its three inputs fix the requested weather fields while keeping the location explicit.
 
 Attach it and retain the Artifact name returned by reShapr:
 
@@ -75,7 +75,7 @@ export FILTER_ARTIFACT_NAME
 
 ## Create two bounded Plans
 
-Both Plans allow only the agent-oriented `current_weather` Tool. The baseline Plan selects the Custom Tool; the filtered Plan selects the same Tool and its output filter.
+Both Plans select only the canonical `GET /v1/forecast` operation. The Custom Tool replaces it with the agent-oriented `current_weather` Tool; the filtered Plan also selects its output filter.
 
 ```bash
 BASELINE_ARTIFACTS="$(jq -cn --arg custom "$CUSTOM_ARTIFACT_NAME" '[$custom]')"
@@ -90,7 +90,7 @@ BASELINE_PLAN_ID="$(
   reshapr config create 'weather-action-baseline' \
     --serviceId "$RESHAPR_SERVICE_ID" \
     --backendEndpoint 'https://api.open-meteo.com' \
-    --includedOperations '["current_weather"]' \
+    --includedOperations '["GET /v1/forecast"]' \
     --includedArtifacts "$BASELINE_ARTIFACTS" \
     --output json \
     | jq -er '.id'
@@ -100,7 +100,7 @@ FILTERED_PLAN_ID="$(
   reshapr config create 'weather-action-filtered' \
     --serviceId "$RESHAPR_SERVICE_ID" \
     --backendEndpoint 'https://api.open-meteo.com' \
-    --includedOperations '["current_weather"]' \
+    --includedOperations '["GET /v1/forecast"]' \
     --includedArtifacts "$FILTERED_ARTIFACTS" \
     --output json \
     | jq -er '.id'
@@ -156,7 +156,7 @@ list_tools() {
     --header 'Accept: application/json, text/event-stream' \
     --header 'MCP-Protocol-Version: 2026-07-28' \
     --header 'Mcp-Method: tools/list' \
-    --data '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"0.2.3"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
+    --data '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"1.0.0-rc1"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
     "$1" | jq -r '.result.tools[].name'
 }
 
@@ -178,7 +178,7 @@ call_weather() {
     --header 'MCP-Protocol-Version: 2026-07-28' \
     --header 'Mcp-Method: tools/call' \
     --header 'Mcp-Name: current_weather' \
-    --data '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"current_weather","arguments":{"latitude":"48.8566","longitude":"2.3522","timezone":"Europe/Paris"},"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"0.2.3"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
+    --data '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"current_weather","arguments":{"latitude":"48.8566","longitude":"2.3522","timezone":"Europe/Paris"},"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"1.0.0-rc1"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
     "$1" | jq -er '.result.content[0].text'
 }
 
@@ -224,7 +224,7 @@ TOON_PLAN_ID="$(
   reshapr config create 'weather-action-toon' \
     --serviceId "$RESHAPR_SERVICE_ID" \
     --backendEndpoint 'https://api.open-meteo.com' \
-    --includedOperations '["current_weather"]' \
+    --includedOperations '["GET /v1/forecast"]' \
     --includedArtifacts "$TOON_ARTIFACTS" \
     --output json \
     | jq -er '.id'
@@ -261,7 +261,7 @@ You replaced a broad generated operation with one agent-oriented Tool, selected 
 ## Limits
 
 - This comparison covers one Open-Meteo request and does not predict token usage or model quality for other data.
-- Output filtering is not a security boundary. In reShapr `0.2.3`, a filter failure returns the original Tool response.
+- Output filtering is not a security boundary. In reShapr `1.0.0-rc1`, a filter failure returns the original Tool response.
 - The before/after field comparison uses JSON before TOON is enabled so the retained keys remain directly inspectable.
 - Re-running the tutorial with the same Plan or Exposition names requires deleting or renaming the previous resources, including the TOON variants.
 

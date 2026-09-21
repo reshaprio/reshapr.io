@@ -46,7 +46,7 @@ These credentials are not interchangeable. In particular, a Gateway API token do
 
 Administrative API routes require the control plane's `x-reshapr-api-key`. The CLI reads the same key from `RESHAPR_ADMIN_API_KEY` or an explicit option when running `reshapr admin` commands.
 
-This key can create and remove users and organizations, replace memberships, manage service accounts, and assign quotas. It is not scoped to one organization in release `0.2.3`. Treat it as a platform-wide privileged credential:
+This key can create and remove users and organizations, replace memberships, manage service accounts, and assign quotas. It is not scoped to one organization in release `1.0.0-rc1`. Treat it as a platform-wide privileged credential:
 
 - keep it in an approved secret manager;
 - expose it only to dedicated administration workloads;
@@ -65,7 +65,7 @@ An administrator can register a reShapr service-account record with:
 - an expiry time;
 - an allow-list of organization names, or `*` for every organization.
 
-A Kubernetes workload presents its projected service-account JWT and names the target organization. In the `0.2.3` same-cluster flow, the control plane:
+A Kubernetes workload presents its projected service-account JWT and names the target organization. In the `1.0.0-rc1` same-cluster flow, the control plane:
 
 1. verifies the JWT signature with the local Kubernetes API server's JWKS;
 2. requires the Kubernetes issuer, expiration, subject, and audience `https://app.reshapr.io`;
@@ -101,7 +101,7 @@ Deleting a token prevents proxies using it from authenticating future control-pl
 
 ## Quotas govern resource counts
 
-Release `0.2.3` defines three organization quota metrics:
+Release `1.0.0-rc1` defines three organization quota metrics:
 
 | Metric | Counted resource | Consumption and release |
 |---|---|---|
@@ -121,7 +121,7 @@ Use **[Assign and Monitor Organization Quotas](../how-to-guides/administration/o
 
 Administrative deletion has wider effects than removing a membership:
 
-| Operation | Effect in release `0.2.3` |
+| Operation | Effect in release `1.0.0-rc1` |
 |---|---|
 | Replace a user's memberships | Replaces the complete organization membership list for that user |
 | Delete a user | Removes memberships and the user; organizations they owned remain but become unowned |
@@ -147,7 +147,7 @@ Organizations remain useful inside each deployment for delegated ownership and r
 
 ## Limits
 
-- Organization tenancy in `0.2.3` is application-level discriminator tenancy in a shared schema.
+- Organization tenancy in `1.0.0-rc1` is application-level discriminator tenancy in a shared schema.
 - The control-plane admin API key is platform-wide rather than organization-scoped.
 - The released Kubernetes service-account exchange is tied to the local cluster issuer, JWKS, CA, and expected audience.
 - Organization allow-lists constrain service-account token exchange; they do not create network isolation.
@@ -158,4 +158,4 @@ Organizations remain useful inside each deployment for delegated ownership and r
 
 Use **[Deployment Models and Trust Boundaries](./deployment-models-trust-boundaries.md)** to choose physical placement and network boundaries. Use **[Security Capabilities and Limits](./security-model.md)** to distinguish control-plane, MCP endpoint, and backend credentials. Use **[Automate reShapr with the CLI in CI/CD](../how-to-guides/automate-with-cli-in-cicd.md)** to operate product resources from a controlled pipeline.
 
-The release-tagged [administrative API contract](https://github.com/reshaprio/reshapr/blob/0.2.3/reshapr-admin-ctrl-openapi-v0.1.yaml), [public API contract](https://github.com/reshaprio/reshapr/blob/0.2.3/reshapr-public-openapi-v0.1.yaml), and [administrative CLI reference](https://github.com/reshaprio/reshapr/blob/0.2.3/cli/ADMIN_CLI.md) remain the canonical interface references.
+The release-tagged [administrative API contract](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/reshapr-admin-ctrl-openapi-v0.1.yaml), [public API contract](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/reshapr-public-openapi-v0.1.yaml), and [administrative CLI reference](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/cli/ADMIN_CLI.md) remain the canonical interface references.

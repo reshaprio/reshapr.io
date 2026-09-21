@@ -2,8 +2,8 @@
 description: Full reference for reShapr CLI commands — login, import, attach, config, expo, secrets, gateway management, and more.
 verification:
   product: reShapr CLI
-  version: 0.2.3
-  date: 2026-09-03
+  version: 1.0.0-rc1
+  date: 2026-09-18
 ---
 
 # reShapr CLI Reference
@@ -367,6 +367,20 @@ reshapr secret create-elicitation 3rd-party-oauth --oc reshapr-saas \
 
 You will then be able to use and reference this Secret when creating your Configuration Plan to enable Elicitation-based security.
 
+### `reshapr secret create-client-credentials` command
+
+Creates a machine-to-machine backend Secret using the OAuth 2.0 Client Credentials grant. `--oauth2ClientID` and `--oauth2TokenEndpoint` are required; the client secret may be an `${env:VARIABLE}` reference resolved by the proxy.
+
+```bash
+reshapr secret create-client-credentials backend-machine-identity \
+  --oauth2ClientID '<client-id>' \
+  --oauth2ClientSecret '${env:BACKEND_OAUTH_CLIENT_SECRET}' \
+  --oauth2TokenEndpoint 'https://idp.example.com/token' \
+  --oauth2Scopes 'backend.read,backend.write'
+```
+
+The proxy requests and caches an access token without user elicitation. See **[Authenticate Backend Calls and Use Elicitation](../how-to-guides/security/backend-auth-and-elicitation.md#use-oauth-client-credentials)** for the operational boundaries.
+
 ### `reshapr secret list` command
 
 Lists all secrets in your organization.
@@ -542,6 +556,19 @@ Instead of doing things in an interactive way using the `--filter` option, you c
 - `--io, --includedOperations [<operation1>, <operation2>]` : Allow the configuration of included operations; only the ones listed here will be actually exposed on the MCP Server endpoint. The operations must be specified within an array like this: `--io '["operation1", "operation2"]'`
 - `--eo, --excludedOperations [<operation1>, <operation2>]` : Allow the specification of excluded operations; none of the ones listed here will be actually exposed on the MCP Server endpoint
 
+Request-header propagation can be configured on `config create` and `config create-oauth`:
+
+- `--reqhp, --requestHeaderPolicy <json>`: Allow, deny, or rename request headers. A rename is expressed as `"Source:Target"` in the `rename` array.
+- `--passthrough`: Allow the incoming `Authorization` header to reach the backend. This shortcut is mutually exclusive with `--requestHeaderPolicy` and is not recommended outside bounded development or debugging.
+- `--reshp, --responseHeaderPolicy <json>`: Store response rules for forward compatibility. Runtime `1.0.0-rc1` does not enforce them.
+
+```bash
+reshapr config create backend-header-policy \
+  --serviceId '<service-id>' \
+  --backendEndpoint 'https://api.example.com' \
+  --requestHeaderPolicy '{"allow":["X-Trace-Id","X-Backend-Token"],"rename":["X-Backend-Token:Authorization"]}'
+```
+
 Finally, you can use the Configuration plan to enable security options. Below are explanations of the options you may find:
 
 - `--bs, --backendSecret <backendSecretId>` : Allow the specification of a Backend Secret to use when exposing an MCP Endpoint on gateways
@@ -555,6 +582,8 @@ This command is actually an alias of the `config create` command, but with optio
 - `--oas, --oauth2AuthorizationServers [<authorizationServer1>, <authorizationServer2>]` : Allow the specification of one or many authorization server URLs that represent valid issuers for Bearer tokens,
 - `--oju, --oauth2jwksUri <jwksUri>` : Allow the configuration of the URI used for retrieving JSON Web Key Set for verifying the Bearer token signatures,
 - `--osc, --oauth2Scopes [<scope1>, <scope2>]` : Allow the configuration of scopes that should be present in the Bearer token to allow access to the MCP endpoint.
+- `--osa, --oauth2StaticAudiences [<audience1>, <audience2>]` : Accept additional audience values besides the dynamic Exposition URL.
+- `--odav, --oauth2DisableAudienceValidation` : Disable `aud` validation for compatibility. This weakens token-to-resource binding and should not be the production default.
 
 Like `config create`, it also supports the `--bt, --backendTimeout <backendTimeout>` option to configure the backend endpoint timeout in milliseconds.
 
@@ -946,6 +975,19 @@ reshapr admin [--admin-api-key <key>] [--server <url>] <command>
 ```
 
 Prefer the `RESHAPR_ADMIN_API_KEY` environment variable to placing the key in shell history. See **[Manage Organizations, Owners, and Memberships](../how-to-guides/administration/organizations-and-memberships.md)** and **[Assign and Monitor Organization Quotas](../how-to-guides/administration/organization-quotas.md)** for applied workflows, the **[Admin CLI guide](https://github.com/reshaprio/reshapr/blob/main/cli/ADMIN_CLI.md)** for the current subcommands and examples, or run `reshapr admin --help`.
+
+Database encryption commands report the active key and re-encrypt stored sensitive fields with that key:
+
+```bash
+reshapr admin encryption status
+reshapr admin encryption rotate --yes
+```
+
+Rotation is idempotent and reports the numbers of Secret and Configuration Plan values changed. Use **[Upgrade reShapr and Rotate Runtime Secrets](../how-to-guides/operations/upgrade-and-rotate.md#rotate-the-database-encryption-key)** for the required key rollout and verification order.
+
+## Shell completion
+
+Release `1.0.0-rc1` provides generated shell completion through `reshapr completion`. Run `reshapr completion --help` to select and install the script for the current shell; completion itself does not require an authenticated session.
 
 ## Structured output
 

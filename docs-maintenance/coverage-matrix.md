@@ -1,8 +1,10 @@
 # Documentation coverage matrix
 
-**Assessed:** 2026-09-07  
-**Product baseline:** reShapr `0.2.3`, controllers `0.0.1`, charts `0.0.11`  
-**Corpus:** 48 authored docs pages, 7 blog files, and 2 content tests
+**Assessed:** 2026-09-21
+
+**Product baseline:** reShapr `1.0.0-rc1`, controllers `0.0.3`, Helm charts `0.0.13`
+
+**Corpus:** 52 authored docs pages, 7 blog files, and 2 content tests
 
 This matrix maps the semantic IDs in [`product-baseline.md`](product-baseline.md) to the current authored corpus. A blank Diataxis column is not automatically a gap: a capability needs only the page types that serve a real reader task.
 
@@ -60,13 +62,16 @@ Coverage statuses:
 | `CAP-LIVE-CONFIGURATION-PROPAGATION` | covered | - | `docs/how-to-guides/operations/troubleshoot.md` | `docs/explanations/control-plane-gateway-synchronization.md` | `docs/references/features.md` |
 | `CAP-ORGANIZATION-TENANCY` | covered | - | `docs/how-to-guides/administration/organizations-and-memberships.md` | `docs/explanations/multi-tenancy-administrative-governance.md` | `docs/references/features.md` |
 | `CAP-USER-ORGANIZATION-MEMBERSHIP-ADMIN` | covered | - | `docs/how-to-guides/administration/organizations-and-memberships.md` | `docs/explanations/multi-tenancy-administrative-governance.md` | `docs/references/interfaces.md` |
-| `CAP-USER-AUTHENTICATION` | covered | `docs/tutorials/try-reshapr-online.md` | `docs/how-to-guides/administration/organizations-and-memberships.md` | `docs/explanations/multi-tenancy-administrative-governance.md` | `docs/references/cli-commands.md` |
+| `CAP-USER-AUTHENTICATION` | covered | `docs/tutorials/try-reshapr-online.md` | `docs/how-to-guides/configure-control-plane-oidc.md`<br>`docs/how-to-guides/administration/organizations-and-memberships.md` | `docs/explanations/multi-tenancy-administrative-governance.md` | `docs/references/cli-commands.md` |
 | `CAP-KUBERNETES-SERVICE-ACCOUNT-AUTH` | covered | `docs/tutorials/first-gitops-mcp-endpoint.md` | `docs/how-to-guides/manage-resources-with-gitops.md` | `docs/explanations/multi-tenancy-administrative-governance.md` | `docs/references/kubernetes-apis.md` |
 | `CAP-API-TOKENS` | covered | - | `docs/how-to-guides/deploy-hybrid-gateway.md` | `docs/explanations/multi-tenancy-administrative-governance.md` | `docs/references/cli-commands.md` |
 | `CAP-ORGANIZATION-RESOURCE-QUOTAS` | covered | - | `docs/how-to-guides/administration/organization-quotas.md` | `docs/explanations/multi-tenancy-administrative-governance.md` | `docs/references/features.md` |
 | `CAP-BACKEND-AUTHENTICATION-SECRETS` | covered | - | `docs/how-to-guides/security/backend-auth-and-elicitation.md` | `docs/explanations/security-model.md` | `docs/references/features.md` |
+| `CAP-BACKEND-OAUTH-CLIENT-CREDENTIALS` | covered | - | `docs/how-to-guides/security/backend-auth-and-elicitation.md`<br>`docs/how-to-guides/security/use-oauth-client-credentials.md` | `docs/explanations/security-model.md` | `docs/references/cli-commands.md` |
 | `CAP-LOCAL-SECRET-REFERENCES` | covered | - | `docs/how-to-guides/security/backend-auth-and-elicitation.md`<br>`docs/how-to-guides/deploy-hybrid-gateway.md` | `docs/explanations/security-model.md` | `docs/references/features.md` |
 | `CAP-CONTROL-PLANE-SECRET-ENCRYPTION` | covered | - | `docs/how-to-guides/operations/upgrade-and-rotate.md` | `docs/explanations/security-model.md` | - |
+| `CAP-ENCRYPTION-KEY-ROTATION` | covered | - | `docs/how-to-guides/operations/upgrade-and-rotate.md`<br>`docs/how-to-guides/operations/rotate-database-encryption-key.md` | `docs/explanations/security-model.md` | `docs/references/cli-commands.md`<br>`docs/references/helm-charts.md` |
+| `CAP-BACKEND-HEADER-POLICY` | covered | - | `docs/how-to-guides/security/configure-backend-header-policy.md` | `docs/explanations/configuration-and-exposition.md`<br>`docs/explanations/security-model.md` | `docs/references/cli-commands.md`<br>`docs/references/kubernetes-apis.md` |
 
 ### Security and observability
 
@@ -76,7 +81,7 @@ Coverage statuses:
 | `CAP-MCP-OAUTH-BEARER-AUTH` | covered | - | `docs/how-to-guides/security/oauth.md` | `docs/explanations/security-model.md` | `docs/references/features.md` |
 | `CAP-OAUTH-PROTECTED-RESOURCE-METADATA` | covered | - | `docs/how-to-guides/security/oauth.md` | `docs/explanations/security-model.md` | - |
 | `CAP-OAUTH-AUTHORIZATION-SERVER-CONFIG` | covered | - | `docs/how-to-guides/security/oauth.md` | `docs/explanations/security-model.md` | - |
-| `CAP-OAUTH-RESOURCE-INDICATOR` | covered | - | `docs/how-to-guides/security/oauth.md` | `docs/explanations/security-model.md` | - |
+| `CAP-OAUTH-RESOURCE-INDICATOR` | historical-only | - | `docs/how-to-guides/security/oauth.md` (replacement boundary) | `docs/explanations/security-model.md` (replacement boundary) | - |
 | `CAP-OAUTH-DYNAMIC-CLIENT-REGISTRATION` | not-documentable | - | `docs/how-to-guides/security/oauth.md` (boundary) | - | - |
 | `CAP-SPIFFE-IDENTITIES` | not-documentable | - | - | - | - |
 | `CAP-OAUTH-PER-TOOL-AUTHORIZATION` | not-documentable | - | `docs/how-to-guides/security/oauth.md` (boundary) | `docs/explanations/security-model.md` (boundary) | - |
@@ -91,6 +96,7 @@ Coverage statuses:
 | `CAP-CLI-PRODUCT-LIFECYCLE` | covered | `docs/tutorials/getting-started.md` | `docs/how-to-guides/automate-with-cli-in-cicd.md` | `docs/explanations/resource-lifecycle.md` | `docs/references/cli-commands.md` |
 | `CAP-CLI-ADMINISTRATION` | covered | - | `docs/how-to-guides/administration/organizations-and-memberships.md`<br>`docs/how-to-guides/administration/organization-quotas.md` | `docs/explanations/multi-tenancy-administrative-governance.md` | `docs/references/cli-commands.md` |
 | `CAP-CLI-PLAN-EVOLUTION` | covered | `docs/tutorials/context-control-in-practice.md` | `docs/how-to-guides/automate-with-cli-in-cicd.md` | `docs/explanations/configuration-and-exposition.md` | `docs/references/cli-commands.md` |
+| `CAP-CLI-SHELL-COMPLETION` | covered | - | - | - | `docs/references/cli-commands.md` |
 | `CAP-WEB-UI-ADMINISTRATION` | covered | `docs/tutorials/web-ui-quickstart.md` | `docs/how-to-guides/administration/organizations-and-memberships.md` | `docs/explanations/resource-lifecycle.md` | `docs/references/features.md` |
 | `CAP-WEB-UI-QUICK-START` | covered | `docs/tutorials/web-ui-quickstart.md` | - | `docs/explanations/api-to-agent.md` | - |
 | `CAP-LOCAL-DOCKER-RUNTIME` | covered | `docs/tutorials/getting-started.md` | `docs/how-to-guides/docker-compose.md` | `docs/explanations/deployment-models-trust-boundaries.md` | `docs/references/features.md` |
@@ -134,7 +140,7 @@ Coverage statuses:
 | `CAP-HELM-COSIGN-SIGNATURES` | covered | - | - | - | `docs/references/helm-charts.md` |
 | `CAP-HELM-UPGRADE-FOUNDATIONS` | covered | - | `docs/how-to-guides/operations/upgrade-and-rotate.md` | `docs/explanations/resource-lifecycle.md` | `docs/references/helm-charts.md` |
 
-There are no `missing` released or partial capabilities at initialization. Unsupported capabilities are intentionally `not-documentable`; their boundary mentions exist only where a reader could otherwise infer support. SPIFFE has no current public mention and needs one only if a nearby identity claim would imply SPIFFE support.
+There are no `missing` released or partial capabilities in this baseline. Unsupported capabilities are intentionally `not-documentable`; their boundary mentions exist only where a reader could otherwise infer support. SPIFFE has no current public mention and needs one only if a nearby identity claim would imply SPIFFE support. The removed resource-claim capability is `historical-only`; current OAuth pages describe its audience-based replacement.
 
 ## Limitation coverage
 
@@ -157,14 +163,18 @@ There are no `missing` released or partial capabilities at initialization. Unsup
 | `LIM-SERVICE-NO-IMMUTABLE-ROLLBACK` | Lifecycle or upgrade content when rollback is discussed | `docs/explanations/resource-lifecycle.md`<br>`docs/how-to-guides/operations/upgrade-and-rotate.md` | covered |
 | `LIM-LIVE-CONFIG-NO-ZERO-DOWNTIME` | Synchronization explanation and hybrid operations | `docs/explanations/control-plane-gateway-synchronization.md`<br>`docs/how-to-guides/deploy-hybrid-gateway.md` | covered |
 | `LIM-TENANCY-APPLICATION-LEVEL` | Governance explanation | `docs/explanations/multi-tenancy-administrative-governance.md` | covered |
-| `LIM-OIDC-EXTERNAL-PROVIDER` | Authentication reference or trust-boundary explanation | `docs/references/cli-commands.md`<br>`docs/explanations/deployment-models-trust-boundaries.md` | covered |
+| `LIM-OIDC-EXTERNAL-PROVIDER` | Authentication procedure or trust-boundary explanation | `docs/how-to-guides/configure-control-plane-oidc.md`<br>`docs/references/cli-commands.md`<br>`docs/explanations/deployment-models-trust-boundaries.md` | covered |
+| `LIM-OIDC-LOGIN-VALIDATION-INCOMPLETE` | OIDC authentication procedure | `docs/how-to-guides/configure-control-plane-oidc.md` | covered |
+| `LIM-OIDC-WEBUI-PUBLIC-URL-IGNORED` | OIDC authentication procedure | `docs/how-to-guides/configure-control-plane-oidc.md` | covered |
 | `LIM-KUBERNETES-SA-AUDIENCE-FIXED` | Workload-identity explanation | `docs/explanations/multi-tenancy-administrative-governance.md` | covered |
 | `LIM-QUOTAS-NOT-RATE-LIMITS` | Quota procedure and governance explanation | `docs/how-to-guides/administration/organization-quotas.md`<br>`docs/explanations/multi-tenancy-administrative-governance.md` | covered |
 | `LIM-BACKEND-AUTH-PROTOCOL-DEPENDENT` | Backend-auth procedure | `docs/how-to-guides/security/backend-auth-and-elicitation.md`<br>`docs/explanations/security-model.md` | covered |
 | `LIM-LOCAL-SECRETS-ENV-ONLY` | Local-secret procedure | `docs/how-to-guides/security/backend-auth-and-elicitation.md` | covered |
+| `LIM-OAUTH-CLIENT-CREDENTIALS-NO-REFRESH` | Client Credentials procedure and security model | `docs/how-to-guides/security/use-oauth-client-credentials.md`<br>`docs/explanations/security-model.md` | covered |
 | `LIM-SECRET-ENCRYPTION-AES-ECB` | Security model | `docs/explanations/security-model.md` | covered |
-| `LIM-SECRET-ROTATION-MANUAL` | Security model and rotation procedure | `docs/explanations/security-model.md`<br>`docs/how-to-guides/operations/upgrade-and-rotate.md` | covered |
+| `LIM-SECRET-ROTATION-MANUAL` | Security model and rotation procedure | `docs/explanations/security-model.md`<br>`docs/how-to-guides/operations/rotate-database-encryption-key.md` | covered |
 | `LIM-OAUTH-AUDIENCE-NOT-VERIFIED` | OAuth procedure and security model | `docs/how-to-guides/security/oauth.md`<br>`docs/explanations/security-model.md` | covered |
+| `LIM-OAUTH-AUDIENCE-DISABLEABLE` | OAuth procedure and security model | `docs/how-to-guides/security/oauth.md`<br>`docs/explanations/security-model.md` | covered |
 | `LIM-OAUTH-AS-METADATA-NOT-HOSTED` | OAuth procedure and security model | `docs/how-to-guides/security/oauth.md`<br>`docs/explanations/security-model.md` | covered |
 | `LIM-OAUTH-RESOURCE-CLAIM-ONLY` | OAuth procedure and security model | `docs/how-to-guides/security/oauth.md`<br>`docs/explanations/security-model.md` | covered |
 | `LIM-OAUTH-DCR-UNSUPPORTED` | OAuth procedure when client registration is discussed | `docs/how-to-guides/security/oauth.md` | covered |
@@ -175,7 +185,11 @@ There are no `missing` released or partial capabilities at initialization. Unsup
 | `LIM-OBSERVABILITY-PROXY-ONLY` | Observability procedure and feature reference | `docs/how-to-guides/operations/observe-and-audit.md`<br>`docs/references/features.md` | covered |
 | `LIM-CLI-ADMIN-KEY-REQUIRED` | CLI reference and governance explanation | `docs/references/cli-commands.md`<br>`docs/explanations/multi-tenancy-administrative-governance.md` | covered |
 | `LIM-QUICK-START-DEFAULT-GATEWAY-GROUP` | Web UI tutorial | `docs/tutorials/web-ui-quickstart.md` | covered |
+| `LIM-HEADER-POLICY-REQUEST-ONLY` | Header-policy procedure, Configuration Plan explanation, and Kubernetes reference | `docs/how-to-guides/security/configure-backend-header-policy.md`<br>`docs/explanations/configuration-and-exposition.md`<br>`docs/references/kubernetes-apis.md` | covered |
 | `LIM-CRD-PROMPTS-FILTERS-ABSENT` | Kubernetes API reference | `docs/references/kubernetes-apis.md` | covered |
+| `LIM-KUBERNETES-RESOURCE-RECONCILIATION-INCOMPATIBLE` | Historical diagnosis where old installations can still expose it | `docs/how-to-guides/operations/troubleshoot.md` | covered |
+| `LIM-KUBERNETES-ARTIFACT-NAME-COLLISION` | GitOps procedure and Kubernetes reference | `docs/how-to-guides/manage-resources-with-gitops.md`<br>`docs/references/kubernetes-apis.md` | covered |
+| `LIM-KUBERNETES-RESOURCES-CRD-MIGRATION` | Controllers upgrade procedure | `docs/how-to-guides/operations/upgrade-and-rotate.md` | covered |
 | `LIM-CRD-ARTIFACT-CLEANUP-INCOMPLETE` | GitOps cleanup procedure and Kubernetes reference | `docs/how-to-guides/manage-resources-with-gitops.md`<br>`docs/references/kubernetes-apis.md` | covered |
 | `LIM-SECRET-SOURCE-RBAC` | GitOps procedure or Kubernetes reference | `docs/how-to-guides/manage-resources-with-gitops.md`<br>`docs/references/kubernetes-apis.md` | covered |
 | `LIM-ADMISSION-FAIL-OPEN` | Kubernetes reference and production procedure | `docs/references/kubernetes-apis.md`<br>`docs/how-to-guides/deploy-kubernetes-production.md` | covered |
@@ -188,6 +202,7 @@ There are no `missing` released or partial capabilities at initialization. Unsup
 | `LIM-HA-INFRASTRUCTURE-DEPENDENT` | Production deployment procedure and deployment-model explanation | `docs/how-to-guides/deploy-kubernetes-production.md`<br>`docs/explanations/deployment-models-trust-boundaries.md` | covered |
 | `LIM-HPA-PROXY-ONLY` | Production deployment procedure | `docs/how-to-guides/deploy-kubernetes-production.md` | covered |
 | `LIM-HELM-NETWORK-POLICY-PARTIAL` | Production deployment procedure and chart reference | `docs/how-to-guides/deploy-kubernetes-production.md`<br>`docs/references/helm-charts.md` | covered |
+| `LIM-HELM-CONTROLLERS-RELEASE-MISMATCH` | Controllers installation procedures and chart reference | `docs/tutorials/first-gitops-mcp-endpoint.md`<br>`docs/how-to-guides/deploy-kubernetes-production.md`<br>`docs/references/helm-charts.md` | covered |
 | `LIM-SERVICEMONITOR-PROXY-ONLY` | Observability and production procedures | `docs/how-to-guides/operations/observe-and-audit.md`<br>`docs/how-to-guides/deploy-kubernetes-production.md` | covered |
 | `LIM-PRODUCTION-PROFILES-NOT-CERTIFICATION` | Chart reference or production procedure | `docs/references/helm-charts.md`<br>`docs/how-to-guides/deploy-kubernetes-production.md` | covered |
 | `LIM-UPGRADE-ROLLBACK-MANUAL` | Upgrade procedure | `docs/how-to-guides/operations/upgrade-and-rotate.md` | covered |
@@ -198,9 +213,9 @@ There are no `missing` released or partial capabilities at initialization. Unsup
 | Persona | Entry points | Progression | Coverage |
 |---|---|---|---|
 | `PER-AGENT-BUILDER` | `docs/tutorials/try-reshapr-online.md`<br>`docs/tutorials/getting-started.md`<br>`docs/tutorials/web-ui-quickstart.md` | Import APIs, test endpoints, then reduce context or build a scripted Tool. | covered |
-| `PER-PLATFORM-ENGINEER` | `docs/how-to-guides/import-api-artifacts.md`<br>`docs/how-to-guides/select-reshapr-artifacts.md`<br>`docs/how-to-guides/automate-with-cli-in-cicd.md` | Move from resource lifecycle and interfaces to administration and repeatable automation. | covered |
-| `PER-KUBERNETES-OPERATOR` | `docs/tutorials/first-gitops-mcp-endpoint.md`<br>`docs/how-to-guides/deploy-kubernetes-production.md`<br>`docs/how-to-guides/operations/troubleshoot.md` | Add GitOps lifecycle, observability, upgrades, and hybrid deployment as needed. | covered |
-| `PER-SECURITY-ARCHITECT` | `docs/explanations/security-model.md`<br>`docs/explanations/deployment-models-trust-boundaries.md` | Continue with API key, OAuth, backend authentication, audit, and governance procedures. | covered |
+| `PER-PLATFORM-ENGINEER` | `docs/how-to-guides/import-api-artifacts.md`<br>`docs/how-to-guides/select-reshapr-artifacts.md`<br>`docs/how-to-guides/automate-with-cli-in-cicd.md`<br>`docs/how-to-guides/configure-control-plane-oidc.md`<br>`docs/how-to-guides/security/configure-backend-header-policy.md`<br>`docs/how-to-guides/security/use-oauth-client-credentials.md` | Move from resource lifecycle and interfaces to administration, backend policy, and repeatable automation. | covered |
+| `PER-KUBERNETES-OPERATOR` | `docs/tutorials/first-gitops-mcp-endpoint.md`<br>`docs/how-to-guides/deploy-kubernetes-production.md`<br>`docs/how-to-guides/configure-control-plane-oidc.md`<br>`docs/how-to-guides/operations/troubleshoot.md`<br>`docs/how-to-guides/operations/rotate-database-encryption-key.md` | Add GitOps lifecycle, identity-provider integration, observability, upgrades, key rotation, and hybrid deployment as needed. | covered |
+| `PER-SECURITY-ARCHITECT` | `docs/explanations/security-model.md`<br>`docs/explanations/deployment-models-trust-boundaries.md`<br>`docs/how-to-guides/configure-control-plane-oidc.md`<br>`docs/how-to-guides/security/configure-backend-header-policy.md`<br>`docs/how-to-guides/security/use-oauth-client-credentials.md`<br>`docs/how-to-guides/operations/rotate-database-encryption-key.md` | Continue with control-plane identity, endpoint and backend authentication, header policy, audit, governance, and key management procedures. | covered |
 | `PER-TECHNOLOGY-DECISION-MAKER` | `docs/overview/why-reshapr.md`<br>`docs/overview/how-it-works.md`<br>`docs/references/features.md` | Compare interfaces, deployment models, trust boundaries, demos, and explicit limits. | covered |
 
 ## Authored corpus inventory
@@ -211,7 +226,7 @@ This inventory makes orphaned or accidentally removed pages visible. Paths are g
 |---|---|
 | Orientation and navigation (4) | `docs/index.mdx`<br>`docs/overview/why-reshapr.md`<br>`docs/overview/how-it-works.md`<br>`docs/demos.md` |
 | Tutorials (5) | `docs/tutorials/try-reshapr-online.md`<br>`docs/tutorials/getting-started.md`<br>`docs/tutorials/web-ui-quickstart.md`<br>`docs/tutorials/context-control-in-practice.md`<br>`docs/tutorials/first-gitops-mcp-endpoint.md` |
-| How-to guides (18) | `docs/how-to-guides/import-api-artifacts.md`<br>`docs/how-to-guides/select-reshapr-artifacts.md`<br>`docs/how-to-guides/build-scripted-custom-tool.md`<br>`docs/how-to-guides/test-mcp-endpoint.md`<br>`docs/how-to-guides/audit-mcp-endpoint.md`<br>`docs/how-to-guides/security/api-key.md`<br>`docs/how-to-guides/security/oauth.md`<br>`docs/how-to-guides/security/backend-auth-and-elicitation.md`<br>`docs/how-to-guides/docker-compose.md`<br>`docs/how-to-guides/automate-with-cli-in-cicd.md`<br>`docs/how-to-guides/administration/organizations-and-memberships.md`<br>`docs/how-to-guides/administration/organization-quotas.md`<br>`docs/how-to-guides/operations/observe-and-audit.md`<br>`docs/how-to-guides/operations/troubleshoot.md`<br>`docs/how-to-guides/operations/upgrade-and-rotate.md`<br>`docs/how-to-guides/manage-resources-with-gitops.md`<br>`docs/how-to-guides/deploy-kubernetes-production.md`<br>`docs/how-to-guides/deploy-hybrid-gateway.md` |
+| How-to guides (22) | `docs/how-to-guides/import-api-artifacts.md`<br>`docs/how-to-guides/select-reshapr-artifacts.md`<br>`docs/how-to-guides/build-scripted-custom-tool.md`<br>`docs/how-to-guides/test-mcp-endpoint.md`<br>`docs/how-to-guides/audit-mcp-endpoint.md`<br>`docs/how-to-guides/security/api-key.md`<br>`docs/how-to-guides/security/oauth.md`<br>`docs/how-to-guides/security/configure-backend-header-policy.md`<br>`docs/how-to-guides/security/backend-auth-and-elicitation.md`<br>`docs/how-to-guides/security/use-oauth-client-credentials.md`<br>`docs/how-to-guides/docker-compose.md`<br>`docs/how-to-guides/automate-with-cli-in-cicd.md`<br>`docs/how-to-guides/configure-control-plane-oidc.md`<br>`docs/how-to-guides/administration/organizations-and-memberships.md`<br>`docs/how-to-guides/administration/organization-quotas.md`<br>`docs/how-to-guides/operations/observe-and-audit.md`<br>`docs/how-to-guides/operations/troubleshoot.md`<br>`docs/how-to-guides/operations/upgrade-and-rotate.md`<br>`docs/how-to-guides/operations/rotate-database-encryption-key.md`<br>`docs/how-to-guides/manage-resources-with-gitops.md`<br>`docs/how-to-guides/deploy-kubernetes-production.md`<br>`docs/how-to-guides/deploy-hybrid-gateway.md` |
 | Explanations (11) | `docs/explanations/api-to-agent.md`<br>`docs/explanations/services-and-artifacts.md`<br>`docs/explanations/context-control.md`<br>`docs/explanations/configuration-and-exposition.md`<br>`docs/explanations/resource-lifecycle.md`<br>`docs/explanations/gateway-groups-and-gateways.md`<br>`docs/explanations/control-plane-gateway-synchronization.md`<br>`docs/explanations/mcp-compatibility.md`<br>`docs/explanations/security-model.md`<br>`docs/explanations/multi-tenancy-administrative-governance.md`<br>`docs/explanations/deployment-models-trust-boundaries.md` |
 | References (10) | `docs/references/features.md`<br>`docs/references/interfaces.md`<br>`docs/references/cli-commands.md`<br>`docs/references/mcp-support.md`<br>`docs/references/custom-tools-specification.md`<br>`docs/references/prompts-specification.md`<br>`docs/references/resources-specification.md`<br>`docs/references/spec-outtools-filtering.md`<br>`docs/references/kubernetes-apis.md`<br>`docs/references/helm-charts.md` |
 

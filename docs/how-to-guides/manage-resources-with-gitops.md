@@ -2,8 +2,8 @@
 description: Organize, reconcile, update, and safely remove reShapr Kubernetes resources through a GitOps workflow.
 verification:
   product: reShapr controllers
-  version: 0.0.1
-  date: 2026-09-04
+  version: 0.0.3
+  date: 2026-09-21
 ---
 
 # Manage reShapr Resources with GitOps
@@ -12,13 +12,13 @@ Use this guide to manage reShapr custom resources as desired state without coupl
 
 ## Prerequisites
 
-- A Kubernetes cluster with reShapr controllers `0.0.1` installed
-- A registered operator identity with access to the target reShapr `0.2.3` organization
+- A Kubernetes cluster with reShapr controllers `0.0.3` installed
+- A registered operator identity with access to the target reShapr `1.0.0-rc1` organization
 - `kubectl` access to the application and `reshapr-system` namespaces
 - A Git repository reconciled to the cluster
 - A completed **[first GitOps-managed MCP endpoint](../tutorials/first-gitops-mcp-endpoint.md)** or equivalent Service, ConfigurationPlan, and Exposition
 
-The [controllers documentation at `0.0.1`](https://github.com/reshaprio/reshapr-controllers/tree/0.0.1/documentation) owns the complete CRD behavior. This guide focuses on repository structure and lifecycle decisions.
+The [controllers documentation at `0.0.3`](https://github.com/reshaprio/reshapr-controllers/tree/0.0.3/documentation) owns the complete CRD behavior. This guide focuses on repository structure and lifecycle decisions.
 
 ## Organize resources by dependency
 
@@ -71,7 +71,7 @@ spec:
         tokenHeaderKey: token-header
 ```
 
-Create the referenced Kubernetes Secret with your secret-management system. The operator requires its separate Secret-reader RBAC to read it. The [`SecretSource` reference](https://github.com/reshaprio/reshapr-controllers/blob/0.0.1/documentation/secretsource-cr.md) lists the supported keys and cleanup behavior.
+Create the referenced Kubernetes Secret with your secret-management system. The operator requires its separate Secret-reader RBAC to read it. The [`SecretSource` reference](https://github.com/reshaprio/reshapr-controllers/blob/0.0.3/documentation/secretsource-cr.md) lists the supported keys and cleanup behavior.
 
 Check each synchronized entry rather than relying only on the aggregate state:
 
@@ -96,7 +96,7 @@ kubectl get services.reshapr.io,gatewaygroups.reshapr.io,configurationplans.resh
 
 Treat a resource as reconciled only when its phase is `READY` and the two generations match. `ERROR` indicates a rejected or unresolved desired state; use `status.message` and the operator logs to diagnose it. `IN_PROGRESS`, `UNKNOWN`, and `PREEXISTING` are not equivalent to `READY`.
 
-`CustomTools` and `Resource` use `status.state` and do not expose `observedGeneration` in controllers `0.0.1`:
+`CustomTools` and `Resources` use `status.state` and do not expose `observedGeneration` in controllers `0.0.3`:
 
 ```bash
 kubectl get customtools.reshapr.io,resources.reshapr.io \
@@ -107,9 +107,29 @@ kubectl get customtools.reshapr.io,resources.reshapr.io \
     @tsv'
 ```
 
+Against reShapr `1.0.0-rc1`, valid `CustomTools` and `Resources` custom resources can each reach `READY`. Controllers `0.0.3` currently upload both artifact kinds with the same `artifact.json` filename, however, so reconciling both kinds against one Service can replace the previously attached artifact. Use only one of these CR kinds per Service, or manage the additional artifact through another supported reShapr interface.
+
 ## Update a ConfigurationPlan through Git
 
-Change `spec.backendEndpoint` in the tracked ConfigurationPlan, then review the Kubernetes diff:
+Add a request-header policy to the tracked ConfigurationPlan. This example keeps two incoming headers, drops one explicitly, and renames one before the backend call:
+
+```yaml
+spec:
+  includedOperations:
+    - GET /v1/forecast
+  headerPolicy:
+    request:
+      allow:
+        - X-Request-Id
+        - X-Client-Id
+      deny:
+        - X-Internal-Debug
+      rename:
+        - from: X-Client-Id
+          to: X-Consumer-Id
+```
+
+Review the Kubernetes diff:
 
 ```bash
 kubectl diff --filename environments/production/endpoints/open-meteo
@@ -119,7 +139,7 @@ Commit and push the change:
 
 ```bash
 git add environments/production/endpoints/open-meteo/30-configuration-plan.yaml
-git commit -m 'Update Open-Meteo backend endpoint'
+git commit -m 'Configure Open-Meteo request headers'
 git push
 ```
 
@@ -148,9 +168,9 @@ Remove the corresponding files in one reviewable change, or split the removal in
 
 For `Service`, `GatewayGroup`, `Exposition`, and `SecretSource`, `spec.keepOnDelete` defaults to `false`: deleting the custom resource also asks the operator to delete the corresponding remote object. Set it to `true` before removal only when the remote object must intentionally outlive Kubernetes management.
 
-ConfigurationPlans are cleaned up remotely by their reconciler and do not expose `keepOnDelete` in controllers `0.0.1`.
+ConfigurationPlans are cleaned up remotely by their reconciler and do not expose `keepOnDelete` in controllers `0.0.3`.
 
-Deleting a `CustomTools` or [`Resource`](https://github.com/reshaprio/reshapr-controllers/blob/0.0.1/documentation/resource-cr.md) custom resource does **not** remove its remote Artifact in controllers `0.0.1`. If the parent Service is retained, remove that Artifact through a supported reShapr interface or record it as intentionally unmanaged. Deleting the parent Service with `keepOnDelete: false` removes the Service that contains those Artifacts.
+Deleting a `CustomTools` or [`Resources`](https://github.com/reshaprio/reshapr-controllers/blob/0.0.3/documentation/resources-cr.md) custom resource does **not** remove its remote Artifact in controllers `0.0.3`. If the parent Service is retained, remove that Artifact through a supported reShapr interface or record it as intentionally unmanaged. Deleting the parent Service with `keepOnDelete: false` removes the Service that contains those Artifacts.
 
 Do not remove CRDs as part of an application cleanup. Deleting a CRD deletes every custom resource of that kind across the cluster.
 
@@ -161,8 +181,9 @@ The repository expresses resource dependencies, sensitive values remain outside 
 ## Limits
 
 - This guide does not configure a GitOps engine or prescribe its dependency and health-check syntax.
-- Controllers `0.0.1` do not expose a uniform readiness contract across all seven custom resources.
-- `CustomTools` and `Resource` deletion can leave remote Artifacts when their parent Service remains.
+- Controllers `0.0.3` do not expose a uniform readiness contract across all seven custom resources.
+- `CustomTools` and `Resources` currently use the same remote artifact filename and can replace each other when reconciled for one Service.
+- `CustomTools` and `Resources` deletion can leave remote Artifacts when their parent Service remains.
 - `keepOnDelete` preserves remote state but does not transfer that state to another Kubernetes resource.
 - A successful reconciliation does not test ingress, proxy health, backend authentication, or Tool execution.
 

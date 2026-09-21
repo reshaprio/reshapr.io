@@ -2,8 +2,8 @@
 description: Use the reShapr Web UI to import an OpenAPI contract, configure its backend, and publish an MCP endpoint.
 verification:
   product: reShapr
-  version: 0.2.3
-  date: 2026-09-05
+  version: 1.0.0-rc1
+  date: 2026-09-18
 ---
 
 # Web UI Quickstart: From Import to Exposition
@@ -12,7 +12,7 @@ Use the Web UI Quick Start to turn a public OpenAPI 3 contract into an MCP endpo
 
 ## Prerequisites
 
-- Access to a reShapr `0.2.3` Web UI and an account that can create Services, Configuration Plans, and Expositions
+- Access to a reShapr `1.0.0-rc1` Web UI and an account that can create Services, Configuration Plans, and Expositions
 - At least one running proxy registered as a Gateway in the **Default Gateway Group**
 - Outbound access from the control plane to GitHub and from the proxy to `https://api.open-meteo.com`
 
@@ -41,7 +41,7 @@ On the **Import** stage:
 
 The result should identify a Service named **Open-Meteo Weather Forecast API**, version `1.0`, with its OpenAPI contract as the main Artifact. The Service identifier shown by your environment is generated and will differ from other installations.
 
-If the format is not recognized, confirm that you used the raw file URL and that the document declares OpenAPI 3.x. Swagger and OpenAPI 2.x documents are not supported in reShapr `0.2.3`. See **[Import OpenAPI, GraphQL, or Protobuf Artifacts](../how-to-guides/import-api-artifacts.md)** for format-specific troubleshooting.
+If the format is not recognized, confirm that you used the raw file URL and that the document declares OpenAPI 3.x. Swagger and OpenAPI 2.x documents are not supported in reShapr `1.0.0-rc1`. See **[Import OpenAPI, GraphQL, or Protobuf Artifacts](../how-to-guides/import-api-artifacts.md)** for format-specific troubleshooting.
 
 ## Review optional Artifacts
 
@@ -85,6 +85,8 @@ https://mcp.example.com/mcp/acme/Open-Meteo+Weather+Forecast+API/1.0
 
 If no endpoint appears, verify that a proxy is running and registered as a Gateway in the Default Gateway Group. Creating an Exposition stores the intended deployment, but only a connected proxy can publish a usable endpoint.
 
+If Quick Start reports that the Configuration Plan is already exposed on Gateway Group `1`, open the existing MCP Server instead. A Plan can have only one Exposition per Gateway Group; Quick Start does not create a duplicate.
+
 :::info Optional endpoint security
 Quick Start can protect the endpoint with an API key or OAuth 2.0. An API key is displayed only when it is generated, so store it before leaving the completion view. Add security after this tutorial by following **[Protect an MCP Endpoint with an API Key](../how-to-guides/security/api-key.md)** or **[Protect an MCP Endpoint with OAuth 2.0](../how-to-guides/security/oauth.md)**.
 :::
@@ -106,6 +108,6 @@ You used the Web UI to import an OpenAPI 3 contract, inspect its Service, config
 
 ## Evidence and limits
 
-This tutorial was last verified with reShapr `0.2.3` on 2026-09-05. Its workflow follows the release-tagged **[Quick Start wizard](https://github.com/reshaprio/reshapr/blob/0.2.3/web-ui/src/lib/components/artifacts/QuickStartWizard.svelte)** and **[Artifact import form](https://github.com/reshaprio/reshapr/blob/0.2.3/web-ui/src/lib/components/artifacts/ImportArtifactForm.svelte)**.
+This tutorial was last verified with reShapr `1.0.0-rc1` on 2026-09-18. Its workflow follows the release-tagged **[Quick Start wizard](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/web-ui/src/lib/components/artifacts/QuickStartWizard.svelte)** and **[Artifact import form](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/web-ui/src/lib/components/artifacts/ImportArtifactForm.svelte)**.
 
 Quick Start uses the `default` Plan and Default Gateway Group rather than asking you to choose names or a target group. Use the full Plan and Exposition views when you need several Plans, another Gateway Group, or more control over the exposed MCP surface.

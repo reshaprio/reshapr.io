@@ -2,8 +2,8 @@
 description: Verified reShapr capabilities, availability, scope, and canonical references.
 verification:
   product: reShapr
-  version: 0.2.3
-  date: 2026-09-03
+  version: 1.0.0-rc1
+  date: 2026-09-18
 ---
 
 # reShapr features
@@ -44,8 +44,10 @@ Methods such as roots, sampling, and subscriptions are not exposed as server cap
 | Capability | Availability | Scope | Reference |
 |---|---|---|---|
 | MCP endpoint API key | Available | The proxy validates `x-reshapr-key`; keys can be renewed and propagated to connected proxies. | [API key guide](../how-to-guides/security/api-key.md) |
-| MCP endpoint OAuth 2.0 | Available | The proxy validates signed bearer JWTs against configured issuers and JWKS, publishes RFC 9728 metadata, checks configured Exposition scopes, and checks a `resource` claim when present. | [OAuth 2.0 guide](../how-to-guides/security/oauth.md) |
-| Backend authentication | Available with limits | Basic, token/header, certificate, and OAuth credentials depend on the backend protocol and Secret configuration. | [Backend authentication and elicitation](../how-to-guides/security/backend-auth-and-elicitation.md) |
+| MCP endpoint OAuth 2.0 | Available | The proxy validates signed bearer JWTs against configured issuers, JWKS, Exposition scopes, and dynamic or static audiences, and publishes RFC 9728 metadata. | [OAuth 2.0 guide](../how-to-guides/security/oauth.md) |
+| Backend authentication | Available with limits | Basic, token/header, certificate, OAuth Client Credentials, and elicited OAuth credentials depend on the backend protocol and Secret configuration. | [Backend authentication and elicitation](../how-to-guides/security/backend-auth-and-elicitation.md) |
+| Backend request header policy | Available with limits | A Configuration Plan can allow, deny, or rename request headers sent to HTTP backends or converted to gRPC call metadata. Response rules are reserved and not enforced in `1.0.0-rc1`. | [Configure backend request header policy](../how-to-guides/security/configure-backend-header-policy.md) |
+| Database encryption and key rotation | Available with limits | The control plane uses identified AES-256-GCM keys and can re-encrypt stored sensitive values with the active key through an administrator command. Key rollout and invocation remain operator-managed. | [Upgrade and rotate runtime secrets](../how-to-guides/operations/upgrade-and-rotate.md) |
 | Local secret references | Available with limits | Hybrid proxies resolve `${env:VARIABLE}` references locally on each backend call. `env` is the provided resolver. | [Backend authentication and elicitation](../how-to-guides/security/backend-auth-and-elicitation.md#create-a-locally-resolved-secret) |
 | Audit events | Available with limits | A proxy emits structured MCP-call and authentication-failure events when audit is enabled on the Configuration Plan. | [Audit MCP endpoint calls](../how-to-guides/audit-mcp-endpoint.md) |
 | Multi-tenancy | Available | Control-plane data is isolated by organization through application-level discriminator tenancy. | [Multi-tenancy and Administrative Governance](../explanations/multi-tenancy-administrative-governance.md) |
@@ -57,7 +59,7 @@ Methods such as roots, sampling, and subscriptions are not exposed as server cap
 | Capability | Availability | Scope | Reference |
 |---|---|---|---|
 | Public and administrative APIs | Available | OpenAPI contracts cover product resources, authentication, and administration. | [reShapr API contracts](https://github.com/reshaprio/reshapr) |
-| CLI | Available | The CLI covers login, import, Services, artifacts, Secrets, Plans, Expositions, Gateway Groups, tokens, quotas, and administrative workflows. | [CLI reference](cli-commands.md) and [CI/CD automation](../how-to-guides/automate-with-cli-in-cicd.md) |
+| CLI | Available | The CLI covers login, import, Services, artifacts, Secrets, Plans, Expositions, Gateway Groups, tokens, quotas, administrative workflows, and generated shell completion. | [CLI reference](cli-commands.md) and [CI/CD automation](../how-to-guides/automate-with-cli-in-cicd.md) |
 | Web UI | Available | The Web UI covers the main import-to-Exposition workflow and organization administration. | [Web UI](https://github.com/reshaprio/reshapr/tree/main/web-ui) |
 | Live configuration propagation | Available | Configuration events are streamed to connected proxies without requiring a proxy restart. This is not a general zero-downtime or rollback guarantee. | [Control Plane to Proxy Synchronization](../explanations/control-plane-gateway-synchronization.md) |
 | Proxy observability | Available with limits | The proxy can export OpenTelemetry traces, metrics, and logs; audit events remain conditional. Equivalent coverage is not provided across every component. | [Observe the reShapr Proxy](../how-to-guides/operations/observe-and-audit.md) |
@@ -74,5 +76,5 @@ Methods such as roots, sampling, and subscriptions are not exposed as server cap
 | Runtime scaling and availability | Available with limits | Production profiles configure replicas and PDBs for the control plane and Web UI; the proxy adds clustering and HPA. End-to-end availability still depends on PostgreSQL and the target infrastructure. | [Helm charts](https://github.com/reshaprio/reshapr-helm-charts) |
 | Network and metrics integration | Available with limits | The proxy chart provides optional NetworkPolicy and ServiceMonitor resources. Coverage is not uniform across all four charts. | [Proxy chart](https://github.com/reshaprio/reshapr-helm-charts/tree/main/proxy) |
 | Installation profiles and signatures | Available | All charts provide development and production values; published charts are signed with Cosign. | [Helm chart verification](https://github.com/reshaprio/reshapr-helm-charts#verifying-chart-signatures) |
-| Upgrades | Available with limits | Kubernetes rolling updates, startup database migrations, retained clustering secrets, and retained CRDs support upgrades. Automated rollback and general secret rotation are not provided. | [Upgrade and rotate runtime secrets](../how-to-guides/operations/upgrade-and-rotate.md) |
+| Upgrades | Available with limits | Kubernetes rolling updates, startup database migrations, retained clustering secrets, retained CRDs, and administrator-triggered database key rotation support upgrades. Automated rollback and general credential rotation are not provided. | [Upgrade and rotate runtime secrets](../how-to-guides/operations/upgrade-and-rotate.md) |
 

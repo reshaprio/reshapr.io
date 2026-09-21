@@ -2,8 +2,8 @@
 description: Protect a reShapr MCP endpoint with an API key, verify access, and rotate the key without restarting the proxy.
 verification:
   product: reShapr
-  version: 0.2.3
-  date: 2026-09-04
+  version: 1.0.0-rc1
+  date: 2026-09-18
 ---
 
 # Protect an MCP Endpoint with an API Key
@@ -12,7 +12,7 @@ An API key restricts the client-to-proxy boundary of an MCP endpoint. reShapr st
 
 ## Prerequisites
 
-- reShapr CLI `0.2.3`, authenticated with `reshapr login`
+- reShapr CLI `1.0.0-rc1`, authenticated with `reshapr login`
 - A Service ID and its backend endpoint
 - `curl` and `jq`
 
@@ -55,7 +55,7 @@ curl --silent --output /dev/null --write-out '%{http_code}\n' \
   --header 'Content-Type: application/json' \
   --header 'MCP-Protocol-Version: 2026-07-28' \
   --header 'Mcp-Method: server/discover' \
-  --data '{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-curl","version":"1.0"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-curl","version":"1.0.0-rc1"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
   "$MCP_URL"
 ```
 
@@ -70,7 +70,7 @@ curl --silent --show-error \
   --header 'MCP-Protocol-Version: 2026-07-28' \
   --header 'Mcp-Method: server/discover' \
   --header "x-reshapr-key: $RESHAPR_API_KEY" \
-  --data '{"jsonrpc":"2.0","id":2,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-curl","version":"1.0"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
+  --data '{"jsonrpc":"2.0","id":2,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-curl","version":"1.0.0-rc1"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
   "$MCP_URL" | jq '.result.supportedVersions'
 ```
 
@@ -99,7 +99,7 @@ curl --silent --output /dev/null --write-out '%{http_code}\n' \
   --header 'MCP-Protocol-Version: 2026-07-28' \
   --header 'Mcp-Method: server/discover' \
   --header "x-reshapr-key: $RESHAPR_OLD_API_KEY" \
-  --data '{"jsonrpc":"2.0","id":3,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-curl","version":"1.0"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
+  --data '{"jsonrpc":"2.0","id":3,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-curl","version":"1.0.0-rc1"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
   "$MCP_URL"
 ```
 

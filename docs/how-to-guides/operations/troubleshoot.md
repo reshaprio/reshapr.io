@@ -2,8 +2,8 @@
 description: Diagnose inactive Expositions, unsynchronized proxies, MCP errors, backend failures, and unresolved Secrets.
 verification:
   product: reShapr stack
-  version: 0.2.3 / controllers 0.0.1
-  date: 2026-09-04
+  version: 1.0.0-rc1 / controllers 0.0.3
+  date: 2026-09-21
 ---
 
 # Troubleshoot an Exposition or Proxy
@@ -14,7 +14,7 @@ Use this guide when an Exposition has no endpoint, a proxy does not receive a ch
 
 You need:
 
-- reShapr runtime `0.2.3` and, for Kubernetes-managed resources, controllers `0.0.1`;
+- reShapr runtime `1.0.0-rc1` and, for Kubernetes-managed resources, controllers `0.0.3`;
 - `reshapr login` completed for the affected organization;
 - access to proxy and operator logs;
 - `curl`, `jq`, and `kubectl` when the workload runs on Kubernetes;
@@ -24,7 +24,7 @@ Set the values relevant to your deployment:
 
 ```bash
 export EXPOSITION_ID='<exposition-id>'
-export MCP_URL='https://<gateway-host>/mcp/<organization>/<exposition-name>'
+export MCP_URL='https://<gateway-host>/mcp/<exposition-id>'
 export APP_NAMESPACE='<application-namespace>'
 export PROXY_NAMESPACE='<gateway-namespace>'
 export PLATFORM_NAMESPACE='reshapr-system'
@@ -93,7 +93,7 @@ For `Service`, `GatewayGroup`, `ConfigurationPlan`, `Exposition`, and `SecretSou
 
 Use `status.message` to resolve an `ERROR`. An Exposition in `IN_PROGRESS` commonly waits for its Service, ConfigurationPlan, or GatewayGroup to exist remotely. Correct the named dependency first.
 
-`CustomTools` and `Resource` use a different status shape in controllers `0.0.1`:
+`CustomTools` and `Resources` use a different status shape in controllers `0.0.3`:
 
 ```bash
 kubectl get customtools.reshapr.io,resources.reshapr.io \
@@ -103,6 +103,23 @@ kubectl get customtools.reshapr.io,resources.reshapr.io \
     [.kind, .metadata.name, .status.state, (.status.message // "")] |
     @tsv'
 ```
+
+Controllers chart `0.0.13` packages the controllers `0.0.3` CRDs, but its default image remains `nightly` and its chart metadata still reports app version `0.0.1`. Confirm both the running image and the ConfigurationPlan schema:
+
+```bash
+kubectl get deployment/reshapr-controllers-operator \
+  --namespace "${PLATFORM_NAMESPACE}" \
+  --output jsonpath='{.spec.template.spec.containers[0].image}{"\n"}'
+kubectl get crd configurationplans.reshapr.io \
+  --output json \
+  | jq '.spec.versions[] | select(.name == "v1alpha1")
+      | .schema.openAPIV3Schema.properties.spec.properties
+      | {includedOperations, headerPolicy}'
+```
+
+The image must end in `:0.0.3`, and both schema properties must be present. If the image differs, set `operator.image.tag=0.0.3` and restart the operator. If an installation upgraded from an earlier chart still has old schemas, apply the release CRDs explicitly because Helm does not upgrade them automatically. Do not apply `resources.reshapr.io` over controllers `0.0.2`: its kind changed immutably, so follow **[Upgrade reShapr and Rotate Runtime Secrets](./upgrade-and-rotate.md#upgrade-the-web-ui-and-controllers)** for that CRD.
+
+Controllers `0.0.3` use the plural `Resources` kind. If Kubernetes reports no match for `kind: Resource`, update the manifest to `kind: Resources` and confirm that the `resources.reshapr.io` CRD also reports `spec.names.kind: Resources`. The old `Unsupported artifact kind and version: Resource - reshapr.io/v1alpha1` error identifies a controllers `0.0.2` operator that still emits the singular artifact kind.
 
 If the status does not explain the failure, inspect the operator logs:
 
@@ -186,7 +203,7 @@ curl --include --silent --show-error \
   --header 'Accept: application/json, text/event-stream' \
   --header 'MCP-Protocol-Version: 2026-07-28' \
   --header 'Mcp-Method: server/discover' \
-  --data '{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-troubleshooting","version":"0.2.3"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-troubleshooting","version":"1.0.0-rc1"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
   "${MCP_URL}"
 ```
 
@@ -263,12 +280,12 @@ The first failing layer now has an observable recovery check: reconciled desired
 
 - A `READY` custom resource proves control-plane reconciliation, not Gateway selection, proxy synchronization, ingress, or backend health.
 - Proxy readiness proves initial control-plane connectivity, not that every Exposition is loaded or every backend is reachable.
-- Release `0.2.3` retains the last fetched local registry during synchronization loss; this is not an offline-operation guarantee.
-- Controllers `0.0.1` do not expose one uniform status contract for all custom resources.
+- Release `1.0.0-rc1` retains the last fetched local registry during synchronization loss; this is not an offline-operation guarantee.
+- Controllers `0.0.3` do not expose one uniform status contract for all custom resources.
 - Logs and telemetry depend on the deployment's collection and retention configuration.
 
 ## Next step
 
 Use **[Observe the reShapr Proxy](./observe-and-audit.md)** to export the signals used here. Review **[Control Plane to Proxy Synchronization](../../explanations/control-plane-gateway-synchronization.md)** for the registration, streaming, heartbeat, and recovery model.
 
-The release-tagged [reShapr runtime](https://github.com/reshaprio/reshapr/tree/0.2.3) and [controllers documentation](https://github.com/reshaprio/reshapr-controllers/tree/0.0.1/documentation) remain the canonical behavioral references.
+The release-tagged [reShapr runtime](https://github.com/reshaprio/reshapr/tree/1.0.0-rc1) and [controllers documentation](https://github.com/reshaprio/reshapr-controllers/tree/0.0.3/documentation) remain the canonical behavioral references.

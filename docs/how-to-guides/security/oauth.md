@@ -2,13 +2,17 @@
 description: Protect a reShapr MCP endpoint with OAuth 2.0 bearer JWT validation and verify accepted and rejected requests.
 verification:
   product: reShapr
-  version: 0.2.3
-  date: 2026-09-04
+  version: 1.0.0-rc1
+  date: 2026-09-18
 ---
 
 # Protect an MCP Endpoint with OAuth 2.0
 
 Use OAuth 2.0 when an MCP endpoint needs authenticated user identity and scopes rather than a shared API key. reShapr validates bearer JWTs at the client-to-proxy boundary and applies the policy to the complete Exposition.
+
+:::info Control-plane user login
+This guide protects MCP endpoints served by the proxy. To authenticate Web UI and CLI users through your organization's identity provider, use **[Connect the Control Plane to an OIDC Provider](../configure-control-plane-oidc.md)**.
+:::
 
 :::info Client ID Metadata Document compatibility
 reShapr accepts bearer JWTs issued after an MCP client registers through a [Client ID Metadata Document (CIMD)](https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization#client-id-metadata-documents). CIMD lets the Authorization Server identify the MCP client from a metadata document hosted at its HTTPS `client_id` URL; the Authorization Server, not CIMD, issues the access token.
@@ -20,17 +24,18 @@ The proxy does not participate in that client-registration step. It validates th
 
 You need:
 
-- the reShapr `0.2.3` CLI, authenticated with `reshapr login`;
+- the reShapr `1.0.0-rc1` CLI, authenticated with `reshapr login`;
 - an imported Service, its backend endpoint, and a Gateway Group ID;
 - an OAuth 2.0 test issuer and HTTPS JWKS endpoint reachable by the proxy;
 - `curl` and `jq`;
-- RSA- or RSA-PSS-signed test access tokens containing `sub`, `iat`, `exp`, and `iss`.
+- RSA- or RSA-PSS-signed test access tokens containing `sub`, `iat`, `exp`, `iss`, and `aud`.
 
 Configure the test issuer to mint these tokens with the same trusted signing key:
 
 - a valid token containing the required `mcp:invoke` scope;
 - an expired token;
 - a token whose `iss` is not in the accepted issuer list;
+- a token whose `aud` does not identify the Exposition;
 - a valid token without the required scope.
 
 The procedure for creating clients, users, and test tokens is specific to your identity provider. Do not use production tokens for these tests.
@@ -51,8 +56,9 @@ Read the four test tokens without adding them to shell history:
 read -r -s -p 'Valid access token: ' VALID_ACCESS_TOKEN; printf '\n'
 read -r -s -p 'Expired access token: ' EXPIRED_ACCESS_TOKEN; printf '\n'
 read -r -s -p 'Wrong-issuer access token: ' WRONG_ISSUER_ACCESS_TOKEN; printf '\n'
+read -r -s -p 'Wrong-audience access token: ' WRONG_AUDIENCE_ACCESS_TOKEN; printf '\n'
 read -r -s -p 'Missing-scope access token: ' MISSING_SCOPE_ACCESS_TOKEN; printf '\n'
-export VALID_ACCESS_TOKEN EXPIRED_ACCESS_TOKEN WRONG_ISSUER_ACCESS_TOKEN MISSING_SCOPE_ACCESS_TOKEN
+export VALID_ACCESS_TOKEN EXPIRED_ACCESS_TOKEN WRONG_ISSUER_ACCESS_TOKEN WRONG_AUDIENCE_ACCESS_TOKEN MISSING_SCOPE_ACCESS_TOKEN
 ```
 
 ## Create an OAuth-protected Configuration Plan
@@ -147,7 +153,7 @@ curl --fail --silent --show-error \
   "${MCP_URL}" | jq '.result.supportedVersions'
 ```
 
-A JSON-RPC result containing `2026-07-28` confirms that the issuer, signature, required claims, expiration, and scope were accepted.
+A JSON-RPC result containing `2026-07-28` confirms that the issuer, signature, audience, required claims, expiration, and scope were accepted. By default, the token audience must contain the exact Exposition URL in `$MCP_URL`. Use `--oauth2StaticAudiences '["<audience>"]'` on `config create-oauth` only when your Authorization Server issues a stable non-URL audience.
 
 ## Verify rejected tokens
 
@@ -187,6 +193,18 @@ curl --silent --show-error --output /dev/null --write-out '%{http_code}\n' \
   "${MCP_URL}"
 ```
 
+A valid token minted for another audience must also return `403`:
+
+```bash
+curl --silent --show-error --output /dev/null --write-out '%{http_code}\n' \
+  --header 'Content-Type: application/json' \
+  --header 'MCP-Protocol-Version: 2026-07-28' \
+  --header 'Mcp-Method: server/discover' \
+  --header "Authorization: Bearer ${WRONG_AUDIENCE_ACCESS_TOKEN}" \
+  --data "${MCP_DISCOVERY_REQUEST}" \
+  "${MCP_URL}"
+```
+
 Use Gateway authentication-failure audit events for additional diagnosis when audit and OpenTelemetry export are configured on the Configuration Plan.
 
 ## Roll back
@@ -196,20 +214,20 @@ Delete the Exposition before its Configuration Plan:
 ```bash
 reshapr expo delete "${EXPOSITION_ID}"
 reshapr config delete "${RESHAPR_CONFIG_ID}"
-unset VALID_ACCESS_TOKEN EXPIRED_ACCESS_TOKEN WRONG_ISSUER_ACCESS_TOKEN MISSING_SCOPE_ACCESS_TOKEN
+unset VALID_ACCESS_TOKEN EXPIRED_ACCESS_TOKEN WRONG_ISSUER_ACCESS_TOKEN WRONG_AUDIENCE_ACCESS_TOKEN MISSING_SCOPE_ACCESS_TOKEN
 ```
 
 This does not remove clients, users, keys, or test tokens from the identity provider. Revoke or delete those resources there.
 
 ## Result
 
-The MCP endpoint publishes its OAuth Protected Resource Metadata, accepts a correctly signed and scoped bearer JWT, rejects expired or unexpected issuers with `401`, and rejects a missing required scope with `403`.
+The MCP endpoint publishes its OAuth Protected Resource Metadata, accepts a correctly signed, scoped, and audience-bound bearer JWT, rejects expired or unexpected issuers with `401`, and rejects a mismatched audience or missing required scope with `403`.
 
 ## Limits
 
 - reShapr validates access tokens but does not operate the Authorization Server or its RFC 8414 metadata endpoint.
-- Release `0.2.3` accepts RSA and RSA-PSS JWT signatures. Symmetric HMAC tokens are rejected.
-- The standard JWT `aud` claim is not checked by this validation path as per version `0.2.3`
+- Release `1.0.0-rc1` accepts RSA and RSA-PSS JWT signatures. Symmetric HMAC tokens are rejected.
+- Audience validation can be disabled with `--oauth2DisableAudienceValidation` for compatibility. This removes the Exposition binding and should not be the production default.
 - OAuth scopes apply to the Exposition, not to individual Tools, Prompts, or Resources.
 - Dynamic Client Registration is not provided.
 

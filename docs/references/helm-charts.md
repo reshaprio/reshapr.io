@@ -4,7 +4,7 @@ description: Choose among the four reShapr Helm charts and continue with their c
 
 # Helm Charts Overview
 
-reShapr components are packaged as four independently versioned Helm charts. This page helps you choose a topology; the [`reshapr-helm-charts`](https://github.com/reshaprio/reshapr-helm-charts) repository owns installation commands, values, and release artifacts.
+reShapr components are packaged as four independently versioned Helm charts. This page describes baseline `0.0.13`; the [`reshapr-helm-charts`](https://github.com/reshaprio/reshapr-helm-charts) repository owns installation commands, values, and release artifacts.
 
 ## Prerequisites
 
@@ -48,9 +48,14 @@ Each chart directory owns its `values.yaml`, `values-dev.yaml`, and `values-prod
 
 For a reproducible installation, select an immutable version from the [Helm chart releases](https://github.com/reshaprio/reshapr-helm-charts/releases) and use documentation and values from the same tag.
 
+Charts `0.0.13` retain the control-plane `encryptionKey.activeKeyId` and `encryptionKey.keys.<kid>` values required for AES-256-GCM key rotation. They retain `encryptionKey.value` and `encryptionKey.key` only for decrypting legacy AES/ECB values during migration. The Web UI chart sets `BODY_SIZE_LIMIT` to `12M` and allows an explicit override through `extraEnv`.
+
+The controllers chart `0.0.13` packages the controllers `0.0.3` CRDs, including the plural `Resources` kind. Its default values still select `nightly`, while `Chart.yaml` and installation notes report app version `0.0.1`. Pin both controller image tags to `0.0.3` for the reviewed baseline; do not use chart metadata alone to identify the running version.
+
 ## Limits
 
 - Chart versions are not necessarily identical across all four components; verify each selected release.
+- Controllers chart `0.0.13` packages the baseline CRDs but does not select the baseline controller image without explicit overrides.
 - Helm does not remove CRDs when the controllers chart is uninstalled. Deleting CRDs manually also deletes their custom resources across namespaces.
 - This overview does not duplicate the complete values schema or installation commands. Review the selected chart's owner documentation before deployment.
 

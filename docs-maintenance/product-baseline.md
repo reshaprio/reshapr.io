@@ -1,9 +1,12 @@
 # Product baseline
 
-**Baseline date:** 2026-09-07  
-**Runtime:** reShapr `0.2.3`  
-**Controllers:** `0.0.1`  
-**Helm charts:** `0.0.11`
+**Baseline date:** 2026-09-21
+
+**Runtime:** reShapr `1.0.0-rc1`
+
+**Controllers:** `0.0.3`
+
+**Helm charts:** `0.0.13`
 
 This is the factual index used to review documentation claims. It is not a substitute for release artifacts or owner-repository contracts. A row means that the evidence was reviewed; it does not make this file evidence.
 
@@ -11,12 +14,12 @@ This is the factual index used to review documentation claims. It is not a subst
 
 | Repository | Released ref | Released commit | Review ref | Review commit |
 |---|---|---|---|---|
-| `reshaprio/reshapr` | `0.2.3` | `0ed842f8a23e377965d9bca0258d9bd5edb6168f` | `main` | `331a0c8da5914ea5d277cd01c669c7c535af8072` |
-| `reshaprio/reshapr-controllers` | `0.0.1` | `9f2c38876d4f3255379f52169b2405e6160cf860` | `main` | `3d1e27118a019a1889ca34e6c33c20f77bd77604` |
-| `reshaprio/reshapr-helm-charts` | `0.0.11` | `331e8edd3c1e4478255c023512808a0b1cade0c6` | `main` | `10e749010cf6942c7b03cf59a514fd8dd884e1a5` |
-| `reshaprio/reshapr.io` | current corpus | `78458e2dc08ae691c1b8350dac117ca0a7ccdcbc` | `main` plus reviewed working tree | same HEAD |
+| `reshaprio/reshapr` | `1.0.0-rc1` | `29fb4d2e29574570df6d05247d7af828a31b0c50` | `1.0.0-rc1` | same commit |
+| `reshaprio/reshapr-controllers` | `0.0.3` | `23685c15e100f2b0eadb2ce7334a13aca76140b5` | `0.0.3` | same commit |
+| `reshaprio/reshapr-helm-charts` | `0.0.13` | `1d5b99809c327e34e854edfa91d82825870ca5fb` | `0.0.13` | same commit |
+| `reshaprio/reshapr.io` | current corpus | `047cd471dc4a9589c2d9ea1a4436a1e11f7784b1` | `main` plus reviewed working tree | same HEAD |
 
-The Helm release ref was verified against `origin`; it was not present in the local clone. Review commits are recorded for change discovery only. A capability is `released` only when it is supported by the released refs above.
+The Helm release ref was verified against `origin`; it was not present in the local clone. The documentation working tree was dirty during this review, and its commit does not include the edits represented by this baseline. A capability is `released` only when it is supported by the released refs above.
 
 ## Personas
 
@@ -42,7 +45,7 @@ The Helm release ref was verified against `origin`; it was not present in the lo
 
 ## Capability registry
 
-Status totals for this baseline are 69 `released`, 7 `partial`, and 7 `unsupported`.
+Status totals for this baseline are 74 `released`, 5 `partial`, 7 `unsupported`, and 1 `removed`.
 
 ### API transformation and Context Control
 
@@ -53,11 +56,11 @@ Status totals for this baseline are 69 `released`, 7 `partial`, and 7 `unsupport
 | `CAP-GRAPHQL-IMPORT` | released | Import GraphQL schemas and generate query and mutation Tools. | `reshapr`: `GraphQLImporter`, `GraphQLMcpToolConverter` | `LIM-GRAPHQL-METADATA-REQUIRED` |
 | `CAP-PROTOBUF-GRPC` | released | Import Protobuf 3 definitions and dispatch Tools to gRPC backends. | `reshapr`: `ProtobufImporter`, `GrpcMcpToolConverter`, `GrpcProxyService` | `LIM-PROTOBUF-DEPENDENCY-RESOLUTION` |
 | `CAP-IMPORT-FILE-OR-URL` | released | Import contracts by local file or URL, with name and version overrides. | `reshapr`: `ArtifactResource`, `ReferenceResolver`, CLI import command | `LIM-LOCAL-IMPORT-EXTERNAL-REFS` |
-| `CAP-OPERATION-SELECTION` | released | Include or exclude generated API operations in a Configuration Plan. | `reshapr`: `OperationNameFilterPredicate`, `ToolCallExecutor` | `LIM-OPERATION-SELECTION-NOT-AUTHORIZATION` |
+| `CAP-OPERATION-SELECTION` | released | Include or exclude generated API operations from the client-visible surface of a Configuration Plan. | `reshapr`: `OperationNameFilterPredicate`, `ToolCallExecutor` | `LIM-OPERATION-SELECTION-NOT-AUTHORIZATION` |
 | `CAP-ARTIFACT-ATTACHMENT` | released | Attach Prompts, Resources, Custom Tools, and Tools Output Filters to a Service. | `reshapr`: `ReshaprArtifactBuilder`, `ArtifactType` | none |
 | `CAP-ARTIFACT-SELECTION` | released | Select attached artifacts per Configuration Plan. | `reshapr`: `ConfigurationPlan.includedArtifacts` | none |
 | `CAP-DECLARATIVE-CUSTOM-TOOLS` | released | Rename, condense, and reshape operations with declarative Custom Tools. | `reshapr`: `ReshaprCustomToolsMcpToolConverter` | none |
-| `CAP-SCRIPTED-CUSTOM-TOOLS` | released | Orchestrate allowed Tools with JavaScript in a Custom Tool. | `reshapr`: `CustomToolScriptRunner`, associated tests | `LIM-SCRIPT-RUNTIME-BOUNDS` |
+| `CAP-SCRIPTED-CUSTOM-TOOLS` | released | Orchestrate declared Tools with JavaScript, including lower-level operations hidden from the client-visible surface. | `reshapr`: `CustomToolScriptRunner`, `ToolCallExecutor`, associated tests | `LIM-SCRIPT-RUNTIME-BOUNDS`, `LIM-OPERATION-SELECTION-NOT-AUTHORIZATION` |
 | `CAP-TOOLS-OUTPUT-FILTERING` | released | Retain fields, apply JSON Patch, compact JSON, or convert Tool output. | `reshapr`: `ToolsOutputFiltersApplier`, associated tests | `LIM-OUTPUT-FILTER-FAILS-OPEN` |
 | `CAP-TOON-OUTPUT` | released | Encode JSON Tool results as TOON. | `reshapr`: `JToon.encodeJson()` integration | `LIM-TOON-OUTPUT-ONLY` |
 | `CAP-ARTIFACT-LIFECYCLE` | released | Read, delete, and analyze the impact of attached artifacts. | `reshapr`: `ArtifactResource`, `ArtifactManagerService` | none |
@@ -82,29 +85,32 @@ Status totals for this baseline are 69 `released`, 7 `partial`, and 7 `unsupport
 | ID | Status | Capability | Owner and direct evidence | Limit IDs |
 |---|---|---|---|---|
 | `CAP-SERVICE-VERSION-ADMINISTRATION` | released | Administer imported Services and coexisting versions. | `reshapr`: `ServiceResource`, `ServiceManagerService` | `LIM-SERVICE-NO-IMMUTABLE-ROLLBACK` |
-| `CAP-CONFIGURATION-PLANS` | released | Configure backend, timeout, operation and artifact selection, audit, and MCP protection. | `reshapr`: `ConfigurationPlan`, REST resource, Web UI editor | none |
+| `CAP-CONFIGURATION-PLANS` | released | Configure backend, timeout, operation and artifact selection, header propagation, audit, and MCP protection. | `reshapr`: `ConfigurationPlan`, REST resource, Web UI editor | none |
 | `CAP-EXPOSITIONS` | released | Bind a Service and Plan to a Gateway Group under a named MCP endpoint. | `reshapr`: `Exposition`, REST resource | none |
 | `CAP-GATEWAY-GROUPS` | released | Select dynamically registered Gateways through labels and Gateway Groups. | `reshapr`: `GatewayGroup`, `GatewayHealthServiceHandler` | none |
 | `CAP-LIVE-CONFIGURATION-PROPAGATION` | released | Stream created, updated, and deleted configuration to connected proxies. | `reshapr`: discovery stream and cluster event broadcaster | `LIM-LIVE-CONFIG-NO-ZERO-DOWNTIME` |
 | `CAP-ORGANIZATION-TENANCY` | released | Isolate control-plane data by organization. | `reshapr`: `TenantAwareEntity`, tenant resolver | `LIM-TENANCY-APPLICATION-LEVEL` |
 | `CAP-USER-ORGANIZATION-MEMBERSHIP-ADMIN` | released | Administer users, organizations, owners, and memberships. | `reshapr`: admin REST resources and CLI commands | none |
-| `CAP-USER-AUTHENTICATION` | released | Authenticate internal users or users from a configured OIDC provider. | `reshapr`: `AuthenticationController`, identity providers | `LIM-OIDC-EXTERNAL-PROVIDER` |
+| `CAP-USER-AUTHENTICATION` | released | Authenticate internal users or users from a configured OIDC provider. | `reshapr`: `AuthenticationController`, identity providers | `LIM-OIDC-EXTERNAL-PROVIDER`, `LIM-OIDC-LOGIN-VALIDATION-INCOMPLETE`, `LIM-OIDC-WEBUI-PUBLIC-URL-IGNORED` |
 | `CAP-KUBERNETES-SERVICE-ACCOUNT-AUTH` | released | Exchange a projected Kubernetes service-account token for reShapr credentials. | `reshapr`, `reshapr-controllers`: token verifier and provider | `LIM-KUBERNETES-SA-AUDIENCE-FIXED` |
 | `CAP-API-TOKENS` | released | Create, list, and delete API tokens for Gateways and automation. | `reshapr`: `TokenResource`, CLI API-token commands | none |
 | `CAP-ORGANIZATION-RESOURCE-QUOTAS` | released | Limit governance resource counts by organization. | `reshapr`: `QuotaMetric`, quota interceptors | `LIM-QUOTAS-NOT-RATE-LIMITS` |
-| `CAP-BACKEND-AUTHENTICATION-SECRETS` | released | Store token, Basic, certificate, and OAuth backend credentials. | `reshapr`: `Secret`, protocol proxy services | `LIM-BACKEND-AUTH-PROTOCOL-DEPENDENT` |
+| `CAP-BACKEND-AUTHENTICATION-SECRETS` | released | Store token, Basic, certificate, OAuth authorization-code, and OAuth Client Credentials backend credentials. | `reshapr`: `Secret`, protocol proxy services | `LIM-BACKEND-AUTH-PROTOCOL-DEPENDENT` |
+| `CAP-BACKEND-OAUTH-CLIENT-CREDENTIALS` | released | Obtain and cache machine-to-machine backend tokens with the OAuth 2.0 Client Credentials grant. | `reshapr`: `SecretAuthMethod`, `ClientCredentialsTokenProvider`, associated tests | `LIM-OAUTH-CLIENT-CREDENTIALS-NO-REFRESH`, `LIM-LOCAL-SECRETS-ENV-ONLY` |
 | `CAP-LOCAL-SECRET-REFERENCES` | released | Resolve `${env:VARIABLE}` values locally at a hybrid proxy. | `reshapr`: `SecretReferenceResolver`, `EnvSecretResolver` | `LIM-LOCAL-SECRETS-ENV-ONLY` |
-| `CAP-CONTROL-PLANE-SECRET-ENCRYPTION` | partial | Encrypt sensitive secret fields at rest in the control plane. | `reshapr`: `CipherService`, attribute converter | `LIM-SECRET-ENCRYPTION-AES-ECB`, `LIM-SECRET-ROTATION-MANUAL` |
+| `CAP-CONTROL-PLANE-SECRET-ENCRYPTION` | released | Encrypt sensitive Secret and Configuration Plan fields at rest with identified AES-256-GCM keys. | `reshapr`: `CipherService`, attribute converters, associated tests | `LIM-SECRET-ENCRYPTION-AES-ECB`, `LIM-SECRET-ROTATION-MANUAL` |
+| `CAP-ENCRYPTION-KEY-ROTATION` | released | Re-encrypt stored sensitive fields with an administrator-selected active key. | `reshapr`: `KeyRotationService`, `KeyRotationResource`, admin CLI | `LIM-SECRET-ROTATION-MANUAL` |
+| `CAP-BACKEND-HEADER-POLICY` | released | Allow, deny, or rename request headers sent from an MCP client to an HTTP backend or converted to gRPC call metadata. | `reshapr`, `reshapr-controllers`: `HeaderPolicyEngine`, `ProxyService`, `GrpcProxyService`, ConfigurationPlan API and CRD | `LIM-HEADER-POLICY-REQUEST-ONLY` |
 
 ### Security and observability
 
 | ID | Status | Capability | Owner and direct evidence | Limit IDs |
 |---|---|---|---|---|
 | `CAP-MCP-API-KEY-AUTH` | released | Protect an Exposition with an `x-reshapr-key` API key. | `reshapr`: `SecureEndpointFilter` | none |
-| `CAP-MCP-OAUTH-BEARER-AUTH` | released | Validate bearer JWTs against configured issuers, JWKS, scopes, and optional resource claim. | `reshapr`: `SecureEndpointFilter`, `MultipleIssuerClaimsVerifier` | `LIM-OAUTH-AUDIENCE-NOT-VERIFIED`, `LIM-OAUTH-PER-TOOL-UNSUPPORTED` |
+| `CAP-MCP-OAUTH-BEARER-AUTH` | released | Validate bearer JWTs against configured issuers, JWKS, scopes, and dynamic or static audiences. | `reshapr`: `SecureEndpointFilter`, `MultipleIssuerClaimsVerifier`, associated tests | `LIM-OAUTH-AUDIENCE-NOT-VERIFIED`, `LIM-OAUTH-AUDIENCE-DISABLEABLE`, `LIM-OAUTH-PER-TOOL-UNSUPPORTED` |
 | `CAP-OAUTH-PROTECTED-RESOURCE-METADATA` | released | Publish RFC 9728 Protected Resource Metadata for MCP endpoints. | `reshapr`: `WellKnownController` | none |
 | `CAP-OAUTH-AUTHORIZATION-SERVER-CONFIG` | partial | Consume configured authorization-server and JWKS metadata. | `reshapr`: `OAuth2ConfigurationEntry`, security filter | `LIM-OAUTH-AS-METADATA-NOT-HOSTED` |
-| `CAP-OAUTH-RESOURCE-INDICATOR` | partial | Compare a JWT `resource` claim with the requested endpoint URL. | `reshapr`: resource-claim branch in `SecureEndpointFilter` | `LIM-OAUTH-RESOURCE-CLAIM-ONLY` |
+| `CAP-OAUTH-RESOURCE-INDICATOR` | removed | Compare a JWT `resource` claim with the requested endpoint URL. Removed in favor of standard `aud` validation. | `reshapr`: `SecureEndpointFilter` diff and audience-binding tests | `LIM-OAUTH-RESOURCE-CLAIM-ONLY` |
 | `CAP-OAUTH-DYNAMIC-CLIENT-REGISTRATION` | unsupported | Register OAuth clients dynamically under RFC 7591. | `reshapr`: no registration endpoint or flow | `LIM-OAUTH-DCR-UNSUPPORTED` |
 | `CAP-SPIFFE-IDENTITIES` | unsupported | Authenticate workloads with SPIFFE identities. | all product repositories: no implementation found | `LIM-SPIFFE-UNSUPPORTED` |
 | `CAP-OAUTH-PER-TOOL-AUTHORIZATION` | unsupported | Enforce scopes or claims per Tool, Prompt, or Resource. | `reshapr`: policy executes at Exposition boundary | `LIM-OAUTH-PER-TOOL-UNSUPPORTED` |
@@ -119,6 +125,7 @@ Status totals for this baseline are 69 `released`, 7 `partial`, and 7 `unsupport
 | `CAP-CLI-PRODUCT-LIFECYCLE` | released | Manage login, imports, artifacts, Services, Secrets, Plans, Expositions, Gateways, tokens, and quotas with the CLI. | `reshapr`: `cli/src/commands` | none |
 | `CAP-CLI-ADMINISTRATION` | released | Manage users, organizations, memberships, quotas, and service accounts with the admin CLI. | `reshapr`: admin CLI commands | `LIM-CLI-ADMIN-KEY-REQUIRED` |
 | `CAP-CLI-PLAN-EVOLUTION` | released | Create, edit, duplicate, secure, and evolve Configuration Plans with the CLI. | `reshapr`: CLI config command | none |
+| `CAP-CLI-SHELL-COMPLETION` | released | Generate shell completion for reShapr CLI commands without authentication. | `reshapr`: `cli/src/completion.ts`, completion tests | none |
 | `CAP-WEB-UI-ADMINISTRATION` | released | Manage the primary product and organization resources in the Web UI. | `reshapr`: Web UI application routes | none |
 | `CAP-WEB-UI-QUICK-START` | released | Complete the import-to-Exposition journey in the Web UI wizard. | `reshapr`: `QuickStartWizard.svelte` | `LIM-QUICK-START-DEFAULT-GATEWAY-GROUP` |
 | `CAP-LOCAL-DOCKER-RUNTIME` | released | Start, inspect, and stop a local release stack with Docker or Podman. | `reshapr`: CLI run/status/stop commands, release Compose | none |
@@ -127,8 +134,8 @@ Status totals for this baseline are 69 `released`, 7 `partial`, and 7 `unsupport
 
 | ID | Status | Capability | Owner and direct evidence | Limit IDs |
 |---|---|---|---|---|
-| `CAP-KUBERNETES-SEVEN-CRDS` | released | Declare Service, ConfigurationPlan, Exposition, GatewayGroup, SecretSource, CustomTools, and Resource CRDs. | `reshapr-controllers`: seven `CustomResource` classes | `LIM-CRD-PROMPTS-FILTERS-ABSENT` |
-| `CAP-KUBERNETES-RECONCILIATION` | released | Reconcile all seven CRDs with the control plane. | `reshapr-controllers`: seven reconcilers | none |
+| `CAP-KUBERNETES-SEVEN-CRDS` | released | Declare Service, ConfigurationPlan, Exposition, GatewayGroup, SecretSource, CustomTools, and Resources CRDs. | `reshapr-controllers`: seven `CustomResource` classes | `LIM-CRD-PROMPTS-FILTERS-ABSENT`, `LIM-KUBERNETES-RESOURCES-CRD-MIGRATION` |
+| `CAP-KUBERNETES-RECONCILIATION` | released | Reconcile all seven CRD kinds, including Configuration Plan header policies and MCP Resources, with the control plane. | `reshapr-controllers`: seven reconcilers and associated tests; release replay | `LIM-HEADER-POLICY-REQUEST-ONLY`, `LIM-KUBERNETES-RESOURCE-RECONCILIATION-INCOMPATIBLE`, `LIM-KUBERNETES-ARTIFACT-NAME-COLLISION` |
 | `CAP-KUBERNETES-STATUS-REPORTING` | released | Report observed generation, remote IDs, states, and conditions in CR status. | `reshapr-controllers`: status classes | none |
 | `CAP-KUBERNETES-REMOTE-CLEANUP` | partial | Delete corresponding remote resources when supported CRs are removed. | `reshapr-controllers`: `Cleaner` implementations | `LIM-CRD-ARTIFACT-CLEANUP-INCOMPLETE` |
 | `CAP-KUBERNETES-SECRET-SYNC` | released | Synchronize selected Kubernetes Secret values to control-plane Secrets. | `reshapr-controllers`: `SecretSourceReconciler` | `LIM-SECRET-SOURCE-RBAC` |
@@ -144,10 +151,10 @@ Status totals for this baseline are 69 `released`, 7 `partial`, and 7 `unsupport
 
 | ID | Status | Capability | Owner and direct evidence | Limit IDs |
 |---|---|---|---|---|
-| `CAP-HELM-FOUR-OCI-CHARTS` | released | Package control plane, proxy, Web UI, and controllers as separate OCI charts. | `reshapr-helm-charts`: four `Chart.yaml` files | none |
+| `CAP-HELM-FOUR-OCI-CHARTS` | released | Package control plane, proxy, Web UI, and controllers as separate OCI charts. | `reshapr-helm-charts`: four `Chart.yaml` files | `LIM-HELM-CONTROLLERS-RELEASE-MISMATCH` |
 | `CAP-HELM-POSTGRESQL-CHOICE` | released | Choose bundled or external PostgreSQL for the control plane. | `reshapr-helm-charts`: control-plane dependencies and values | `LIM-BUNDLED-POSTGRESQL-NOT-HA` |
 | `CAP-HELM-WEB-UI-TOPOLOGY` | released | Install the Web UI independently or as an optional control-plane dependency. | `reshapr-helm-charts`: Web UI and control-plane charts | none |
-| `CAP-HELM-EXISTING-SECRETS` | released | Supply existing Kubernetes Secrets for runtime credentials. | `reshapr-helm-charts`: `existingSecret` values and templates | none |
+| `CAP-HELM-EXISTING-SECRETS` | released | Supply existing Kubernetes Secrets for runtime credentials and identified control-plane encryption keys. | `reshapr-helm-charts`: `existingSecret` and `encryptionKey.keys` values and templates | none |
 | `CAP-HELM-INGRESS-TLS` | released | Configure Ingress and TLS for runtime components. | `reshapr-helm-charts`: Ingress templates and values | `LIM-INGRESS-CERTIFICATE-MANUAL` |
 | `CAP-HELM-PROBES-AND-RESOURCES` | released | Configure runtime liveness, readiness, and resource requests and limits. | `reshapr-helm-charts`: deployment templates and values | `LIM-HELM-PROBES-INCOMPLETE` |
 | `CAP-HELM-SECURITY-CONTEXT` | partial | Harden selected containers with pod and container security contexts. | `reshapr-helm-charts`: chart security-context values | `LIM-HELM-SECURITY-CONTEXT-PARTIAL` |
@@ -156,71 +163,82 @@ Status totals for this baseline are 69 `released`, 7 `partial`, and 7 `unsupport
 | `CAP-HELM-PROXY-CLUSTERING` | released | Cluster proxies with encrypted Infinispan/JGroups state traffic. | `reshapr-helm-charts`: headless Service and clustering configuration | none |
 | `CAP-HELM-NETWORK-POLICY` | partial | Restrict proxy clustering ingress with an optional NetworkPolicy. | `reshapr-helm-charts`: proxy NetworkPolicy template | `LIM-HELM-NETWORK-POLICY-PARTIAL` |
 | `CAP-HELM-PROMETHEUS-SCRAPING` | released | Expose proxy metrics through an optional Prometheus Operator ServiceMonitor. | `reshapr-helm-charts`: proxy ServiceMonitor template | `LIM-SERVICEMONITOR-PROXY-ONLY` |
-| `CAP-HELM-CONTROLLER-TOGGLES` | released | Enable the operator and admission controller independently. | `reshapr-helm-charts`: controllers values and conditionals | none |
+| `CAP-HELM-CONTROLLER-TOGGLES` | released | Enable the operator and admission controller independently. | `reshapr-helm-charts`: controllers values and conditionals | `LIM-HELM-CONTROLLERS-RELEASE-MISMATCH` |
 | `CAP-HELM-WEBHOOK-CERTIFICATE-PROVIDERS` | released | Choose cert-manager, OpenShift Service CA, or existing webhook certificates. | `reshapr-helm-charts`: controllers certificate values and templates | none |
 | `CAP-HELM-ENVIRONMENT-PROFILES` | released | Start from development and production values for every chart. | `reshapr-helm-charts`: `values-dev.yaml`, `values-production.yaml` | `LIM-PRODUCTION-PROFILES-NOT-CERTIFICATION` |
 | `CAP-HELM-COSIGN-SIGNATURES` | released | Sign published charts with Cosign and provide verification instructions. | `reshapr-helm-charts`: release workflows and README | none |
-| `CAP-HELM-UPGRADE-FOUNDATIONS` | partial | Use rolling updates, startup Flyway migration, retained cluster secrets, and retained CRDs during upgrades. | `reshapr`, `reshapr-helm-charts`: migration and upgrade surfaces | `LIM-UPGRADE-ROLLBACK-MANUAL`, `LIM-HELM-CRDS-RETAINED` |
+| `CAP-HELM-UPGRADE-FOUNDATIONS` | partial | Use rolling updates, startup Flyway migration, retained cluster secrets and CRDs, and operator-triggered database key rotation during upgrades. | `reshapr`, `reshapr-helm-charts`: migration, key rotation, and upgrade surfaces | `LIM-SECRET-ROTATION-MANUAL`, `LIM-UPGRADE-ROLLBACK-MANUAL`, `LIM-HELM-CRDS-RETAINED`, `LIM-KUBERNETES-RESOURCES-CRD-MIGRATION` |
 
 ## Limitation registry
 
-All limitations below are `active` through the named baseline. There are no verified `resolved` limitations in the initial registry. When one is resolved, preserve its row, change the status, and replace `Applies through` with the last affected release plus `Resolved in`.
+Limitations remain in this registry after resolution so historical claims stay traceable. `Applies through` names the last affected release for resolved entries and the current reviewed release for active entries.
 
 | ID | Status | Applies through | Statement | Affected capabilities |
 |---|---|---|---|---|
-| `LIM-OPENAPI-2-UNSUPPORTED` | active | reShapr 0.2.3 | Swagger and OpenAPI 2.x documents are not recognized; import requires OpenAPI 3.x. | `CAP-OPENAPI-3-IMPORT`, `CAP-OPENAPI-2-IMPORT` |
-| `LIM-GRAPHQL-METADATA-REQUIRED` | active | reShapr 0.2.3 | GraphQL imports require explicit Service name and version when the schema does not carry them. | `CAP-GRAPHQL-IMPORT` |
-| `LIM-PROTOBUF-DEPENDENCY-RESOLUTION` | active | reShapr 0.2.3 | A Protobuf import fails when compilation dependencies cannot be resolved. | `CAP-PROTOBUF-GRPC` |
-| `LIM-LOCAL-IMPORT-EXTERNAL-REFS` | active | reShapr 0.2.3 | Local file import cannot always resolve external references available to URL import. | `CAP-IMPORT-FILE-OR-URL` |
-| `LIM-OPERATION-SELECTION-NOT-AUTHORIZATION` | active | reShapr 0.2.3 | Operation selection changes the exposed Tool surface; it does not authorize calls at the backend. | `CAP-OPERATION-SELECTION` |
-| `LIM-SCRIPT-RUNTIME-BOUNDS` | active | reShapr 0.2.3 | Script execution time, call depth, arguments, and callable Tools are bounded; scripts are programmable rather than no-code. | `CAP-SCRIPTED-CUSTOM-TOOLS` |
-| `LIM-OUTPUT-FILTER-FAILS-OPEN` | active | reShapr 0.2.3 | A filter transformation failure returns the original response, so filtering is not a sensitive-data security boundary. | `CAP-TOOLS-OUTPUT-FILTERING` |
-| `LIM-TOON-OUTPUT-ONLY` | active | reShapr 0.2.3 | TOON is an output encoding, not an import format or MCP transport. | `CAP-TOON-OUTPUT` |
-| `LIM-MCP-NO-WEBSOCKET` | active | reShapr 0.2.3 | The product does not provide a WebSocket MCP transport. | `CAP-MCP-STREAMABLE-HTTP` |
-| `LIM-MCP-METHODS-UNSUPPORTED` | active | reShapr 0.2.3 | Logging, subscriptions, roots, and sampling are not dispatched as server methods. | `CAP-MCP-ADDITIONAL-SERVER-METHODS` |
-| `LIM-ELICITATION-IDENTITY-BOUND` | active | reShapr 0.2.3 | Elicited credentials bind to a legacy MCP session or, in stateless mode, an authenticated OAuth user. | `CAP-MCP-URL-ELICITATION` |
-| `LIM-CACHE-HINTS-MODERN-ONLY` | active | reShapr 0.2.3 | Cache hints are emitted only in the MCP `2026-07-28` response dialect. | `CAP-MCP-CACHE-HINTS` |
-| `LIM-SERVICE-NO-IMMUTABLE-ROLLBACK` | active | reShapr 0.2.3 | Coexisting Service versions do not provide an immutable rollback mechanism. | `CAP-SERVICE-VERSION-ADMINISTRATION` |
-| `LIM-LIVE-CONFIG-NO-ZERO-DOWNTIME` | active | reShapr 0.2.3 | Live proxy configuration avoids a configuration restart but is not a platform-wide zero-downtime or rollback guarantee. | `CAP-LIVE-CONFIGURATION-PROPAGATION` |
-| `LIM-TENANCY-APPLICATION-LEVEL` | active | reShapr 0.2.3 | Organization isolation is application-level discriminator tenancy, not a physical database per tenant. | `CAP-ORGANIZATION-TENANCY` |
-| `LIM-OIDC-EXTERNAL-PROVIDER` | active | reShapr 0.2.3 | OIDC authentication depends on an externally configured identity provider. | `CAP-USER-AUTHENTICATION` |
-| `LIM-KUBERNETES-SA-AUDIENCE-FIXED` | active | controllers 0.0.1 | Kubernetes service-account exchange expects the `https://app.reshapr.io` token audience. | `CAP-KUBERNETES-SERVICE-ACCOUNT-AUTH` |
-| `LIM-QUOTAS-NOT-RATE-LIMITS` | active | reShapr 0.2.3 | Organization quotas govern resource counts, not MCP request rate or volume. | `CAP-ORGANIZATION-RESOURCE-QUOTAS`, `CAP-MCP-RATE-LIMITING` |
-| `LIM-BACKEND-AUTH-PROTOCOL-DEPENDENT` | active | reShapr 0.2.3 | Available credential forms depend on the backend protocol and Secret configuration. | `CAP-BACKEND-AUTHENTICATION-SECRETS` |
-| `LIM-LOCAL-SECRETS-ENV-ONLY` | active | reShapr 0.2.3 | `env` is the only provided local secret resolver. | `CAP-LOCAL-SECRET-REFERENCES` |
-| `LIM-SECRET-ENCRYPTION-AES-ECB` | active | reShapr 0.2.3 | `AES/ECB/PKCS5Padding` provides confidentiality without authenticated integrity and reveals repeated block patterns. | `CAP-CONTROL-PLANE-SECRET-ENCRYPTION` |
-| `LIM-SECRET-ROTATION-MANUAL` | active | reShapr 0.2.3 / charts 0.0.11 | General secret and encryption-key rotation is not automated. | `CAP-CONTROL-PLANE-SECRET-ENCRYPTION`, `CAP-HELM-UPGRADE-FOUNDATIONS` |
-| `LIM-OAUTH-AUDIENCE-NOT-VERIFIED` | active | reShapr 0.2.3 | The OAuth endpoint path does not verify the standard JWT `aud` claim. | `CAP-MCP-OAUTH-BEARER-AUTH` |
-| `LIM-OAUTH-AS-METADATA-NOT-HOSTED` | active | reShapr 0.2.3 | reShapr consumes authorization-server configuration but does not host RFC 8414 authorization-server metadata. | `CAP-OAUTH-AUTHORIZATION-SERVER-CONFIG` |
-| `LIM-OAUTH-RESOURCE-CLAIM-ONLY` | active | reShapr 0.2.3 | RFC 8707 support is limited to checking a present JWT `resource` claim, not performing a token-request flow. | `CAP-OAUTH-RESOURCE-INDICATOR` |
-| `LIM-OAUTH-DCR-UNSUPPORTED` | active | reShapr 0.2.3 | Dynamic Client Registration under RFC 7591 is not implemented. | `CAP-OAUTH-DYNAMIC-CLIENT-REGISTRATION` |
-| `LIM-SPIFFE-UNSUPPORTED` | active | reShapr 0.2.3 | SPIFFE workload identities are not implemented. | `CAP-SPIFFE-IDENTITIES` |
-| `LIM-OAUTH-PER-TOOL-UNSUPPORTED` | active | reShapr 0.2.3 | OAuth scopes apply to an entire Exposition, not individual Tools, Prompts, or Resources. | `CAP-MCP-OAUTH-BEARER-AUTH`, `CAP-OAUTH-PER-TOOL-AUTHORIZATION` |
-| `LIM-MCP-RATE-LIMITING-UNSUPPORTED` | active | reShapr 0.2.3 | The product does not rate-limit MCP calls. | `CAP-MCP-RATE-LIMITING` |
-| `LIM-AUDIT-CONFIG-REQUIRED` | active | reShapr 0.2.3 | Audit events require the Plan audit flag and an operational telemetry destination. | `CAP-MCP-AUDIT-EVENTS` |
-| `LIM-OBSERVABILITY-PROXY-ONLY` | active | reShapr 0.2.3 | Equivalent traces, metrics, and logs are not provided across every component. | `CAP-PROXY-OPENTELEMETRY`, `CAP-CONTROLLERS-OBSERVABILITY` |
-| `LIM-CLI-ADMIN-KEY-REQUIRED` | active | reShapr 0.2.3 | Administrative CLI operations require a distinct admin API key context. | `CAP-CLI-ADMINISTRATION` |
-| `LIM-QUICK-START-DEFAULT-GATEWAY-GROUP` | active | reShapr 0.2.3 | The Web UI Quick Start depends on the Default Gateway Group. | `CAP-WEB-UI-QUICK-START` |
-| `LIM-CRD-PROMPTS-FILTERS-ABSENT` | active | controllers 0.0.1 | There are no dedicated Prompts or ToolsOutputFilters CRDs. | `CAP-MCP-PROMPTS`, `CAP-KUBERNETES-SEVEN-CRDS` |
-| `LIM-CRD-ARTIFACT-CLEANUP-INCOMPLETE` | active | controllers 0.0.1 | Deleting CustomTools or Resource CRs does not delete the corresponding remote artifact. | `CAP-KUBERNETES-REMOTE-CLEANUP` |
-| `LIM-SECRET-SOURCE-RBAC` | active | controllers 0.0.1 | SecretSource reconciliation requires explicit permission to read referenced Kubernetes Secrets. | `CAP-KUBERNETES-SECRET-SYNC` |
-| `LIM-ADMISSION-FAIL-OPEN` | active | controllers 0.0.1 / charts 0.0.11 | The admission webhook defaults to `failurePolicy: Ignore`; unavailable admission can produce Pods without sidecars. | `CAP-KUBERNETES-SIDECAR-INJECTION` |
-| `LIM-SIDECAR-DEPLOYMENT-ONLY` | active | controllers 0.0.1 | Automatic sidecar Service management is limited to Deployment-owned workloads. | `CAP-KUBERNETES-SIDECAR-SERVICES` |
-| `LIM-CONTROLLERS-OBSERVABILITY-UNSUPPORTED` | active | controllers 0.0.1 | Dedicated operator and admission metrics and traces are not provided; component logs remain available. | `CAP-CONTROLLERS-OBSERVABILITY` |
-| `LIM-BUNDLED-POSTGRESQL-NOT-HA` | active | charts 0.0.11 | Bundled PostgreSQL is a development topology, not a high-availability database. | `CAP-HELM-POSTGRESQL-CHOICE` |
-| `LIM-INGRESS-CERTIFICATE-MANUAL` | active | charts 0.0.11 | Runtime Ingress is optional and does not uniformly provision its own certificate. | `CAP-HELM-INGRESS-TLS` |
-| `LIM-HELM-PROBES-INCOMPLETE` | active | charts 0.0.11 | Runtime charts lack startup probes and controller charts lack explicit probes. | `CAP-HELM-PROBES-AND-RESOURCES` |
-| `LIM-HELM-SECURITY-CONTEXT-PARTIAL` | active | charts 0.0.11 | `runAsNonRoot` is not uniformly enforced and controller security contexts are empty by default. | `CAP-HELM-SECURITY-CONTEXT` |
-| `LIM-HA-INFRASTRUCTURE-DEPENDENT` | active | charts 0.0.11 | Replicas and PDBs do not make the full system highly available without HA PostgreSQL and suitable infrastructure. | `CAP-HELM-REPLICATION-AND-PDB` |
-| `LIM-HPA-PROXY-ONLY` | active | charts 0.0.11 | HPA is provided for the proxy only and scales from CPU and memory metrics. | `CAP-HELM-PROXY-HPA` |
-| `LIM-HELM-NETWORK-POLICY-PARTIAL` | active | charts 0.0.11 | The optional policy covers proxy clustering ingress only; it adds no complete egress or cross-chart policy. | `CAP-HELM-NETWORK-POLICY` |
-| `LIM-SERVICEMONITOR-PROXY-ONLY` | active | charts 0.0.11 | ServiceMonitor support is optional and limited to proxy metrics. | `CAP-HELM-PROMETHEUS-SCRAPING` |
-| `LIM-PRODUCTION-PROFILES-NOT-CERTIFICATION` | active | charts 0.0.11 | Production values are starting profiles, not environment-specific sizing or security certification. | `CAP-HELM-ENVIRONMENT-PROFILES` |
-| `LIM-UPGRADE-ROLLBACK-MANUAL` | active | reShapr 0.2.3 / charts 0.0.11 | Generic migration hooks, automated rollback, and general credential rotation are not provided. | `CAP-HELM-UPGRADE-FOUNDATIONS` |
-| `LIM-HELM-CRDS-RETAINED` | active | charts 0.0.11 | Helm retains CRDs on uninstall; manually deleting a CRD also deletes its custom resources. | `CAP-HELM-UPGRADE-FOUNDATIONS` |
+| `LIM-OPENAPI-2-UNSUPPORTED` | active | reShapr 1.0.0-rc1 | Swagger and OpenAPI 2.x documents are not recognized; import requires OpenAPI 3.x. | `CAP-OPENAPI-3-IMPORT`, `CAP-OPENAPI-2-IMPORT` |
+| `LIM-GRAPHQL-METADATA-REQUIRED` | active | reShapr 1.0.0-rc1 | GraphQL imports require explicit Service name and version when the schema does not carry them. | `CAP-GRAPHQL-IMPORT` |
+| `LIM-PROTOBUF-DEPENDENCY-RESOLUTION` | active | reShapr 1.0.0-rc1 | A Protobuf import fails when compilation dependencies cannot be resolved. | `CAP-PROTOBUF-GRPC` |
+| `LIM-LOCAL-IMPORT-EXTERNAL-REFS` | active | reShapr 1.0.0-rc1 | Local file import cannot always resolve external references available to URL import. | `CAP-IMPORT-FILE-OR-URL` |
+| `LIM-OPERATION-SELECTION-NOT-AUTHORIZATION` | active | reShapr 1.0.0-rc1 | Operation selection controls the client-visible Tool surface, not backend authorization; a scripted Custom Tool can call its declared lower-level Tools even when they are hidden from clients. | `CAP-OPERATION-SELECTION`, `CAP-SCRIPTED-CUSTOM-TOOLS` |
+| `LIM-SCRIPT-RUNTIME-BOUNDS` | active | reShapr 1.0.0-rc1 | Script execution time, call depth, arguments, and callable Tools are bounded; scripts are programmable rather than no-code. | `CAP-SCRIPTED-CUSTOM-TOOLS` |
+| `LIM-OUTPUT-FILTER-FAILS-OPEN` | active | reShapr 1.0.0-rc1 | A filter transformation failure returns the original response, so filtering is not a sensitive-data security boundary. | `CAP-TOOLS-OUTPUT-FILTERING` |
+| `LIM-TOON-OUTPUT-ONLY` | active | reShapr 1.0.0-rc1 | TOON is an output encoding, not an import format or MCP transport. | `CAP-TOON-OUTPUT` |
+| `LIM-MCP-NO-WEBSOCKET` | active | reShapr 1.0.0-rc1 | The product does not provide a WebSocket MCP transport. | `CAP-MCP-STREAMABLE-HTTP` |
+| `LIM-MCP-METHODS-UNSUPPORTED` | active | reShapr 1.0.0-rc1 | Logging, subscriptions, roots, and sampling are not dispatched as server methods. | `CAP-MCP-ADDITIONAL-SERVER-METHODS` |
+| `LIM-ELICITATION-IDENTITY-BOUND` | active | reShapr 1.0.0-rc1 | Elicited credentials bind to a legacy MCP session or, in stateless mode, an authenticated OAuth user. | `CAP-MCP-URL-ELICITATION` |
+| `LIM-CACHE-HINTS-MODERN-ONLY` | active | reShapr 1.0.0-rc1 | Cache hints are emitted only in the MCP `2026-07-28` response dialect. | `CAP-MCP-CACHE-HINTS` |
+| `LIM-SERVICE-NO-IMMUTABLE-ROLLBACK` | active | reShapr 1.0.0-rc1 | Coexisting Service versions do not provide an immutable rollback mechanism. | `CAP-SERVICE-VERSION-ADMINISTRATION` |
+| `LIM-LIVE-CONFIG-NO-ZERO-DOWNTIME` | active | reShapr 1.0.0-rc1 | Live proxy configuration avoids a configuration restart but is not a platform-wide zero-downtime or rollback guarantee. | `CAP-LIVE-CONFIGURATION-PROPAGATION` |
+| `LIM-TENANCY-APPLICATION-LEVEL` | active | reShapr 1.0.0-rc1 | Organization isolation is application-level discriminator tenancy, not a physical database per tenant. | `CAP-ORGANIZATION-TENANCY` |
+| `LIM-OIDC-EXTERNAL-PROVIDER` | active | reShapr 1.0.0-rc1 | OIDC authentication depends on an externally configured identity provider. | `CAP-USER-AUTHENTICATION` |
+| `LIM-OIDC-LOGIN-VALIDATION-INCOMPLETE` | active | reShapr 1.0.0-rc1 | OIDC login decodes access-token claims without validating the JWT signature, issuer, audience, or expiration, and returns a reShapr token to a client redirect carried in unbound, unsigned state. | `CAP-USER-AUTHENTICATION` |
+| `LIM-OIDC-WEBUI-PUBLIC-URL-IGNORED` | active | reShapr 1.0.0-rc1 / charts 0.0.13 | The Web UI chart injects a separate public control-plane URL, but the OIDC login route uses only the internal control-plane URL; deployments must make that configured URL browser-reachable. | `CAP-USER-AUTHENTICATION` |
+| `LIM-KUBERNETES-SA-AUDIENCE-FIXED` | active | controllers 0.0.3 | Kubernetes service-account exchange expects the `https://app.reshapr.io` token audience. | `CAP-KUBERNETES-SERVICE-ACCOUNT-AUTH` |
+| `LIM-QUOTAS-NOT-RATE-LIMITS` | active | reShapr 1.0.0-rc1 | Organization quotas govern resource counts, not MCP request rate or volume. | `CAP-ORGANIZATION-RESOURCE-QUOTAS`, `CAP-MCP-RATE-LIMITING` |
+| `LIM-BACKEND-AUTH-PROTOCOL-DEPENDENT` | active | reShapr 1.0.0-rc1 | Available credential forms depend on the backend protocol and Secret configuration. | `CAP-BACKEND-AUTHENTICATION-SECRETS` |
+| `LIM-LOCAL-SECRETS-ENV-ONLY` | active | reShapr 1.0.0-rc1 | `env` is the only provided local secret resolver, including for OAuth client credentials. | `CAP-LOCAL-SECRET-REFERENCES`, `CAP-BACKEND-OAUTH-CLIENT-CREDENTIALS` |
+| `LIM-OAUTH-CLIENT-CREDENTIALS-NO-REFRESH` | active | reShapr 1.0.0-rc1 | Client Credentials uses cached access tokens and reacquires them after expiry; refresh tokens are ignored. | `CAP-BACKEND-OAUTH-CLIENT-CREDENTIALS` |
+| `LIM-SECRET-ENCRYPTION-AES-ECB` | resolved | reShapr 0.2.3; resolved in 1.0.0-rc1 | New values use AES-256-GCM authenticated encryption; legacy AES/ECB values remain readable only for migration. | `CAP-CONTROL-PLANE-SECRET-ENCRYPTION` |
+| `LIM-SECRET-ROTATION-MANUAL` | active | reShapr 1.0.0-rc1 / charts 0.0.13 | Database key re-encryption is available but generation, distribution, activation, invocation, and retirement remain operator-driven; general credential rotation is not automated. | `CAP-CONTROL-PLANE-SECRET-ENCRYPTION`, `CAP-ENCRYPTION-KEY-ROTATION`, `CAP-HELM-UPGRADE-FOUNDATIONS` |
+| `LIM-OAUTH-AUDIENCE-NOT-VERIFIED` | resolved | reShapr 0.2.3; resolved in 1.0.0-rc1 | Standard JWT `aud` is required and checked against dynamic Exposition URLs or configured static audiences by default. | `CAP-MCP-OAUTH-BEARER-AUTH` |
+| `LIM-OAUTH-AUDIENCE-DISABLEABLE` | active | reShapr 1.0.0-rc1 | Audience validation can be disabled per Configuration Plan for compatibility, weakening token-to-resource binding. | `CAP-MCP-OAUTH-BEARER-AUTH` |
+| `LIM-OAUTH-AS-METADATA-NOT-HOSTED` | active | reShapr 1.0.0-rc1 | reShapr consumes authorization-server configuration but does not host RFC 8414 authorization-server metadata. | `CAP-OAUTH-AUTHORIZATION-SERVER-CONFIG` |
+| `LIM-OAUTH-RESOURCE-CLAIM-ONLY` | resolved | reShapr 0.2.3; resolved by removal in 1.0.0-rc1 | The optional `resource`-claim check was removed and replaced by standard JWT audience validation; reShapr still does not perform the RFC 8707 token-request flow. | `CAP-OAUTH-RESOURCE-INDICATOR`, `CAP-MCP-OAUTH-BEARER-AUTH` |
+| `LIM-OAUTH-DCR-UNSUPPORTED` | active | reShapr 1.0.0-rc1 | Dynamic Client Registration under RFC 7591 is not implemented. | `CAP-OAUTH-DYNAMIC-CLIENT-REGISTRATION` |
+| `LIM-SPIFFE-UNSUPPORTED` | active | reShapr 1.0.0-rc1 | SPIFFE workload identities are not implemented. | `CAP-SPIFFE-IDENTITIES` |
+| `LIM-OAUTH-PER-TOOL-UNSUPPORTED` | active | reShapr 1.0.0-rc1 | OAuth scopes and audiences apply to an entire Exposition, not individual Tools, Prompts, or Resources. | `CAP-MCP-OAUTH-BEARER-AUTH`, `CAP-OAUTH-PER-TOOL-AUTHORIZATION` |
+| `LIM-MCP-RATE-LIMITING-UNSUPPORTED` | active | reShapr 1.0.0-rc1 | The product does not rate-limit MCP calls. | `CAP-MCP-RATE-LIMITING` |
+| `LIM-AUDIT-CONFIG-REQUIRED` | active | reShapr 1.0.0-rc1 | Audit events require the Plan audit flag and an operational telemetry destination. | `CAP-MCP-AUDIT-EVENTS` |
+| `LIM-OBSERVABILITY-PROXY-ONLY` | active | reShapr 1.0.0-rc1 | Equivalent traces, metrics, and logs are not provided across every component. | `CAP-PROXY-OPENTELEMETRY`, `CAP-CONTROLLERS-OBSERVABILITY` |
+| `LIM-CLI-ADMIN-KEY-REQUIRED` | active | reShapr 1.0.0-rc1 | Administrative CLI operations require a distinct admin API key context. | `CAP-CLI-ADMINISTRATION`, `CAP-ENCRYPTION-KEY-ROTATION` |
+| `LIM-QUICK-START-DEFAULT-GATEWAY-GROUP` | active | reShapr 1.0.0-rc1 | The Web UI Quick Start depends on the Default Gateway Group. | `CAP-WEB-UI-QUICK-START` |
+| `LIM-HEADER-POLICY-REQUEST-ONLY` | active | reShapr 1.0.0-rc1 / controllers 0.0.3 | Request allow, deny, and rename rules are enforced for HTTP backends and gRPC call metadata; response rules are represented but reserved and not enforced. | `CAP-BACKEND-HEADER-POLICY`, `CAP-KUBERNETES-RECONCILIATION` |
+| `LIM-CRD-PROMPTS-FILTERS-ABSENT` | active | controllers 0.0.3 | There are no dedicated Prompts or ToolsOutputFilters CRDs. | `CAP-MCP-PROMPTS`, `CAP-KUBERNETES-SEVEN-CRDS` |
+| `LIM-KUBERNETES-RESOURCE-RECONCILIATION-INCOMPATIBLE` | resolved | controllers 0.0.2 / reShapr 1.0.0-rc1; resolved in controllers 0.0.3 | Controllers `0.0.3` use the supported plural `Resources` artifact kind; a replayed Resources CR reached `READY` and its URI was returned by MCP `resources/list`. | `CAP-KUBERNETES-RECONCILIATION` |
+| `LIM-KUBERNETES-ARTIFACT-NAME-COLLISION` | active | controllers 0.0.3 / reShapr 1.0.0-rc1 | CustomTools and Resources reconciliation uploads both artifacts as `artifact.json`; for one Service, the later reconciliation can replace the earlier artifact. | `CAP-KUBERNETES-RECONCILIATION` |
+| `LIM-KUBERNETES-RESOURCES-CRD-MIGRATION` | active | controllers 0.0.3 / charts 0.0.13 | Upgrading from the singular `Resource` CRD requires deleting and recreating `resources.reshapr.io` because Kubernetes makes `spec.names.kind` immutable; deleting the CRD also deletes its custom resources. | `CAP-KUBERNETES-SEVEN-CRDS`, `CAP-HELM-UPGRADE-FOUNDATIONS` |
+| `LIM-CRD-ARTIFACT-CLEANUP-INCOMPLETE` | active | controllers 0.0.3 | Deleting CustomTools or Resources CRs does not delete the corresponding remote artifact. | `CAP-KUBERNETES-REMOTE-CLEANUP` |
+| `LIM-SECRET-SOURCE-RBAC` | active | controllers 0.0.3 | SecretSource reconciliation requires explicit permission to read referenced Kubernetes Secrets. | `CAP-KUBERNETES-SECRET-SYNC` |
+| `LIM-ADMISSION-FAIL-OPEN` | active | controllers 0.0.3 / charts 0.0.13 | The admission webhook defaults to `failurePolicy: Ignore`; unavailable admission can produce Pods without sidecars. | `CAP-KUBERNETES-SIDECAR-INJECTION` |
+| `LIM-SIDECAR-DEPLOYMENT-ONLY` | active | controllers 0.0.3 | Automatic sidecar Service management is limited to Deployment-owned workloads. | `CAP-KUBERNETES-SIDECAR-SERVICES` |
+| `LIM-CONTROLLERS-OBSERVABILITY-UNSUPPORTED` | active | controllers 0.0.3 | Dedicated operator and admission metrics and traces are not provided; component logs remain available. | `CAP-CONTROLLERS-OBSERVABILITY` |
+| `LIM-BUNDLED-POSTGRESQL-NOT-HA` | active | charts 0.0.13 | Bundled PostgreSQL is a development topology, not a high-availability database. | `CAP-HELM-POSTGRESQL-CHOICE` |
+| `LIM-INGRESS-CERTIFICATE-MANUAL` | active | charts 0.0.13 | Runtime Ingress is optional and does not uniformly provision its own certificate. | `CAP-HELM-INGRESS-TLS` |
+| `LIM-HELM-PROBES-INCOMPLETE` | active | charts 0.0.13 | Runtime charts lack startup probes and controller charts lack explicit probes. | `CAP-HELM-PROBES-AND-RESOURCES` |
+| `LIM-HELM-SECURITY-CONTEXT-PARTIAL` | active | charts 0.0.13 | `runAsNonRoot` is not uniformly enforced and controller security contexts are empty by default. | `CAP-HELM-SECURITY-CONTEXT` |
+| `LIM-HA-INFRASTRUCTURE-DEPENDENT` | active | charts 0.0.13 | Replicas and PDBs do not make the full system highly available without HA PostgreSQL and suitable infrastructure. | `CAP-HELM-REPLICATION-AND-PDB` |
+| `LIM-HPA-PROXY-ONLY` | active | charts 0.0.13 | HPA is provided for the proxy only and scales from CPU and memory metrics. | `CAP-HELM-PROXY-HPA` |
+| `LIM-HELM-NETWORK-POLICY-PARTIAL` | active | charts 0.0.13 | The optional policy covers proxy clustering ingress only; it adds no complete egress or cross-chart policy. | `CAP-HELM-NETWORK-POLICY` |
+| `LIM-HELM-CONTROLLERS-RELEASE-MISMATCH` | active | charts 0.0.13 / controllers 0.0.3 | The controllers chart packages the controllers `0.0.3` CRDs, but defaults image tags to `nightly` while `Chart.yaml` and installation notes report app version `0.0.1`; pin image tags and inspect running images. | `CAP-HELM-FOUR-OCI-CHARTS`, `CAP-HELM-CONTROLLER-TOGGLES` |
+| `LIM-SERVICEMONITOR-PROXY-ONLY` | active | charts 0.0.13 | ServiceMonitor support is optional and limited to proxy metrics. | `CAP-HELM-PROMETHEUS-SCRAPING` |
+| `LIM-PRODUCTION-PROFILES-NOT-CERTIFICATION` | active | charts 0.0.13 | Production values are starting profiles, not environment-specific sizing or security certification. | `CAP-HELM-ENVIRONMENT-PROFILES` |
+| `LIM-UPGRADE-ROLLBACK-MANUAL` | active | reShapr 1.0.0-rc1 / charts 0.0.13 | Generic migration hooks, automated rollback, and general credential rotation are not provided. | `CAP-HELM-UPGRADE-FOUNDATIONS` |
+| `LIM-HELM-CRDS-RETAINED` | active | charts 0.0.13 | Helm retains CRDs on uninstall; manually deleting a CRD also deletes its custom resources. | `CAP-HELM-UPGRADE-FOUNDATIONS` |
 
 ## Change log
 
 | Date | Baseline | Change |
 |---|---|---|
+| 2026-09-21 | reShapr 1.0.0-rc1 / controllers 0.0.3 / charts 0.0.13 | Verified all seven reconcilers with the plural Resources kind; resolved the runtime schema incompatibility; recorded the artifact filename collision and the destructive CRD kind migration; narrowed the controllers chart mismatch to image defaults and stale metadata. |
+| 2026-09-18 | reShapr 1.0.0-rc1 / controllers 0.0.2 / charts 0.0.12 | Added Client Credentials, request-header policy, database key rotation, and CLI completion; enabled OAuth audience validation; resolved the ECB and unverified-audience limitations; recorded removal of the legacy `resource`-claim check; recorded the replayed Resource reconciliation and controllers chart packaging limitations. |
 | 2026-09-07 | reShapr 0.2.3 / controllers 0.0.1 / charts 0.0.11 | Initialized from the verified product audit and the current documentation corpus. |

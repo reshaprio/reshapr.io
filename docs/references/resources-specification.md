@@ -14,7 +14,7 @@ The key difference with tools is intent and usage pattern:
 reShapr provides **an easy way to design and specify your Resources using a simple YAML description,** called the `Resources` specification. If you want to provide such resources to your reShapr-powered MCP endpoint, you’ll need to write this simple file and `attach` it to your existing Service. Let’s see a simple example of such a file:
 
 :::note
-This page describes the MCP `Resources` artifact (`kind: Resources`). It is distinct from the Kubernetes operator's singular **[`Resource` custom resource](https://github.com/reshaprio/reshapr-controllers/blob/main/documentation/resource-cr.md)**, which declares a resource through a CRD.
+Controllers `0.0.3` can also create this artifact from a Kubernetes **[`Resources` custom resource](https://github.com/reshaprio/reshapr-controllers/blob/0.0.3/documentation/resources-cr.md)** using the same `apiVersion` and plural `kind`.
 :::
 
 ```yaml

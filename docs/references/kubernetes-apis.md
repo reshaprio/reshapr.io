@@ -4,7 +4,7 @@ description: Find the seven reShapr Kubernetes APIs and understand the operator 
 
 # Kubernetes APIs and Controllers Overview
 
-The [`reshapr-controllers`](https://github.com/reshaprio/reshapr-controllers) repository provides a Kubernetes operator, seven namespaced custom resources, and an admission webhook for proxy sidecar injection. Its [documentation index](https://github.com/reshaprio/reshapr-controllers/tree/main/documentation) and [generated CRDs](https://github.com/reshaprio/reshapr-controllers/tree/main/deploy/crd) are the canonical references.
+The [`reshapr-controllers`](https://github.com/reshaprio/reshapr-controllers) repository provides a Kubernetes operator, seven namespaced custom resources, and an admission webhook for proxy sidecar injection. The [0.0.3 documentation index](https://github.com/reshaprio/reshapr-controllers/tree/0.0.3/documentation) and [generated CRDs](https://github.com/reshaprio/reshapr-controllers/tree/0.0.3/deploy/crd) are the canonical references for this baseline.
 
 ## Operator model
 
@@ -18,13 +18,15 @@ The operator ServiceAccount must be registered as a trusted control-plane client
 |---|---|---|---|
 | `Service` | Imports the primary OpenAPI, GraphQL, or Protobuf artifact | Remote Service cleanup is enabled by default; `keepOnDelete` can retain it | [Service CR](https://github.com/reshaprio/reshapr-controllers/blob/main/documentation/service-cr.md) |
 | `GatewayGroup` | Declares the labels used to select Gateways | Remote Gateway Group cleanup is enabled by default; `keepOnDelete` can retain it | [GatewayGroup CR](https://github.com/reshaprio/reshapr-controllers/blob/main/documentation/gatewaygroup-cr.md) |
-| `ConfigurationPlan` | Binds an existing Service to a backend endpoint and security configuration | The reconciler cleans up its remote Configuration Plan | [ConfigurationPlan CR](https://github.com/reshaprio/reshapr-controllers/blob/main/documentation/configurationplan-cr.md) |
+| `ConfigurationPlan` | Binds an existing Service to a backend endpoint, operation and artifact selection, cache settings, request-header policy, and security configuration | The reconciler cleans up its remote Configuration Plan | [ConfigurationPlan CR](https://github.com/reshaprio/reshapr-controllers/blob/0.0.3/documentation/configurationplan-cr.md) |
 | `Exposition` | Exposes a Service through a ready Configuration Plan and Gateway Group | Remote Exposition cleanup is enabled by default; `keepOnDelete` can retain it | [Exposition CR](https://github.com/reshaprio/reshapr-controllers/blob/main/documentation/exposition-cr.md) |
 | `SecretSource` | Declares control-plane Secrets, optionally sourced from Kubernetes Secrets | Remote Secret cleanup is enabled by default; `keepOnDelete` can retain it | [SecretSource CR](https://github.com/reshaprio/reshapr-controllers/blob/main/documentation/secretsource-cr.md) |
 | `CustomTools` | Attaches declarative or scripted tools to an existing Service | No remote artifact cleanup is implemented when the CR is deleted | [CustomTools CR](https://github.com/reshaprio/reshapr-controllers/blob/main/documentation/customtools-cr.md) |
-| `Resource` | Attaches MCP resources and resource templates to an existing Service | No remote artifact cleanup is implemented when the CR is deleted | [Resource CR](https://github.com/reshaprio/reshapr-controllers/blob/main/documentation/resource-cr.md) |
+| `Resources` | Declares MCP resources and resource templates for an existing Service | No remote artifact cleanup is implemented when the CR is deleted | [Resources CR](https://github.com/reshaprio/reshapr-controllers/blob/0.0.3/documentation/resources-cr.md) |
 
 There are no dedicated `Prompts` or `ToolsOutputFilters` CRDs in the current API set.
+
+Controllers `0.0.3` expose `spec.headerPolicy.request` and `spec.headerPolicy.response` with `allow`, `deny`, and `rename` rules. The operator forwards both shapes to the control plane, but runtime `1.0.0-rc1` enforces only request rules; response rules are reserved for future use.
 
 ## Admission controller
 
@@ -34,7 +36,8 @@ The webhook is fail-open by default through `failurePolicy: Ignore`. Its serving
 
 ## Limits
 
-- `CustomTools` and `Resource` deletion can leave their remote artifacts in the target Service.
+- `CustomTools` and `Resources` deletion can leave their remote artifacts in the target Service.
+- Controllers `0.0.3` upload both `CustomTools` and `Resources` artifacts as `artifact.json`; reconciling both kinds for one Service can replace the previously attached artifact.
 - Reading Kubernetes Secrets for `SecretSource` requires the operator's separate Secret-reader RBAC.
 - The admission controller creates supporting Services only for injected Pods owned by a Deployment.
 - Controller-specific metrics and traces are not currently documented as a supported observability surface; rely on component logs unless the owner documentation states otherwise.

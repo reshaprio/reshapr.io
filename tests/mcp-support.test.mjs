@@ -61,7 +61,7 @@ function readOwnerSource(relativePath) {
   return fs.existsSync(sourcePath) ? fs.readFileSync(sourcePath, 'utf8') : null;
 }
 
-test('publishes the exact reShapr 0.2.3 protocol versions and modes', () => {
+test('publishes the exact reShapr 1.0.0-rc1 protocol versions and modes', () => {
   const versionSection = section(supportPage, 'Protocol versions and modes');
   assert.deepEqual(columnValues(versionSection, 0), supportedVersions);
   assert.match(versionSection, /\| `2026-07-28` \| Stateless \| `server\/discover` \|/);
@@ -95,7 +95,7 @@ test('documents both response dialects and release-tagged evidence', () => {
 
   const ownerLinks = [...supportPage.matchAll(/https:\/\/github\.com\/reshaprio\/reshapr\/blob\/([^/]+)\//g)];
   assert.ok(ownerLinks.length >= 5);
-  assert.ok(ownerLinks.every((match) => match[1] === '0.2.3'));
+  assert.ok(ownerLinks.every((match) => match[1] === '1.0.0-rc1'));
 });
 
 test('matches McpSchema and McpController when the owner checkout is available', (context) => {

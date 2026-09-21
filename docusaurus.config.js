@@ -122,6 +122,10 @@ const config = {
             from: '/docs/how-to-guides/kubernetes',
             to: '/docs/references/helm-charts',
           },
+          {
+            from: '/docs/how-to-guides/administration/configure-control-plane-oidc',
+            to: '/docs/how-to-guides/configure-control-plane-oidc',
+          },
         ],
       },
     ],

@@ -2,8 +2,8 @@
 description: Authenticate reShapr proxy calls to backend APIs with stored, locally resolved, or elicited credentials.
 verification:
   product: reShapr
-  version: 0.2.3
-  date: 2026-09-04
+  version: 1.0.0-rc1
+  date: 2026-09-18
 ---
 
 # Authenticate Backend Calls and Use Elicitation
@@ -20,7 +20,7 @@ See [token elicitation with GitHub GraphQL](https://youtu.be/y38__Uj5gWo), [OAut
 
 You need:
 
-- the reShapr `0.2.3` CLI, authenticated with `reshapr login`;
+- the reShapr `1.0.0-rc1` CLI, authenticated with `reshapr login`;
 - an imported Service for a protected test backend;
 - a Gateway Group and a proxy instance whose runtime configuration you control;
 - a read-only backend operation and its expected successful response;
@@ -44,11 +44,14 @@ export GATEWAY_GROUP_ID='<gateway-group-id>'
 | REST or GraphQL with Basic authentication | `username` and `password` | Sends HTTP Basic credentials |
 | gRPC with token | `token`, optionally `tokenHeader` | Adds per-call gRPC metadata |
 | gRPC with a private CA | `certPem` | Uses the PEM certificate as a custom TLS trust anchor |
+| REST, GraphQL, or gRPC with OAuth Client Credentials | `authMethod: OAUTH2_CLIENT_CREDENTIALS` and an OAuth client configuration | Obtains and caches a machine-to-machine access token |
 | REST, GraphQL, or gRPC with elicitation | `useElicitation` and a header or OAuth client configuration | Requests a credential for the current MCP session or authenticated user |
 
-In release `0.2.3`, username/password is not applied as gRPC Basic authentication, and `certPem` is not used by the HTTP proxy. The certificate field configures gRPC server trust; it is not a client certificate.
+In release `1.0.0-rc1`, username/password is not applied as gRPC Basic authentication, and `certPem` is not used by the HTTP proxy. The certificate field configures gRPC server trust; it is not a client certificate.
 
 ## Create a locally resolved Secret
+
+**[Secret references](../../explanations/security-model.md#secret-references)** explains why the control plane stores a placeholder while the target proxy resolves the credential locally.
 
 Read the backend token into the shell environment without echoing it:
 
@@ -78,9 +81,9 @@ For a backend API key carried by a custom header, add `--tokenHeader '<header-na
 --password '${env:BACKEND_PASSWORD}'
 ```
 
-The proxy resolves each placeholder when preparing a backend call. Release `0.2.3` provides the `env` scheme; an unknown scheme or missing value fails the call.
+The proxy resolves each placeholder when preparing a backend call. Release `1.0.0-rc1` provides the `env` scheme; an unknown scheme or missing value fails the call.
 
-## Make the value available to the proxy
+### Make the value available to the proxy
 
 Inject the variable through the workload's secret mechanism. For the Docker command in **[Deploy a Hybrid reShapr Proxy](../deploy-hybrid-gateway.md)**, add this option when creating the container:
 
@@ -92,7 +95,7 @@ This form passes the value from the current environment without placing it in th
 
 Check the proxy logs after startup. A missing variable is reported when the first matching backend call tries to resolve it.
 
-## Attach the Secret to a Configuration Plan
+### Attach the Secret to a Configuration Plan
 
 Create a Configuration Plan for the protected backend:
 
@@ -124,7 +127,7 @@ export EXPOSITION_ID="$(
 reshapr expo get "${EXPOSITION_ID}"
 ```
 
-## Verify the backend call
+### Verify the backend call
 
 Set the exact endpoint returned by `reshapr expo get` and select a read-only Tool:
 
@@ -153,7 +156,7 @@ curl --silent --show-error \
 
 An expected backend response confirms that the proxy resolved the reference and applied the credential. A backend `401` usually means the value is missing, expired, or sent through the wrong header.
 
-## Rotate a local value
+### Rotate a local value
 
 reShapr does not cache the resolved Secret value between backend calls. Whether a changed value becomes visible without replacing the proxy depends on the configuration source.
 
@@ -230,6 +233,11 @@ Register `https://<gateway-host>/elicitation/callback` as an allowed redirect ba
 
 This flow cannot be validated without a real Authorization Server, a compatible MCP client, and a callback URL reachable through the proxy. Test it in an isolated identity-provider tenant before production use.
 
+## Use OAuth Client Credentials
+
+Use this mode when the proxy must authenticate as a workload rather than as the MCP user. **[Use OAuth Client Credentials for Backend Calls](./use-oauth-client-credentials.md)** covers the proxy-local client secret, token request, cache behavior, backend verification, rotation, and recovery procedure.
+
+
 ## Roll back
 
 Delete resources in dependency order:
@@ -248,7 +256,8 @@ The proxy authenticates a read-only backend call with a locally resolved credent
 
 ## Limits
 
-- Release `0.2.3` provides only the `env` local-reference scheme. It does not integrate directly with a general external secret-provider API.
+- Release `1.0.0-rc1` provides only the `env` local-reference scheme. It does not integrate directly with a general external secret-provider API.
+- Client Credentials is a shared machine identity, not user delegation. Refresh tokens returned by an Authorization Server are ignored; the proxy requests a new access token when needed.
 - Environment-variable rotation requires the workload platform to make the new value visible. Docker and Kubernetes environment variables require container or pod replacement.
 - HTTP Basic credentials are not applied to gRPC calls. Custom CA certificates are applied to gRPC TLS, not HTTP backends, and are not client certificates.
 - Elicited credentials are runtime values associated with a session or authenticated user. They are not a substitute for MCP endpoint authentication or authorization.

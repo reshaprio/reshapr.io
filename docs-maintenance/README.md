@@ -9,6 +9,7 @@ It is not product documentation. Do not link readers here, add it to a Docusauru
 - [`product-baseline.md`](product-baseline.md) records reviewed repositories, personas, functional domains, capabilities, and limitations for the current release baseline.
 - [`coverage-matrix.md`](coverage-matrix.md) maps baseline IDs to the current public documentation and identifies missing or intentionally excluded coverage.
 - [`update-playbook.md`](update-playbook.md) defines the repeatable discovery, evidence, editing, and validation workflow.
+- [`replay/`](replay/README.md) retains parameterized preflight and live-verification helpers for Kubernetes, hybrid Gateway, and observability procedures.
 
 The public authoring contract remains [`CONTRIBUTING.md`](../CONTRIBUTING.md). This directory adds traceability; it does not restate Diataxis, terminology, page structure, or executable-documentation rules.
 
@@ -38,7 +39,7 @@ Every released or partial capability must have a row in both the baseline and co
 
 Blog posts are dated editorial snapshots. They can be corrected when a factual statement was already false on publication, but they never provide normative capability coverage and are always classified `historical-only` here.
 
-Run `npm run docs:audit` after changing this directory or the authored docs. Run `npm run build` before merging documentation changes.
+Run the relevant replay helpers before advancing executable page verification markers. Run `npm run docs:audit` after changing this directory or the authored docs, and run `npm run build` before merging documentation changes.
 
 ## Publication boundary
 

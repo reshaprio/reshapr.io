@@ -98,6 +98,8 @@ tools:
 
 When `service` is omitted, the script calls a tool from the same Service as the Custom Tool. Cross-Service calls are restricted to Services belonging to the same organization.
 
+A declared script dependency remains callable even when that underlying operation is excluded from the client-visible Configuration Plan surface. This allows a scripted Custom Tool to expose a bounded business action while hiding its lower-level operations. The `tools` allow-list still gates every internal call; operation inclusion and exclusion are exposure controls, not backend authorization rules.
+
 ### The `rs` host API
 
 Inside the script, reShapr exposes a global `rs` object:
@@ -178,6 +180,8 @@ Script execution is bounded by gateway settings:
 | `reshapr.gateway.scripting.max-depth` | `5` | Maximum nesting depth when a scripted tool calls another scripted tool. |
 
 The timeout cancels interruptible work such as backend calls and waits. Keep scripts simple and avoid unbounded CPU loops.
+
+Artifact validation rejects a declarative tool without `arguments`, a placeholder that is absent from `input.properties`, and a reference to a Tool that cannot be resolved. Compilation failures are returned without exposing the generated wrapper source.
 
 ### Example
 

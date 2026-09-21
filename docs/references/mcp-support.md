@@ -2,13 +2,13 @@
 description: Verified matrix of MCP protocol versions, state modes, server methods, elicitation behavior, and response dialects supported by reShapr.
 verification:
   product: reShapr
-  version: 0.2.3
-  date: 2026-09-07
+  version: 1.0.0-rc1
+  date: 2026-09-21
 ---
 
 # MCP Support Matrix
 
-This reference records the MCP server behavior implemented by the reShapr `0.2.3` Gateway. It distinguishes protocol vocabulary declared in code from methods that the server dispatcher actually handles.
+This reference records the MCP server behavior implemented by the reShapr `1.0.0-rc1` Gateway. It distinguishes protocol vocabulary declared in code from methods that the server dispatcher actually handles.
 
 For the reasoning behind the two modes, see **[MCP Compatibility: Session and Stateless Modes](../explanations/mcp-compatibility.md)**. For executable requests, see **[Test an MCP Endpoint](../how-to-guides/test-mcp-endpoint.md)**.
 
@@ -56,7 +56,7 @@ For a method removed by the `2026-07-28` revision, the Gateway returns HTTP `404
 
 ## Modern request contract
 
-| Element | Source of truth | Validation in `0.2.3` |
+| Element | Source of truth | Validation in `1.0.0-rc1` |
 |---|---|---|
 | Protocol version | `params._meta["io.modelcontextprotocol/protocolVersion"]` | Must name one of the five supported versions when the modern envelope is present. |
 | `MCP-Protocol-Version` | Mirrors the protocol metadata | If present, it must equal the version in the request body. Non-handshake stateless calls require it to select stateless mode. |
@@ -91,14 +91,14 @@ The matrix applies to MCP over Streamable HTTP on all three reShapr endpoint for
 - the organization and Exposition-name endpoint;
 - the historical organization, Service, and version endpoint.
 
-The historical Service endpoint can advertise the deterministic Exposition endpoint through `X-Reshapr-Preferred-Endpoint`. reShapr `0.2.3` does not expose an MCP WebSocket transport.
+The historical Service endpoint can advertise the deterministic Exposition endpoint through `X-Reshapr-Preferred-Endpoint`. reShapr `1.0.0-rc1` does not expose an MCP WebSocket transport.
 
 ## Verification sources
 
-- **[McpSchema](https://github.com/reshaprio/reshapr/blob/0.2.3/proxy/src/main/java/io/reshapr/proxy/mcp/McpSchema.java)** declares the supported versions, headers, protocol metadata key, and method vocabulary.
-- **[McpController](https://github.com/reshaprio/reshapr/blob/0.2.3/proxy/src/main/java/io/reshapr/proxy/mcp/McpController.java)** owns endpoint routing, request validation, lifecycle handling, and the method dispatcher.
-- **[LegacyProtocolDialect](https://github.com/reshaprio/reshapr/blob/0.2.3/proxy/src/main/java/io/reshapr/proxy/mcp/LegacyProtocolDialect.java)** and **[ModernProtocolDialect](https://github.com/reshaprio/reshapr/blob/0.2.3/proxy/src/main/java/io/reshapr/proxy/mcp/ModernProtocolDialect.java)** define version-specific result shapes.
-- **[McpProtocolVersionRoutingTest](https://github.com/reshaprio/reshapr/blob/0.2.3/proxy/src/test/java/io/reshapr/proxy/mcp/McpProtocolVersionRoutingTest.java)** verifies session/stateless routing, modern headers, unsupported versions, removed methods, and unimplemented methods.
+- **[McpSchema](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/proxy/src/main/java/io/reshapr/proxy/mcp/McpSchema.java)** declares the supported versions, headers, protocol metadata key, and method vocabulary.
+- **[McpController](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/proxy/src/main/java/io/reshapr/proxy/mcp/McpController.java)** owns endpoint routing, request validation, lifecycle handling, and the method dispatcher.
+- **[LegacyProtocolDialect](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/proxy/src/main/java/io/reshapr/proxy/mcp/LegacyProtocolDialect.java)** and **[ModernProtocolDialect](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/proxy/src/main/java/io/reshapr/proxy/mcp/ModernProtocolDialect.java)** define version-specific result shapes.
+- **[McpProtocolVersionRoutingTest](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/proxy/src/test/java/io/reshapr/proxy/mcp/McpProtocolVersionRoutingTest.java)** verifies session/stateless routing, modern headers, unsupported versions, removed methods, and unimplemented methods.
 - The **[official MCP specification](https://modelcontextprotocol.io/specification/)** owns the protocol semantics beyond reShapr's implementation boundary.
 
-This matrix was last verified with reShapr `0.2.3` on 2026-09-07. Recheck the owner code and tests before changing a version, mode, or method classification.
+This matrix was last verified with reShapr `1.0.0-rc1` on 2026-09-21. Recheck the owner code and tests before changing a version, mode, or method classification.

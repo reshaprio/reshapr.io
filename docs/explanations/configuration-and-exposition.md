@@ -15,7 +15,11 @@ In a nutshell, a Configuration Plan will allow you to define:
 - Whether the proxy emits audit events for calls made through the Plan,
 - The **[security options](security-model.md)** you’d like to enable for securing the access of the MCP endpoints - you can choose to secure access with an API key or using an OAuth Authorization Server,
 - The OAuth scopes required to access an Exposition. These scopes protect the Exposition as a whole; reShapr does not apply different OAuth scopes or claims to individual tools, Resources, or Prompts,
+- The accepted OAuth token audiences. By default, the requested Exposition URL is required; static audiences can be added, or validation can be disabled explicitly for compatibility,
+- The request headers forwarded to HTTP backends or converted to gRPC call metadata, using allow, deny, and rename rules. Hop-by-hop, reShapr authentication, and MCP transport headers are always removed,
 - The **[credentials Secret](services-and-artifacts.md)** the MCP Server will present to authorize access to the backend endpoint.
+
+The `headerPolicy.response` shape is present in the API and Kubernetes CRD but is reserved in `1.0.0-rc1`; only request headers are filtered or renamed. An absent request policy passes ordinary headers while removing `Authorization` and `Cookie` by default. Use explicit rules when a backend requires either header, and treat forwarding `Authorization` as a deliberate trust-boundary decision.
 
 A reShapr Service can have multiple Configuration Plans that match different environments or lifecycle stages. A Configuration Plan is always associated with a specific version of a Service and has to be replicated for other versions.
 

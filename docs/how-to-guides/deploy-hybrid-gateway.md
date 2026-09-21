@@ -2,8 +2,8 @@
 description: Run a reShapr proxy in another trust domain and connect it to an existing control plane.
 verification:
   product: reShapr
-  version: 0.2.3
-  date: 2026-09-04
+  version: 1.0.0-rc1
+  date: 2026-09-18
 ---
 
 # Deploy a Hybrid reShapr Proxy
@@ -16,8 +16,8 @@ The proxy initiates the control-plane connection and registers a logical Gateway
 
 You need:
 
-- a reShapr `0.2.3` control plane reachable from the proxy over gRPC;
-- the reShapr `0.2.3` CLI, authenticated with `reshapr login`;
+- a reShapr `1.0.0-rc1` control plane reachable from the proxy over gRPC;
+- the reShapr `1.0.0-rc1` CLI, authenticated with `reshapr login`;
 - Docker or Podman on the proxy host;
 - `curl` and `jq` for verification;
 - a Service and Configuration Plan for a non-destructive backend operation;
@@ -26,7 +26,8 @@ You need:
 The examples use Docker. Set `CONTAINER_ENGINE=podman` to use the same commands with Podman.
 
 ```bash
-export RESHAPR_IMAGE=registry.reshapr.io/reshapr/reshapr-proxy:0.2.3
+export CONTAINER_ENGINE=docker
+export RESHAPR_IMAGE=registry.reshapr.io/reshapr/reshapr-proxy:1.0.0-rc1
 ```
 
 ## 1. Select a Gateway Group
@@ -50,7 +51,7 @@ The command returns a generated ID. Store that value for later commands:
 export GATEWAY_GROUP_ID='<gateway-group-id>'
 ```
 
-The labels advertised for the proxy's Gateway in step 3 must match this group's labels. Labels select configuration; they do not establish network or security boundaries.
+The labels advertised for the proxy's Gateway in step 3 must match this group's labels. The CLI accepts a JSON object, while `RESHAPR_GATEWAY_LABELS` uses semicolon-separated `key=value` pairs. Labels select configuration; they do not establish network or security boundaries.
 
 ## 2. Create a dedicated Gateway token
 
@@ -83,7 +84,7 @@ export RESHAPR_GATEWAY_FQDNS='localhost:7777'
 The following command expects TLS on the control-plane connection. For a trusted development network that deliberately uses plaintext gRPC, set `RESHAPR_CTRL_TLS_PLAINTEXT=true` and use its plaintext port instead.
 
 ```bash
-docker run --detach \
+${CONTAINER_ENGINE} run --detach \
   --name reshapr-hybrid-gateway \
   --restart unless-stopped \
   --publish 7777:7777 \
@@ -110,7 +111,7 @@ curl --fail --silent http://localhost:7777/q/health/ready | jq '.status'
 The expected status is `"UP"`. If readiness fails, inspect the startup and registration messages:
 
 ```bash
-docker logs --tail 100 reshapr-hybrid-gateway
+${CONTAINER_ENGINE} logs --tail 100 reshapr-hybrid-gateway
 ```
 
 Readiness confirms that the proxy completed its initial connection and Gateway registration. It does not confirm that a particular Exposition targets this Gateway.
@@ -128,10 +129,13 @@ reshapr expo create \
   --name hybrid-endpoint
 ```
 
-Record the generated Exposition ID:
+The structured creation response contains endpoint details but not the Exposition ID. Resolve the unique ID by the name just created:
 
 ```bash
-export EXPOSITION_ID='<exposition-id>'
+export EXPOSITION_ID="$(
+  reshapr expo list --all --output json \
+    | jq -er '.[] | select(.name == "hybrid-endpoint") | .id'
+)"
 ```
 
 Confirm that the Exposition is active and that `ENDPOINTS` contains the hostname advertised by the proxy's registered Gateway:
@@ -145,10 +149,10 @@ If the Exposition remains inactive, compare the proxy's `RESHAPR_GATEWAY_LABELS`
 
 ## 6. Verify the MCP endpoint
 
-Set `MCP_URL` to the exact endpoint returned by `reshapr expo get`, including its scheme and path. With the direct local configuration in this guide, it uses HTTP:
+Build the MCP URL from the Exposition ID. With the direct local configuration in this guide, it uses HTTP:
 
 ```bash
-export MCP_URL='http://localhost:7777/mcp/<organization>/hybrid-endpoint'
+export MCP_URL="http://localhost:7777/mcp/${EXPOSITION_ID}"
 ```
 
 Discover the stateless MCP server:
@@ -159,7 +163,7 @@ curl --silent --show-error \
   --header 'Accept: application/json, text/event-stream' \
   --header 'MCP-Protocol-Version: 2026-07-28' \
   --header 'Mcp-Method: server/discover' \
-  --data '{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"0.2.3"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"1.0.0-rc1"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
   "${MCP_URL}" | jq '.result | {supportedVersions, capabilities}'
 ```
 
@@ -171,7 +175,7 @@ curl --silent --show-error \
   --header 'Accept: application/json, text/event-stream' \
   --header 'MCP-Protocol-Version: 2026-07-28' \
   --header 'Mcp-Method: tools/list' \
-  --data '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"0.2.3"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
+  --data '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"1.0.0-rc1"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
   "${MCP_URL}" | jq '.result.tools[] | {name, description}'
 ```
 
@@ -184,7 +188,7 @@ export TOOL_ARGUMENTS='{}'
 jq -n \
   --arg name "${TOOL_NAME}" \
   --argjson arguments "${TOOL_ARGUMENTS}" \
-  '{jsonrpc:"2.0",id:3,method:"tools/call",params:{name:$name,arguments:$arguments,_meta:{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{name:"reshapr-docs",version:"0.2.3"},"io.modelcontextprotocol/clientCapabilities":{}}}}' | \
+  '{jsonrpc:"2.0",id:3,method:"tools/call",params:{name:$name,arguments:$arguments,_meta:{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{name:"reshapr-docs",version:"1.0.0-rc1"},"io.modelcontextprotocol/clientCapabilities":{}}}}' | \
 curl --silent --show-error \
   --header 'Content-Type: application/json' \
   --header 'Accept: application/json, text/event-stream' \
@@ -223,7 +227,7 @@ Deleting the token prevents later registration with that credential. A proxy tha
 
 ## Result
 
-You now have a reShapr `0.2.3` proxy running in another trust domain, registered as a logical Gateway with a dedicated credential, selected through Gateway Group labels, and verified through its MCP endpoint.
+You now have a reShapr `1.0.0-rc1` proxy running in another trust domain, registered as a logical Gateway with a dedicated credential, selected through Gateway Group labels, and verified through its MCP endpoint.
 
 ## Limits
 

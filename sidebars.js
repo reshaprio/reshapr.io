@@ -44,7 +44,7 @@ const sidebars = {
       label: 'Tutorials',
       className: 'sidebar-icon-tutorials',
       description: 'Learning-oriented guides to get you started',
-      collapsed: false,
+      collapsed: true,
       items: [
         {
           type: 'category',
@@ -96,7 +96,7 @@ const sidebars = {
       label: 'How-to Guides',
       className: 'sidebar-icon-howto',
       description: 'Task-oriented guides for specific goals',
-      collapsed: false,
+      collapsed: true,
       items: [
         {
           type: 'category',
@@ -154,6 +154,16 @@ const sidebars = {
               id: 'how-to-guides/security/backend-auth-and-elicitation',
               label: 'Authenticate backend calls',
             },
+            {
+              type: 'doc',
+              id: 'how-to-guides/security/use-oauth-client-credentials',
+              label: 'Use OAuth Client Credentials',
+            },
+            {
+              type: 'doc',
+              id: 'how-to-guides/security/configure-backend-header-policy',
+              label: 'Configure request header policy',
+            },
           ],
         },
         {
@@ -210,6 +220,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'how-to-guides/operations/rotate-database-encryption-key',
+              label: 'Rotate database encryption keys',
+            },
+            {
+              type: 'doc',
               id: 'how-to-guides/operations/upgrade-and-rotate',
               label: 'Upgrade and rotate runtime secrets',
             },
@@ -223,6 +238,11 @@ const sidebars = {
               type: 'doc',
               id: 'how-to-guides/deploy-kubernetes-production',
               label: 'Deploy on Kubernetes for production',
+            },
+            {
+              type: 'doc',
+              id: 'how-to-guides/configure-control-plane-oidc',
+              label: 'Connect the control plane to OIDC',
             },
             {
               type: 'doc',
@@ -243,7 +263,7 @@ const sidebars = {
       label: 'Explanations',
       className: 'sidebar-icon-explanation',
       description: 'Concepts and background understanding',
-      collapsed: false,
+      collapsed: true,
       items: [
         {
           type: 'category',
@@ -319,7 +339,7 @@ const sidebars = {
       label: 'References',
       className: 'sidebar-icon-reference',
       description: 'Technical descriptions and specifications',
-      collapsed: false,
+      collapsed: true,
       items: [
         {
           type: 'doc',
