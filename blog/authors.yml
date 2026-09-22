@@ -19,3 +19,12 @@ yacine:
     linkedin: https://www.linkedin.com/in/yacinekheddache/
     bluesky: https://bsky.app/profile/yadayac.bsky.social
     github: yada
+
+guillaume:
+  name: Guillaume Goisset
+  title: Independent automation consultant
+  url: https://low-code-consultant.com
+  image_url: /img/authors/guillaume-goisset.jpg
+  page: true
+  socials:
+    github: GuillaumeExia
