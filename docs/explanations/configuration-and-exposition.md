@@ -19,7 +19,7 @@ In a nutshell, a Configuration Plan will allow you to define:
 - The request headers forwarded to HTTP backends or converted to gRPC call metadata, using allow, deny, and rename rules. Hop-by-hop, reShapr authentication, and MCP transport headers are always removed,
 - The **[credentials Secret](services-and-artifacts.md)** the MCP Server will present to authorize access to the backend endpoint.
 
-The `headerPolicy.response` shape is present in the API and Kubernetes CRD but is reserved in `1.0.0-rc1`; only request headers are filtered or renamed. An absent request policy passes ordinary headers while removing `Authorization` and `Cookie` by default. Use explicit rules when a backend requires either header, and treat forwarding `Authorization` as a deliberate trust-boundary decision.
+The `headerPolicy.response` shape is present in the API and Kubernetes CRD but is reserved in `1.0.0`; only request headers are filtered or renamed. An absent request policy passes ordinary headers while removing `Authorization` and `Cookie` by default. Use explicit rules when a backend requires either header, and treat forwarding `Authorization` as a deliberate trust-boundary decision.
 
 A reShapr Service can have multiple Configuration Plans that match different environments or lifecycle stages. A Configuration Plan is always associated with a specific version of a Service and has to be replicated for other versions.
 

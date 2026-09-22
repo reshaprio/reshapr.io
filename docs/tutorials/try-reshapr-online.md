@@ -2,7 +2,7 @@
 verification:
   product: reShapr
   version: 0.2.3
-  date: 2026-09-04
+  date: 2026-09-22
 ---
 
 # Try reShapr online

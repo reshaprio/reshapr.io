@@ -2,8 +2,8 @@
 description: Full reference for reShapr CLI commands — login, import, attach, config, expo, secrets, gateway management, and more.
 verification:
   product: reShapr CLI
-  version: 1.0.0-rc1
-  date: 2026-09-18
+  version: 1.0.0
+  date: 2026-09-22
 ---
 
 # reShapr CLI Reference
@@ -560,7 +560,7 @@ Request-header propagation can be configured on `config create` and `config crea
 
 - `--reqhp, --requestHeaderPolicy <json>`: Allow, deny, or rename request headers. A rename is expressed as `"Source:Target"` in the `rename` array.
 - `--passthrough`: Allow the incoming `Authorization` header to reach the backend. This shortcut is mutually exclusive with `--requestHeaderPolicy` and is not recommended outside bounded development or debugging.
-- `--reshp, --responseHeaderPolicy <json>`: Store response rules for forward compatibility. Runtime `1.0.0-rc1` does not enforce them.
+- `--reshp, --responseHeaderPolicy <json>`: Store response rules for forward compatibility. Runtime `1.0.0` does not enforce them.
 
 ```bash
 reshapr config create backend-header-policy \
@@ -987,7 +987,7 @@ Rotation is idempotent and reports the numbers of Secret and Configuration Plan 
 
 ## Shell completion
 
-Release `1.0.0-rc1` provides generated shell completion through `reshapr completion`. Run `reshapr completion --help` to select and install the script for the current shell; completion itself does not require an authenticated session.
+Release `1.0.0` provides generated shell completion through `reshapr completion`. Run `reshapr completion --help` to select and install the script for the current shell; completion itself does not require an authenticated session.
 
 ## Structured output
 

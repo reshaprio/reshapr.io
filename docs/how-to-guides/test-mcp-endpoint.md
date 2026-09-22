@@ -2,8 +2,8 @@
 description: Validate a reShapr MCP endpoint by negotiating a protocol mode, listing Tools, calling one Tool, and interpreting common errors.
 verification:
   product: reShapr
-  version: 1.0.0-rc1
-  date: 2026-09-18
+  version: 1.0.0
+  date: 2026-09-22
 ---
 
 # Test an MCP Endpoint with an MCP Client
@@ -44,7 +44,7 @@ curl --silent --show-error \
   --header 'Accept: application/json, text/event-stream' \
   --header 'MCP-Protocol-Version: 2026-07-28' \
   --header 'Mcp-Method: server/discover' \
-  --data '{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-curl","version":"1.0.0-rc1"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-curl","version":"1.0.0"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
   "$MCP_URL" | jq .
 ```
 
@@ -58,7 +58,7 @@ curl --silent --show-error \
   --header 'Accept: application/json, text/event-stream' \
   --header 'MCP-Protocol-Version: 2026-07-28' \
   --header 'Mcp-Method: tools/list' \
-  --data '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-curl","version":"1.0.0-rc1"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
+  --data '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-curl","version":"1.0.0"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
   "$MCP_URL" | jq '.result.tools[] | {name, description}'
 ```
 
@@ -75,7 +75,7 @@ curl --silent --show-error \
   --header 'MCP-Protocol-Version: 2026-07-28' \
   --header 'Mcp-Method: tools/call' \
   --header "Mcp-Name: $MCP_TOOL" \
-  --data '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"get_v1_forecast","arguments":{"latitude":"48.8566","longitude":"2.3522","current":["temperature_2m","weather_code","wind_speed_10m"],"timezone":"Europe/Paris"},"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-curl","version":"1.0.0-rc1"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
+  --data '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"get_v1_forecast","arguments":{"latitude":"48.8566","longitude":"2.3522","current":["temperature_2m","weather_code","wind_speed_10m"],"timezone":"Europe/Paris"},"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-curl","version":"1.0.0"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
   "$MCP_URL" | jq .
 ```
 
@@ -90,7 +90,7 @@ export MCP_HEADERS="$(mktemp)"
 
 curl --silent --show-error --dump-header "$MCP_HEADERS" \
   --header 'Content-Type: application/json' \
-  --data '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"reshapr-curl","version":"1.0.0-rc1"}}}' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"reshapr-curl","version":"1.0.0"}}}' \
   "$MCP_URL" | jq .
 
 export MCP_SESSION_ID="$(awk 'tolower($1) == "mcp-session-id:" {print $2}' "$MCP_HEADERS" | tr -d '\r')"

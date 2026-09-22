@@ -13,7 +13,7 @@ This supports two common requirements:
 - **Response scope.** A GraphQL node with many scalar properties or a REST endpoint returning a deeply nested JSON tree can expose fields that are irrelevant to the task. Filtering at the gateway retains only the required response shape.
 - **Stable response shape.** Retaining and patching known fields gives the Agent a smaller, more predictable result independent of the underlying API protocol.
 
-In reShapr `1.0.0-rc1`, a filter-processing error returns the original Tool response. Treat `ToolsOutputFilters` as response shaping, **not as a security or data-loss-prevention boundary**. Prevent access to sensitive fields in the backend contract and authorization layer.
+In reShapr `1.0.0`, a filter-processing error returns the original Tool response. Treat `ToolsOutputFilters` as response shaping, **not as a security or data-loss-prevention boundary**. Prevent access to sensitive fields in the backend contract and authorization layer.
 
 reShapr applies filtering universally, regardless of the source protocol (REST, GraphQL, gRPC), because filters operate on the canonical JSON response produced by reShapr's protocol converters.
 

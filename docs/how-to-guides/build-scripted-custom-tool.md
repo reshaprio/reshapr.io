@@ -2,8 +2,8 @@
 description: Build and verify a Scripted Custom Tool that combines same-Service and cross-Service calls behind one MCP action.
 verification:
   product: reShapr
-  version: 1.0.0-rc1
-  date: 2026-09-18
+  version: 1.0.0
+  date: 2026-09-22
 ---
 
 # Build a Scripted Custom Tool
@@ -46,7 +46,7 @@ Use this pattern when the sequence represents a reusable business action. Keep o
 
 ## Prerequisites
 
-- reShapr CLI `1.0.0-rc1`, authenticated against reShapr Online or a local `1.0.0-rc1` environment
+- reShapr CLI `1.0.0`, authenticated against reShapr Online or a local `1.0.0` environment
 - `curl` and `jq`
 - Docker Compose v2 when testing the timeout override on the local stack
 - A running proxy registered as a Gateway in Gateway Group `1`
@@ -193,7 +193,7 @@ call_tool() {
         arguments: $arguments,
         _meta: {
           "io.modelcontextprotocol/protocolVersion": "2026-07-28",
-          "io.modelcontextprotocol/clientInfo": {name: "reshapr-docs", version: "1.0.0-rc1"},
+          "io.modelcontextprotocol/clientInfo": {name: "reshapr-docs", version: "1.0.0"},
           "io.modelcontextprotocol/clientCapabilities": {}
         }
       }
@@ -218,7 +218,7 @@ curl --silent --show-error \
   --header 'Accept: application/json, text/event-stream' \
   --header 'MCP-Protocol-Version: 2026-07-28' \
   --header 'Mcp-Method: tools/list' \
-  --data '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"1.0.0-rc1"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"1.0.0"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
   "$MCP_URL" | jq -r '.result.tools[].name'
 ```
 
@@ -263,7 +263,7 @@ The returned object has `blocked: true` and an invalid-parameters error naming t
 
 ### Maximum Tool calls
 
-The `1.0.0-rc1` default permits 10 underlying Tool calls per script execution. The diagnostic Tool attempts 11:
+The `1.0.0` default permits 10 underlying Tool calls per script execution. The diagnostic Tool attempts 11:
 
 ```bash
 call_tool 'exceed_call_limit' '{}' \
@@ -298,7 +298,7 @@ Recreate only the proxy with the one-millisecond test limit:
 
 ```bash
 docker compose \
-  --file "$HOME/.reshapr/docker-compose-1.0.0-rc1.yml" \
+  --file "$HOME/.reshapr/docker-compose-1.0.0.yml" \
   --file scripted-timeout.override.yaml \
   up --detach --force-recreate gateway-01
 ```
@@ -309,7 +309,7 @@ Restore the release default and remove the temporary override:
 
 ```bash
 docker compose \
-  --file "$HOME/.reshapr/docker-compose-1.0.0-rc1.yml" \
+  --file "$HOME/.reshapr/docker-compose-1.0.0.yml" \
   up --detach --force-recreate gateway-01
 
 rm scripted-timeout.override.yaml

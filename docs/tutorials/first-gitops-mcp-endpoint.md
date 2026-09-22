@@ -2,8 +2,8 @@
 description: Create and verify a reShapr MCP endpoint from Kubernetes resources managed through Git.
 verification:
   product: reShapr stack
-  version: 1.0.0-rc1 / controllers 0.0.3 / charts 0.0.13
-  date: 2026-09-21
+  version: 1.0.0 / controllers 0.0.3 / charts 0.0.14
+  date: 2026-09-22
 ---
 
 # Your First GitOps-managed MCP Endpoint
@@ -14,12 +14,12 @@ Install the reShapr controllers, commit a small set of Kubernetes resources, and
 
 - Kubernetes 1.25 or later and Helm 3.8 or later
 - `kubectl`, Helm, Git, `curl`, and `jq`
-- A running reShapr `1.0.0-rc1` **[control plane](../how-to-guides/deploy-kubernetes-production.md#3-configure-the-control-plane)** and **[proxy](../how-to-guides/deploy-kubernetes-production.md#6-configure-the-proxy)** reachable from the cluster
-- The reShapr `1.0.0-rc1` CLI authenticated with administrative access to that control plane
+- A running reShapr `1.0.0` **[control plane](../how-to-guides/deploy-kubernetes-production.md#3-configure-the-control-plane)** and **[proxy](../how-to-guides/deploy-kubernetes-production.md#6-configure-the-proxy)** reachable from the cluster
+- The reShapr `1.0.0` CLI authenticated with administrative access to that control plane
 - A proxy registered in the control plane's `Default Gateway Group`
 - A Git repository whose manifests are applied to the cluster, either manually or by your GitOps controller
 
-This tutorial uses reShapr controllers `0.0.3` through Helm chart `0.0.13`. The [controllers chart documentation](https://github.com/reshaprio/reshapr-helm-charts/blob/0.0.13/controllers/README.md) owns the complete values contract.
+This tutorial uses reShapr controllers `0.0.3` through Helm chart `0.0.14`. The [controllers chart documentation](https://github.com/reshaprio/reshapr-helm-charts/blob/0.0.14/controllers/README.md) owns the complete values contract.
 
 ## 1. Register the operator identity
 
@@ -39,12 +39,12 @@ The subject contains the namespace and ServiceAccount created by the Helm releas
 
 ## 2. Install the controllers
 
-Chart `0.0.13` packages the controllers `0.0.3` CRDs. Its default image tag remains `nightly`, so pin the reviewed operator image explicitly:
+Chart `0.0.14` packages the controllers `0.0.3` CRDs. Its default image tag remains `nightly`, so pin the reviewed operator image explicitly:
 
 ```bash
 helm install reshapr-controllers \
   oci://quay.io/reshapr/reshapr-helm-charts/reshapr-controllers \
-  --version 0.0.13 \
+  --version 0.0.14 \
   --namespace reshapr-system \
   --create-namespace \
   --set operator.image.tag=0.0.3 \
@@ -174,7 +174,7 @@ curl --silent --show-error \
   --header 'Accept: application/json, text/event-stream' \
   --header 'MCP-Protocol-Version: 2026-07-28' \
   --header 'Mcp-Method: server/discover' \
-  --data '{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-gitops-tutorial","version":"1.0.0-rc1"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-gitops-tutorial","version":"1.0.0"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
   "$MCP_URL" | jq '.result | {supportedVersions, capabilities}'
 ```
 

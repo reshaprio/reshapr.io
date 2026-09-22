@@ -2,8 +2,8 @@
 description: Authenticate reShapr proxy calls to backend APIs with stored, locally resolved, or elicited credentials.
 verification:
   product: reShapr
-  version: 1.0.0-rc1
-  date: 2026-09-18
+  version: 1.0.0
+  date: 2026-09-22
 ---
 
 # Authenticate Backend Calls and Use Elicitation
@@ -20,7 +20,7 @@ See [token elicitation with GitHub GraphQL](https://youtu.be/y38__Uj5gWo), [OAut
 
 You need:
 
-- the reShapr `1.0.0-rc1` CLI, authenticated with `reshapr login`;
+- the reShapr `1.0.0` CLI, authenticated with `reshapr login`;
 - an imported Service for a protected test backend;
 - a Gateway Group and a proxy instance whose runtime configuration you control;
 - a read-only backend operation and its expected successful response;
@@ -47,7 +47,7 @@ export GATEWAY_GROUP_ID='<gateway-group-id>'
 | REST, GraphQL, or gRPC with OAuth Client Credentials | `authMethod: OAUTH2_CLIENT_CREDENTIALS` and an OAuth client configuration | Obtains and caches a machine-to-machine access token |
 | REST, GraphQL, or gRPC with elicitation | `useElicitation` and a header or OAuth client configuration | Requests a credential for the current MCP session or authenticated user |
 
-In release `1.0.0-rc1`, username/password is not applied as gRPC Basic authentication, and `certPem` is not used by the HTTP proxy. The certificate field configures gRPC server trust; it is not a client certificate.
+In release `1.0.0`, username/password is not applied as gRPC Basic authentication, and `certPem` is not used by the HTTP proxy. The certificate field configures gRPC server trust; it is not a client certificate.
 
 ## Create a locally resolved Secret
 
@@ -81,7 +81,7 @@ For a backend API key carried by a custom header, add `--tokenHeader '<header-na
 --password '${env:BACKEND_PASSWORD}'
 ```
 
-The proxy resolves each placeholder when preparing a backend call. Release `1.0.0-rc1` provides the `env` scheme; an unknown scheme or missing value fails the call.
+The proxy resolves each placeholder when preparing a backend call. Release `1.0.0` provides the `env` scheme; an unknown scheme or missing value fails the call.
 
 ### Make the value available to the proxy
 
@@ -256,7 +256,7 @@ The proxy authenticates a read-only backend call with a locally resolved credent
 
 ## Limits
 
-- Release `1.0.0-rc1` provides only the `env` local-reference scheme. It does not integrate directly with a general external secret-provider API.
+- Release `1.0.0` provides only the `env` local-reference scheme. It does not integrate directly with a general external secret-provider API.
 - Client Credentials is a shared machine identity, not user delegation. Refresh tokens returned by an Authorization Server are ignored; the proxy requests a new access token when needed.
 - Environment-variable rotation requires the workload platform to make the new value visible. Docker and Kubernetes environment variables require container or pod replacement.
 - HTTP Basic credentials are not applied to gRPC calls. Custom CA certificates are applied to gRPC TLS, not HTTP backends, and are not client certificates.

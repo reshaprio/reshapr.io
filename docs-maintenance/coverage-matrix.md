@@ -2,7 +2,7 @@
 
 **Assessed:** 2026-09-21
 
-**Product baseline:** reShapr `1.0.0-rc1`, controllers `0.0.3`, Helm charts `0.0.13`
+**Product baseline:** reShapr `1.0.0`, controllers `0.0.3`, Helm charts `0.0.14`
 
 **Corpus:** 52 authored docs pages, 7 blog files, and 2 content tests
 
@@ -164,8 +164,8 @@ There are no `missing` released or partial capabilities in this baseline. Unsupp
 | `LIM-LIVE-CONFIG-NO-ZERO-DOWNTIME` | Synchronization explanation and hybrid operations | `docs/explanations/control-plane-gateway-synchronization.md`<br>`docs/how-to-guides/deploy-hybrid-gateway.md` | covered |
 | `LIM-TENANCY-APPLICATION-LEVEL` | Governance explanation | `docs/explanations/multi-tenancy-administrative-governance.md` | covered |
 | `LIM-OIDC-EXTERNAL-PROVIDER` | Authentication procedure or trust-boundary explanation | `docs/how-to-guides/configure-control-plane-oidc.md`<br>`docs/references/cli-commands.md`<br>`docs/explanations/deployment-models-trust-boundaries.md` | covered |
-| `LIM-OIDC-LOGIN-VALIDATION-INCOMPLETE` | OIDC authentication procedure | `docs/how-to-guides/configure-control-plane-oidc.md` | covered |
-| `LIM-OIDC-WEBUI-PUBLIC-URL-IGNORED` | OIDC authentication procedure | `docs/how-to-guides/configure-control-plane-oidc.md` | covered |
+| `LIM-OIDC-LOGIN-VALIDATION-INCOMPLETE` | Remaining OIDC browser binding and token-verification boundaries | `docs/how-to-guides/configure-control-plane-oidc.md` | covered |
+| `LIM-OIDC-WEBUI-PUBLIC-URL-IGNORED` | First tagged baseline with separate public control-plane routing | `docs/how-to-guides/configure-control-plane-oidc.md` | historical-only |
 | `LIM-KUBERNETES-SA-AUDIENCE-FIXED` | Workload-identity explanation | `docs/explanations/multi-tenancy-administrative-governance.md` | covered |
 | `LIM-QUOTAS-NOT-RATE-LIMITS` | Quota procedure and governance explanation | `docs/how-to-guides/administration/organization-quotas.md`<br>`docs/explanations/multi-tenancy-administrative-governance.md` | covered |
 | `LIM-BACKEND-AUTH-PROTOCOL-DEPENDENT` | Backend-auth procedure | `docs/how-to-guides/security/backend-auth-and-elicitation.md`<br>`docs/explanations/security-model.md` | covered |

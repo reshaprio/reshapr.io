@@ -2,8 +2,8 @@
 description: Authenticate reShapr proxy calls to a backend with an OAuth 2.0 Client Credentials machine identity and locally resolved client secret.
 verification:
   product: reShapr
-  version: 1.0.0-rc1
-  date: 2026-09-21
+  version: 1.0.0
+  date: 2026-09-22
 ---
 
 # Use OAuth Client Credentials for Backend Calls
@@ -16,7 +16,7 @@ This guide keeps the OAuth client secret out of control-plane storage by resolvi
 
 You need:
 
-- reShapr `1.0.0-rc1` and its CLI;
+- reShapr `1.0.0` and its CLI;
 - an imported Service and a read-only backend operation;
 - an OAuth client authorized to call that backend;
 - a token endpoint that supports `grant_type=client_credentials` and `client_secret_basic`;
@@ -122,7 +122,7 @@ Call the Tool as described in **[Test an MCP Endpoint](../test-mcp-endpoint.md)*
 
 For an isolated verification tenant, inspect the Authorization Server logs and call the same Tool twice before the token expires. The first call should reach the token endpoint; the second should reuse the cached token. Do not log the Basic authorization header, client secret, or access token.
 
-The token request has these properties in `1.0.0-rc1`:
+The token request has these properties in `1.0.0`:
 
 - method `POST` and content type `application/x-www-form-urlencoded`;
 - body parameter `grant_type=client_credentials`;
@@ -164,14 +164,14 @@ The Configuration Plan uses a proxy-local OAuth client secret to obtain and cach
 ## Limits
 
 - Client Credentials represents one shared machine identity, not an MCP user's delegated identity.
-- reShapr `1.0.0-rc1` does not use OAuth refresh tokens for this flow.
+- reShapr `1.0.0` does not use OAuth refresh tokens for this flow.
 - Configured scopes apply to the token request, not to per-Tool authorization in reShapr.
 - The token cache is runtime state, not persistent credential storage; a cluster restart causes a new exchange.
 - Environment-backed secret rotation requires the workload platform to replace or restart the consuming proxy processes.
-- `env` is the only provided local-reference scheme in `1.0.0-rc1`.
+- `env` is the only provided local-reference scheme in `1.0.0`.
 
 ## Next step
 
 Use **[Authenticate Backend Calls and Use Elicitation](./backend-auth-and-elicitation.md)** to compare this shared identity with direct credentials and per-user elicitation. Use **[Security Capabilities and Limits](../../explanations/security-model.md)** to review the complete trust boundary.
 
-The release-tagged [Client Credentials provider](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/proxy/src/main/java/io/reshapr/proxy/secret/ClientCredentialsTokenProvider.java), [token request implementation](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/commons/src/main/java/io/reshapr/security/OidcUtils.java), and [provider tests](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/proxy/src/test/java/io/reshapr/proxy/secret/ClientCredentialsTokenProviderTest.java) own the behavior described here.
+The release-tagged [Client Credentials provider](https://github.com/reshaprio/reshapr/blob/1.0.0/proxy/src/main/java/io/reshapr/proxy/secret/ClientCredentialsTokenProvider.java), [token request implementation](https://github.com/reshaprio/reshapr/blob/1.0.0/commons/src/main/java/io/reshapr/security/OidcUtils.java), and [provider tests](https://github.com/reshaprio/reshapr/blob/1.0.0/proxy/src/test/java/io/reshapr/proxy/secret/ClientCredentialsTokenProviderTest.java) own the behavior described here.

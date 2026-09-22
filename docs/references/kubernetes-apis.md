@@ -26,7 +26,7 @@ The operator ServiceAccount must be registered as a trusted control-plane client
 
 There are no dedicated `Prompts` or `ToolsOutputFilters` CRDs in the current API set.
 
-Controllers `0.0.3` expose `spec.headerPolicy.request` and `spec.headerPolicy.response` with `allow`, `deny`, and `rename` rules. The operator forwards both shapes to the control plane, but runtime `1.0.0-rc1` enforces only request rules; response rules are reserved for future use.
+Controllers `0.0.3` expose `spec.headerPolicy.request` and `spec.headerPolicy.response` with `allow`, `deny`, and `rename` rules. The operator forwards both shapes to the control plane, but runtime `1.0.0` enforces only request rules; response rules are reserved for future use.
 
 ## Admission controller
 

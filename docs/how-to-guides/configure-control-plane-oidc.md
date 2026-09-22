@@ -2,8 +2,8 @@
 description: Connect the reShapr control plane to an external OpenID Connect provider for federated Web UI and CLI user authentication.
 verification:
   product: reShapr
-  version: 1.0.0-rc1 / Helm charts 0.0.13
-  date: 2026-09-21
+  version: 1.0.0 / Helm charts 0.0.14
+  date: 2026-09-22
 ---
 
 # Connect the Control Plane to an OIDC Provider
@@ -12,17 +12,17 @@ Use an external OpenID Connect (OIDC) provider when users must authenticate to t
 
 This is control-plane user authentication. It is separate from **[OAuth protection for an MCP endpoint](./security/oauth.md)** and from OAuth credentials used to call a backend.
 
-:::warning Security limitation in 1.0.0-rc1
-The control-plane callback accepts the client-supplied final `redirect_uri`, carries it in an unsigned `state` value, and returns the generated reShapr token to that URI. It does not bind or compare the random value included in `state`. The control plane also reads identity claims by decoding the returned access token without independently verifying its JWT signature, issuer, audience, or expiration.
+:::warning Remaining security limitation
+The control plane validates final redirect URIs, uses opaque single-use login and onboarding states stored in Hazelcast, verifies the ID-token `nonce`, and rejects expired ID and access tokens. However, it does not bind the login state to the initiating browser session. It also reads identity claims by decoding the returned access token without independently verifying its JWT signature, issuer, or audience.
 
-Do not treat this release as suitable for an untrusted, publicly reachable production login flow. Limit it to a controlled environment and trusted clients until these checks are added. Registering an exact callback URI at the identity provider remains necessary, but does not constrain the separate final redirect performed by reShapr.
+Do not treat this flow as suitable for an untrusted, publicly reachable production login until those checks are added. Registering an exact callback URI at the identity provider and configuring the reShapr redirect allow-list are separate requirements.
 :::
 
 ## Prerequisites
 
 You need:
 
-- reShapr `1.0.0-rc1` deployed with the control-plane Helm chart `0.0.13`;
+- reShapr control-plane and Web UI images `1.0.0`, with control-plane chart `0.0.14`;
 - an OIDC provider reachable from user browsers and the control-plane pods;
 - permission to register an [OAuth 2.0 Authorization Code](https://www.rfc-editor.org/rfc/rfc6749#section-4.1) client at that provider;
 - public HTTPS URLs for the control plane and, when used, the Web UI;
@@ -53,11 +53,11 @@ Create a confidential OIDC client at the identity provider with:
   ```
 
 - the standard `openid`, `profile`, and `email` scopes;
-- an access token encoded as a JWT;
+- ID and access tokens encoded as compact JWTs with an `exp` claim;
 - `preferred_username` in the access token;
 - `email` in the access token when a new user can enter onboarding.
 
-reShapr consumes the `access_token` returned by the token endpoint, not the `id_token`. Configure claim mappers accordingly. Optional access and organization rules can also require `groups` or custom claims.
+reShapr requires both tokens returned by the token endpoint. It verifies the login `nonce` and expiration on the `id_token`, verifies expiration on the `access_token`, and reads identity and authorization claims from the `access_token`. Configure claim mappers accordingly. Optional access and organization rules can also require `groups` or custom claims.
 
 Store the client credentials without placing the secret in the Helm values file:
 
@@ -97,7 +97,14 @@ authentication:
     existingSecret: reshapr-control-plane-oidc
     clientIdKey: client-id
     clientSecretKey: client-secret
+    allowedRedirectUris:
+      - https://app.reshapr.example.com/api/auth/callback/oidc
+    allowCliLoopbackRedirect: true
 ```
+
+`allowedRedirectUris` contains exact final browser callbacks, not the identity-provider callback. The control plane rejects other HTTPS destinations. CLI login uses a separate constrained rule for HTTP loopback callbacks on `localhost`, `127.0.0.1`, or `::1`, using ports `5556-5599`; set `allowCliLoopbackRedirect: false` when CLI browser login is not required.
+
+When the Web UI is enabled through the control-plane chart and `reshapr-web-ui.publicUrl` is set, the chart automatically adds its `/api/auth/callback/oidc` URL. Explicit entries are preserved and duplicates are removed.
 
 Apply the values through the same Helm release workflow that owns the control plane, then wait for its Deployment to complete its rollout. OIDC configuration is read at startup; it is not changed through the administration API.
 
@@ -111,16 +118,17 @@ curl --fail --silent --show-error \
 
 ## Configure the Web UI
 
-When the Web UI is deployed with `1.0.0-rc1`, set its control-plane URL to the public URL that a user's browser can resolve:
+Keep the internal control-plane URL for server-side API calls and configure its separate browser-reachable URL for OIDC redirects:
 
 ```yaml
 controlPlane:
-  url: https://ctrl.reshapr.example.com
+  url: http://reshapr-control-plane-ctrl:5555
+  publicUrl: https://ctrl.reshapr.example.com
 
 publicUrl: https://app.reshapr.example.com
 ```
 
-The Web UI also has a `controlPlane.publicUrl` chart value, but `1.0.0-rc1` does not read the corresponding `RESHAPR_CTRL_PUBLIC_URL` environment variable when it builds the OIDC login redirect. Using the public URL as `controlPlane.url` is the release-compatible workaround; the Web UI pod must therefore be able to reach that address for its server-side API calls too.
+The chart maps these values to `RESHAPR_CTRL_URL`, `RESHAPR_CTRL_PUBLIC_URL`, and `RESHAPR_WEBUI_PUBLIC_URL`. The Web UI uses the internal URL for server-side calls and the public URL for the browser redirect. If `controlPlane.publicUrl` is empty, it falls back to `controlPlane.url`.
 
 Apply the values to the Web UI Helm release and wait for its Deployment rollout. The Web UI sends users to the public control-plane login endpoint and requests this final callback:
 
@@ -195,16 +203,17 @@ OIDC is enabled when `/api/config` returns `oidcEnabled: true`, a permitted test
 
 ## Limits
 
-- The `1.0.0-rc1` redirect and token-validation limitations in the warning above apply to both Web UI and CLI login.
-- The `1.0.0-rc1` Web UI ignores `controlPlane.publicUrl` for OIDC login; use the public address as `controlPlane.url` until the wiring is corrected.
-- reShapr expects identity claims in a JWT `access_token`; an opaque access token or claims available only in an `id_token` will not work.
+- The browser-session binding and token-signature, issuer, and audience limitations in the warning above apply to both Web UI and CLI login.
+- reShapr requires compact JWT ID and access tokens. Identity claims available only in the `id_token`, or an opaque access token, will not work.
 - The control plane requests `openid profile email` and appends any comma-separated `authentication.idp.scopes` values.
 - A configured default organization must already exist; the resolver does not create it.
 - OIDC configuration requires a control-plane restart through the deployment rollout.
 - The provider-specific client, consent, claims, group, and session configuration remains owned by your identity provider.
 
+reShapr `1.0.0` and Helm charts `0.0.14` are the first tagged baseline documented here that includes the redirect allow-list and separate Web UI public control-plane URL.
+
 ## Next step
 
 Review **[Multi-tenancy and Administrative Governance](../explanations/multi-tenancy-administrative-governance.md)** to decide how federated identities should receive organization access. Use **[Protect an MCP Endpoint with OAuth 2.0](./security/oauth.md)** when the next task is authenticating MCP clients rather than control-plane users.
 
-The release-tagged [OIDC controller flow](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/control-plane/src/main/java/io/reshapr/ctrl/security/AuthenticationController.java), [identity-provider configuration](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/control-plane/src/main/java/io/reshapr/ctrl/config/AuthenticationIdentityProviderConfig.java), [token exchange helper](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/commons/src/main/java/io/reshapr/security/OidcUtils.java), [CLI login flow](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/cli/src/commands/login.ts), [control-plane chart values](https://github.com/reshaprio/reshapr-helm-charts/blob/0.0.13/control-plane/values.yaml), and [Web UI chart values](https://github.com/reshaprio/reshapr-helm-charts/blob/0.0.13/web-ui/values.yaml) own the behavior described here.
+The release-tagged [OIDC controller flow](https://github.com/reshaprio/reshapr/blob/1.0.0/control-plane/src/main/java/io/reshapr/ctrl/security/AuthenticationController.java), [token claim validation](https://github.com/reshaprio/reshapr/blob/1.0.0/commons/src/main/java/io/reshapr/security/OidcUtils.java), [login state store](https://github.com/reshaprio/reshapr/blob/1.0.0/control-plane/src/main/java/io/reshapr/ctrl/security/OidcLoginStateStore.java), [Web UI URL resolver](https://github.com/reshaprio/reshapr/blob/1.0.0/web-ui/src/lib/server/auth.ts), and [control-plane chart values](https://github.com/reshaprio/reshapr-helm-charts/blob/0.0.14/control-plane/values.yaml) own the behavior described here.

@@ -85,9 +85,9 @@ If the shutdown advertisement cannot be delivered, stale-registration cleanup pr
 
 ## Protocol ownership
 
-The release-tagged [`eds-v1.proto`](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/api/src/main/proto/eds-v1.proto) owns the discovery snapshot and change-event contract. [`ghs-v1.proto`](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/api/src/main/proto/ghs-v1.proto) owns health and shutdown advertisements.
+The release-tagged [`eds-v1.proto`](https://github.com/reshaprio/reshapr/blob/1.0.0/api/src/main/proto/eds-v1.proto) owns the discovery snapshot and change-event contract. [`ghs-v1.proto`](https://github.com/reshaprio/reshapr/blob/1.0.0/api/src/main/proto/ghs-v1.proto) owns health and shutdown advertisements.
 
-The tracked [proxy runtime](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/proxy/src/main/java/io/reshapr/proxy/ReshaprGatewayApp.java), [health advertiser](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/proxy/src/main/java/io/reshapr/proxy/health/HealthAdvertiser.java), and [registration cleaner](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/control-plane/src/main/java/io/reshapr/ctrl/control/GatewayRegistrationCleaner.java) define the `1.0.0-rc1` runtime behavior.
+The tracked [proxy runtime](https://github.com/reshaprio/reshapr/blob/1.0.0/proxy/src/main/java/io/reshapr/proxy/ReshaprGatewayApp.java), [health advertiser](https://github.com/reshaprio/reshapr/blob/1.0.0/proxy/src/main/java/io/reshapr/proxy/health/HealthAdvertiser.java), and [registration cleaner](https://github.com/reshaprio/reshapr/blob/1.0.0/control-plane/src/main/java/io/reshapr/ctrl/control/GatewayRegistrationCleaner.java) define the `1.0.0` runtime behavior.
 
 ## Limits
 
@@ -95,7 +95,7 @@ The tracked [proxy runtime](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/
 - Stream retry and health re-registration do not replace readiness checks, alerting, or operational recovery procedures.
 - Retaining the last local registry does not guarantee that its credentials, backend routes, or external dependencies remain valid.
 - Live propagation is not a zero-downtime deployment, upgrade, or rollback guarantee.
-- This page describes release `1.0.0-rc1`; timing and recovery behavior can change in later releases.
+- This page describes release `1.0.0`; timing and recovery behavior can change in later releases.
 
 ## Next step
 

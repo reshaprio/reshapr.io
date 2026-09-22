@@ -2,8 +2,8 @@
 description: Protect a reShapr MCP endpoint with OAuth 2.0 bearer JWT validation and verify accepted and rejected requests.
 verification:
   product: reShapr
-  version: 1.0.0-rc1
-  date: 2026-09-18
+  version: 1.0.0
+  date: 2026-09-22
 ---
 
 # Protect an MCP Endpoint with OAuth 2.0
@@ -24,7 +24,7 @@ The proxy does not participate in that client-registration step. It validates th
 
 You need:
 
-- the reShapr `1.0.0-rc1` CLI, authenticated with `reshapr login`;
+- the reShapr `1.0.0` CLI, authenticated with `reshapr login`;
 - an imported Service, its backend endpoint, and a Gateway Group ID;
 - an OAuth 2.0 test issuer and HTTPS JWKS endpoint reachable by the proxy;
 - `curl` and `jq`;
@@ -226,7 +226,7 @@ The MCP endpoint publishes its OAuth Protected Resource Metadata, accepts a corr
 ## Limits
 
 - reShapr validates access tokens but does not operate the Authorization Server or its RFC 8414 metadata endpoint.
-- Release `1.0.0-rc1` accepts RSA and RSA-PSS JWT signatures. Symmetric HMAC tokens are rejected.
+- Release `1.0.0` accepts RSA and RSA-PSS JWT signatures. Symmetric HMAC tokens are rejected.
 - Audience validation can be disabled with `--oauth2DisableAudienceValidation` for compatibility. This removes the Exposition binding and should not be the production default.
 - OAuth scopes apply to the Exposition, not to individual Tools, Prompts, or Resources.
 - Dynamic Client Registration is not provided.

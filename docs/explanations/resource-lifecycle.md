@@ -75,4 +75,4 @@ Change the **Service** when the source API contract changed. Change or attach an
 
 Continue with **[From API Contract to Agent Action](./api-to-agent.md)** to follow one request through these resources, or **[Configuration Plan and Exposition](./configuration-and-exposition.md)** for the policy boundary in more detail.
 
-The evolving implementation is owned by the [reShapr runtime repository](https://github.com/reshaprio/reshapr). The [public API contract for release 1.0.0-rc1](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/reshapr-public-openapi-v0.1.yaml) is the versioned interface source for executable examples.
+The evolving implementation is owned by the [reShapr runtime repository](https://github.com/reshaprio/reshapr). The [public API contract for release 1.0.0](https://github.com/reshaprio/reshapr/blob/1.0.0/reshapr-public-openapi-v0.1.yaml) is the versioned interface source for executable examples.

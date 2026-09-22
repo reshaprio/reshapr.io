@@ -54,7 +54,7 @@ TLS for the client-to-proxy connection is a deployment responsibility. For examp
 
 A backend Secret is independent from MCP endpoint authentication. For REST and GraphQL calls, a token becomes an `Authorization: Bearer` header unless `tokenHeader` names another header. A username and password become HTTP Basic credentials. For gRPC, a token becomes per-call metadata; a PEM certificate configures a custom trust manager for a TLS backend.
 
-Release `1.0.0-rc1` also supports OAuth 2.0 Client Credentials for REST, GraphQL, and gRPC backends. The proxy resolves the client ID and secret, requests an access token from the configured token endpoint, and caches it until shortly before expiration. This is a machine-to-machine flow: it does not elicit user credentials and does not use refresh tokens.
+Release `1.0.0` also supports OAuth 2.0 Client Credentials for REST, GraphQL, and gRPC backends. The proxy resolves the client ID and secret, requests an access token from the configured token endpoint, and caches it until shortly before expiration. This is a machine-to-machine flow: it does not elicit user credentials and does not use refresh tokens.
 
 The Secret fields are not a promise that every combination applies to every backend protocol. HTTP Basic credentials are handled by the HTTP proxy, while custom CA trust material is handled by the gRPC proxy.
 
@@ -62,13 +62,13 @@ The Secret fields are not a promise that every combination applies to every back
 
 A Configuration Plan can allow, deny, or rename request headers before an HTTP or gRPC backend call. For gRPC, surviving headers become call metadata, except `Accept`, `Content-Type`, and `User-Agent`, which the transport manages. The proxy always removes hop-by-hop headers, reShapr authentication headers, and MCP transport headers. Without an explicit policy, it also removes `Authorization` and `Cookie`; explicitly allowing or renaming a header can opt in to the backend credential contract you intend.
 
-Only the client-to-backend request direction is enforced in `1.0.0-rc1`. Response rules are represented in the API and Kubernetes CRD but are reserved for future use. Header propagation shapes transport metadata; it does not replace backend authorization.
+Only the client-to-backend request direction is enforced in `1.0.0`. Response rules are represented in the API and Kubernetes CRD but are reserved for future use. Header propagation shapes transport metadata; it does not replace backend authorization.
 
 ### Secret references
 
 Backend Secrets can contain literal values stored by the control plane or references resolved locally by a proxy. The `${env:VARIABLE}` scheme lets a hybrid proxy retrieve a sensitive value from its own environment when preparing a backend call, so the control plane stores and propagates only the reference. A value can contain several placeholders, and literal text can surround them.
 
-The current implementation provides only the `env` resolver. An unknown scheme or missing environment variable fails resolution rather than falling back to a literal credential. The release-tagged [public API contract](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/reshapr-public-openapi-v0.1.yaml) defines the Secret fields, while the [secret resolver](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/proxy/src/main/java/io/reshapr/proxy/secret/SecretReferenceResolver.java) defines `1.0.0-rc1` resolution behavior.
+The current implementation provides only the `env` resolver. An unknown scheme or missing environment variable fails resolution rather than falling back to a literal credential. The release-tagged [public API contract](https://github.com/reshaprio/reshapr/blob/1.0.0/reshapr-public-openapi-v0.1.yaml) defines the Secret fields, while the [secret resolver](https://github.com/reshaprio/reshapr/blob/1.0.0/proxy/src/main/java/io/reshapr/proxy/secret/SecretReferenceResolver.java) defines `1.0.0` resolution behavior.
 
 ## Elicited credentials
 
@@ -92,11 +92,11 @@ The authorization UI, authorization code, and resulting access token do not pass
 
 The storage boundary depends on the negotiated MCP version. Protocol versions before `2026-07-28` bind the elicited value to a replicated MCP session and return a `URL_ELICITATION_REQUIRED` error when input is needed. The public `2026-07-28` protocol follows the current [multi-round-trip elicitation model](https://modelcontextprotocol.io/specification/draft/client/elicitation): it returns an `input_required` result containing `elicitation/create` requests and binds the resulting value to the authenticated user's JWT issuer and subject. Stateless elicitation therefore requires a stable authenticated identity. **[MCP Compatibility](./mcp-compatibility.md)** compares both state models and their response dialects.
 
-In `1.0.0-rc1`, the proxy associates the completed interaction with the initiating session or MCP identity and validates the opaque OAuth `state` value in stateless callbacks. Its elicitation web routes do not independently reauthenticate the browser user as that same identity. Treat the elicitation URL and identifier as sensitive, show the complete target domain before opening it, never share the URL, and use HTTPS outside local development.
+In `1.0.0`, the proxy associates the completed interaction with the initiating session or MCP identity and validates the opaque OAuth `state` value in stateless callbacks. Its elicitation web routes do not independently reauthenticate the browser user as that same identity. Treat the elicitation URL and identifier as sensitive, show the complete target domain before opening it, never share the URL, and use HTTPS outside local development.
 
 ## Storage, propagation, and audit
 
-The control plane encrypts selected sensitive Configuration Plan and Secret fields with AES-256-GCM keys identified by a `kid`. Each value carries its key identifier and a random IV, providing authenticated encryption. Release `1.0.0-rc1` can still decrypt legacy AES/ECB values during migration and provides administrator-only status and re-encryption commands.
+The control plane encrypts selected sensitive Configuration Plan and Secret fields with AES-256-GCM keys identified by a `kid`. Each value carries its key identifier and a random IV, providing authenticated encryption. Release `1.0.0` can still decrypt legacy AES/ECB values during migration and provides administrator-only status and re-encryption commands.
 
 Key generation, distribution, activation, invocation of the rotation command, retirement, and backup recovery remain operator responsibilities. All control-plane replicas must receive the complete key set before the active key changes, and old keys must remain available until status and rotation checks show that no stored value depends on them.
 
@@ -106,10 +106,10 @@ When audit is enabled on a Configuration Plan, the proxy emits structured events
 
 ## Canonical sources
 
-- The [`1.0.0-rc1` public API contract](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/reshapr-public-openapi-v0.1.yaml) owns Configuration Plan and Secret fields.
-- The [`1.0.0-rc1` endpoint security implementation](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/proxy/src/main/java/io/reshapr/proxy/security/SecureEndpointFilter.java) defines API-key and OAuth token validation.
-- The [`1.0.0-rc1` HTTP](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/proxy/src/main/java/io/reshapr/proxy/proxy/ProxyService.java) and [gRPC](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/proxy/src/main/java/io/reshapr/proxy/proxy/GrpcProxyService.java) proxy implementations define backend credential handling.
-- The [`1.0.0-rc1` encryption implementation](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/control-plane/src/main/java/io/reshapr/ctrl/security/CipherService.java) defines the control-plane encryption behavior.
+- The [`1.0.0` public API contract](https://github.com/reshaprio/reshapr/blob/1.0.0/reshapr-public-openapi-v0.1.yaml) owns Configuration Plan and Secret fields.
+- The [`1.0.0` endpoint security implementation](https://github.com/reshaprio/reshapr/blob/1.0.0/proxy/src/main/java/io/reshapr/proxy/security/SecureEndpointFilter.java) defines API-key and OAuth token validation.
+- The [`1.0.0` HTTP](https://github.com/reshaprio/reshapr/blob/1.0.0/proxy/src/main/java/io/reshapr/proxy/proxy/ProxyService.java) and [gRPC](https://github.com/reshaprio/reshapr/blob/1.0.0/proxy/src/main/java/io/reshapr/proxy/proxy/GrpcProxyService.java) proxy implementations define backend credential handling.
+- The [`1.0.0` encryption implementation](https://github.com/reshaprio/reshapr/blob/1.0.0/control-plane/src/main/java/io/reshapr/ctrl/security/CipherService.java) defines the control-plane encryption behavior.
 
 ## Next step
 

@@ -2,8 +2,8 @@
 description: Attach Prompts, Resources, Custom Tools, and output filters to a Service, then expose different Artifact selections through separate Plans.
 verification:
   product: reShapr
-  version: 1.0.0-rc1
-  date: 2026-09-18
+  version: 1.0.0
+  date: 2026-09-22
 ---
 
 # Attach and Select reShapr Artifacts
@@ -13,7 +13,7 @@ Attach reusable agent-oriented capabilities to one Service, then use `includedAr
 ## Prerequisites
 
 - The Open-Meteo Service from **[Your First MCP Endpoint](../tutorials/getting-started.md)**
-- reShapr CLI `1.0.0-rc1`, authenticated against the target environment
+- reShapr CLI `1.0.0`, authenticated against the target environment
 - `curl` and `jq`
 - A running proxy registered as a Gateway in Gateway Group `1`
 
@@ -176,7 +176,7 @@ list_capabilities() {
     params: {
       _meta: {
         "io.modelcontextprotocol/protocolVersion": "2026-07-28",
-        "io.modelcontextprotocol/clientInfo": {name: "reshapr-docs", version: "1.0.0-rc1"},
+        "io.modelcontextprotocol/clientInfo": {name: "reshapr-docs", version: "1.0.0"},
         "io.modelcontextprotocol/clientCapabilities": {}
       }
     }
@@ -228,7 +228,7 @@ One Service now has four reusable attached Artifact types and two Configuration 
 
 - Artifact capabilities describe declared names; use MCP list methods to verify what an Exposition serves.
 - Artifact selection is Plan-wide, not conditional per user or per Tool call.
-- Output filters are not an authorization boundary and fail open in reShapr `1.0.0-rc1`.
+- Output filters are not an authorization boundary and fail open in reShapr `1.0.0`.
 - The deletion step previews impact and is deliberately cancelled; confirming it changes the action Plan.
 - Re-running the commands with the same Plan or Exposition names requires deleting or renaming the previous resources.
 

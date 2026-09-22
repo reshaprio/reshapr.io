@@ -3,7 +3,7 @@ description: Organize, reconcile, update, and safely remove reShapr Kubernetes r
 verification:
   product: reShapr controllers
   version: 0.0.3
-  date: 2026-09-21
+  date: 2026-09-22
 ---
 
 # Manage reShapr Resources with GitOps
@@ -13,7 +13,7 @@ Use this guide to manage reShapr custom resources as desired state without coupl
 ## Prerequisites
 
 - A Kubernetes cluster with reShapr controllers `0.0.3` installed
-- A registered operator identity with access to the target reShapr `1.0.0-rc1` organization
+- A registered operator identity with access to the target reShapr `1.0.0` organization
 - `kubectl` access to the application and `reshapr-system` namespaces
 - A Git repository reconciled to the cluster
 - A completed **[first GitOps-managed MCP endpoint](../tutorials/first-gitops-mcp-endpoint.md)** or equivalent Service, ConfigurationPlan, and Exposition
@@ -107,7 +107,7 @@ kubectl get customtools.reshapr.io,resources.reshapr.io \
     @tsv'
 ```
 
-Against reShapr `1.0.0-rc1`, valid `CustomTools` and `Resources` custom resources can each reach `READY`. Controllers `0.0.3` currently upload both artifact kinds with the same `artifact.json` filename, however, so reconciling both kinds against one Service can replace the previously attached artifact. Use only one of these CR kinds per Service, or manage the additional artifact through another supported reShapr interface.
+Against reShapr `1.0.0`, valid `CustomTools` and `Resources` custom resources can each reach `READY`. Controllers `0.0.3` currently upload both artifact kinds with the same `artifact.json` filename, however, so reconciling both kinds against one Service can replace the previously attached artifact. Use only one of these CR kinds per Service, or manage the additional artifact through another supported reShapr interface.
 
 ## Update a ConfigurationPlan through Git
 

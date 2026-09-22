@@ -2,13 +2,13 @@
 description: Upgrade a Kubernetes reShapr deployment and rotate endpoint, proxy registration, and backend credentials with explicit recovery boundaries.
 verification:
   product: reShapr stack
-  version: 1.0.0-rc1 / controllers 0.0.3 / charts 0.0.13
-  date: 2026-09-21
+  version: 1.0.0 / controllers 0.0.3 / charts 0.0.14
+  date: 2026-09-22
 ---
 
 # Upgrade reShapr and Rotate Runtime Secrets
 
-Use this runbook to upgrade an existing Kubernetes deployment to reShapr `1.0.0-rc1`, controllers `0.0.3`, and Helm charts `0.0.13`. It also covers control-plane database encryption keys, an Exposition API key, a Gateway registration token, and a backend credential referenced through `${env:...}`.
+Use this runbook to upgrade an existing Kubernetes deployment to reShapr `1.0.0`, controllers `0.0.3`, and Helm charts `0.0.14`. It also covers control-plane database encryption keys, an Exposition API key, a Gateway registration token, and a backend credential referenced through `${env:...}`.
 
 This is not a universal upgrade path from every earlier release. Validate the exact source-to-target path in staging before changing production.
 
@@ -18,11 +18,11 @@ You need:
 
 - the four reShapr releases installed as described in **[Deploy reShapr on Kubernetes for Production](../deploy-kubernetes-production.md)**;
 - tracked and reviewable Helm values for every installed release;
-- access to the [reShapr `1.0.0-rc1` release](https://github.com/reshaprio/reshapr/releases/tag/1.0.0-rc1), [controllers `0.0.3`](https://github.com/reshaprio/reshapr-controllers/releases/tag/0.0.3), and [charts `0.0.13`](https://github.com/reshaprio/reshapr-helm-charts/releases/tag/0.0.13);
+- access to the [reShapr `1.0.0` release](https://github.com/reshaprio/reshapr/releases/tag/1.0.0), [controllers `0.0.3`](https://github.com/reshaprio/reshapr-controllers/releases/tag/0.0.3), and [charts `0.0.14`](https://github.com/reshaprio/reshapr-helm-charts/releases/tag/0.0.14);
 - an externally managed PostgreSQL service with a tested backup and restore procedure;
 - maintenance authority for Gateway registration and client credentials;
 - one active Exposition and one non-destructive Tool for post-upgrade checks;
-- Helm, `kubectl`, `curl`, `jq`, `openssl`, and reShapr CLI `1.0.0-rc1`.
+- Helm, `kubectl`, `curl`, `jq`, `openssl`, and reShapr CLI `1.0.0`.
 
 Set the release names and namespaces used by this runbook:
 
@@ -33,8 +33,8 @@ export CONTROL_PLANE_RELEASE='reshapr-control-plane'
 export WEB_UI_RELEASE='reshapr-ui'
 export CONTROLLERS_RELEASE='reshapr-controllers'
 export PROXY_RELEASE='reshapr-proxy'
-export TARGET_CHART_VERSION='0.0.13'
-export TARGET_RUNTIME_VERSION='1.0.0-rc1'
+export TARGET_CHART_VERSION='0.0.14'
+export TARGET_RUNTIME_VERSION='1.0.0'
 export TARGET_CONTROLLERS_VERSION='0.0.3'
 export MCP_URL='https://<gateway-host>/mcp/<organization>/<exposition-name>'
 export EXPOSITION_ID='<exposition-id>'
@@ -82,9 +82,9 @@ Pin these image fields in the reviewed files:
 
 | File | Field | Target |
 |---|---|---|
-| `values/control-plane.yaml` | `ctrl.image.tag` | `1.0.0-rc1` |
-| `values/web-ui.yaml` | `image.tag` | `1.0.0-rc1` |
-| `values/proxy.yaml` | `image.tag` | `1.0.0-rc1` |
+| `values/control-plane.yaml` | `ctrl.image.tag` | `1.0.0` |
+| `values/web-ui.yaml` | `image.tag` | `1.0.0` |
+| `values/proxy.yaml` | `image.tag` | `1.0.0` |
 | `values/controllers.yaml` | `operator.image.tag` | `0.0.3` |
 | `values/controllers.yaml` | `admissionController.image.tag` | `0.0.3` |
 
@@ -181,7 +181,7 @@ curl --fail --silent https://<control-plane-host>/q/health/ready | jq -er '.stat
 reshapr info
 ```
 
-Stop the rollout if readiness fails or the server does not report `1.0.0-rc1`. Preserve logs and database state before attempting recovery.
+Stop the rollout if readiness fails or the server does not report `1.0.0`. Preserve logs and database state before attempting recovery.
 
 ## Upgrade the Web UI and controllers
 
@@ -287,7 +287,7 @@ curl --fail --silent --show-error \
   --header 'Accept: application/json, text/event-stream' \
   --header 'MCP-Protocol-Version: 2026-07-28' \
   --header 'Mcp-Method: server/discover' \
-  --data '{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-upgrade-check","version":"1.0.0-rc1"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-upgrade-check","version":"1.0.0"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
   "${MCP_URL}" | jq -er '.result.supportedVersions'
 ```
 
@@ -332,7 +332,7 @@ reshapr config renew-api-key "${CONFIGURATION_PLAN_ID}"
 
 The CLI displays the new key once. Store it in the client secret manager immediately and treat the previous key as invalid. Update authorized MCP clients, verify that the new key succeeds, and verify that the old key receives HTTP `401`.
 
-There is no documented overlap or scheduled API-key rotation mechanism in `1.0.0-rc1`. Coordinate clients before renewal when an immediate cutover would interrupt them.
+There is no documented overlap or scheduled API-key rotation mechanism in `1.0.0`. Coordinate clients before renewal when an immediate cutover would interrupt them.
 
 ## Rotate a Gateway registration token
 
@@ -391,7 +391,7 @@ Verify proxy readiness and Gateway registration, then repeat a read-only Tool ca
 
 ## Result
 
-The Helm releases use charts `0.0.13`, runtime workloads use `1.0.0-rc1`, controllers use `0.0.3`, the database recovery point remains external and tested, and each rotated key or credential has an explicit replacement and verification step.
+The Helm releases use charts `0.0.14`, runtime workloads use `1.0.0`, controllers use `0.0.3`, the database recovery point remains external and tested, and each rotated key or credential has an explicit replacement and verification step.
 
 ## Limits
 
@@ -400,11 +400,11 @@ The Helm releases use charts `0.0.13`, runtime workloads use `1.0.0-rc1`, contro
 - Helm does not provide automatic CRD downgrade or deletion during rollback.
 - The generated proxy clustering keystore is retained across upgrades; rotating it requires a separately planned simultaneous restart.
 - Database encryption-key rotation is administrator-triggered; key generation, distribution, activation, retirement, and scheduling remain external responsibilities.
-- API-key, Gateway-token, and `${env:...}` credential rotations are not scheduled or automated by reShapr `1.0.0-rc1`.
+- API-key, Gateway-token, and `${env:...}` credential rotations are not scheduled or automated by reShapr `1.0.0`.
 - A successful rollout does not by itself validate ingress, Exposition propagation, endpoint authorization, or backend behavior.
 
 ## Next step
 
 Use **[Troubleshoot an Exposition or Proxy](./troubleshoot.md)** when a post-upgrade check fails, and **[Observe the reShapr Proxy](./observe-and-audit.md)** to compare telemetry across the maintenance window.
 
-The release-tagged [Helm chart documentation](https://github.com/reshaprio/reshapr-helm-charts/tree/0.0.13) and [reShapr runtime](https://github.com/reshaprio/reshapr/tree/1.0.0-rc1) remain the canonical references.
+The release-tagged [Helm chart documentation](https://github.com/reshaprio/reshapr-helm-charts/tree/0.0.14) and [reShapr runtime](https://github.com/reshaprio/reshapr/tree/1.0.0) remain the canonical references.

@@ -2,8 +2,8 @@
 description: Run a reShapr proxy in another trust domain and connect it to an existing control plane.
 verification:
   product: reShapr
-  version: 1.0.0-rc1
-  date: 2026-09-18
+  version: 1.0.0
+  date: 2026-09-22
 ---
 
 # Deploy a Hybrid reShapr Proxy
@@ -16,8 +16,8 @@ The proxy initiates the control-plane connection and registers a logical Gateway
 
 You need:
 
-- a reShapr `1.0.0-rc1` control plane reachable from the proxy over gRPC;
-- the reShapr `1.0.0-rc1` CLI, authenticated with `reshapr login`;
+- a reShapr `1.0.0` control plane reachable from the proxy over gRPC;
+- the reShapr `1.0.0` CLI, authenticated with `reshapr login`;
 - Docker or Podman on the proxy host;
 - `curl` and `jq` for verification;
 - a Service and Configuration Plan for a non-destructive backend operation;
@@ -27,7 +27,7 @@ The examples use Docker. Set `CONTAINER_ENGINE=podman` to use the same commands 
 
 ```bash
 export CONTAINER_ENGINE=docker
-export RESHAPR_IMAGE=registry.reshapr.io/reshapr/reshapr-proxy:1.0.0-rc1
+export RESHAPR_IMAGE=registry.reshapr.io/reshapr/reshapr-proxy:1.0.0
 ```
 
 ## 1. Select a Gateway Group
@@ -163,7 +163,7 @@ curl --silent --show-error \
   --header 'Accept: application/json, text/event-stream' \
   --header 'MCP-Protocol-Version: 2026-07-28' \
   --header 'Mcp-Method: server/discover' \
-  --data '{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"1.0.0-rc1"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"1.0.0"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
   "${MCP_URL}" | jq '.result | {supportedVersions, capabilities}'
 ```
 
@@ -175,7 +175,7 @@ curl --silent --show-error \
   --header 'Accept: application/json, text/event-stream' \
   --header 'MCP-Protocol-Version: 2026-07-28' \
   --header 'Mcp-Method: tools/list' \
-  --data '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"1.0.0-rc1"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
+  --data '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-docs","version":"1.0.0"},"io.modelcontextprotocol/clientCapabilities":{}}}}' \
   "${MCP_URL}" | jq '.result.tools[] | {name, description}'
 ```
 
@@ -188,7 +188,7 @@ export TOOL_ARGUMENTS='{}'
 jq -n \
   --arg name "${TOOL_NAME}" \
   --argjson arguments "${TOOL_ARGUMENTS}" \
-  '{jsonrpc:"2.0",id:3,method:"tools/call",params:{name:$name,arguments:$arguments,_meta:{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{name:"reshapr-docs",version:"1.0.0-rc1"},"io.modelcontextprotocol/clientCapabilities":{}}}}' | \
+  '{jsonrpc:"2.0",id:3,method:"tools/call",params:{name:$name,arguments:$arguments,_meta:{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{name:"reshapr-docs",version:"1.0.0"},"io.modelcontextprotocol/clientCapabilities":{}}}}' | \
 curl --silent --show-error \
   --header 'Content-Type: application/json' \
   --header 'Accept: application/json, text/event-stream' \
@@ -227,7 +227,7 @@ Deleting the token prevents later registration with that credential. A proxy tha
 
 ## Result
 
-You now have a reShapr `1.0.0-rc1` proxy running in another trust domain, registered as a logical Gateway with a dedicated credential, selected through Gateway Group labels, and verified through its MCP endpoint.
+You now have a reShapr `1.0.0` proxy running in another trust domain, registered as a logical Gateway with a dedicated credential, selected through Gateway Group labels, and verified through its MCP endpoint.
 
 ## Limits
 

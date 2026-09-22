@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-RUNTIME_VERSION="${RUNTIME_VERSION:-1.0.0-rc1}"
+RUNTIME_VERSION="${RUNTIME_VERSION:-1.0.0}"
 CONTAINER_ENGINE="${CONTAINER_ENGINE:-docker}"
 RESHAPR_IMAGE="${RESHAPR_IMAGE:-registry.reshapr.io/reshapr/reshapr-proxy:${RUNTIME_VERSION}}"
 CONTAINER_NAME="${CONTAINER_NAME:-reshapr-docs-hybrid-replay}"

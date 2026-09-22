@@ -56,7 +56,7 @@ The proxy validates the requested Tool and arguments, maps the call to the REST,
 
 ## 6. Response treatment happens before MCP delivery
 
-A selected output filter can retain JSON branches, apply JSON Patch operations, remove recursively empty values, and encode the resulting data as TOON. For the `1.0.0-rc1` baseline, these stages run in that order:
+A selected output filter can retain JSON branches, apply JSON Patch operations, remove recursively empty values, and encode the resulting data as TOON. For the `1.0.0` baseline, these stages run in that order:
 
 ```text
 backend JSON -> jsonRetain -> jsonPatches -> compact (optional) -> TOON (optional) -> MCP Tool result

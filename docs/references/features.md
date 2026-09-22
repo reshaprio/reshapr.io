@@ -2,8 +2,8 @@
 description: Verified reShapr capabilities, availability, scope, and canonical references.
 verification:
   product: reShapr
-  version: 1.0.0-rc1
-  date: 2026-09-18
+  version: 1.0.0
+  date: 2026-09-22
 ---
 
 # reShapr features
@@ -46,7 +46,7 @@ Methods such as roots, sampling, and subscriptions are not exposed as server cap
 | MCP endpoint API key | Available | The proxy validates `x-reshapr-key`; keys can be renewed and propagated to connected proxies. | [API key guide](../how-to-guides/security/api-key.md) |
 | MCP endpoint OAuth 2.0 | Available | The proxy validates signed bearer JWTs against configured issuers, JWKS, Exposition scopes, and dynamic or static audiences, and publishes RFC 9728 metadata. | [OAuth 2.0 guide](../how-to-guides/security/oauth.md) |
 | Backend authentication | Available with limits | Basic, token/header, certificate, OAuth Client Credentials, and elicited OAuth credentials depend on the backend protocol and Secret configuration. | [Backend authentication and elicitation](../how-to-guides/security/backend-auth-and-elicitation.md) |
-| Backend request header policy | Available with limits | A Configuration Plan can allow, deny, or rename request headers sent to HTTP backends or converted to gRPC call metadata. Response rules are reserved and not enforced in `1.0.0-rc1`. | [Configure backend request header policy](../how-to-guides/security/configure-backend-header-policy.md) |
+| Backend request header policy | Available with limits | A Configuration Plan can allow, deny, or rename request headers sent to HTTP backends or converted to gRPC call metadata. Response rules are reserved and not enforced in `1.0.0`. | [Configure backend request header policy](../how-to-guides/security/configure-backend-header-policy.md) |
 | Database encryption and key rotation | Available with limits | The control plane uses identified AES-256-GCM keys and can re-encrypt stored sensitive values with the active key through an administrator command. Key rollout and invocation remain operator-managed. | [Upgrade and rotate runtime secrets](../how-to-guides/operations/upgrade-and-rotate.md) |
 | Local secret references | Available with limits | Hybrid proxies resolve `${env:VARIABLE}` references locally on each backend call. `env` is the provided resolver. | [Backend authentication and elicitation](../how-to-guides/security/backend-auth-and-elicitation.md#create-a-locally-resolved-secret) |
 | Audit events | Available with limits | A proxy emits structured MCP-call and authentication-failure events when audit is enabled on the Configuration Plan. | [Audit MCP endpoint calls](../how-to-guides/audit-mcp-endpoint.md) |

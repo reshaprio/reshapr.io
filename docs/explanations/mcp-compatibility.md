@@ -23,7 +23,7 @@ The proxy selects a mode from the request and its headers:
 
 These modes are alternatives. A client must not add a legacy session ID to a stateless request or omit the session ID from a non-handshake legacy request.
 
-The five entries are versions reShapr `1.0.0-rc1` explicitly recognizes. This does not imply support for an unknown later MCP version: the modern request envelope is validated against the declared list before dispatch.
+The five entries are versions reShapr `1.0.0` explicitly recognizes. This does not imply support for an unknown later MCP version: the modern request envelope is validated against the declared list before dispatch.
 
 ## Historical clients establish a session
 
@@ -45,7 +45,7 @@ Modern requests can also mirror body routing data in HTTP headers:
 
 When a mirror header is present, it must agree with the body. A mismatch is rejected before method dispatch with HTTP `400` and JSON-RPC error `-32020`. An unsupported version in the modern envelope is rejected with HTTP `400` and error `-32022`.
 
-`2026-07-28` is a public version supported by reShapr `1.0.0-rc1`. It is not an experimental mode.
+`2026-07-28` is a public version supported by reShapr `1.0.0`. It is not an experimental mode.
 
 ## Dialects change the result shape
 
@@ -77,7 +77,7 @@ See **[Authenticate Backend Calls and Use Elicitation](../how-to-guides/security
 
 The MCP schema contains names for methods used in requests, responses, and client/server interactions. A constant alone does not mean that reShapr implements that method as a server capability.
 
-The proxy dispatcher in `1.0.0-rc1` handles:
+The proxy dispatcher in `1.0.0` handles:
 
 - `initialize` and `server/discover` for the applicable lifecycle mode;
 - `tools/list` and `tools/call`;
@@ -96,6 +96,6 @@ Do not translate one mode into the other by changing headers alone. Negotiation,
 
 ## Evidence and limits
 
-This explanation describes reShapr `1.0.0-rc1`, verified on 2026-09-21. The release-tagged **[MCP schema](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/proxy/src/main/java/io/reshapr/proxy/mcp/McpSchema.java)** owns the version list and protocol vocabulary. The **[MCP controller](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/proxy/src/main/java/io/reshapr/proxy/mcp/McpController.java)** owns negotiation and dispatch, while the **[legacy](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/proxy/src/main/java/io/reshapr/proxy/mcp/LegacyProtocolDialect.java)** and **[modern](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/proxy/src/main/java/io/reshapr/proxy/mcp/ModernProtocolDialect.java)** dialects own response shaping.
+This explanation describes reShapr `1.0.0`, verified on 2026-09-21. The release-tagged **[MCP schema](https://github.com/reshaprio/reshapr/blob/1.0.0/proxy/src/main/java/io/reshapr/proxy/mcp/McpSchema.java)** owns the version list and protocol vocabulary. The **[MCP controller](https://github.com/reshaprio/reshapr/blob/1.0.0/proxy/src/main/java/io/reshapr/proxy/mcp/McpController.java)** owns negotiation and dispatch, while the **[legacy](https://github.com/reshaprio/reshapr/blob/1.0.0/proxy/src/main/java/io/reshapr/proxy/mcp/LegacyProtocolDialect.java)** and **[modern](https://github.com/reshaprio/reshapr/blob/1.0.0/proxy/src/main/java/io/reshapr/proxy/mcp/ModernProtocolDialect.java)** dialects own response shaping.
 
 reShapr exposes MCP over Streamable HTTP. It does not provide a WebSocket MCP transport, and this page does not claim client-side support in any particular agent framework or SDK.

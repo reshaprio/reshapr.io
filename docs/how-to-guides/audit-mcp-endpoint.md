@@ -2,8 +2,8 @@
 description: Enable audit for an MCP endpoint and verify successful-call and authentication-failure records.
 verification:
   product: reShapr
-  version: 1.0.0-rc1
-  date: 2026-09-18
+  version: 1.0.0
+  date: 2026-09-22
 ---
 
 # Audit MCP Endpoint Calls
@@ -16,7 +16,7 @@ Audit events are [OpenTelemetry](https://opentelemetry.io/) log records marked w
 
 You need:
 
-- a reShapr proxy and CLI at version `1.0.0-rc1`;
+- a reShapr proxy and CLI at version `1.0.0`;
 - proxy OpenTelemetry logs configured with **[Observe the reShapr Proxy](./operations/observe-and-audit.md)**;
 - a telemetry or audit backend where you can search exported records;
 - `reshapr login` completed for the target organization;
@@ -75,7 +75,7 @@ Wait until the Exposition lists the expected Gateway endpoint before sending req
 Send a successful discovery request with the generated key:
 
 ```bash
-export MCP_DISCOVERY_REQUEST='{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-audit-check","version":"1.0.0-rc1"},"io.modelcontextprotocol/clientCapabilities":{}}}}'
+export MCP_DISCOVERY_REQUEST='{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientInfo":{"name":"reshapr-audit-check","version":"1.0.0"},"io.modelcontextprotocol/clientCapabilities":{}}}}'
 
 curl --fail --silent --show-error \
   --header 'Content-Type: application/json' \
@@ -172,4 +172,4 @@ The Configuration Plan enables audit for its Expositions, and the audit sink con
 
 Use **[Observe the reShapr Proxy](./operations/observe-and-audit.md)** to route records with `log.type=audit` to a dedicated sink. Use **[Security Capabilities and Limits](../explanations/security-model.md)** to review endpoint authentication and audit boundaries.
 
-The release-tagged [audit implementation](https://github.com/reshaprio/reshapr/tree/1.0.0-rc1/proxy/src/main/java/io/reshapr/proxy/audit) and [public API contract](https://github.com/reshaprio/reshapr/blob/1.0.0-rc1/reshapr-public-openapi-v0.1.yaml) remain the canonical references.
+The release-tagged [audit implementation](https://github.com/reshaprio/reshapr/tree/1.0.0/proxy/src/main/java/io/reshapr/proxy/audit) and [public API contract](https://github.com/reshaprio/reshapr/blob/1.0.0/reshapr-public-openapi-v0.1.yaml) remain the canonical references.

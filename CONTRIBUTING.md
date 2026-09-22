@@ -59,14 +59,14 @@ Prefer relative links between pages in this repository. Preserve published URLs 
 
 ## Executable Documentation
 
-The current documentation baseline is reShapr `1.0.0-rc1`, controllers `0.0.3`, and Helm charts `0.0.13`. Tutorials and how-to guides that contain commands must:
+The current documentation baseline is reShapr `1.0.0`, controllers `0.0.3`, and Helm charts `0.0.14`. Tutorials and how-to guides that contain commands must:
 
 - declare the verification target in frontmatter so the theme can render it below the page title:
 
 	```yaml
 	verification:
 		product: reShapr
-		version: 1.0.0-rc1
+		version: 1.0.0
 		date: YYYY-MM-DD
 	```
 

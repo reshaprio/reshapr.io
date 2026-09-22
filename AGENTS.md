@@ -21,7 +21,7 @@ npm run build
 
 - Give every page one primary Diátaxis purpose and preserve its existing published URL unless a redirect or alias is added.
 - Validate product claims against a tracked canonical source before writing them.
-- Use reShapr `0.2.3` as the current baseline for executable documentation. Add `Last verified with reShapr 0.2.3 on <date>` and replay changed commands against that release.
+- Use reShapr `1.0.0`, controllers `0.0.3`, and Helm charts `0.0.14` as the current baseline for executable documentation. Declare the applicable versions and verification date in page frontmatter, and replay changed commands against those releases.
 - Clearly label generated IDs, timestamps, URLs, names, and command output as examples.
 - Keep exhaustive CLI help, OpenAPI contracts, internal architecture, CRD schemas, Helm values, and manifests in their owner repositories. Summarize and link from this site.
 - Use release-tagged links for executable procedures and default-branch links for evolving concepts.
