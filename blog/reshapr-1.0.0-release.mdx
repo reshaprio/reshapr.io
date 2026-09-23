@@ -1,0 +1,217 @@
+---
+title: "reShapr 1.0.0: Crossing Our First Stability Gate 🚀"
+date: 2026-09-22
+authors:
+  - yacine
+  - laurent
+description: "reShapr reaches 1.0.0: hardened security, reliability guarantees, and the numbers behind six months of building in the open, as we set our sights on the AAIF Sandbox."
+image: /img/blog/reshapr-1.0.0-banner.jpg
+tags: [Release, Milestone, 1.0.0, Security, Stability, AAIF, Open-Source, MCP, Community, CNCF]
+---
+
+{/* markdownlint-disable MD001 MD026 MD030 MD045 */}
+
+<figure style={{textAlign: 'center', margin: '1.5rem 0'}}>
+
+![reShapr 1.0.0 is here](/img/blog/reshapr-1.0.0-banner.jpg)
+
+</figure>
+
+Today, we're shipping **[reShapr 1.0.0](https://github.com/reshaprio/reshapr/releases/tag/1.0.0)**, **202 days** and **20 releases** after our [first commit](https://github.com/reshaprio/reshapr/commit/81bfed238dc5db09fbe52e3062c2ac879e68453b).
+
+<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '0.75rem', margin: '1.75rem 0'}}>
+  <div style={{border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', padding: '0.9rem 1rem', textAlign: 'center'}}>
+    <div style={{fontSize: '1.7rem', fontWeight: 700, color: 'var(--ifm-color-primary)'}}>460</div>
+    <div style={{fontSize: '0.8rem', color: 'var(--ifm-font-color-secondary)'}}>commits</div>
+  </div>
+  <div style={{border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', padding: '0.9rem 1rem', textAlign: 'center'}}>
+    <div style={{fontSize: '1.7rem', fontWeight: 700, color: 'var(--ifm-color-primary)'}}>20</div>
+    <div style={{fontSize: '0.8rem', color: 'var(--ifm-font-color-secondary)'}}>releases in 202 days</div>
+  </div>
+  <div style={{border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', padding: '0.9rem 1rem', textAlign: 'center'}}>
+    <div style={{fontSize: '1.7rem', fontWeight: 700, color: 'var(--ifm-color-primary)'}}>234</div>
+    <div style={{fontSize: '0.8rem', color: 'var(--ifm-font-color-secondary)'}}>issues closed</div>
+  </div>
+  <div style={{border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', padding: '0.9rem 1rem', textAlign: 'center'}}>
+    <div style={{fontSize: '1.7rem', fontWeight: 700, color: 'var(--ifm-color-primary)'}}>140</div>
+    <div style={{fontSize: '0.8rem', color: 'var(--ifm-font-color-secondary)'}}>pull requests merged</div>
+  </div>
+  <div style={{border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', padding: '0.9rem 1rem', textAlign: 'center'}}>
+    <div style={{fontSize: '1.7rem', fontWeight: 700, color: 'var(--ifm-color-primary)'}}>10</div>
+    <div style={{fontSize: '0.8rem', color: 'var(--ifm-font-color-secondary)'}}>human contributors</div>
+  </div>
+  <div style={{border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', padding: '0.9rem 1rem', textAlign: 'center'}}>
+    <div style={{fontSize: '1.7rem', fontWeight: 700, color: 'var(--ifm-color-primary)'}}>126 ⭐</div>
+    <div style={{fontSize: '0.8rem', color: 'var(--ifm-font-color-secondary)'}}>GitHub stars</div>
+  </div>
+</div>
+
+> 1.0.0 isn't a release stuffed with new features. It's a **stability gate**: the point where we're confident enough in reShapr's API, its security posture, and its behavior under load to make a promise: from here on, we won't break you without a major version bump.
+
+{/* truncate */}
+
+## What reShapr does
+
+reShapr is the open source MCP Server runtime for AI-native API access. Point it at an **OpenAPI 3.x** spec, a **GraphQL** schema, or a **Protobuf/gRPC** definition, and it produce working MCP Tools immediately, no generated code, no hand-written server, no protocol-specific SDK to learn.
+
+What makes reShapr different is what happens after that translation step. **[Custom Tools](https://reshapr.io/docs/references/custom-tools-specification)**, declarative or scripted, reshape a Tool produced from your schema into the action an agent actually needs: renaming arguments, pinning values, or orchestrating several Tools across Services into one compact result. Pair that with **[Tools Output Filtering](https://reshapr.io/docs/references/spec-outtools-filtering)** and a sprawling multi-call workflow becomes one predictable action with a stable, minimal response. **[Prompts](https://reshapr.io/docs/references/prompts-specification)** and **[Resources](https://reshapr.io/docs/references/resources-specification)** round things out, both attaching to a Service in the same way. That's the difference between exposing an API to a tool-calling agent and exposing a Service to a full **MCP App**.
+
+We measured exactly how much that matters in a [live benchmark against the official GitHub MCP server](https://reshapr.io/blog/reshapr-vs-official-github-mcp): the same pull-request-velocity task went from **31 agent tool calls to 1**, **267.8 KB to 7.4 KB**, and **~67,000 estimated tokens to ~1,900**, a **97.2% reduction**, with output filtering and TOON trimming the already-compact result by another **12.4%**.
+
+> That's the case for reShapr: **very low agent-facing overhead**, measured, not asserted.
+
+## Why 1.0.0 is a stability gate, not a feature dump
+
+Look at the **66 commits** that went into 1.0.0 since [`0.2.3`](https://github.com/reshaprio/reshapr/releases/tag/0.2.3), and a pattern jumps out: almost none of them are new capabilities. They're hardening. Encryption, key rotation, quota consistency under concurrent load, stricter validation on every input that reaches a script or a proxied call. That's exactly what we want a `1.0.0` to look like.
+
+From this release on, the [public API](https://github.com/reshaprio/reshapr/blob/1.0.0/reshapr-public-openapi-v0.1.yaml), the [Admin/Control API](https://github.com/reshaprio/reshapr/blob/1.0.0/reshapr-admin-ctrl-openapi-v0.1.yaml), the CLI surface, and the Configuration Plan schema follow semantic versioning: a `1.x` upgrade will not break your integration. A breaking change means `2.0.0`, with a migration guide.
+
+> That **guarantee** is the actual product of this release.
+
+See the [full diff since `0.2.3`](https://github.com/reshaprio/reshapr/compare/0.2.3...1.0.0) for every commit, PR, and issue behind that hardening.
+
+## Built for every persona
+
+1.0.0 isn't one feature for one audience. Here's what it concretely changes, and the win it unlocks, for each of the roles we build reShapr for:
+
+### 🧑‍💻 Developer / Agent builder
+
+**Need:** turn an API into an MCP server and start consuming it in minutes.
+
+Import an **OpenAPI 3.x**, **GraphQL**, or **Protobuf/gRPC** contract and get working MCP Tools instantly. When the generated shape isn't the action your agent needs, [Custom Tools](https://reshapr.io/docs/references/custom-tools-specification), declarative or scripted, **reshape it**: rename arguments, pin values, or orchestrate several calls (even across Services). See it running yourself in the [demos repository](https://github.com/reshaprio/reshapr-demos) or on our [YouTube channel](https://www.youtube.com/@reShaprio).
+
+**Win:** the goal isn't an agent that guesses its way through a generic API, it's one that executes a task. The workflow becomes something you can code-review, test, and version: **one named action, one input schema, one output shape**, instead of hoping the agent replans the same multi-step loop correctly every time.
+
+### 🧩 API / Platform engineer
+
+**Need:** govern Services, Configuration Plans, Expositions, and integrations.
+
+A Configuration Plan controls backend routing, timeouts, which operations and artifacts are visible, and header propagation ([#324](https://github.com/reshaprio/reshapr/issues/324)); an Exposition binds a Plan to a Gateway Group under a named MCP endpoint. Configuration **changes stream live** to connected proxies, no restart required.
+
+**Win:** the same Service can back several Expositions, each on a different Plan, so a partner-facing endpoint and an internal one expose different Tool surfaces from **one governed source of truth**.
+
+### ☸️ SRE / Kubernetes operator
+
+**Need:** deploy, secure, scale, observe, and troubleshoot the platform.
+
+Seven CRDs (Service, ConfigurationPlan, Exposition, GatewayGroup, SecretSource, CustomTools, Resources) let [`reshapr-controllers`](https://github.com/reshaprio/reshapr-controllers) reconcile reShapr the GitOps way. An admission webhook injects the reShapr proxy as a **sidecar container** directly into your workload's Pod, and generates the headless Service needed for discovery, no separate gateway deployment to run or scale on its own. [Four OCI Helm charts](https://github.com/reshaprio/reshapr-helm-charts) install each component independently, the proxy autoscales on CPU/memory, and every chart ships Cosign-signed.
+
+**Win:** the resources a platform engineer edits through the CLI or Web UI reconcile cleanly from a Git repository, so "governed" and "GitOps" describe the same system, and running reShapr in-Pod means **one less network hop and one less shared gateway** to reason about at scale.
+
+### 🛡️ Security architect
+
+**Need:** apply enterprise-grade authentication and authorization consistently across every MCP server you run, not bolt it on endpoint by endpoint.
+
+1.0.0 brings **enterprise identity** and **access control natively**: connect [your own or an external IdP](https://reshapr.io/docs/how-to-guides/configure-control-plane-oidc), accept MCP clients registered via [Client ID Metadata Documents](https://reshapr.io/docs/how-to-guides/security/oauth) instead of running Dynamic Client Registration, and resolve backend credentials across [multiple OAuth profiles or through MCP Elicitation](https://reshapr.io/docs/how-to-guides/security/backend-auth-and-elicitation) rather than hardcoding them. It's also been verified interoperable with Enterprise-Managed Authorization (**EMA**/ID-JAG) flows against an external Authorization Server.
+
+**Win:** one Configuration Plan **enforces identical security policy across every Exposition**, secure by default means all of them, not just the one you remembered to configure.
+
+### 🎯 Technology decision-maker
+
+**Need:** evaluate functional coverage, deployment models, and limitations.
+
+One project **covers any API contract**, whatever the format, under a single MCP layer, **Apache-2.0** licensed, deployable via Docker Compose, Kubernetes with GitOps controllers and Helm. It's the same coverage a developer uses to ship one integration and a platform engineer uses to govern a hundred.
+
+**Win:** N bespoke MCP servers means N security reviews and N upgrade paths, a maintenance nightmare at scale. Standardizing on one Apache-2.0 project with a frozen public API contract collapses that into a **single auditable risk surface**, and it **flips the ROI math**: faster time-to-delivery on the next integration, backed by an open source commitment with no single vendor's roadmap to wait on.
+
+## reShapr by the numbers
+
+We [first committed code](https://github.com/reshaprio/reshapr/commit/81bfed238dc5db09fbe52e3062c2ac879e68453b) on **March 4, 2026**, and went public three weeks later with [Welcome to reShapr](https://reshapr.io/blog/welcome-to-reshapr) on **March 31, 2026**. Everything below covers the span between whichever of those two dates you consider "launch," through today.
+
+<figure style={{margin: '2rem 0'}}>
+<svg viewBox="0 0 880 190" role="img" aria-labelledby="cadence-title cadence-desc" style={{width: '100%', height: 'auto'}}>
+  <title id="cadence-title">reShapr release cadence, March to September 2026</title>
+  <desc id="cadence-desc">Twenty releases plotted by date from the first commit on March 4, 2026 to reShapr 1.0.0 on September 22, 2026, averaging one release every ten days.</desc>
+
+  <line x1="40" y1="140" x2="840" y2="140" stroke="var(--ifm-color-emphasis-300)" strokeWidth="1.5" />
+
+  {/* reference markers */}
+  <line x1="40" y1="140" x2="40" y2="158" stroke="var(--ifm-color-emphasis-500)" strokeWidth="1.5" />
+  <circle cx="40" cy="140" r="4.5" fill="var(--ifm-color-emphasis-500)" />
+  <text x="40" y="174" textAnchor="middle" fontSize="11" fill="var(--ifm-font-color-secondary)">First commit</text>
+  <text x="40" y="187" textAnchor="middle" fontSize="10" fill="var(--ifm-font-color-secondary)">Mar 4</text>
+
+  <line x1="147" y1="140" x2="147" y2="158" stroke="var(--ifm-color-emphasis-500)" strokeWidth="1.5" />
+  <circle cx="147" cy="140" r="4.5" fill="var(--ifm-color-emphasis-500)" />
+  <text x="147" y="174" textAnchor="middle" fontSize="11" fill="var(--ifm-font-color-secondary)">Public launch</text>
+  <text x="147" y="187" textAnchor="middle" fontSize="10" fill="var(--ifm-font-color-secondary)">Mar 31</text>
+
+  {/* patch releases */}
+  <circle cx="76" cy="140" r="3.5" fill="var(--ifm-color-primary)" />
+  <circle cx="92" cy="140" r="3.5" fill="var(--ifm-color-primary)" />
+  <circle cx="120" cy="140" r="3.5" fill="var(--ifm-color-primary)" />
+  <circle cx="143" cy="140" r="3.5" fill="var(--ifm-color-primary)" />
+  <circle cx="159" cy="140" r="3.5" fill="var(--ifm-color-primary)" />
+  <circle cx="215" cy="140" r="3.5" fill="var(--ifm-color-primary)" />
+  <circle cx="283" cy="140" r="3.5" fill="var(--ifm-color-primary)" />
+  <circle cx="315" cy="140" r="3.5" fill="var(--ifm-color-primary)" />
+  <circle cx="370" cy="140" r="3.5" fill="var(--ifm-color-primary)" />
+  <circle cx="406" cy="140" r="3.5" fill="var(--ifm-color-primary)" />
+  <circle cx="478" cy="140" r="3.5" fill="var(--ifm-color-primary)" />
+  <circle cx="705" cy="140" r="3.5" fill="var(--ifm-color-primary)" />
+  <circle cx="733" cy="140" r="3.5" fill="var(--ifm-color-primary)" />
+  <circle cx="768" cy="140" r="3.5" fill="var(--ifm-color-primary)" />
+
+  {/* minor / major milestones */}
+  <circle cx="549" cy="140" r="6" fill="var(--ifm-color-primary)" />
+  <line x1="549" y1="134" x2="549" y2="112" stroke="var(--ifm-color-emphasis-300)" strokeWidth="1.5" />
+  <text x="549" y="102" textAnchor="middle" fontSize="12" fontWeight="600" fill="var(--ifm-font-color-base)">0.1.0</text>
+
+  <circle cx="653" cy="140" r="6" fill="var(--ifm-color-primary)" />
+  <line x1="653" y1="134" x2="653" y2="90" stroke="var(--ifm-color-emphasis-300)" strokeWidth="1.5" />
+  <text x="653" y="80" textAnchor="middle" fontSize="12" fontWeight="600" fill="var(--ifm-font-color-base)">0.2.0</text>
+
+  <circle cx="824" cy="140" r="6" fill="var(--ifm-color-primary)" />
+  <line x1="824" y1="134" x2="824" y2="112" stroke="var(--ifm-color-emphasis-300)" strokeWidth="1.5" />
+  <text x="824" y="102" textAnchor="middle" fontSize="12" fontWeight="600" fill="var(--ifm-font-color-base)">1.0.0-rc1</text>
+
+  <circle cx="840" cy="140" r="8.5" fill="none" stroke="var(--ifm-color-primary)" strokeWidth="2" />
+  <circle cx="840" cy="140" r="4" fill="var(--ifm-color-primary)" />
+  <line x1="840" y1="131" x2="840" y2="60" stroke="var(--ifm-color-emphasis-300)" strokeWidth="1.5" />
+  <text x="840" y="50" textAnchor="middle" fontSize="13" fontWeight="700" fill="var(--ifm-color-primary)">1.0.0</text>
+  <text x="840" y="65" textAnchor="middle" fontSize="10" fill="var(--ifm-font-color-secondary)">Sep 22</text>
+</svg>
+</figure>
+
+Twenty releases in 202 days: a new build roughly every **ten days**, without ever breaking a minor version along the way.
+
+Commit counts tell the same honest story without needing a chart: of **460 commits**, 270 come from Laurent, with the rest spread across Vaishnav Kale (16), Yacine (14), Thierry Mathias (5), Ashmeet Singh Rekhi (3), and five more contributors at one commit each, plus 147 automated commits from Dependabot and our own `reshapr-bot`.
+
+That's exactly what you'd expect from a project that just earned its stability gate, not one claiming to be bigger than it is: most of the code still comes from the two founding maintainers. But it's no longer *only* them. Contributions have landed from a **[CNCF/Microcks community mentor](https://github.com/Vaishnav88sk)** in Pune, a contributor at the **University of Pennsylvania**, an engineer at **[Observal](https://github.com/santhoshalpha)**, and independents in Lille, Coimbatore, Bengaluru, and Rio de Janeiro. 
+
+> That's at least **four countries** outside the founding team, on top of **126 GitHub stars**, **30 forks**, and **3,300+ npm installs** of the CLI since launch.
+
+## Setting our sights on the AAIF Sandbox
+
+reShapr exists to make APIs AI-native without locking anyone into a single vendor's runtime. That only works if the project itself is **vendor-neutral**. That's why our next step isn't a bigger roadmap, it's a home.
+
+The [Agentic AI Foundation (AAIF)](https://aaif.io/) hosts protocols, developer projects, and infrastructure for the agentic ecosystem under neutral governance. Its entry point, the [**Sandbox phase**](https://aaif.io/blog/aaif-sandbox-phase), deliberately keeps the bar low and the intent clear: a working implementation, a documented reason the project needs to exist, at least one named active maintainer, and clean licensing. In exchange, a Sandbox project gets "standard infrastructure only — no funding, no marketing, no scanning. A home and a neutral flag, nothing more."
+
+That's the bar 1.0.0 was built to clear:
+
+- **Clean licensing.** reShapr is [Apache-2.0](https://github.com/reshaprio/reshapr/blob/1.0.0/LICENSE), full stop.
+- **A working implementation.** 460 commits, 20 releases, and a public API we're now committed to not breaking.
+- **Credible momentum.** 126 stars, 10 human contributors across four countries, and a growing constellation of companion repos ([controllers](https://github.com/reshaprio/reshapr-controllers), [Helm charts](https://github.com/reshaprio/reshapr-helm-charts), [demos](https://github.com/reshaprio/reshapr-demos)).
+- **Named, active maintainers.** [Laurent Broudoux](https://github.com/lbroudoux) and [Yacine Kheddache](https://github.com/yada) have been shipping every ~10 days since March. Both are also maintainers of [Microcks](https://microcks.io), a CNCF Incubating project, and they're bringing that experience directly to reShapr: the open governance and community practices we're putting in place here are built on lessons already tested at the CNCF level.
+
+So, plainly: **we intend to submit reShapr to the AAIF Sandbox.** We're not there yet on AAIF's *Growth* criteria (commits from two or more unaffiliated organizations over six months, production use by two unaffiliated organizations), and we're not claiming otherwise. Sandbox is the honest next step for where reShapr actually is today, and Growth is the goal it sets up. Projects like [Agent Router](https://aaif.io/blog/agent-router-joins-aaif) show what that later stage looks like: multi-org governance, dozens of adopters. It's a reasonable north star, not a claim we're making about 1.0.0.
+
+That Growth-phase gap is partly a visibility problem, not a reality one. We're actively working with organizations that are already running reShapr in-house or evaluating it for production use, and if that's your team: there's no need to stay in the shadows. Whenever you're comfortable, we'd be grateful if you added your organization to our [public adopters list](https://github.com/reshaprio/.github/blob/main/ADOPTERS.md). It's a small edit on your end, and it does more for the project, and its case for joining AAIF, than almost anything else you could do.
+
+## What's next?
+
+With the stability gate crossed, our attention shifts outward: widening the contributor base beyond the founding team, preparing the AAIF Sandbox submission, and continuing the `1.x` line under the compatibility guarantee this release establishes. If you want a say in any of that, this is the moment: the API surface is now stable enough that your feedback shapes a `1.1`, not a rewrite.
+
+## Thanks 🙏
+
+To everyone who opened an issue, sent a PR, or just tried `reshapr run` and told us what broke: this release is yours as much as ours.
+
+<p style={{textAlign: 'left'}}>
+  <img src="https://contrib.rocks/image?repo=reshaprio/reshapr" alt="reShapr contributors" />
+</p>
+
+Give it a try: head over to the [docs](https://reshapr.io/docs/) to get reShapr 1.0.0 running.
+
+Questions, ideas, or war stories from your own AI-native migration? Come tell us on **[Discord](https://discord.gg/KyDUdam34h)**, open an issue on **[GitHub](https://github.com/reshaprio/reshapr)**, or just [give the project a star](https://github.com/reshaprio/reshapr).
+
+**Every bit of visibility helps** as we take this next step toward AAIF ❤️
