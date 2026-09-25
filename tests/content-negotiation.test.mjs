@@ -31,6 +31,11 @@ test('does not negotiate requests that already target files', () => {
   assert.equal(markdownPathname('/img/logo.png'), null);
 });
 
+test('negotiates slugs containing dots that are not file extensions', () => {
+  assert.equal(markdownPathname('/blog/reshapr-1.0.0-release'), '/blog/reshapr-1.0.0-release.md');
+  assert.equal(markdownPathname('/blog/reshapr-1.0.0-release/'), '/blog/reshapr-1.0.0-release.md');
+});
+
 test('serves Markdown and marks the response as varying by Accept', async () => {
   let downstreamRequest;
   const context = {

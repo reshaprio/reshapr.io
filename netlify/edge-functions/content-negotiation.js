@@ -15,7 +15,9 @@ export function markdownPathname(pathname) {
   };
 
   if (legacyAgentRoutes[routePath]) return legacyAgentRoutes[routePath];
-  if (/\.[^/]+$/.test(routePath)) return null;
+  if (/\.(html?|md|mdx|txt|xml|xsl|json|jsonld|css|js|mjs|map|webmanifest|ico|png|jpe?g|gif|svg|webp|avif|mp4|pdf|woff2?|ttf|eot|otf)$/i.test(routePath)) {
+    return null;
+  }
   if (routePath === '/') return '/index.md';
   if (routePath === '/docs') return '/docs/index.md';
   return `${routePath}.md`;
