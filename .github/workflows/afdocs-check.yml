@@ -1,0 +1,73 @@
+name: Agent-friendly docs check
+
+on:
+  schedule:
+    - cron: '30 23 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-26.04
+    steps:
+      - name: Check out documentation
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+
+      - name: Run agent-friendly docs check
+        id: afdocs
+        run: |
+          # afdocs exits non-zero whenever any check fails, so capture the
+          # result without letting that abort the job before we can react to it.
+          npx --yes afdocs check https://reshapr.io --format json --score > afdocs-result.json || true
+
+          # Missing/null scoring (e.g. the tool errored or the site was unreachable)
+          # is treated as the worst case so it still triggers an alert.
+          overall=$(jq '.scoring.overall // 0' afdocs-result.json)
+          grade=$(jq -r '.scoring.grade // "F"' afdocs-result.json)
+          echo "score=$overall" >> "$GITHUB_OUTPUT"
+          echo "grade=$grade" >> "$GITHUB_OUTPUT"
+          if [ "$overall" -lt 100 ]; then
+            echo "regression=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "regression=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          {
+            echo "Weekly [agentdocsspec.com](https://agentdocsspec.com/spec/) check on https://reshapr.io dropped below a perfect score."
+            echo
+            echo "**Overall: ${overall}/100 (${grade})**"
+            echo
+            echo "### Categories below 100"
+            jq -r '.scoring.categoryScores | to_entries[] | select(.value.score != null and .value.score < 100) | "- \(.key): \(.value.score)/100 (\(.value.grade))"' afdocs-result.json
+            echo
+            echo "### Failing / warning checks"
+            jq -r '.results[] | select(.status == "fail" or .status == "warn") | "- **\(.id)** (\(.category), \(.status)): \(.message)"' afdocs-result.json
+            echo
+            echo "Re-run locally: \`npx afdocs check https://reshapr.io --format scorecard\`"
+          } > afdocs-body.md
+
+      - name: Open issue on regression
+        if: steps.afdocs.outputs.regression == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # "documentation" is a shared label already used by unrelated open
+          # issues, so dedupe on title text instead of the label.
+          existing=$(gh issue list --search "agentdocsspec.com score dropped in:title" --state open --json number --jq 'length')
+          if [ "$existing" -gt 0 ]; then
+            echo "An open agentdocsspec.com regression issue already exists, skipping."
+            exit 0
+          fi
+
+          gh issue create \
+            --title "agentdocsspec.com score dropped to ${{ steps.afdocs.outputs.score }}/100 (${{ steps.afdocs.outputs.grade }})" \
+            --label documentation \
+            --body-file afdocs-body.md
