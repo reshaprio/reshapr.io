@@ -4,7 +4,7 @@
 
 **Product baseline:** reShapr `1.0.0`, controllers `0.0.3`, Helm charts `0.0.14`
 
-**Corpus:** 52 authored docs pages, 7 blog files, and 2 content tests
+**Corpus:** 52 authored docs pages, 8 blog files, and 2 content tests
 
 This matrix maps the semantic IDs in [`product-baseline.md`](product-baseline.md) to the current authored corpus. A blank Diataxis column is not automatically a gap: a capability needs only the page types that serve a real reader task.
 
@@ -242,6 +242,7 @@ Every blog file is `historical-only`, including posts that remain factually accu
 | `blog/six-use-cases-for-accelerating-ai-with-reshapr.mdx` | published snapshot | historical-only |
 | `blog/from-api-sprawl-to-agent-actions.mdx` | published snapshot | historical-only |
 | `blog/reshapr-vs-official-github-mcp.mdx` | published snapshot | historical-only |
+| `blog/building-sync-check-with-reshapr.mdx` | published snapshot | historical-only |
 | `blog/_draft-secure-mcp-deployment-with-reshapr.md` | draft snapshot | historical-only |
 
 ## Automated coverage
