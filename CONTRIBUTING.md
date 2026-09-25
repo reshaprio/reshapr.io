@@ -1,123 +1,89 @@
-# Contributing to reShapr Documentation
+# Contributing to reShapr
 
-Follow the organization-wide [contribution guide](https://github.com/reshaprio/.github/blob/main/CONTRIBUTING.md) for the Git and pull-request workflow. This document adds the authoring and validation rules specific to `reshapr.io`.
+We love your input! We want to make contributing to this project as easy and transparent as possible.
 
-## Prerequisites
+## Summary of the contribution flow
 
-- Node.js 20 or later
-- npm
+The following is a summary of the ideal contribution flow. Please, note that Pull Requests can also be rejected by the maintainers when appropriate.
 
-Install dependencies with `npm install`.
+``` bash
+    ┌───────────────────────┐
+    │                       │
+    │    Open an issue      │
+    │  (a bug report or a   │
+    │   feature request)    │
+    │                       │
+    └───────────────────────┘
+               ⇩
+    ┌───────────────────────┐
+    │                       │
+    │  Open a Pull Request  │
+    │   (only after issue   │
+    │     is approved)      │
+    │                       │
+    └───────────────────────┘
+               ⇩
+    ┌───────────────────────┐
+    │                       │
+    │   Your changes will   │
+    │     be merged and     │
+    │ published on the next │
+    │        release        │
+    │                       │
+    └───────────────────────┘
+```
 
-## Documentation Contract
+## Code of Conduct
 
-Write documentation in English and give each page one primary [Diátaxis](https://diataxis.fr/) purpose:
+reShapr has adopted a Code of Conduct that we expect project participants to adhere to. Please [read the full text](CODE_OF_CONDUCT.md) so that you can understand what sort of behaviour is expected.
 
-- **Tutorials** help a learner complete a reproducible journey.
-- **How-to guides** help a practitioner achieve a specific goal.
-- **Explanations** build understanding and remain conceptual.
-- **References** describe interfaces and behavior precisely.
+## Our Development Process
 
-Keep introductions, decisions, and the first useful example on `reshapr.io`. Keep exhaustive or volatile implementation details in the repository that owns them.
+We use Github to host code, to track issues and feature requests, as well as accept pull requests.
 
-The private [`docs-maintenance/`](docs-maintenance/README.md) registry tracks the released product baseline, documentation coverage, and update workflow. Update it when a capability, limitation, persona journey, or authored page changes; it is maintenance input and must not be published by Docusaurus.
+## Issues
 
-### Content ownership
+Open an issue in the repository you're contributing to **only** if you want to report a bug or a feature. Don't open issues for questions or support, instead join our [Discord `#support`](https://discord.gg/KyDUdam34h) channel and ask there.
 
-| Content | Canonical owner |
-|---|---|
-| Product architecture, runtime behavior, CLI, Web UI, and REST contracts | [`reshapr`](https://github.com/reshaprio/reshapr) |
-| Kubernetes controllers, CRDs, samples, and controller architecture | [`reshapr-controllers`](https://github.com/reshaprio/reshapr-controllers) |
-| Helm charts, values, and chart deployment details | [`reshapr-helm-charts`](https://github.com/reshaprio/reshapr-helm-charts) |
-| User journeys, concepts, orientation, and bounded examples | [`reshapr.io`](https://github.com/reshaprio/reshapr.io) |
+## Bug Reports and Feature Requests
 
-Do not copy complete CLI help, OpenAPI schemas, CRD schemas, Helm values tables, or deployment manifests into this site. Summarize the decision a reader must make, show the first useful example, and link to the canonical owner.
+Please use our issues templates that provide you with hints on what information we need from you to help you out.
 
-### Product terminology
+## Pull Requests
 
-Use **Gateway** for the logical resource represented in the database and exposed through the APIs, CLI, and Web UI. A Gateway records the identity, labels, addresses, version, and health advertised by one running proxy. Use **Gateway Group** for the logical selection target assigned to an Exposition.
+**Please, make sure you open an issue before starting with a Pull Request, unless it's a typo or a really obvious error.** Pull requests are the best way to propose changes to the specification. Take time to check the current working branch for the repository you want to contribute on before working :wink:
 
-Use **reShapr proxy**, or **proxy** after the first mention, for the deployable data-plane component: its process, runtime, container, image, workload, Helm release, configuration, logs, and metrics. A proxy registers a Gateway with the control plane and serves the MCP endpoints selected for that Gateway.
+### AI Contribution Policy
 
-Do not describe the reShapr proxy as an AI Gateway. AI Gateways are broader, complementary products; when appropriate, one can be deployed in front of an MCP endpoint served by a reShapr proxy. Preserve literal identifiers such as `Gateway`, `GatewayGroup`, `Gateway API token`, `RESHAPR_GATEWAY_ID`, and `reshapr-proxy`.
+If you use Generative AI tools (like GitHub Copilot, Cursor, etc.) to assist in your contributions, you must adhere to our [AI Contribution Policy](AI-POLICY.md). You are 100% accountable for your code, must explicitly disclose AI usage in your PR, and must not use AI tools to auto-reply to maintainers.
 
-## Evidence and Links
+## Testing
 
-Every technical capability or limitation must be supported by a public, tracked source such as code, a contract, a test, a release artifact, or owner documentation.
+New features and bug fixes should be accompanied by automated tests. Pull requests that add functionality without corresponding test coverage may be asked to add it before merging.
 
-Before adding a GitHub link:
+## Conventional commits
 
-1. Confirm that the target is tracked in its repository and available on GitHub.
-2. Link to the repository that owns the detail.
-3. Use a release tag for executable procedures and examples that depend on a specific version.
-4. Use the default branch for evolving concepts or implementation orientation.
-5. Keep all links within one executable guide consistent with the guide's stated release.
+Our repositories follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary) specification. Releasing to GitHub and NPM is done with the support of [semantic-release](https://semantic-release.gitbook.io/semantic-release/).
 
-Never use an untracked local file as canonical evidence. In particular, files that exist only in a neighboring checkout, private working tree, generated output, or ignored directory are not publishable references.
+Pull requests should have a title that follows the specification, otherwise, merging is blocked. If you are not familiar with the specification simply ask maintainers to modify. You can also use this cheatsheet if you want:
 
-Prefer relative links between pages in this repository. Preserve published URLs when moving content by adding a Docusaurus redirect or alias.
+- `fix:` prefix in the title indicates that PR is a bug fix and PATCH release must be triggered.
+- `feat:` prefix in the title indicates that PR is a feature and MINOR release must be triggered.
+- `docs:` prefix in the title indicates that PR is only related to the documentation and there is no need to trigger release.
+- `chore:` prefix in the title indicates that PR is only related to cleanup in the project and there is no need to trigger release.
+- `test:` prefix in the title indicates that PR is only related to tests and there is no need to trigger release.
+- `refactor:` prefix in the title indicates that PR is only related to refactoring and there is no need to trigger release.
 
-## Executable Documentation
+What about MAJOR release? just add `!` to the prefix, like `fix!:` or `refactor!:`
 
-The current documentation baseline is reShapr `1.0.0`, controllers `0.0.3`, and Helm charts `0.0.14`. Tutorials and how-to guides that contain commands must:
+Prefix that follows specification is not enough though. Remember that the title must be clear and descriptive with usage of [imperative mood](https://chris.beams.io/posts/git-commit/#imperative).
 
-- declare the verification target in frontmatter so the theme can render it below the page title:
+Happy contributing :heart:
 
-	```yaml
-	verification:
-		product: reShapr
-		version: 1.0.0
-		date: YYYY-MM-DD
-	```
+## License
 
-- use commands, options, images, outputs, and release links compatible with the component versions named by the page;
-- label generated identifiers, timestamps, hostnames, and other changing output as examples;
-- include an observable success check;
-- state relevant limitations rather than implying unsupported guarantees.
+When you submit changes, your submissions are understood to be under the same [Apache 2.0 License](LICENSE) that covers the project. Feel free to [contact the maintainers](MAINTAINERS.md) if that's a concern.
 
-When the baseline changes, update the marker and examples only after replaying the documented procedure.
+## References
 
-## Page Structure
-
-Use only the sections that support the page's Diátaxis purpose.
-
-### Tutorials
-
-- `Prerequisites`: what the learner needs before starting.
-- `Result`: the observable outcome produced by the journey.
-- `Next step`: the next useful journey or concept.
-- `Limits`: relevant boundaries that could change the learner's expectations.
-
-The final tutorial step must verify the promised result.
-
-### How-to guides
-
-- `Prerequisites`: required access, tools, and state.
-- `Result`: how to verify that the goal was achieved.
-- `Limits`: operational or product boundaries relevant to the task.
-- `Next step`: a related task when one naturally follows.
-
-### Explanations
-
-Do not force procedural sections into an explanation. Link to tutorials or how-to guides for execution and to references for exhaustive details.
-
-### References
-
-Identify the canonical owner and version sensitivity of volatile interfaces. Prefer precise tables and examples, but link rather than duplicate exhaustive owner contracts.
-
-## Generated Content
-
-Do not edit `build/**`, `llms.txt`, `llms-full.txt`, generated route Markdown, or `.docusaurus/**` manually. The build creates and validates machine-readable content from the authored sources.
-
-## Validation
-
-Before opening a pull request:
-
-1. Recheck technical claims against their canonical owner.
-2. Verify local, GitHub, and external links.
-3. Replay changed executable steps against their stated release.
-4. Run `npm run docs:audit`.
-5. Run `npm run build`.
-6. Review generated human-facing and machine-readable content for contradictory claims.
-
-The build must complete successfully before the documentation change is ready for review.
+This document was adapted from the open-source contribution guidelines for [Facebook's Draft](https://github.com/facebook/draft-js/blob/master/CONTRIBUTING.md).
