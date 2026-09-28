@@ -1,7 +1,89 @@
 diff --git a/node_modules/docusaurus-plugin-llms/lib/generator.js b/node_modules/docusaurus-plugin-llms/lib/generator.js
+index f769ecb..076769f 100644
 --- a/node_modules/docusaurus-plugin-llms/lib/generator.js
 +++ b/node_modules/docusaurus-plugin-llms/lib/generator.js
-@@ -281,7 +281,7 @@ async function generateIndividualMarkdownFiles(docs, outputDir, siteUrl, docsDir
+@@ -63,6 +63,60 @@ function cleanDescriptionForToc(description) {
+     // Truncate if too long (150 characters max with ellipsis)
+     return cleaned.length > 150 ? cleaned.substring(0, 147) + '...' : cleaned;
+ }
++const RELATIVE_LINK_PATTERN = /(!?\[[^\]\n]*\])\(([^)]*)\)/g;
++const LINK_HAS_SCHEME = /^[a-zA-Z][a-zA-Z0-9+.-]*:/;
++/**
++ * Concatenating per-document content into one file (llms-full.txt) strips
++ * the base URL each relative link relied on. Resolve every link against the
++ * document's own URL so cross-references keep working once the sections are
++ * merged.
++ * @param content - Markdown content for a single document
++ * @param docUrl - The document's absolute URL
++ */
++function resolveRelativeLinksForBundle(content, docUrl) {
++    let origin;
++    let selfPath;
++    let fileDir;
++    try {
++        const parsed = new URL(docUrl);
++        origin = parsed.origin;
++        selfPath = parsed.pathname;
++        fileDir = path.posix.dirname(selfPath);
++    }
++    catch {
++        return content;
++    }
++    let inFence = false;
++    return content.split('\n').map(line => {
++        if (/^\s*```/.test(line)) {
++            inFence = !inFence;
++            return line;
++        }
++        if (inFence)
++            return line;
++        return line.replace(RELATIVE_LINK_PATTERN, (match, label, inner) => {
++            const spaceIndex = inner.search(/\s/);
++            const url = spaceIndex === -1 ? inner : inner.slice(0, spaceIndex);
++            const rest = spaceIndex === -1 ? '' : inner.slice(spaceIndex);
++            if (!url || LINK_HAS_SCHEME.test(url) || url.startsWith('//'))
++                return match;
++            const hashIndex = url.indexOf('#');
++            const pathPart = hashIndex === -1 ? url : url.slice(0, hashIndex);
++            const fragment = hashIndex === -1 ? '' : url.slice(hashIndex);
++            let routePath;
++            if (pathPart === '') {
++                routePath = selfPath;
++            }
++            else if (pathPart.startsWith('/')) {
++                routePath = pathPart;
++            }
++            else {
++                routePath = path.posix.normalize(path.posix.join(fileDir, pathPart));
++            }
++            return `${label}(${origin}${routePath}${fragment}${rest})`;
++        });
++    }).join('\n');
++}
+ /**
+  * Generate an LLM-friendly file
+  * @param docs - Processed document information
+@@ -95,8 +149,9 @@ async function generateLLMFile(docs, outputPath, fileTitle, fileDescription, inc
+                 utils_1.logger.verbose(`Processing batch ${batchNumber}/${totalBatches} (${batch.length} documents)`);
+             }
+             const batchSections = batch.map(doc => {
++                const absoluteContent = resolveRelativeLinksForBundle(doc.content, doc.url);
+                 // Check if content already starts with the same heading to avoid duplication
+-                const trimmedContent = doc.content.trim();
++                const trimmedContent = absoluteContent.trim();
+                 const contentLines = trimmedContent.split('\n');
+                 const firstLine = contentLines.length > 0 ? contentLines[0] : '';
+                 // Check if the first line is a heading that matches our title
+@@ -125,7 +180,7 @@ ${restOfContent}`;
+                     // Content doesn't have the same heading, add our unique H2 header
+                     return `## ${uniqueHeader}
+
+-${doc.content}`;
++${absoluteContent}`;
+                 }
+             });
+             fullContentSections.push(...batchSections);
+@@ -281,7 +336,7 @@ async function generateIndividualMarkdownFiles(docs, outputDir, siteUrl, docsDir
          // Create updated DocInfo with new URL pointing to the generated markdown file
          // Convert file path to URL path (use forward slashes)
          const urlPath = (0, utils_1.normalizePath)(uniquePath);
@@ -11,9 +93,10 @@ diff --git a/node_modules/docusaurus-plugin-llms/lib/generator.js b/node_modules
              ...doc,
              url: newUrl,
 diff --git a/node_modules/docusaurus-plugin-llms/lib/utils.js b/node_modules/docusaurus-plugin-llms/lib/utils.js
+index ed9850c..79c0746 100644
 --- a/node_modules/docusaurus-plugin-llms/lib/utils.js
 +++ b/node_modules/docusaurus-plugin-llms/lib/utils.js
-@@ -555,6 +555,11 @@ function cleanMarkdownContent(content, excludeImports = false, removeDuplicateH
+@@ -555,6 +555,11 @@ function cleanMarkdownContent(content, excludeImports = false, removeDuplicateHeadings = false) {
          // - import "..."; (side-effect imports)
          cleaned = cleaned.replace(/^\s*import\s+.*?;?\s*$/gm, '');
      }
