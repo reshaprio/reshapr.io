@@ -15,15 +15,33 @@ const {
 } = require('./machine-content');
 
 const errors = [];
+const HAS_SCHEME = /^[a-zA-Z][a-zA-Z0-9+.-]*:/;
 
 for (const markdownPath of walkMarkdown(BUILD_DIR)) {
   const content = fs.readFileSync(markdownPath, 'utf8');
   const opening = content.slice(0, 1000);
+  const relativePath = path.relative(BUILD_DIR, markdownPath).split(path.sep).join('/');
 
   if (!opening.includes(MACHINE_DIRECTIVE)) {
     errors.push(
-      `${path.relative(BUILD_DIR, markdownPath)} does not contain the Agent View directive near the top of the page.`,
+      `${relativePath} does not contain the Agent View directive near the top of the page.`,
     );
+  }
+
+  const lines = content.split('\n');
+  let inFence = false;
+  for (const line of lines) {
+    if (/^\s*```/.test(line)) {
+      inFence = !inFence;
+      continue;
+    }
+    if (inFence) continue;
+
+    for (const match of line.matchAll(/!?\[[^\]\n]*\]\(([^)\s]+)/g)) {
+      const url = match[1];
+      if (HAS_SCHEME.test(url) || url.startsWith('//')) continue;
+      errors.push(`${relativePath} has a link unresolvable without a base URL: ${url}`);
+    }
   }
 }
 
