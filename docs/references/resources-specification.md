@@ -4,7 +4,7 @@ description: Define MCP Resources to share contextual data — files, schemas, o
 
 # Resources
 
-As explained in **[Why reShapr?](../overview/why-reshapr.md)**, reShapr can create secure MCP servers in seconds without coding, just by importing your API’s existing artifacts - like **[OpenAPI 3.x](https://www.openapis.org/)** specs, **[GraphQL](https://graphql.org/)** schemas, and **[gRPC/Protobuf](https://grpc.io/)** definitions. These artifacts are directly used to produce **[MCP Tools](https://modelcontextprotocol.io/specification/2025-06-18/server/tools)** that are at the core of the Model Context Protocol. Another interesting aspect of MCP is that it may be composed of **[Resources](https://modelcontextprotocol.io/specification/2025-06-18/server/resources)**. Resources allow servers to share data that provides context to LLM, such as files, database schemas, or application-specific information.
+As explained in **[Why reShapr?](../overview/why-reshapr.md)**, reShapr can create secure MCP servers in seconds without coding, just by importing your API’s existing artifacts - like **[OpenAPI 3.x](https://www.openapis.org/)** specs, **[GraphQL](https://graphql.org/)** schemas, and **[gRPC/Protobuf](https://grpc.io/)** definitions. These artifacts are directly used to produce **[MCP Tools](https://modelcontextprotocol.io/specification/2026-07-28/server/tools)** that are at the core of the Model Context Protocol. Another interesting aspect of MCP is that it may be composed of **[Resources](https://modelcontextprotocol.io/specification/2026-07-28/server/resources)**. Resources allow servers to share data that provides context to LLM, such as files, database schemas, or application-specific information.
 
 The key difference with tools is intent and usage pattern:
 
@@ -53,7 +53,7 @@ A `Resources` artifact follows some simple rules:
   - A resource **must** always have a `name` that defines its short name,
   - A resource **may** provide optional `title`, `description`, `mimeType` and `icons` to provide more context to the Agent when choosing an appropriate resource,
   - A resource **may** also specify its content by using either a `text` or a `blob` property. `text` specifies its content as plain text, `blob` value must be encoded using Base64
-  - A resource  **may** also specify `annotations` that provide hints to clients about how to use or display the resource. More on this in the **[official MCP documentation](https://modelcontextprotocol.io/specification/2025-11-25/server/resources#annotations)**.
+  - A resource  **may** also specify `annotations` that provide hints to clients about how to use or display the resource. More on this in the **[official MCP documentation](https://modelcontextprotocol.io/specification/2026-07-28/server/resources#annotations)**.
 
 You can specify as many resources as you want in the same `Resources` artifact file.
 
