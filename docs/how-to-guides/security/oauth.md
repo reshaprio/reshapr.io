@@ -15,7 +15,7 @@ This guide protects MCP endpoints served by the proxy. To authenticate Web UI an
 :::
 
 :::info Client ID Metadata Document compatibility
-reShapr accepts bearer JWTs issued after an MCP client registers through a [Client ID Metadata Document (CIMD)](https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization#client-id-metadata-documents). CIMD lets the Authorization Server identify the MCP client from a metadata document hosted at its HTTPS `client_id` URL; the Authorization Server, not CIMD, issues the access token.
+reShapr accepts bearer JWTs issued after an MCP client registers through a [Client ID Metadata Document (CIMD)](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization/client-registration#client-id-metadata-documents). CIMD lets the Authorization Server identify the MCP client from a metadata document hosted at its HTTPS `client_id` URL; the Authorization Server, not CIMD, issues the access token.
 
 The proxy does not participate in that client-registration step. It validates the resulting JWT in the same way as any other bearer token: against the configured issuer, JWKS, required claims, expiration, and scopes.
 :::
