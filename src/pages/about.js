@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
 import {m} from 'motion/react';
@@ -83,6 +84,106 @@ const founders = [
   },
 ];
 
+const personas = [
+  {
+    icon: '🧑‍💻',
+    name: 'Developer / Agent builder',
+    need: 'Turn an API into an MCP server and start consuming it in minutes.',
+    how: (
+      <>
+        Import an <strong>OpenAPI</strong>, <strong>GraphQL</strong>, or{' '}
+        <strong>Protobuf/gRPC</strong> contract and get working MCP tools
+        instantly. Custom Tools then reshape them into the exact action your
+        agent needs.
+      </>
+    ),
+    win: (
+      <>
+        <strong>One named action, one input schema, one output shape</strong>,
+        instead of an agent replanning the same multi-step loop every time.
+      </>
+    ),
+  },
+  {
+    icon: '🧩',
+    name: 'API / Platform engineer',
+    need: 'Govern Services, Configuration Plans, Expositions, and integrations.',
+    how: (
+      <>
+        A Configuration Plan controls routing, timeouts, and which operations
+        are visible. Changes <strong>stream live</strong> to connected
+        proxies, with no restart.
+      </>
+    ),
+    win: (
+      <>
+        The same Service backs several Expositions, so a partner-facing and an
+        internal endpoint share <strong>one governed source of truth</strong>.
+      </>
+    ),
+  },
+  {
+    icon: '☸️',
+    name: 'SRE / Kubernetes operator',
+    need: 'Deploy, secure, scale, observe, and troubleshoot the platform.',
+    how: (
+      <>
+        Seven CRDs reconcile reShapr <strong>the GitOps way</strong>, a webhook
+        injects the proxy as a sidecar, and four Cosign-signed Helm charts
+        install each component.
+      </>
+    ),
+    win: (
+      <>
+        <strong>One less network hop and one less shared gateway</strong> to
+        run and scale on its own.
+      </>
+    ),
+  },
+  {
+    icon: '🛡️',
+    name: 'Security architect',
+    need: 'Apply authentication and authorization consistently across every MCP server.',
+    how: (
+      <>
+        Bring your own <strong>IdP</strong>, accept clients registered with
+        Client ID Metadata Documents, and resolve backend credentials through
+        OAuth profiles or MCP Elicitation instead of hardcoding them.
+      </>
+    ),
+    win: (
+      <>
+        One Configuration Plan{' '}
+        <strong>enforces identical security policy across every Exposition</strong>.
+      </>
+    ),
+  },
+  {
+    icon: '🎯',
+    name: 'Technology decision-maker',
+    need: 'Evaluate functional coverage, deployment models, and limitations.',
+    how: (
+      <>
+        One <strong>Apache-2.0</strong> project covers any API contract under a
+        single MCP layer, deployable with Docker Compose, Kubernetes, and Helm.
+      </>
+    ),
+    win: (
+      <>
+        Instead of N servers with N security reviews, a{' '}
+        <strong>single auditable risk surface</strong> and faster delivery of
+        the next integration.
+      </>
+    ),
+  },
+];
+
+const gatewayHighlights = [
+  {label: 'reShapr', text: 'API-to-MCP transformation, Context Control, tool governance'},
+  {label: 'Gateway (optional)', text: 'traffic routing and policy across MCP servers'},
+  {label: 'Your backends', text: 'unchanged REST, GraphQL, and gRPC services'},
+];
+
 export default function AboutPage() {
   const motion = usePageRevealMotion();
 
@@ -119,8 +220,8 @@ export default function AboutPage() {
                 </m.p>
                 <m.p variants={motion.itemVariants} className={styles.body}>
                   Our platform instantly transforms your existing APIs (REST,
-                  gRPC, GraphQL) into <strong>production-grade MCP servers</strong>:
-                  no code, no vendor lock-in, no compromises. You stay in control,
+                  gRPC, GraphQL) into <strong>governed, LLM-optimized MCP tools</strong>:
+                  no rewrite, no vendor lock-in, no compromises. You stay in control,
                   deploy anywhere, and <strong>accelerate AI initiatives</strong> without rewriting a thing.
                 </m.p>
                 <m.p variants={motion.itemVariants} className={styles.body}>
@@ -183,6 +284,73 @@ export default function AboutPage() {
                 </div>
               </div>
 
+              {/* ── Personas ─────────────────────────────────────────────── */}
+              <div className={styles.personasWrap}>
+                <Heading as="h2" className={styles.personasTitle}>
+                  Who reShapr is for
+                </Heading>
+                <p className={styles.personasIntro}>
+                  reShapr serves <strong>every role</strong> that takes an API
+                  from <strong>idea to governed production</strong>. See the
+                  full detail in the{' '}
+                  <Link to="/blog/reshapr-1.0.0-release#built-for-every-persona">
+                    1.0.0 release notes
+                  </Link>
+                  .
+                </p>
+                <div className={styles.personasGrid}>
+                  {personas.map((persona, index) => (
+                    <m.article
+                      key={persona.name}
+                      className={styles.personaCard}
+                      initial={motion.inViewHidden}
+                      whileInView={motion.inViewBase}
+                      viewport={{once: true, margin: '-48px 0px', amount: 0.15}}
+                      transition={motion.cardTransition(index)}>
+                      <div className={styles.personaHead}>
+                        <Heading as="h3" className={styles.personaName}>
+                          <span aria-hidden>{persona.icon}</span> {persona.name}
+                        </Heading>
+                        <p className={styles.personaNeed}>{persona.need}</p>
+                      </div>
+                      <div className={styles.personaBody}>
+                        <p>{persona.how}</p>
+                        <p className={styles.personaWin}>
+                          <span className={styles.personaWinLabel}>The win</span>{' '}
+                          {persona.win}
+                        </p>
+                      </div>
+                    </m.article>
+                  ))}
+                </div>
+              </div>
+
+              {/* ── Gateway positioning ──────────────────────────────────── */}
+              <m.div
+                className={styles.gatewayBlock}
+                initial={motion.inViewHidden}
+                whileInView={motion.inViewBase}
+                viewport={{once: true, margin: '-48px 0px', amount: 0.2}}
+                transition={motion.cardTransition(0)}>
+                <div>
+                  <Heading as="h2" className={styles.gatewayTitle}>
+                    Not a gateway. Better together.
+                  </Heading>
+                  <p className={styles.gatewayText}>
+                    reShapr <strong>transforms and governs</strong> your APIs into
+                    MCP tools. An <strong>MCP or AI gateway</strong> can sit in
+                    front of it for traffic-layer routing and policy.{' '}
+                    <strong>Use them together</strong>, or use reShapr on its own.
+                  </p>
+                </div>
+                <ul className={styles.gatewayList}>
+                  {gatewayHighlights.map((item) => (
+                    <li key={item.label}>
+                      <strong>{item.label}</strong>: {item.text}
+                    </li>
+                  ))}
+                </ul>
+              </m.div>
             </div>
           </section>
         </main>

@@ -225,8 +225,8 @@
   max-width: 720px;
   margin-bottom: 0;
   color: var(--ifm-font-color-base);
-  font-size: clamp(2.3rem, 1.5rem + 3vw, 4.3rem);
-  line-height: 1.08;
+  font-size: clamp(2.1rem, 1.4rem + 2.2vw, 3.5rem);
+  line-height: 1.1;
   letter-spacing: -0.02em;
   font-weight: 650;
 }
@@ -247,6 +247,83 @@
   color: var(--ifm-font-color-base);
   font-size: 1.2rem;
   line-height: 1.55;
+}
+
+.heroBadges {
+  margin: 0;
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
+.benchmark {
+  display: flex;
+  flex-direction: column;
+  gap: var(--reshapr-landing-gap);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.promptCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--reshapr-space-3);
+  padding: var(--reshapr-space-5) var(--reshapr-space-6);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--ifm-background-color) 50%, var(--ifm-background-surface-color));
+}
+
+.promptLabel {
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.promptText {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ifm-font-color-base);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.benchmarkChart {
+  width: 100%;
+  height: auto;
+}
+
+.seeAlso {
+  margin: 0;
+  text-align: center;
+}
+
+.testimonialGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+@media screen and (min-width: 997px) {
+  .testimonialGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.adopterLink.adopterLink {
+  font-weight: 400;
+  color: var(--ifm-link-color);
+  text-decoration: underline;
+}
+
+.textCard {
+  display: block;
 }
 
 .buttons {
@@ -599,26 +676,13 @@
   font-weight: 700;
 }
 
-/* Panel checklist: symmetric spacing above and below each divider */
+/* Panel checklist: plain list without dividers */
 .panelCheckList li {
   margin-bottom: 0;
 }
 
 .panelCheckList li:not(:last-child) {
   padding-bottom: 1.5rem;
-}
-
-.panelCheckList li + li {
-  border-top: 1px solid var(--ifm-color-emphasis-200);
-  padding-top: 1.5rem;
-}
-
-.panelCheckList li + li::before {
-  top: 1.5rem;
-}
-
-[data-theme='dark'] .panelCheckList li + li {
-  border-color: var(--ifm-color-emphasis-300);
 }
 
 .ctaSection {

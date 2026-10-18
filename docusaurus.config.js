@@ -11,7 +11,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'reShapr',
-  tagline: 'The No-Code MCP Server for AI-Native API Access',
+  tagline: 'Turn your APIs AI-Native, without rebuilding them',
   favicon: 'favicon.ico',
   headTags: [
     {
@@ -139,12 +139,12 @@ const config = {
         removeDuplicateHeadings: true,
         generateMarkdownFiles: true,
         description:
-          'reShapr is a no-code AI translation layer that instantly converts existing APIs (REST, gRPC, GraphQL) into secure, production-ready MCP (Model Context Protocol) servers — without writing a line of code.',
+          'reShapr is an open source runtime that turns existing APIs (REST, GraphQL, gRPC) into governed, LLM-optimized MCP (Model Context Protocol) tools, without writing a bespoke MCP server for each API.',
         rootContent: `reShapr enables enterprises to expose their APIs to AI agents and LLMs via the Model Context Protocol. It handles authentication, authorization, context control, and multi-tenant deployment so teams can move from API to AI-native endpoint in seconds.
 
 **Key concepts:**
 - **MCP (Model Context Protocol)**: An open standard by Anthropic for connecting LLMs to external tools and data sources. reShapr implements and extends it for enterprise use.
-- **No-code server creation**: Connect an existing API artifact (OpenAPI spec, gRPC proto, etc.) and reShapr generates a secure MCP server automatically.
+- **Zero-rewrite server creation**: Connect an existing API artifact (OpenAPI spec, gRPC proto, etc.) and reShapr generates MCP tools automatically.
 - **Context control**: reShapr filters which tools are exposed to which agents, preventing context overload and keeping LLM interactions precise.
 - **Gateway groups**: Logical groupings of MCP gateways for multi-tenant and multi-environment deployments.
 - **Hybrid deployment**: Run reShapr in the cloud, on-premise, or in hybrid configurations via Docker Compose or Helm charts.

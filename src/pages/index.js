@@ -4,9 +4,10 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import {m} from 'motion/react';
-import {Code, Copy, Globe, ShieldCheck} from 'lucide-react';
+import {Copy, Filter, Globe, Layers, Scale, ShieldCheck, SquareTerminal} from 'lucide-react';
 
 import Heading from '@theme/Heading';
+import ThemedImage from '@theme/ThemedImage';
 import {ICON_SIZE_INLINE_PX, ICON_SIZE_LP_FEATURE_PX} from '@site/src/constants/iconSizes';
 import VideoWithPlaceholder from '@site/src/components/VideoWithPlaceholder';
 import PageMotionRoot, {scrollEase, usePageRevealMotion} from '@site/src/components/PageMotion';
@@ -72,29 +73,200 @@ const featureIconProps = {
 
 const featureCards = [
   {
-    title: 'No-code API translation',
-    description:
-      'Turn existing REST, GraphQL, and gRPC services into MCP endpoints without writing code.',
-    icon: <Code {...featureIconProps} />,
+    title: 'Context Control',
+    description: (
+      <>
+        <strong>Custom Tools</strong> reshape generated tools into the exact
+        action an agent needs, and <strong>Tools Output Filtering</strong>{' '}
+        trims payloads before they reach the model.
+      </>
+    ),
+    icon: <Filter {...featureIconProps} />,
   },
   {
-    title: 'Security-first exposure',
-    description:
-      'Apply API key or OAuth protections, backend secrets, and operation filters before agents can call tools.',
+    title: 'Code Mode',
+    description: (
+      <>
+        Let agents <strong>search tools</strong>,{' '}
+        <strong>discover API types</strong>, and{' '}
+        <strong>run code in a hardened sandbox</strong> instead of loading
+        every tool definition into context.
+      </>
+    ),
+    icon: <SquareTerminal {...featureIconProps} />,
+  },
+  {
+    title: 'Governance & security',
+    description: (
+      <>
+        <strong>API key or OAuth</strong> protection, backend secrets,
+        operation filters, quotas, and audit, applied{' '}
+        <strong>before any agent can call a tool</strong>.
+      </>
+    ),
     icon: <ShieldCheck {...featureIconProps} />,
   },
   {
-    title: 'Deploy Anywhere',
-    description:
-      'Expose endpoints and run reShapr in your own trust domain for stricter data boundaries.',
+    title: 'Zero rewrite',
+    description: (
+      <>
+        Your <strong>backends stay untouched</strong>. Import an OpenAPI,
+        GraphQL, or Protobuf contract and get working MCP tools for{' '}
+        <strong>any MCP client</strong>.
+      </>
+    ),
+    icon: <Layers {...featureIconProps} />,
+  },
+  {
+    title: 'Run anywhere',
+    description: (
+      <>
+        Use the CLI on your laptop, <strong>Docker Compose</strong>, or{' '}
+        <strong>Kubernetes</strong> with Helm charts and controllers, all
+        inside <strong>your own trust domain</strong>.
+      </>
+    ),
     icon: <Globe {...featureIconProps} />,
+  },
+  {
+    title: 'Open and neutral',
+    description: (
+      <>
+        <strong>Apache-2.0</strong> licensed, with{' '}
+        <strong>organization-balanced governance</strong>, built by the
+        co-founders of{' '}
+        <a href="https://microcks.io/">
+          <strong>Microcks</strong>
+        </a>
+        .
+      </>
+    ),
+    icon: <Scale {...featureIconProps} />,
   },
 ];
 
-const highlights = [
-  'OpenAPI, GraphQL, gRPC to MCP conversion',
-  'Security and policy controls before exposure',
-  'Cloud native and flexible deployment patterns',
+const BENCHMARK_PROMPT = `Using the available GitHub MCP tools, analyze recent pull request velocity for the public repository microsoft/vscode.
+
+Use the 10 most recently updated pull requests. For each pull request, collect the pull request details, up to 5 review touchpoints, and up to 10 changed file paths.
+
+Return a compact summary with pull request id, title, creator, state, creation and merge timestamps, review touchpoints, and changed paths.`;
+
+const problems = [
+  {
+    title: 'Context overload',
+    description: (
+      <>
+        Raw API responses <strong>waste tokens</strong> and{' '}
+        <strong>degrade tool selection</strong>. reShapr filters outputs and
+        composes calls so the model <strong>only sees what matters</strong>.
+      </>
+    ),
+  },
+  {
+    title: 'MCP server sprawl',
+    description: (
+      <>
+        One hand-built MCP server per API and per team means one{' '}
+        <strong>security review</strong> and one <strong>cost footprint</strong>{' '}
+        each. reShapr gives you a{' '}
+        <strong>single governed control plane</strong>.
+      </>
+    ),
+  },
+  {
+    title: 'Agents replanning workflows',
+    description: (
+      <>
+        Multi-step workflows get <strong>re-derived on every run</strong>.
+        Custom Tools turn them into{' '}
+        <strong>one compact, governed action</strong>.
+      </>
+    ),
+  },
+];
+
+const testimonials = [
+  {
+    quote:
+      'The first results from our reShapr evaluation at AXA are very promising. It addresses complex enterprise challenges with rare clarity and a true open source heart. As a maintainer in the CNCF space, I’m excited to support this community effort and see how it transforms how we expose services to agents.',
+    name: 'Sebastien Degodez',
+    link: 'https://www.linkedin.com/in/sebastien-degodez/',
+    role: 'Software Engineer | TechLead',
+  },
+  {
+    quote:
+      'When organizations have hundreds or even thousands of APIs to maintain, speed and security become non-negotiable. reShapr transforms how existing services are exposed to agents, delivering an unmatched FinOps ratio and the fastest path to production. It’s a definitive solution for scaling agentic context within highly regulated environments.',
+    name: 'Ludovic Pourrat',
+    link: 'https://www.linkedin.com/in/ludovic-pourrat/',
+    role: 'API Architect | Platform Architect',
+  },
+  {
+    quote:
+      'I’m excited by reShapr’s clear purpose and the co-founders’ vision, which directly address the real-world challenges I see across the organizations I work with. Open-sourcing such a critical component to advance MCP democratization is a meaningful step forward for the ecosystem, and I’m genuinely looking forward to being part of this journey and helping build a strong, open community around reShapr.',
+    name: 'Sébastien Blanc',
+    link: 'https://www.linkedin.com/in/s%C3%A9bastien-blanc-08a73b1/',
+    role: 'Java Champion | Technical Director',
+  },
+  {
+    quote: (
+      <>
+        I use reShapr to let AI assistants work with business systems:
+        PayCaptain’s payroll API and, for a client in fashion retail, a PLM
+        product catalog they can query in plain language and sync to multiple
+        Shopify stores (products and prices), served from{' '}
+        <Link to="/blog/building-sync-check-with-reshapr">
+          one consolidated MCP server built with cross-service scripted Custom
+          Tools
+        </Link>
+        .
+      </>
+    ),
+    name: 'Guillaume Goisset',
+    link: 'https://low-code-consultant.com',
+    role: (
+      <>
+        Head of Automation at{' '}
+        <a
+          className={styles.adopterLink}
+          href="https://github.com/reshaprio/.github/blob/main/ADOPTERS.md">
+          PayCaptain and independent consultant
+        </a>
+      </>
+    ),
+  },
+];
+
+const steps = [
+  {
+    title: '1. Import',
+    description: (
+      <>
+        Point reShapr at an <strong>OpenAPI</strong>, <strong>GraphQL</strong>,
+        or <strong>Protobuf/gRPC</strong> contract. Working MCP tools are{' '}
+        <strong>generated immediately</strong>.
+      </>
+    ),
+  },
+  {
+    title: '2. Reshape',
+    description: (
+      <>
+        <strong>Rename and pin arguments</strong>,{' '}
+        <strong>orchestrate several services into one tool</strong>, filter
+        responses, and choose <strong>tools, code, or hybrid</strong> exposure.
+      </>
+    ),
+  },
+  {
+    title: '3. Govern and expose',
+    description: (
+      <>
+        Protect endpoints with <strong>API key or OAuth</strong>, set quotas,
+        and version everything in <strong>Configuration Plans</strong>. Then
+        run it on <strong>your own infrastructure</strong>.
+      </>
+    ),
+  },
 ];
 
 function HomepageHeader() {
@@ -115,15 +287,24 @@ function HomepageHeader() {
           animate="visible">
           <m.div variants={itemVariants}>
             <Heading as="h1" className={styles.heroTitle}>
-              The open source, no-code MCP Server for{' '}
+              Turn your APIs{' '}
               <span className={styles.heroTitleBreak} />
-              AI-Native API Access
+              <span style={{color: '#16BA96'}}>AI-Native</span>, without rebuilding them.
             </Heading>
           </m.div>
 
           <m.p variants={itemVariants} className={styles.heroSubtitle}>
-            Build a uniform API value chain for AI agents with secure, no-code
-            endpoint translation across your existing API services.
+            reShapr is the <strong>open source runtime</strong> that turns the
+            REST, GraphQL, and gRPC APIs you already have into{' '}
+            <strong>governed, LLM-optimized MCP tools</strong>. No bespoke MCP
+            server to build and maintain for every API.
+          </m.p>
+          <m.p variants={itemVariants} className={styles.heroBadges}>
+            <Link href="https://github.com/reshaprio/reshapr/blob/main/LICENSE">Apache-2.0</Link>
+            {' · '}
+            <Link to="/docs/explanations/mcp-compatibility">Model Context Protocol</Link>
+            {' · '}
+            <Link to="/blog/reshapr-1.0.0-release">Stable 1.x (semver)</Link>
           </m.p>
 
           <m.div variants={itemVariants} className={styles.buttons}>
@@ -188,6 +369,40 @@ function HomepageMain() {
 
   return (
     <main>
+      <section className={styles.sectionAlt}>
+        <div className="container">
+          <m.div
+            className={styles.sectionHeader}
+            initial={inViewHidden}
+            whileInView={inViewBase}
+            viewport={{once: true, margin: '-72px 0px', amount: 0.25}}
+            transition={headerTransition}>
+            <Heading as="h2">Your APIs weren't designed for agents. reShapr reshapes them.</Heading>
+            <p>
+              Agents need <strong>small, precise, governed actions</strong>.
+              Your APIs return <strong>large, general-purpose responses</strong>.
+              reShapr <strong>closes that gap</strong>.
+            </p>
+          </m.div>
+          <div className={styles.featureGrid}>
+            {problems.map((item, index) => (
+              <m.article
+                key={item.title}
+                className={clsx(styles.featureCard, styles.textCard)}
+                initial={inViewHidden}
+                whileInView={inViewBase}
+                viewport={{once: true, margin: '0px 0px -10% 0px', amount: 0.15}}
+                transition={cardTransition(index)}>
+                <div className={styles.featureBody}>
+                  <Heading as="h3">{item.title}</Heading>
+                  <p>{item.description}</p>
+                </div>
+              </m.article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className={styles.section}>
         <div className="container">
           <m.div
@@ -196,10 +411,70 @@ function HomepageMain() {
             whileInView={inViewBase}
             viewport={{once: true, margin: '-72px 0px', amount: 0.25}}
             transition={headerTransition}>
-            <Heading as="h2">Everything you need to ship MCP endpoints</Heading>
+            <Heading as="h2">The feedback we received</Heading>
+          </m.div>
+          <div className={styles.testimonialGrid}>
+            {testimonials.map((item, index) => (
+              <m.div
+                key={item.name}
+                className="testimonial-card"
+                initial={inViewHidden}
+                whileInView={inViewBase}
+                viewport={{once: true, margin: '0px 0px -10% 0px', amount: 0.15}}
+                transition={cardTransition(index)}>
+                <blockquote>{item.quote}</blockquote>
+                <div className="testimonial-author">
+                  <a href={item.link}>{item.name}</a>
+                  <span className="testimonial-role">{item.role}</span>
+                </div>
+              </m.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.sectionAlt}>
+        <div className="container">
+          <m.div
+            className={styles.sectionHeader}
+            initial={inViewHidden}
+            whileInView={inViewBase}
+            viewport={{once: true, margin: '-72px 0px', amount: 0.25}}
+            transition={headerTransition}>
+            <Heading as="h2">From API contract to agent-ready tools in three steps</Heading>
+          </m.div>
+          <div className={styles.featureGrid}>
+            {steps.map((item, index) => (
+              <m.article
+                key={item.title}
+                className={clsx(styles.featureCard, styles.textCard)}
+                initial={inViewHidden}
+                whileInView={inViewBase}
+                viewport={{once: true, margin: '0px 0px -10% 0px', amount: 0.15}}
+                transition={cardTransition(index)}>
+                <div className={styles.featureBody}>
+                  <Heading as="h3">{item.title}</Heading>
+                  <p>{item.description}</p>
+                </div>
+              </m.article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <div className="container">
+          <m.div
+            className={styles.sectionHeader}
+            initial={inViewHidden}
+            whileInView={inViewBase}
+            viewport={{once: true, margin: '-72px 0px', amount: 0.25}}
+            transition={headerTransition}>
+            <Heading as="h2">What you get</Heading>
             <p>
-              Build an AI-ready access layer on top of your existing APIs with
-              governance, security controls, and flexible deployment.
+              A runtime that makes your existing APIs{' '}
+              <strong>efficient, governed</strong>, and ready for{' '}
+              <strong>any MCP client</strong>.
             </p>
           </m.div>
           <div className={styles.featureGrid}>
@@ -225,28 +500,53 @@ function HomepageMain() {
       <section className={styles.sectionAlt}>
         <div className="container">
           <m.div
-            className={styles.panel}
+            className={styles.sectionHeader}
             initial={inViewHidden}
             whileInView={inViewBase}
-            viewport={{once: true, margin: '-64px 0px', amount: 0.2}}
-            transition={
-              reduceMotion
-                ? {duration: 0}
-                : {duration: 0.52, ease: scrollEase}
-            }>
-            <div className={styles.panelCopy}>
-              <Heading as="h2">Built for secure AI-native operations</Heading>
-              <p>
-                Keep control of how APIs are exposed to AI clients: credentials,
-                policies, and runtime behavior stay in your trust domain, not
-                bolted on after the fact.
-              </p>
+            viewport={{once: true, margin: '-72px 0px', amount: 0.25}}
+            transition={headerTransition}>
+            <Heading as="h2">
+              Measured on a pull-request-velocity task against the official GitHub MCP server.
+            </Heading>
+            <p>
+              <strong>Same task, same data</strong>: the{' '}
+              <Link to="https://github.com/github/github-mcp-server">
+                official GitHub MCP server
+              </Link>{' '}
+              needs <strong>31 tool calls</strong>, reShapr needs{' '}
+              <strong>one</strong> 👉{' '}
+              <Link to="/blog/reshapr-vs-official-github-mcp">Read the benchmark</Link>.
+            </p>
+          </m.div>
+          <m.div
+            className={styles.benchmark}
+            initial={inViewHidden}
+            whileInView={inViewBase}
+            viewport={{once: true, margin: '0px 0px -10% 0px', amount: 0.15}}
+            transition={cardTransition(0)}>
+            <div className={styles.promptCard}>
+              <span className={styles.promptLabel}>What the user asks</span>
+              <pre className={styles.promptText}>{BENCHMARK_PROMPT}</pre>
+              <span className={styles.promptLabel}>
+                What reShapr exposes: one task-shaped tool,{' '}
+                <code>get_repo_velocity_metrics</code>
+              </span>
             </div>
-            <ul className={clsx(styles.checkList, styles.panelCheckList)}>
-              {highlights.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
+            <ThemedImage
+              className={styles.benchmarkChart}
+              alt="Comparison of the official GitHub MCP and reShapr on the same task: 31 versus 1 agent tool calls, 34 versus 4 MCP HTTP roundtrips, 28,081 ms versus 2,082 ms tool-call latency, 267,824 versus 7,401 response bytes, and 66,956 versus 1,851 estimated tokens."
+              sources={{
+                light: '/img/blog/reshapr-github-mcp-reduction-chart-light.png',
+                dark: '/img/blog/reshapr-github-mcp-reduction-chart-dark.png',
+              }}
+            />
+            <p className={styles.seeAlso}>
+              <strong>See also:</strong> a fashion brand runs its product
+              catalog and Shopify syncs through{' '}
+              <strong>one consolidated MCP server</strong>, built with
+              cross-service <strong>Custom Tools</strong> 👉{' '}
+              <Link to="/blog/building-sync-check-with-reshapr">Read the story</Link>.
+            </p>
           </m.div>
         </div>
       </section>
@@ -266,7 +566,7 @@ function HomepageMain() {
             <div className={styles.ctaLead}>
               <Heading as="h2">Start building with reShapr</Heading>
               <p>
-                Follow the quickstart, import your first API artifact, and expose secure MCP endpoints instantly.
+                Follow the quickstart, import your first API contract, and give your agents governed MCP tools in minutes.
               </p>
             </div>
             <div className={styles.ctaCliRow}>
@@ -294,7 +594,7 @@ export default function Home() {
   return (
     <Layout
       title={siteConfig.title}
-      description="reShapr instantly turns your existing REST, gRPC, and GraphQL APIs into production-grade MCP servers — no code, no lock-in, no compromises.">
+      description="reShapr is the open source runtime that turns your existing REST, GraphQL, and gRPC APIs into governed, LLM-optimized MCP tools, without rebuilding them.">
       <PageMotionRoot>
         <div className={landingShell.landingFrame}>
           <HomepageHeader />
