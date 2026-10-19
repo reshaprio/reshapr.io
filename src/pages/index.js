@@ -4,7 +4,7 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import {m} from 'motion/react';
-import {Copy, Filter, Globe, Layers, Scale, ShieldCheck, SquareTerminal} from 'lucide-react';
+import {Copy, Filter, Globe, Layers, Network, Repeat, Scale, ShieldCheck, SquareTerminal, Waves} from 'lucide-react';
 
 import Heading from '@theme/Heading';
 import ThemedImage from '@theme/ThemedImage';
@@ -154,6 +154,7 @@ Return a compact summary with pull request id, title, creator, state, creation a
 const problems = [
   {
     title: 'Context overload',
+    icon: <Waves {...featureIconProps} />,
     description: (
       <>
         Raw API responses <strong>waste tokens</strong> and{' '}
@@ -164,6 +165,7 @@ const problems = [
   },
   {
     title: 'MCP server sprawl',
+    icon: <Network {...featureIconProps} />,
     description: (
       <>
         One hand-built MCP server per API and per team means one{' '}
@@ -174,7 +176,8 @@ const problems = [
     ),
   },
   {
-    title: 'Agents replanning workflows',
+    title: 'Non-deterministic workflows',
+    icon: <Repeat {...featureIconProps} />,
     description: (
       <>
         Multi-step workflows get <strong>re-derived on every run</strong>.
@@ -191,6 +194,7 @@ const testimonials = [
       'The first results from our reShapr evaluation at AXA are very promising. It addresses complex enterprise challenges with rare clarity and a true open source heart. As a maintainer in the CNCF space, I’m excited to support this community effort and see how it transforms how we expose services to agents.',
     name: 'Sebastien Degodez',
     link: 'https://www.linkedin.com/in/sebastien-degodez/',
+    photo: '/img/authors/sebastien-degodez.jpg',
     role: 'Software Engineer | TechLead',
   },
   {
@@ -198,6 +202,7 @@ const testimonials = [
       'When organizations have hundreds or even thousands of APIs to maintain, speed and security become non-negotiable. reShapr transforms how existing services are exposed to agents, delivering an unmatched FinOps ratio and the fastest path to production. It’s a definitive solution for scaling agentic context within highly regulated environments.',
     name: 'Ludovic Pourrat',
     link: 'https://www.linkedin.com/in/ludovic-pourrat/',
+    photo: '/img/authors/ludovic-pourrat.jpg',
     role: 'API Architect | Platform Architect',
   },
   {
@@ -205,6 +210,7 @@ const testimonials = [
       'I’m excited by reShapr’s clear purpose and the co-founders’ vision, which directly address the real-world challenges I see across the organizations I work with. Open-sourcing such a critical component to advance MCP democratization is a meaningful step forward for the ecosystem, and I’m genuinely looking forward to being part of this journey and helping build a strong, open community around reShapr.',
     name: 'Sébastien Blanc',
     link: 'https://www.linkedin.com/in/s%C3%A9bastien-blanc-08a73b1/',
+    photo: '/img/authors/sebastien-blanc.jpg',
     role: 'Java Champion | Technical Director',
   },
   {
@@ -223,6 +229,7 @@ const testimonials = [
     ),
     name: 'Guillaume Goisset',
     link: 'https://low-code-consultant.com',
+    photo: '/img/authors/guillaume-goisset.jpg',
     role: (
       <>
         Head of Automation at{' '}
@@ -388,11 +395,12 @@ function HomepageMain() {
             {problems.map((item, index) => (
               <m.article
                 key={item.title}
-                className={clsx(styles.featureCard, styles.textCard)}
+                className={styles.featureCard}
                 initial={inViewHidden}
                 whileInView={inViewBase}
                 viewport={{once: true, margin: '0px 0px -10% 0px', amount: 0.15}}
                 transition={cardTransition(index)}>
+                <div className={styles.featureIcon}>{item.icon}</div>
                 <div className={styles.featureBody}>
                   <Heading as="h3">{item.title}</Heading>
                   <p>{item.description}</p>
@@ -423,9 +431,24 @@ function HomepageMain() {
                 viewport={{once: true, margin: '0px 0px -10% 0px', amount: 0.15}}
                 transition={cardTransition(index)}>
                 <blockquote>{item.quote}</blockquote>
-                <div className="testimonial-author">
-                  <a href={item.link}>{item.name}</a>
-                  <span className="testimonial-role">{item.role}</span>
+                <div className={clsx('testimonial-author', styles.testimonialAuthor)}>
+                  <a
+                    href={item.link}
+                    className={styles.avatar}
+                    aria-label={item.name}
+                    tabIndex={-1}>
+                    {item.photo ? (
+                      <img src={item.photo} alt="" loading="lazy" />
+                    ) : (
+                      <span aria-hidden="true">
+                        {item.name.split(' ').map((w) => w[0]).join('')}
+                      </span>
+                    )}
+                  </a>
+                  <div>
+                    <a href={item.link}>{item.name}</a>
+                    <span className="testimonial-role">{item.role}</span>
+                  </div>
                 </div>
               </m.div>
             ))}
@@ -459,6 +482,41 @@ function HomepageMain() {
               </m.article>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className={styles.ctaSection}>
+        <div className="container">
+          <m.div
+            className={styles.ctaCard}
+            initial={inViewHidden}
+            whileInView={inViewBase}
+            viewport={{once: true, margin: '-48px 0px', amount: 0.3}}
+            transition={
+              reduceMotion
+                ? {duration: 0}
+                : {duration: 0.48, ease: scrollEase}
+            }>
+            <div className={styles.ctaLead}>
+              <Heading as="h2">Start building with reShapr</Heading>
+              <p>
+                Follow the quickstart, import your first API contract, and give your agents governed MCP tools in minutes.
+              </p>
+            </div>
+            <div className={styles.ctaCliRow}>
+              <CliInstallSnippet />
+              <m.div
+                className={clsx(styles.heroButtonLift, styles.heroButtonLiftPrimary)}
+                whileHover={reduceMotion ? undefined : {y: -0.5}}
+                whileTap={reduceMotion ? undefined : {scale: 0.997}}>
+                <Link
+                  className="button button--primary button--lg"
+                  to="/docs/tutorials/getting-started">
+                  CLI Quickstart
+                </Link>
+              </m.div>
+            </div>
+          </m.div>
         </div>
       </section>
 
@@ -547,41 +605,6 @@ function HomepageMain() {
               cross-service <strong>Custom Tools</strong> 👉{' '}
               <Link to="/blog/building-sync-check-with-reshapr">Read the story</Link>.
             </p>
-          </m.div>
-        </div>
-      </section>
-
-      <section className={styles.ctaSection}>
-        <div className="container">
-          <m.div
-            className={styles.ctaCard}
-            initial={inViewHidden}
-            whileInView={inViewBase}
-            viewport={{once: true, margin: '-48px 0px', amount: 0.3}}
-            transition={
-              reduceMotion
-                ? {duration: 0}
-                : {duration: 0.48, ease: scrollEase}
-            }>
-            <div className={styles.ctaLead}>
-              <Heading as="h2">Start building with reShapr</Heading>
-              <p>
-                Follow the quickstart, import your first API contract, and give your agents governed MCP tools in minutes.
-              </p>
-            </div>
-            <div className={styles.ctaCliRow}>
-              <CliInstallSnippet />
-              <m.div
-                className={clsx(styles.heroButtonLift, styles.heroButtonLiftPrimary)}
-                whileHover={reduceMotion ? undefined : {y: -0.5}}
-                whileTap={reduceMotion ? undefined : {scale: 0.997}}>
-                <Link
-                  className="button button--primary button--lg"
-                  to="/docs/tutorials/getting-started">
-                  CLI Quickstart
-                </Link>
-              </m.div>
-            </div>
           </m.div>
         </div>
       </section>

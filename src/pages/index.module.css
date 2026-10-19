@@ -322,6 +322,35 @@
   text-decoration: underline;
 }
 
+.testimonialAuthor {
+  display: flex;
+  align-items: center;
+  gap: var(--reshapr-space-4);
+}
+
+.avatar.avatar {
+  flex: 0 0 auto;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--ifm-color-primary);
+  background: color-mix(in srgb, var(--ifm-color-primary) 15%, transparent);
+  color: var(--ifm-color-primary);
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-decoration: none;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .textCard {
   display: block;
 }
