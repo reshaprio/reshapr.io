@@ -24,7 +24,7 @@ The [`reshapr`](https://github.com/reshaprio/reshapr) repository owns the contro
 
 | Interface | Purpose | Current contract |
 |---|---|---|
-| Public API | Manage Services, artifacts, Configuration Plans, Expositions, Secrets, Gateway Groups, and API tokens | [Public OpenAPI](https://github.com/reshaprio/reshapr/blob/main/reshapr-public-openapi-v0.1.yaml) |
+| Public API | Manage Services, artifacts, Configuration Plans, Expositions, Secrets, Gateway Groups, and API tokens | [Public OpenAPI](https://github.com/reshaprio/reshapr/blob/main/reshapr-public-openapi.yaml) |
 | Administration API | Manage users, organizations, memberships, quotas, and service accounts | [Admin OpenAPI](https://github.com/reshaprio/reshapr/blob/main/reshapr-admin-ctrl-openapi.yaml), [organization guide](../how-to-guides/administration/organizations-and-memberships.md), and [quota guide](../how-to-guides/administration/organization-quotas.md) |
 | Authentication API | Authenticate users and establish CLI or browser sessions | [Authentication OpenAPI](https://github.com/reshaprio/reshapr/blob/main/reshapr-authentication-openapi.yaml) |
 
