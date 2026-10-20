@@ -6,7 +6,7 @@ authors:
   - laurent
 description: "How reShapr's selective tool exposure makes the Model Context Protocol production-ready at enterprise scale."
 image: /img/blog/context-control-hero.jpeg
-tags: [MCP, Production, Context, Token Optimization, Anthropic, LLM, No-Code, API, Enterprise, Security, Governance, Observability, AI-native]
+tags: [MCP, Production, Context, Token Optimization, Anthropic, LLM, API, Enterprise, Security, Governance, Observability, AI-native]
 ---
 
 import ThemedImage from '@theme/ThemedImage';
@@ -43,7 +43,7 @@ Anthropic’s post illustrates two pain points:
 1. Loading all MCP tool definitions upfront floods the model’s context.
 2. Intermediate results, even megabytes of JSON or text, must pass back through the model.
 
-Both are symptoms of what we call **context coupling**: treating the model’s memory as a data bus instead of an intent space. When we designed the **reShapr’s No-Code MCP Server**, we flipped that pattern. Instead of dumping every API operation and description into the model, _reShapr acts as a programmable filter between your existing API services and the MCP interface._
+Both are symptoms of what we call **context coupling**: treating the model’s memory as a data bus instead of an intent space. When we designed the **reShapr runtime**, we flipped that pattern. Instead of dumping every API operation and description into the model, _reShapr acts as a programmable filter between your existing API services and the MCP interface._
 
 That design allows you to:
 
@@ -117,7 +117,7 @@ Each of these servers can live side-by-side, derived from the same Stripe backen
 
 > That’s what we mean when we say **“AI-native by translation, not reinvention.”**
 
-### No-Code setup, enterprise-grade results
+### Zero-rewrite setup, enterprise-grade results
 
 reShapr’s configuration model is intentionally simple:
 
@@ -147,7 +147,7 @@ reShapr delivers that by externalizing code execution into _controlled MCP endpo
 
 You receive all the benefits, including reduced token usage, efficient data handling, and composable workflows, without the operational risk associated with distributed sandboxes.
 
-And when you do want to give agents controlled compute, reShapr integrates **seamlessly** with your **existing infrastructure**: Kubernetes jobs, serverless functions, or dedicated compute pools all behind the same **No-Code MCP Server** powered by reShapr.
+And when you do want to give agents controlled compute, reShapr integrates **seamlessly** with your **existing infrastructure**: Kubernetes jobs, serverless functions, or dedicated compute pools all behind the same **reShapr runtime**.
 
 ### Complementing, not competing, with the ecosystem
 
