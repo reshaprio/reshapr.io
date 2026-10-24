@@ -2047,3 +2047,53 @@ html.docs-doc-page .theme-code-block div[class*='codeBlockTitle'] {
     padding-top: var(--reshapr-space-8);
   }
 }
+
+/* Navbar search: rounded, icon-only until focused */
+.navbar__search {
+  margin-left: 0;
+}
+.navbar__search-input {
+  width: 3.6rem;
+  height: 2.4rem;
+  padding: 0 0 0 2.4rem;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-color: var(--palette-bg);
+  background-position: 0.85rem center;
+  color: transparent;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: width 0.2s ease, border-color 0.2s ease;
+}
+.navbar__search-input::placeholder {
+  color: transparent;
+}
+.navbar__search-input:focus {
+  width: 14rem;
+  padding-right: 1rem;
+  border-color: var(--ifm-color-primary);
+  color: var(--palette-ink);
+  cursor: text;
+  outline: none;
+}
+.navbar__search-input:focus::placeholder {
+  color: var(--palette-muted);
+}
+[data-theme='dark'] .navbar__search-input {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+[data-theme='dark'] .navbar__search-input:focus {
+  color: var(--palette-white);
+}
+.navbar__search kbd,
+.navbar__search [class*='searchHintContainer'] {
+  display: none;
+}
+@media (max-width: 996px) {
+  .navbar__items--right > [class*='navbarSearchContainer'] {
+    position: static;
+  }
+  .navbar__search-input:focus {
+    width: 12rem;
+  }
+}

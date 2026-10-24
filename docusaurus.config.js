@@ -104,7 +104,7 @@ const config = {
           onUntruncatedBlogPosts: 'warn',
         },
         sitemap: {
-          ignorePatterns: ['/agent/**'],
+          ignorePatterns: ['/agent/**', '/search'],
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -167,6 +167,25 @@ const config = {
     ],
   ],
 
+  themes: [
+    '@docusaurus/theme-mermaid',
+    [
+      require.resolve('@easyops-cn/docusaurus-search-local'),
+      /** @type {import('@easyops-cn/docusaurus-search-local').PluginOptions} */
+      ({
+        hashed: true,
+        indexDocs: true,
+        indexBlog: true,
+        indexPages: false,
+        docsRouteBasePath: 'docs',
+        blogRouteBasePath: 'blog',
+        highlightSearchTermsOnTargetPage: true,
+        searchBarShortcutHint: true,
+        explicitSearchResultPath: true,
+      }),
+    ],
+  ],
+
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -215,6 +234,7 @@ const config = {
             label: 'Demos 👀', 
             position: 'left'
           },
+          {type: 'search', position: 'right'},
           {
             type: 'html',
             position: 'right',
@@ -290,7 +310,6 @@ const config = {
   markdown: {
     mermaid: true,
   },
-  themes: ['@docusaurus/theme-mermaid'],
 };
 
 // See https://docusaurus.io/docs/api/docusaurus-config#scripts
