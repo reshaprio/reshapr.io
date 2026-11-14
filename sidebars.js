@@ -44,11 +44,21 @@ const sidebars = {
       label: 'Tutorials',
       className: 'sidebar-icon-tutorials',
       description: 'Learning-oriented guides to get you started',
+      link: {
+        type: 'generated-index',
+        slug: '/category/tutorials',
+        description: 'Learning-oriented guides that take you from a first MCP endpoint to a GitOps-managed deployment.',
+      },
       collapsed: true,
       items: [
         {
           type: 'category',
           label: 'Getting started',
+          link: {
+            type: 'generated-index',
+            slug: '/category/getting-started',
+            description: 'Try reShapr online, create your first MCP endpoint and see Context Control at work.',
+          },
           items: [
             {
               type: 'doc',
@@ -70,6 +80,11 @@ const sidebars = {
         {
           type: 'category',
           label: 'Design an MCP surface',
+          link: {
+            type: 'generated-index',
+            slug: '/category/design-an-mcp-surface',
+            description: 'Shape what AI assistants and agents see: Artifacts, Custom Tools and context control.',
+          },
           items: [
             {
               type: 'doc',
@@ -81,6 +96,11 @@ const sidebars = {
         {
           type: 'category',
           label: 'Kubernetes',
+          link: {
+            type: 'generated-index',
+            slug: '/category/tutorials-kubernetes',
+            description: 'Install the controllers and manage MCP endpoints from Git-managed Kubernetes resources.',
+          },
           items: [
             {
               type: 'doc',
@@ -96,11 +116,21 @@ const sidebars = {
       label: 'How-to Guides',
       className: 'sidebar-icon-howto',
       description: 'Task-oriented guides for specific goals',
+      link: {
+        type: 'generated-index',
+        slug: '/category/how-to-guides',
+        description: 'Task-oriented guides to build, secure, run and operate reShapr.',
+      },
       collapsed: true,
       items: [
         {
           type: 'category',
           label: 'Create and optimize',
+          link: {
+            type: 'generated-index',
+            slug: '/category/create-and-optimize',
+            description: 'Import API Artifacts and build Custom Tools, Code Mode and MCP Apps.',
+          },
           items: [
             {
               type: 'doc',
@@ -132,6 +162,11 @@ const sidebars = {
         {
           type: 'category',
           label: 'MCP endpoints',
+          link: {
+            type: 'generated-index',
+            slug: '/category/mcp-endpoints',
+            description: 'Test an MCP endpoint and audit its calls.',
+          },
           items: [
             {
               type: 'doc',
@@ -148,6 +183,11 @@ const sidebars = {
         {
           type: 'category',
           label: 'Security',
+          link: {
+            type: 'generated-index',
+            slug: '/category/security',
+            description: 'Protect endpoints with API keys or OAuth 2.0 and authenticate calls to your backends.',
+          },
           items: [
             {
               type: 'doc',
@@ -179,6 +219,11 @@ const sidebars = {
         {
           type: 'category',
           label: 'Local development',
+          link: {
+            type: 'generated-index',
+            slug: '/category/local-development',
+            description: 'Run reShapr on your machine with Docker or Podman.',
+          },
           items: [
             {
               type: 'doc',
@@ -190,6 +235,11 @@ const sidebars = {
         {
           type: 'category',
           label: 'Automation',
+          link: {
+            type: 'generated-index',
+            slug: '/category/automation',
+            description: 'Automate reShapr with the CLI in CI/CD pipelines.',
+          },
           items: [
             {
               type: 'doc',
@@ -201,6 +251,11 @@ const sidebars = {
         {
           type: 'category',
           label: 'Administration',
+          link: {
+            type: 'generated-index',
+            slug: '/category/administration',
+            description: 'Manage organizations, memberships and quotas.',
+          },
           items: [
             {
               type: 'doc',
@@ -217,6 +272,11 @@ const sidebars = {
         {
           type: 'category',
           label: 'Operations',
+          link: {
+            type: 'generated-index',
+            slug: '/category/operations',
+            description: 'Observe, troubleshoot and maintain a running reShapr, including key and secret rotation.',
+          },
           items: [
             {
               type: 'doc',
@@ -243,6 +303,11 @@ const sidebars = {
         {
           type: 'category',
           label: 'Kubernetes and deployment',
+          link: {
+            type: 'generated-index',
+            slug: '/category/kubernetes-and-deployment',
+            description: 'Deploy for production, connect OIDC, manage resources with GitOps and run a hybrid Proxy.',
+          },
           items: [
             {
               type: 'doc',
@@ -273,11 +338,21 @@ const sidebars = {
       label: 'Explanations',
       className: 'sidebar-icon-explanation',
       description: 'Concepts and background understanding',
+      link: {
+        type: 'generated-index',
+        slug: '/category/explanations',
+        description: 'Concepts and background: how reShapr turns APIs into MCP Tools, and how it is deployed and secured.',
+      },
       collapsed: true,
       items: [
         {
           type: 'category',
           label: 'Core concepts',
+          link: {
+            type: 'generated-index',
+            slug: '/category/core-concepts',
+            description: 'How reShapr turns APIs into MCP Tools: lifecycle, Services, Artifacts, exposition and context control.',
+          },
           items: [
             {
               type: 'doc',
@@ -319,6 +394,11 @@ const sidebars = {
         {
           type: 'category',
           label: 'Architecture and trust',
+          link: {
+            type: 'generated-index',
+            slug: '/category/architecture-and-trust',
+            description: 'Deployment models, trust boundaries, multi-tenancy, synchronization and security limits.',
+          },
           items: [
             {
               type: 'doc',
@@ -354,6 +434,11 @@ const sidebars = {
       label: 'References',
       className: 'sidebar-icon-reference',
       description: 'Technical descriptions and specifications',
+      link: {
+        type: 'generated-index',
+        slug: '/category/references',
+        description: 'Technical descriptions: features, interfaces, CLI, Kubernetes APIs, configuration and specifications.',
+      },
       collapsed: true,
       items: [
         {
@@ -364,6 +449,11 @@ const sidebars = {
         {
           type: 'category',
           label: 'Interface references',
+          link: {
+            type: 'generated-index',
+            slug: '/category/interface-references',
+            description: 'Features, product interfaces, MCP support, CLI commands, Kubernetes APIs, Helm charts and environment variables.',
+          },
           items: [
             {
               type: 'doc',
@@ -405,6 +495,11 @@ const sidebars = {
         {
           type: 'category',
           label: 'Artifact specifications',
+          link: {
+            type: 'generated-index',
+            slug: '/category/artifact-specifications',
+            description: 'Specifications for Prompts, Custom Tools, Tools Output Filtering and Resources.',
+          },
           items: [
             {
               type: 'doc',
