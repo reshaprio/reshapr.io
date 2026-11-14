@@ -5,6 +5,7 @@
 // See: https://docusaurus.io/docs/api/docusaurus-config
 
 import {themes as prismThemes} from 'prism-react-renderer';
+import {announcement} from './src/data/announcement.js';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -191,6 +192,15 @@ const config = {
     ({
       // Replace with your project's social card
       image: 'img/reShapr-logo-light.png',
+      announcementBar: announcement.enable
+        ? {
+            id: announcement.id,
+            content: `${announcement.text} <a target="_blank" rel="noopener noreferrer" href="${announcement.link}">${announcement.cta}</a>`,
+            backgroundColor: '#1f807b',
+            textColor: '#ffffff',
+            isCloseable: true,
+          }
+        : undefined,
       colorMode: {
         // Until the user toggles theme, follow OS preference; toggle only sets light vs dark.
         respectPrefersColorScheme: true,

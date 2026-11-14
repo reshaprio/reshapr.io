@@ -204,6 +204,41 @@ body,
   font-family: var(--reshapr-font-stack);
 }
 
+/* Homepage announcement bar (see src/data/announcement.js) */
+div[class*='announcementBar'] {
+  --docusaurus-announcement-bar-height: 3rem;
+  font-family: var(--reshapr-font-stack);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+div[class*='announcementBar'] a {
+  color: var(--palette-white);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+div[class*='announcementBar'] button[class*='closeButton'] {
+  color: var(--palette-white);
+  opacity: 1;
+}
+
+div[class*='announcementBar'] button[class*='closeButton'] svg {
+  fill: currentColor;
+}
+
+@media (max-width: 996px) {
+  div[class*='announcementBar'] {
+    --docusaurus-announcement-bar-height: auto;
+    height: auto;
+    font-size: 0.9rem;
+  }
+
+  div[class*='announcementBar'] [class*='content'] {
+    padding: 0.4rem 0;
+  }
+}
+
 /* Infima primary: white label on cyan (buttons site-wide) */
 .button.button--primary,
 .button.button--primary:visited {
