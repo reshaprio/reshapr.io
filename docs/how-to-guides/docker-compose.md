@@ -53,6 +53,8 @@ The CLI auto-detects Docker or Podman. To select one explicitly, use `--engine`:
 reshapr run --release 1.1.0 --engine podman
 ```
 
+On a Mac you can also run the stack without Docker or Podman. See [Run on apple/container](./run-on-apple-container.md).
+
 Add the optional Web UI with `--ui`:
 
 ```bash

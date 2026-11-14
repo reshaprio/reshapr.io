@@ -76,7 +76,7 @@ Methods such as roots, sampling, and subscriptions are not exposed as server cap
 
 | Capability | Availability | Scope | Reference |
 |---|---|---|---|
-| Local runtime | Available | The CLI starts and stops a release Docker Compose stack with Docker or Podman and can include the Web UI. | [reShapr project](https://github.com/reshaprio/reshapr) |
+| Local runtime | Available | The CLI starts and stops a release Docker Compose stack with Docker or Podman, or on apple/container, and can include the Web UI. | [reShapr project](https://github.com/reshaprio/reshapr) |
 | Kubernetes APIs and operator | Available with limits | Eight `v1alpha1` CRDs manage Services, Plans, Expositions, Gateway Groups, Secret sources, Custom Tools, Resources, and Prompts. Artifact CRs have filename-collision and remote-cleanup limits. | [Kubernetes APIs and Controllers](./kubernetes-apis.md) |
 | Sidecar injection | Available with limits | The admission controller injects Gateway sidecars and creates discovery/MCP Services for supported Deployment-owned workloads. It is fail-open by default. | [Admission controller](https://github.com/reshaprio/reshapr-controllers/blob/main/documentation/admission-controller.md) |
 | Helm packaging | Available | Four OCI charts package the control plane, proxy, Web UI, and controllers. | [Helm charts](https://github.com/reshaprio/reshapr-helm-charts) |

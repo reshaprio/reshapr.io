@@ -103,6 +103,7 @@ Coverage statuses:
 | `CAP-WEB-UI-ADMINISTRATION` | covered | `docs/tutorials/web-ui-quickstart.md` | `docs/how-to-guides/administration/organizations-and-memberships.md` | `docs/explanations/resource-lifecycle.md` | `docs/references/features.md` |
 | `CAP-WEB-UI-QUICK-START` | covered | `docs/tutorials/web-ui-quickstart.md` | - | `docs/explanations/api-to-agent.md` | - |
 | `CAP-LOCAL-DOCKER-RUNTIME` | covered | `docs/tutorials/getting-started.md` | `docs/how-to-guides/docker-compose.md` | `docs/explanations/deployment-models-trust-boundaries.md` | `docs/references/features.md` |
+| `CAP-LOCAL-APPLE-CONTAINER-RUNTIME` | covered | - | `docs/how-to-guides/run-on-apple-container.md` | - | `docs/references/cli-commands.md`<br>`docs/references/features.md` |
 
 ### Kubernetes and GitOps
 
@@ -215,6 +216,7 @@ There are no `missing` released or partial capabilities in this baseline. Unsupp
 | `LIM-PRODUCTION-PROFILES-NOT-CERTIFICATION` | Chart reference or production procedure | `docs/references/helm-charts.md`<br>`docs/how-to-guides/deploy-kubernetes-production.md` | covered |
 | `LIM-UPGRADE-ROLLBACK-MANUAL` | Upgrade procedure | `docs/how-to-guides/operations/upgrade-and-rotate.md` | covered |
 | `LIM-HELM-CRDS-RETAINED` | Upgrade and GitOps cleanup procedures | `docs/how-to-guides/operations/upgrade-and-rotate.md`<br>`docs/how-to-guides/manage-resources-with-gitops.md` | covered |
+| `LIM-APPLE-CONTAINER-COMPOSE-SUBSET` | Apple/container how-to | `docs/how-to-guides/run-on-apple-container.md`<br>`docs/references/cli-commands.md` | covered |
 
 ## Persona journeys
 
@@ -240,11 +242,11 @@ This inventory makes orphaned or accidentally removed pages visible. Paths are g
 
 | Additional role | Current pages |
 |---|---|
-| New how-to guides (2) | `docs/how-to-guides/use-code-mode.md`<br>`docs/how-to-guides/reference-mcp-app.md` |
+| New how-to guides (3) | `docs/how-to-guides/use-code-mode.md`<br>`docs/how-to-guides/reference-mcp-app.md`<br>`docs/how-to-guides/run-on-apple-container.md` |
 | New runtime references (2) | `docs/references/environment-variables.md`<br>`docs/references/logging.md` |
 | New explanation (1) | `docs/explanations/code-mode.md` |
 
-The original 52-page inventory above plus these five additions accounts for all 57 current pages. The agent-builder journey now includes progressive Tool discovery with Code Mode, its execution and security model, and MCP Apps references; operators can look up guardrails and enable temporary diagnostics from the new runtime references.
+The original 52-page inventory above plus these six additions accounts for all 58 current pages. The agent-builder journey now includes progressive Tool discovery with Code Mode, its execution and security model, and MCP Apps references; operators can look up guardrails and enable temporary diagnostics from the new runtime references.
 
 ## Blog classification
 
