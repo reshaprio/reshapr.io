@@ -105,7 +105,7 @@ const config = {
           onUntruncatedBlogPosts: 'warn',
         },
         sitemap: {
-          ignorePatterns: ['/agent/**', '/search'],
+          ignorePatterns: ['/agent/**', '/search', '/docs/category/**'],
         },
         theme: {
           customCss: './src/css/custom.css',
