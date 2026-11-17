@@ -122,7 +122,7 @@ for (const htmlPath of walkFiles(BUILD_DIR, 'index.html')) {
     || route.startsWith('/docs/')
     || route === '/blog'
     || route.startsWith('/blog/');
-  if (!isContentRoute) continue;
+  if (!isContentRoute || route.startsWith('/docs/category/')) continue;
 
   const html = fs.readFileSync(htmlPath, 'utf8');
   const isRedirect = /<meta\s+http-equiv="refresh"\s+content="0;\s*url=/i.test(html);

@@ -4,6 +4,7 @@ export function getAgentHref(pathname) {
     : pathname;
 
   if (normalizedPath.startsWith('/agent')) return null;
+  if (normalizedPath.startsWith('/docs/category/')) return null;
   if (normalizedPath === '/' || normalizedPath === '') return '/index.md';
   if (normalizedPath === '/docs') return '/docs/index.md';
   if (normalizedPath.startsWith('/docs/')) return `${normalizedPath}.md`;
