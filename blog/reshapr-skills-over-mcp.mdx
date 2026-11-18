@@ -1,6 +1,6 @@
 ---
 title: "Skills over MCP in reShapr 1.2: Teach Agents How to Use Your APIs"
-date: 2026-11-17
+date: 2026-11-19
 authors:
   - yacine
 description: "reShapr 1.2 serves Agent Skills over MCP. Attach a Skills manifest to a Service and agents discover and read a step-by-step procedure next to the tools, from one governed endpoint."
@@ -134,6 +134,8 @@ We got `Verified 1 skill and 3 files: no conformance errors.` **From the tag URL
 - **Retrieval.** `resources/read` on `skill://petstore-adoption-desk/SKILL.md` returns the file as `text/markdown`.
 - **Integrity.** When we edited `SKILL.md` on a local file server, the Inspector reported a mismatch between the cached 927 bytes and the 937 bytes now served. Re-running `reshapr attach` refreshed the skill and the check passed again. With a tag URL the content does not change under the gateway.
 - **Tools unchanged.** The same endpoint still serves the 19 Petstore tools.
+
+To edit the Skill and test your changes without a commit or a tag, see [Edit and iterate on the Skill](https://github.com/reshaprio/reshapr-demos/tree/main/demos/10-petstore-skills#edit-and-iterate-on-the-skill) in the demo.
 
 ## See it with Claude
 
