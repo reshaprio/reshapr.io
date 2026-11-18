@@ -32,7 +32,7 @@ An agent with the right tools can still do the wrong thing. It knows **what it c
 
 reShapr 1.2 serves it from the same place as the tools. **Skills over MCP** lets you attach an [Agent Skill](https://agentskills.io/specification) to a Service, and the reShapr runtime exposes it through the official [`io.modelcontextprotocol/skills` extension](https://modelcontextprotocol.io/extensions/skills/overview) ([SEP-2640](https://modelcontextprotocol.io/seps/2640-skills-extension)). The feature was tracked in [reshaprio/reshapr#121](https://github.com/reshaprio/reshapr/issues/121).
 
-> **TL;DR** A new **Skills** artifact points to a skill directory (`SKILL.md` and its reference files) hosted on any HTTP server. reShapr fetches and caches it, then serves it as **`skill://` resources** next to your tools. Agents list skills cheaply and read the full instructions only when they need them. We tried it with Claude Code on the Petstore API: **without the skill it listed 6 pets, with the skill it offered 3 and waited for a confirmation**. Today Claude Code reads a skill when you give it the URI, it does not discover it by itself.
+> **TL;DR** A new **Skills** artifact points to a skill directory (`SKILL.md` and its reference files) hosted on any HTTP server. reShapr fetches and caches it, then serves it as **`skill://` resources** next to your tools. Agents list skills cheaply and read the full instructions only when they need them. We tried it with Claude Code on the Petstore API: **without the skill it listed every dog it found (6 in our run), with the skill it offered 3 and waited for a confirmation**. Today Claude Code reads a skill when you give it the URI, it does not discover it by itself.
 
 {/* truncate */}
 
@@ -145,7 +145,7 @@ We ran **Claude Code 2.1.311** headless against the endpoint, with the same MCP 
 I'd like to adopt a dog. Please handle my request.
 ```
 
-Claude connected, listed the 19 tools and called `get_pet_findbystatus`. It **never fetched the skill**. It answered with a table of **6 dogs** and asked which one to order.
+Claude connected, listed the 19 tools and called `get_pet_findbystatus`. It **never fetched the skill**. It answered with a table of **6 dogs** and asked which one to order. We repeated the run on a second machine: it listed 5 rows, picked a favourite for us and again did not read the skill. The exact pets differ because the public Petstore data changes.
 
 **Run 2: the prompt gives the skill URI.**
 
@@ -160,9 +160,9 @@ The sequence, from the tool calls in the run:
 1. `ReadMcpResourceTool` on `skill://petstore-adoption-desk/SKILL.md`
 2. `ReadMcpResourceTool` on `references/ADOPTION-RULES.md`, then on `references/ORDER-TEMPLATE.md`
 3. `get_pet_findbystatus` with `status=available`
-4. A reply with **3 dogs** (Max, Buddy and Rex, with their `id`), a request to confirm by `id`, and no order yet
+4. A reply with **3 dogs** (Max, Buddy and Rex in our run, with their `id`), a request to confirm by `id`, and no order yet
 
-That is the procedure: the desk rules cap the offer at 3 pets and stop before the order. Claude Code read the skill and its two reference files through `resources/read`, and followed them.
+That is the procedure: the desk rules cap the offer at 3 pets and stop before the order. Claude Code read the skill and its two reference files through `resources/read`, and followed them. The second machine gave the same result: 3 dogs and a confirmation question.
 
 **What this tells us.** The endpoint serves the skill correctly and Claude can use it, but **Claude Code 2.1.311 did not discover it on its own** from `skills/list`. For now, name the `skill://` URI in your project instructions or in the prompt. Other clients may behave differently, and newer Claude Code versions may too: test yours.
 
