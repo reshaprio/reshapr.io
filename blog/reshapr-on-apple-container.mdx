@@ -102,13 +102,13 @@ Beyond the numbers, we wanted to know whether reShapr works the same on this eng
 
 - **MCP end to end.** `initialize`, `tools/list` and `tools/call` work through the data plane, against a public API (Open-Meteo, used as an example).
 - **Hardened control plane.** In the PoC, it runs with `--read-only --cap-drop ALL --tmpfs /tmp`; `--engine apple` does not set these flags.
-- **Two gateways, shared sessions.** reShapr is a runtime, and its gateways are data plane proxies. In the PoC, two of them share MCP sessions inside a `container cluster`; the benchmark stack runs a single one.
+- **Two clustered gateways.** reShapr is a runtime, and its gateways are data plane proxies. In the PoC, two of them form one cluster inside a `container cluster`; the benchmark stack runs a single one.
 
 ## Limits to know before you start
 
 - **Postgres data is not persisted yet.** The engine ignores compose `volumes`, so stopping the stack resets the configuration. Docker keeps it because the release compose file mounts `~/tmp/reshapr-data`. The gap is in the engine, not in apple/container: in our test, a Postgres VM kept its data in a mounted host folder across a restart, as long as the mount targets the parent of the data directory.
 - `restart` and `extra_hosts` from the compose files are **ignored**.
-- **No cluster mode** with `--engine apple`.
+- **No cluster mode** with `--engine apple`. Two gateways did form one cluster in a `container cluster` with the 1.2.0 images, but that setup is Kubernetes-style and outside `reshapr run`. The [PoC](https://github.com/yada/reshapr-container-poc#clustered-gateways-container-cluster) has the manifest and steps; its manifest still pins 1.1.1, so change the image tags to 1.2.0.
 - **Apple silicon and macOS 26 or later** only, with container 1.7 or later. We did not verify macOS 15.
 - The engine is available **from reShapr 1.2.0**. The proof of concept scripts predate the release and run the same stack on earlier ones.
 
@@ -130,4 +130,4 @@ reshapr stop
 - It is **slower to start and heavier per container** than Docker Desktop in our test, and **much cheaper when idle**.
 - The limits are known and listed: no persistence, no restart, no cluster mode.
 
-If you build on a Mac and want to try it, start from the [**PoC**](https://github.com/yada/reshapr-container-poc) and tell us what you hit. To learn more about the engine, see the [**apple/container**](https://github.com/apple/container) repository. For the step-by-step procedure, see the [**apple/container guide**](/docs/how-to-guides/run-on-apple-container). For the Docker path, see the [**Docker Compose guide**](/docs/how-to-guides/docker-compose).
+If you build on a Mac and want to try it, follow the [**apple/container guide**](/docs/how-to-guides/run-on-apple-container) and [open an issue](https://github.com/reshaprio/reshapr/issues) with what you hit. To learn more about the engine, see the [**apple/container**](https://github.com/apple/container) repository. For the Docker path, see the [**Docker Compose guide**](/docs/how-to-guides/docker-compose).
