@@ -1,5 +1,15 @@
 ---
 description: Run reShapr locally on a Mac with apple/container instead of Docker or Podman.
+verification:
+  product: reShapr
+  version: 1.2.0
+  date: 2026-11-19
+release_review:
+  runtime: 1.2.0
+  controllers: 0.0.4
+  charts: 0.0.16
+  date: 2026-11-19
+  scope: release-tagged source review and live replay on apple/container 1.7.1
 ---
 
 # Run reShapr on apple/container
@@ -18,10 +28,10 @@ container system start
 ```
 
 - **[Node.js](https://nodejs.org/)** 20 or later, required by the reShapr CLI;
-- the **reShapr CLI** at a release that supports the `apple` engine:
+- the **reShapr CLI** 1.2.0 or later, the first release with the `apple` engine:
 
 ```bash
-npm install -g @reshapr/reshapr-cli@<release> --allow-scripts=@scarf/scarf
+npm install -g @reshapr/reshapr-cli@1.2.0 --allow-scripts=@scarf/scarf
 ```
 
 No `sudo` step is needed for this procedure.
@@ -31,7 +41,7 @@ No `sudo` step is needed for this procedure.
 Select the engine explicitly with `--engine apple`:
 
 ```bash
-reshapr run --release <release> --engine apple
+reshapr run --release 1.2.0 --engine apple
 ```
 
 If `docker` and `podman` are not installed, the CLI detects `container` and selects `apple` on its own. When Docker or Podman is also present, the CLI prefers them, so pass `--engine apple` to choose apple/container.
@@ -41,7 +51,7 @@ apple/container has no Compose. The CLI downloads the release-owned Compose file
 Add the optional Web UI with `--ui`:
 
 ```bash
-reshapr run --release <release> --engine apple --ui
+reshapr run --release 1.2.0 --engine apple --ui
 ```
 
 ## Check status
@@ -75,9 +85,9 @@ The CLI stops and deletes the containers it started and cleans up the run state.
 ## Limits
 
 - This topology is intended for local development and testing, not production availability or durability.
-- The CLI ignores the Compose `restart`, `extra_hosts` and `volumes` settings. A container that crashes stays stopped, and the host alias `host.docker.internal` is not available. The CLI warns when an environment value refers to it, for example an optional host identity provider.
+- The CLI ignores the Compose `restart`, `extra_hosts` and `volumes` settings. If a container exits while the stack starts, the CLI prints its last logs and removes the partial stack. A container that crashes after startup stays stopped, and the host alias `host.docker.internal` is not available. The CLI warns when an environment value refers to it, for example an optional host identity provider.
 - Containers are wired by IP address, because name resolution between containers needs a host DNS setup that requires `sudo` (`container system dns create`).
-- The CLI refuses to start when containers from a previous run still exist. Run `reshapr stop` first.
+- The CLI refuses to start when containers from a previous run still exist. Run `reshapr stop` first. If a previous `reshapr run` was interrupted before it finished, `reshapr stop` has nothing to stop, because the CLI saves its run state only after the stack has started. List the leftovers with `container ls -a`, then remove the `reshapr-*` containers with `container stop` and `container delete`.
 - A single proxy runs on this engine. A clustered gateway needs a shared keystore and several A records for one name, which plain containers do not provide. Use Kubernetes for that topology.
 - Published ports are the release defaults. If another stack, such as Docker Desktop, already publishes `5555` or `7777`, stop it first.
 

@@ -83,7 +83,7 @@ Historical OIDC artifact evidence from the previous 1.0.0 baseline (not evidence
 
 ## Capability registry
 
-Status totals for this baseline are 78 `released`, 1 `main-only`, 5 `partial`, 7 `unsupported`, and 1 `removed`.
+Status totals for this baseline are 79 `released`, 5 `partial`, 7 `unsupported`, and 1 `removed`.
 
 ### API transformation and Context Control
 
@@ -170,7 +170,7 @@ Status totals for this baseline are 78 `released`, 1 `main-only`, 5 `partial`, 7
 | `CAP-WEB-UI-ADMINISTRATION` | released | Manage the primary product and organization resources in the Web UI. | `reshapr`: Web UI application routes | none |
 | `CAP-WEB-UI-QUICK-START` | released | Complete the import-to-Exposition journey in the Web UI wizard. | `reshapr`: `QuickStartWizard.svelte` | `LIM-QUICK-START-DEFAULT-GATEWAY-GROUP` |
 | `CAP-LOCAL-DOCKER-RUNTIME` | released | Start, inspect, and stop a local release stack with Docker or Podman. | `reshapr`: CLI run/status/stop commands, release Compose | none |
-| `CAP-LOCAL-APPLE-CONTAINER-RUNTIME` | main-only | Start, inspect, and stop a local release stack on macOS with apple/container (`reshapr run --engine apple`), without Compose. | `reshapr` `main` (reshaprio/reshapr#620): `cli/src/utils/apple-container.ts`, `cli/src/commands/run.ts`; not in release 1.1.1 | `LIM-APPLE-CONTAINER-COMPOSE-SUBSET` |
+| `CAP-LOCAL-APPLE-CONTAINER-RUNTIME` | released | Start, inspect, and stop a local release stack on macOS with apple/container (`reshapr run --engine apple`), without Compose. | `reshapr` 1.2.0 (reshaprio/reshapr#620, reshaprio/reshapr#642): `cli/src/utils/apple-container.ts`, `cli/src/utils/containers.ts`, `cli/src/commands/run.ts` | `LIM-APPLE-CONTAINER-COMPOSE-SUBSET` |
 
 ### Kubernetes and GitOps
 
@@ -281,12 +281,13 @@ Limitations remain in this registry after resolution so historical claims stay t
 | `LIM-PRODUCTION-PROFILES-NOT-CERTIFICATION` | active | charts 0.0.15 | Production values are starting profiles, not environment-specific sizing or security certification. | `CAP-HELM-ENVIRONMENT-PROFILES` |
 | `LIM-UPGRADE-ROLLBACK-MANUAL` | active | reShapr 1.1.0 / charts 0.0.15 | Generic migration hooks, automated rollback, and general credential rotation are not provided. | `CAP-HELM-UPGRADE-FOUNDATIONS` |
 | `LIM-HELM-CRDS-RETAINED` | active | charts 0.0.15 | Helm retains CRDs on uninstall; manually deleting a CRD also deletes its custom resources. | `CAP-HELM-UPGRADE-FOUNDATIONS` |
-| `LIM-APPLE-CONTAINER-COMPOSE-SUBSET` | active | `main` after reShapr 1.1.1 | The apple engine starts containers with `container run` from the release Compose files. It ignores `restart`, `extra_hosts` and `volumes`, warns on `host.docker.internal`, wires containers by IP because name resolution needs a host DNS setup with `sudo`, and refuses to start while containers from a previous run exist. It targets a single-node local stack, not clustered gateways. | `CAP-LOCAL-APPLE-CONTAINER-RUNTIME` |
+| `LIM-APPLE-CONTAINER-COMPOSE-SUBSET` | active | reShapr 1.2.0 | The apple engine starts containers with `container run` from the release Compose files. It ignores `restart`, `extra_hosts` and `volumes`, warns on `host.docker.internal`, wires containers by IP because name resolution needs a host DNS setup with `sudo`, refuses to start while containers from a previous run exist, and removes the partial stack when a container exits during startup. If `reshapr run` is interrupted before it finishes, the run state is not saved, so `reshapr stop` cannot find the containers and they must be removed with `container delete`. It targets a single-node local stack, not clustered gateways. | `CAP-LOCAL-APPLE-CONTAINER-RUNTIME` |
 
 ## Change log
 
 | Date | Baseline | Change |
 |---|---|---|
+| 2026-11-19 | reShapr 1.2.0 | Promoted `CAP-LOCAL-APPLE-CONTAINER-RUNTIME` to `released` and set `LIM-APPLE-CONTAINER-COMPOSE-SUBSET` to 1.2.0 after reshaprio/reshapr#620 and reshaprio/reshapr#642 shipped in the 1.2.0 tag, with the `run-on-apple-container` how-to. Replayed on 1.2.0 with apple/container 1.7.1 on macOS 27.2.1: `run --engine apple --ui` (about 47 s including image pulls), `status`, `login`, import, MCP `tools/call`, the "Containers already exist" guard and `stop`, after which no `reshapr-*` containers remained. Interrupted start (1.2.0 source and a live run): the apple engine leaves the containers and `reshapr stop` finds nothing; not reproduced on Docker, where a re-run is idempotent. Also replayed: engine auto-detection with Docker and Podman off the `PATH` (`Detected container engine: apple`) and a start without `--ui`. The page `verification` is advanced to 1.2.0. |
 | 2026-11-14 | reShapr `main` after 1.1.1 (not released) | Added `CAP-LOCAL-APPLE-CONTAINER-RUNTIME` as `main-only` and `LIM-APPLE-CONTAINER-COMPOSE-SUBSET` for `reshapr run --engine apple` (reshaprio/reshapr#620), with the `run-on-apple-container` how-to. Commands were checked on `main`, not replayed against a release. Promote the capability to `released` and replay the page after the first release that includes #620. |
 | 2026-10-19 | reShapr 1.1.0 / controllers 0.0.4 / corrected charts 0.0.15 | Reviewed Code Mode Tool exposure and execution, hardened script limits, backend HTTP payload bounds, MCP Apps references, Prompts reconciliation, all eight published chart CRDs, and admission extraEnv. Added current guides and runtime/logging references; preserved prior replay markers and historical limitations. |
 | 2026-09-22 | reShapr 1.0.0 / controllers 0.0.3 / charts 0.0.14 | Promoted the released runtime and charts to the documentation baseline; verified published images and chart artifacts; validated OIDC nonce and token-expiration checks; and carried forward unaffected documentation after reviewing the release delta. |
