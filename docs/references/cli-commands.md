@@ -902,7 +902,7 @@ Use **[Assign and Monitor Organization Quotas](../how-to-guides/administration/o
 
 ### `reshapr run` command
 
-Starts reShapr locally using Docker Compose (or Podman Compose). The CLI downloads the appropriate compose file from the GitHub repository for the specified release, caches it locally, and starts the containers.
+Starts reShapr locally using Docker Compose (or Podman Compose), or with `container run` on apple/container. The CLI downloads the appropriate compose file from the GitHub repository for the specified release, caches it locally, and starts the containers.
 
 ```bash
 reshapr run [options]
@@ -911,7 +911,7 @@ reshapr run [options]
 Available options:
 
 - `-r, --release <release>` : Release of the containers to run (defaults to `latest`; use `nightly` for the latest development build)
-- `-e, --engine <engine>` : Container engine to use (`docker` or `podman`)
+- `-e, --engine <engine>` : Container engine to use (`docker`, `podman` or `apple` for apple/container). Without this option, the CLI tries `docker`, then `podman`, then `container`
 - `--ui` : Download and deploy the Web UI Compose add-on
 
 ```bash
@@ -933,6 +933,8 @@ To use a specific release with Podman:
 ```bash
 reshapr run -r 0.2.3 -e podman
 ```
+
+To run on a Mac with apple/container, which has no Compose and ignores the Compose `restart`, `extra_hosts` and `volumes` settings, see [Run on apple/container](../how-to-guides/run-on-apple-container.md).
 
 To include the Web UI:
 

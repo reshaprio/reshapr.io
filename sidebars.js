@@ -222,13 +222,18 @@ const sidebars = {
           link: {
             type: 'generated-index',
             slug: '/category/local-development',
-            description: 'Run reShapr on your machine with Docker or Podman.',
+            description: 'Run reShapr on your machine with Docker, Podman or apple/container.',
           },
           items: [
             {
               type: 'doc',
               id: 'how-to-guides/docker-compose',
               label: 'Run with Docker Compose',
+            },
+            {
+              type: 'doc',
+              id: 'how-to-guides/run-on-apple-container',
+              label: 'Run on apple/container',
             },
           ],
         },
