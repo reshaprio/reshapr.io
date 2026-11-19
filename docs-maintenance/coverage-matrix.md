@@ -263,6 +263,7 @@ Every blog file is `historical-only`, including posts that remain factually accu
 | `blog/building-sync-check-with-reshapr.mdx` | published snapshot | historical-only |
 | `blog/reshapr-1.0.0-release.mdx` | published snapshot | historical-only |
 | `blog/_draft-secure-mcp-deployment-with-reshapr.md` | draft snapshot | historical-only |
+| `blog/reshapr-on-apple-container.mdx` | published snapshot | historical-only |
 
 ## Automated coverage
 

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1672 941" width="1672" height="941" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="{{shadow}}" flood-opacity="{{shadowOpacity}}"/></filter>
+  </defs>
+  <rect width="1672" height="941" fill="{{bg}}"/>
+  <g filter="url(#shadow)"><rect x="72" y="70" width="490" height="680" rx="14" fill="{{card}}" stroke="{{cardBorder}}"/></g>
+  <text x="100" y="124" font-size="26" font-weight="700" fill="{{text}}">Time to ready</text>
+  <text x="100" y="156" font-size="18" fill="{{muted}}">seconds, median of 10 starts</text>
+  <rect x="140" y="240" width="150" height="420" rx="6" fill="{{flow}}"/>
+  <text x="215" y="226" font-size="28" font-weight="700" text-anchor="middle" fill="{{text}}">7.7 s</text>
+  <rect x="340" y="382" width="150" height="278" rx="6" fill="{{cross}}"/>
+  <text x="415" y="368" font-size="28" font-weight="700" text-anchor="middle" fill="{{text}}">5.1 s</text>
+  <line x1="100" y1="660" x2="534" y2="660" stroke="{{cardBorder}}" stroke-width="2"/>
+  <text x="215" y="700" font-size="18" text-anchor="middle" fill="{{muted}}">apple/container</text>
+  <text x="415" y="700" font-size="18" text-anchor="middle" fill="{{muted}}">Docker Desktop</text>
+  <g filter="url(#shadow)"><rect x="591" y="70" width="490" height="680" rx="14" fill="{{card}}" stroke="{{cardBorder}}"/></g>
+  <text x="619" y="124" font-size="26" font-weight="700" fill="{{text}}">Memory in the containers</text>
+  <text x="619" y="156" font-size="18" fill="{{muted}}">MiB, data plane + control plane + Postgres</text>
+  <rect x="659" y="240" width="150" height="420" rx="6" fill="{{flow}}"/>
+  <text x="734" y="226" font-size="28" font-weight="700" text-anchor="middle" fill="{{text}}">915 MiB</text>
+  <rect x="859" y="407" width="150" height="253" rx="6" fill="{{cross}}"/>
+  <text x="934" y="393" font-size="28" font-weight="700" text-anchor="middle" fill="{{text}}">552 MiB</text>
+  <line x1="619" y1="660" x2="1053" y2="660" stroke="{{cardBorder}}" stroke-width="2"/>
+  <text x="734" y="700" font-size="18" text-anchor="middle" fill="{{muted}}">apple/container</text>
+  <text x="934" y="700" font-size="18" text-anchor="middle" fill="{{muted}}">Docker Desktop</text>
+  <g filter="url(#shadow)"><rect x="1110" y="70" width="490" height="680" rx="14" fill="{{card}}" stroke="{{cardBorder}}"/></g>
+  <text x="1138" y="124" font-size="26" font-weight="700" fill="{{text}}">Host cost, no containers</text>
+  <text x="1138" y="156" font-size="18" fill="{{muted}}">MB resident, engine processes only</text>
+  <rect x="1178" y="641" width="150" height="19" rx="6" fill="{{flow}}"/>
+  <text x="1253" y="627" font-size="28" font-weight="700" text-anchor="middle" fill="{{text}}">30 MB</text>
+  <rect x="1378" y="240" width="150" height="420" rx="6" fill="{{cross}}"/>
+  <text x="1453" y="226" font-size="28" font-weight="700" text-anchor="middle" fill="{{text}}">660 MB</text>
+  <line x1="1138" y1="660" x2="1572" y2="660" stroke="{{cardBorder}}" stroke-width="2"/>
+  <text x="1253" y="700" font-size="18" text-anchor="middle" fill="{{muted}}">apple/container</text>
+  <text x="1453" y="700" font-size="18" text-anchor="middle" fill="{{muted}}">Docker Desktop</text>
+  <text x="836" y="834" font-size="28" font-weight="700" text-anchor="middle" fill="{{text}}">Warm start, memory and idle cost on one Mac</text>
+  <text x="836" y="870" font-size="21" text-anchor="middle" fill="{{muted}}">reShapr 1.2.0 stack, images already pulled, 2026-11-19. Lower is better.</text>
+</svg>
