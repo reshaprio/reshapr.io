@@ -27,7 +27,7 @@ import ThemedImage from '@theme/ThemedImage';
 
 Most of us build MCP servers and agents on a Mac. Until now, running reShapr on that Mac meant Docker Desktop or Podman. Containers need a Linux kernel, so these tools start one Linux VM and run every container inside it, sharing that kernel. The VM starts with the app and stays around while you work.
 
-Apple ships a different model. [**apple/container**](https://github.com/apple/container) is an open source tool, written in Swift, that runs each Linux container in **its own lightweight VM** on Apple silicon, with nothing else resident when no container runs.
+Apple ships a different model. [**apple/container**](https://github.com/apple/container) is an open source tool, written in Swift, that runs each Linux container in **its own lightweight VM** on Apple silicon, with only small engine services resident when no container runs.
 
 We added it to reShapr as a **third engine**: `reshapr run --engine apple`. Here is what that means, what we measured against Docker Desktop, and where it still falls short.
 
@@ -78,8 +78,8 @@ Measured on 2026-11-19 on one Apple silicon Mac (macOS 27.2.1, 24 GB), with reSh
 
 Reading these numbers honestly:
 
-- **Start time:** apple/container is **about 2.5 seconds slower** in this test. Starting three VMs costs more than starting three containers in a VM that is already running. Docker's start time barely moved between runs, while apple/container varied from 6.4 to 9.0 s.
-- **Memory in the containers:** apple/container is **higher**, mostly Postgres (141 MiB against 26 MiB). Each container carries its own Linux kernel and page cache. Both figures were the same in the two series.
+- **Start time:** apple/container is **about 2.6 seconds slower** in this test. Starting three VMs costs more than starting three containers in a VM that is already running. Docker's start time barely moved between runs, while apple/container varied from 6.4 to 9.0 s.
+- **Memory in the containers:** apple/container is **higher** on all three services, most on the control plane (485 against 328 MiB) and Postgres (141 against 26 MiB). Each container carries its own Linux kernel and page cache. Both figures were the same in the two series.
 - **Idle cost:** this is where it wins. With no container running, the engine's services hold **about 30 MB**. Docker Desktop's app processes hold **about 660 MB**, and its Linux VM adds more on top.
 - **Host total with the stack up:** we do not report it. The resident size of the VMs changed by more than 1 GB between our two series, because macOS compresses idle VM memory, so a `ps` total does not support a comparison.
 
@@ -102,14 +102,14 @@ Beyond the numbers, we wanted to know whether reShapr works the same on this eng
 
 - **MCP end to end.** `initialize`, `tools/list` and `tools/call` work through the data plane, against a public API (Open-Meteo, used as an example).
 - **Hardened control plane.** In the PoC, it runs with `--read-only --cap-drop ALL --tmpfs /tmp`; `--engine apple` does not set these flags.
-- **Two clustered gateways.** reShapr is a runtime, and its gateways are data plane proxies. In the PoC, two of them form one cluster inside a `container cluster`; the benchmark stack runs a single one.
+- **Two clustered gateways.** In the PoC, two data plane replicas form one cluster inside a `container cluster`; the benchmark stack runs a single one.
 
 ## Limits to know before you start
 
 - **Postgres data is not persisted yet.** The engine ignores compose `volumes`, so stopping the stack resets the configuration. Docker keeps it because the release compose file mounts `~/tmp/reshapr-data`. The gap is in the engine, not in apple/container: in our test, a Postgres VM kept its data in a mounted host folder across a restart, as long as the mount targets the parent of the data directory.
 - `restart` and `extra_hosts` from the compose files are **ignored**.
 - **No cluster mode** with `--engine apple`. Two gateways did form one cluster in a `container cluster` with the 1.2.0 images, but that setup is Kubernetes-style and outside `reshapr run`. The [PoC](https://github.com/yada/reshapr-container-poc#clustered-gateways-container-cluster) has the manifest and steps. It is experimental.
-- **Apple silicon and macOS 26 or later** only, with container 1.7 or later. We did not verify macOS 15.
+- **Apple silicon and macOS 26 or later** only, with container 1.7 or later.
 - The engine is available **from reShapr 1.2.0**. The proof of concept scripts predate the release and run the same stack on earlier ones.
 
 ## Try it
@@ -126,7 +126,7 @@ reshapr stop
 ## What changed
 
 - reShapr has a **third engine**, native to the Mac, selected with `--engine apple`.
-- The stack runs as **three VMs**, and nothing stays resident when it is stopped.
+- The stack runs as **three VMs**, and only about 30 MB of engine services stay resident when it is stopped.
 - It is **slower to start and heavier per container** than Docker Desktop in our test, and **much cheaper when idle**.
 - The limits are known and listed: no persistence, no restart, no cluster mode.
 
