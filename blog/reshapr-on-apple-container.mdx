@@ -1,0 +1,133 @@
+---
+title: "reShapr on apple/container: One VM per Container on Your Mac"
+date: 2026-11-19
+authors:
+  - yacine
+description: "reShapr 1.2.0 adds apple/container, Apple's open source engine that gives every Linux container its own lightweight VM. What it is, what we measured against Docker Desktop on one Mac (not faster, cheap when idle), and where it still falls short."
+image: /img/blog/apple-container-hero-light.png
+imageDark: /img/blog/apple-container-hero-dark.png
+tags: [MCP, Open-Source, Deployment, Benchmark, AI-native, Docker, macOS]
+---
+
+import ThemedImage from '@theme/ThemedImage';
+
+{/* markdownlint-disable MD001 MD026 MD030 MD045 */}
+
+<figure style={{textAlign: 'center', margin: '1.5rem 0'}}>
+
+<ThemedImage
+  alt="The reShapr CLI starts three containers on apple/container, each in its own VM: the data plane, the control plane and Postgres. An AI assistant calls MCP tools on the data plane, which calls a backend API"
+  sources={{
+    light: '/img/blog/apple-container-hero-light.png',
+    dark: '/img/blog/apple-container-hero-dark.png',
+  }}
+/>
+
+</figure>
+
+Most of us build MCP servers and agents on a Mac. Until now, running reShapr on that Mac meant Docker Desktop or Podman. Containers need a Linux kernel, so these tools start one Linux VM and run every container inside it, sharing that kernel. The VM starts with the app and stays around while you work.
+
+Apple ships a different model. [**apple/container**](https://github.com/apple/container) is an open source tool, written in Swift, that runs each Linux container in **its own lightweight VM** on Apple silicon, with nothing else resident when no container runs.
+
+We added it to reShapr as a **third engine**: `reshapr run --engine apple`. Here is what that means, what we measured against Docker Desktop, and where it still falls short.
+
+> **TL;DR** **reShapr 1.2.0** adds apple/container as a **third engine** ([reshaprio/reshapr#620](https://github.com/reshaprio/reshapr/pull/620)), selected with `--engine apple`. It is **not faster** than Docker Desktop. It costs **almost nothing when idle** and isolates each container in its own VM. The numbers below come from reShapr 1.2.0. The [proof of concept](https://github.com/yada/reshapr-container-poc) ran the same stack on 1.1.0 and 1.1.1 before the release.
+
+{/* truncate */}
+
+## Why a Mac-native engine
+
+The Mac is where many of you try reShapr first: a laptop, an assistant, an API you want to expose as MCP tools. The quickest path was [**Docker Compose**](/docs/how-to-guides/docker-compose), which still works and stays the default.
+
+apple/container changes two things for that laptop experience:
+
+- **One VM per container.** Each container gets its own kernel and its own memory limit, so containers are isolated from each other by a hypervisor boundary and not only by namespaces.
+- **No always-on VM.** The engine's own services stay small. A shared Linux VM and a desktop app are not part of the picture.
+
+## What we built
+
+[`reshapr run --engine apple`](https://github.com/reshaprio/reshapr/pull/620) reads the **same release compose files** as the Docker engine. It starts each service with `container run` in `depends_on` order, replays the compose healthchecks inside the container, and wires the containers together by IP, so **no `sudo` DNS setup** is needed.
+
+Engine auto-detection tries **Docker first, then Podman, then apple/container**. Existing setups keep working unchanged, and `--engine apple` selects the new one explicitly.
+
+## What we measured
+
+The question: **what does it cost to run the same reShapr stack on each engine, on the same Mac?**
+
+The stack is the default one: data plane, control plane and Postgres, release 1.2.0, started with `reshapr run --release 1.2.0 --engine apple` or `--engine docker`.
+
+<figure style={{textAlign: 'center', margin: '1.75rem 0'}}>
+
+<ThemedImage
+  alt="Bar charts comparing apple/container and Docker Desktop for the reShapr stack: time to ready 7.7 seconds against 5.1, container memory 915 MiB against 552, host memory with no containers 30 MB against 660"
+  sources={{
+    light: '/img/blog/apple-container-benchmark-light.png',
+    dark: '/img/blog/apple-container-benchmark-dark.png',
+  }}
+/>
+
+</figure>
+
+Measured on 2026-11-19 on one Apple silicon Mac (macOS 27.2.1, 24 GB), with reShapr 1.2.0, apple/container 1.7.1 and Docker Desktop 29.9.3. We ran two series of 5 warm starts per engine and report the 10 starts together.
+
+| | apple/container | Docker Desktop |
+|---|---|---|
+| Time to ready, 10 warm starts | 6.4 to 9.0 s (median 7.7 s) | 5.1 to 5.2 s (median 5.1 s) |
+| Memory inside the containers (data plane, control plane, Postgres) | 286 to 291, 485 to 486, 141 MiB (913 to 917 MiB total) | 197 to 199, 326 to 330, 26 MiB (551 to 553 MiB total) |
+| Engine processes on the host, no container running | about 30 MB | about 660 MB |
+
+Reading these numbers honestly:
+
+- **Start time:** apple/container is **about 2.5 seconds slower** in this test. Starting three VMs costs more than starting three containers in a VM that is already running. Docker's start time barely moved between runs, while apple/container varied from 6.4 to 9.0 s.
+- **Memory in the containers:** apple/container is **higher**, mostly Postgres (141 MiB against 26 MiB). Each container carries its own Linux kernel and page cache. Both figures were the same in the two series.
+- **Idle cost:** this is where it wins. With no container running, the engine's services hold **about 30 MB**. Docker Desktop's app processes hold **about 660 MB**, and its Linux VM adds more on top.
+- **Host total with the stack up:** we do not report it. The resident size of the VMs changed by more than 1 GB between our two series, because macOS compresses idle VM memory, so a `ps` total does not support a comparison.
+
+### Method
+
+Only **warm starts** are timed. We pulled all the images on both engines first, then measured start to readiness. A pull depends on the network and on layers already cached, so mixing it into the start time would measure the registry and not the engine. For the record, the first pull of the three images took about 64 seconds on apple/container; we did not benchmark Docker's pull, because Postgres and shared layers were already cached.
+
+Each cycle runs `reshapr run --release 1.2.0 --engine apple` (or `docker`), polls both `/q/health/ready` endpoints until they answer 200, then runs `reshapr stop`. Memory is sampled 30 seconds after the last start of each series.
+
+### Fairness caveats
+
+- One machine, one day, two series of five starts per engine. Treat the figures as orders of magnitude, not as a verdict.
+- Container memory comes from `container stats` and `docker stats`. Idle host memory is resident size from `ps`, approximate, sampled once per series.
+- Docker Desktop's idle figure is its desktop app and helper processes. Its VM is sized for the whole machine (8 GiB here) and is not included, because its resident size varied too much to compare. apple/container gave each container a 1 GiB limit by default.
+- An earlier series on reShapr 1.1.1, which started the apple/container stack with our proof of concept scripts, gave 10.4 s against 7.1 s. The difference with today's numbers comes from the release, the start path and the state of the machine, and we did not isolate them.
+
+## What the proof of concept showed
+
+Beyond the numbers, we wanted to know whether reShapr works the same on this engine. To find out, we built a proof of concept in a GitHub repository: **[yada/reshapr-container-poc](https://github.com/yada/reshapr-container-poc)**. It holds the scripts that start the stack on apple/container and records each check, run on macOS 27 with reShapr 1.1.0 and 1.1.1:
+
+- **MCP end to end.** `initialize`, `tools/list` and `tools/call` work through the data plane, against a public API (Open-Meteo, used as an example).
+- **Hardened control plane.** In the PoC, it runs with `--read-only --cap-drop ALL --tmpfs /tmp`; `--engine apple` does not set these flags.
+- **Two gateways, shared sessions.** reShapr is a runtime, and its gateways are data plane proxies. In the PoC, two of them share MCP sessions inside a `container cluster`; the benchmark stack runs a single one.
+
+## Limits to know before you start
+
+- **Postgres data is not persisted yet.** The engine ignores compose `volumes`, so stopping the stack resets the configuration. Docker keeps it because the release compose file mounts `~/tmp/reshapr-data`. The gap is in the engine, not in apple/container: in our test, a Postgres VM kept its data in a mounted host folder across a restart, as long as the mount targets the parent of the data directory.
+- `restart` and `extra_hosts` from the compose files are **ignored**.
+- **No cluster mode** with `--engine apple`.
+- **Apple silicon and macOS 26 or later** only, with container 1.7 or later. We did not verify macOS 15.
+- The engine is available **from reShapr 1.2.0**. The proof of concept scripts predate the release and run the same stack on earlier ones.
+
+## Try it
+
+With reShapr 1.2.0 or later, the flow is the same as with Docker. The full procedure, with its limits, is in the [**apple/container guide**](/docs/how-to-guides/run-on-apple-container).
+
+```bash
+container system start
+reshapr run --engine apple   # uses the latest release; pin one with --release 1.2.0
+reshapr status
+reshapr stop
+```
+
+## What changed
+
+- reShapr has a **third engine**, native to the Mac, selected with `--engine apple`.
+- The stack runs as **three VMs**, and nothing stays resident when it is stopped.
+- It is **slower to start and heavier per container** than Docker Desktop in our test, and **much cheaper when idle**.
+- The limits are known and listed: no persistence, no restart, no cluster mode.
+
+If you build on a Mac and want to try it, start from the [**PoC**](https://github.com/yada/reshapr-container-poc) and tell us what you hit. To learn more about the engine, see the [**apple/container**](https://github.com/apple/container) repository. For the step-by-step procedure, see the [**apple/container guide**](/docs/how-to-guides/run-on-apple-container). For the Docker path, see the [**Docker Compose guide**](/docs/how-to-guides/docker-compose).
