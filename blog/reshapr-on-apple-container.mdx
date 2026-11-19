@@ -108,7 +108,7 @@ Beyond the numbers, we wanted to know whether reShapr works the same on this eng
 
 - **Postgres data is not persisted yet.** The engine ignores compose `volumes`, so stopping the stack resets the configuration. Docker keeps it because the release compose file mounts `~/tmp/reshapr-data`. The gap is in the engine, not in apple/container: in our test, a Postgres VM kept its data in a mounted host folder across a restart, as long as the mount targets the parent of the data directory.
 - `restart` and `extra_hosts` from the compose files are **ignored**.
-- **No cluster mode** with `--engine apple`. Two gateways did form one cluster in a `container cluster` with the 1.2.0 images, but that setup is Kubernetes-style and outside `reshapr run`. The [PoC](https://github.com/yada/reshapr-container-poc#clustered-gateways-container-cluster) has the manifest and steps; its manifest still pins 1.1.1, so change the image tags to 1.2.0.
+- **No cluster mode** with `--engine apple`. Two gateways did form one cluster in a `container cluster` with the 1.2.0 images, but that setup is Kubernetes-style and outside `reshapr run`. The [PoC](https://github.com/yada/reshapr-container-poc#clustered-gateways-container-cluster) has the manifest and steps. It is experimental.
 - **Apple silicon and macOS 26 or later** only, with container 1.7 or later. We did not verify macOS 15.
 - The engine is available **from reShapr 1.2.0**. The proof of concept scripts predate the release and run the same stack on earlier ones.
 
