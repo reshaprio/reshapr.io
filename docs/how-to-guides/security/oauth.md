@@ -5,11 +5,9 @@ verification:
   version: 1.0.0
   date: 2026-09-22
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  date: 2026-11-20
+  scope: release-tagged OAuth configuration and CLI prerequisites; no live identity provider replay
 ---
 
 # Protect an MCP Endpoint with OAuth 2.0
@@ -30,7 +28,7 @@ The proxy does not participate in that client-registration step. It validates th
 
 You need:
 
-- the reShapr `1.1.0` CLI, authenticated with `reshapr login`;
+- the reShapr `1.2.0` CLI, authenticated with `reshapr login`;
 - an imported Service, its backend endpoint, and a Gateway Group ID;
 - an OAuth 2.0 test issuer and HTTPS JWKS endpoint reachable by the proxy;
 - `curl` and `jq`;

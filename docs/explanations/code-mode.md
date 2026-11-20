@@ -145,8 +145,8 @@ Derived calls are traced under the execution rather than duplicated as individua
 
 Release-tagged implementation and tests establish the reShapr behavior described here:
 
-- [Dispatch, preflight, and injected defaults](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/main/java/io/reshapr/proxy/mcp/ToolCallExecutor.java).
-- [Selected surface, discovery, execution, and error handling](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/main/java/io/reshapr/proxy/mcp/code/CodeModeExecutor.java).
-- [Sandbox execution, memory ceiling, and cancellation](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/main/java/io/reshapr/proxy/mcp/script/CustomToolScriptRunner.java), including the [CPU-loop timeout regression test](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/test/java/io/reshapr/proxy/mcp/script/CustomToolScriptRunnerTest.java).
+- [Dispatch, preflight, and injected defaults](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/main/java/io/reshapr/proxy/mcp/ToolCallExecutor.java).
+- [Selected surface, discovery, execution, and error handling](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/main/java/io/reshapr/proxy/mcp/code/CodeModeExecutor.java).
+- [Sandbox execution, memory ceiling, and cancellation](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/main/java/io/reshapr/proxy/mcp/script/CustomToolScriptRunner.java), including the [CPU-loop timeout regression test](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/test/java/io/reshapr/proxy/mcp/script/CustomToolScriptRunnerTest.java).
 
 [Cloudflare's Code Mode article](https://blog.cloudflare.com/code-mode/) and [Anthropic's code execution with MCP article](https://www.anthropic.com/engineering/code-execution-with-mcp) explain the wider pattern: callable code APIs, progressive discovery, and processing results outside model context. [Anthropic's programmatic tool calling](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling) is a related provider-managed implementation. Their execution environments, filesystem examples, and benchmark figures are not reShapr contracts or prerequisites.

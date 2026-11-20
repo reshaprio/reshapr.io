@@ -1,12 +1,14 @@
 # Product baseline
 
-**Baseline date:** 2026-10-21
+**Baseline date:** 2026-11-20
 
-**Runtime:** reShapr `1.1.0`
+**Runtime:** reShapr `1.2.0`
 
-**Controllers:** `0.0.4`
+**Scoped follow-up:** the local Web UI Quick Start was verified on reShapr `1.2.1`. This does not promote the broader documentation baseline or reverify the CLI or Helm workflows.
 
-**Helm charts:** `0.0.16`
+**Controllers:** `0.0.5`
+
+**Helm charts:** `0.0.18`
 
 This is the factual index used to review documentation claims. It is not a substitute for release artifacts or owner-repository contracts. A row means that the evidence was reviewed; it does not make this file evidence.
 
@@ -14,10 +16,12 @@ This is the factual index used to review documentation claims. It is not a subst
 
 | Repository | Released ref | Released commit | Review ref | Review commit |
 |---|---|---|---|---|
-| `reshaprio/reshapr` | `1.1.0` | `bd55008a322e56f7d2dac7e96cadc7211e5c09a9` | release-tagged implementation and tests | same commit |
-| `reshaprio/reshapr-controllers` | `0.0.4` | `4c11573b91a3361d7b76f4450d39bec9271b2059` | eight CRDs and reconcilers | same commit |
-| `reshaprio/reshapr-helm-charts` | `0.0.16` | `3fa540d4a0aaa26e0718152678a24e2cd6a00c83` | release tag and four published OCI charts | same commit |
-| `reshaprio/reshapr.io` | current corpus | `10140fb7a8c847b338fe4e0b105518e3d68e8101` | `main` plus reviewed working tree | same HEAD |
+| `reshaprio/reshapr` | `1.2.0` | `d52533be85e97a2b796fa337849161b4085bb762` | release-tagged implementation and tests, npm and OCI artifacts | same commit |
+| `reshaprio/reshapr-controllers` | `0.0.5` | `a391342777b2732fdc39232d35f2d83310f0ee18` | ten CRDs, reconcilers and tests | same commit |
+| `reshaprio/reshapr-helm-charts` | `0.0.18` | `40f245be9d849b95f54a02bff4c1871f3788452f` | release tag and four published OCI charts | same commit |
+| `reshaprio/reshapr.io` | current corpus | `b6274420b42504c018258c10accb471b923c888e` | reviewed working tree | HEAD plus uncommitted changes |
+
+Release-update replay, 2026-11-19: the published npm CLI and runtime images were exercised in a disposable, loopback-only Compose project. The local Getting Started path covered login, server information, Open-Meteo import, Plan and Exposition creation, discovery, `tools/list`, and a live `tools/call`. The Web UI login route returned HTTP 200; browser login and the complete Web UI tutorial were not replayed. A Skills fixture was attached through the multipart public API and verified through discovery, `skills/list`, `skills/get`, and a supporting file read; `reshapr import` is not the attachment path. An inline Configuration Plan merge patch persisted `backendTimeout`. The four released charts rendered, all ten release CRD schemas were retrieved and checked, and the proxy image and observability manifests passed preflight. The controller chart packages nine CRDs, not `Skills`. These checks do not qualify hosted login, Podman, alternate TLS providers, a production upgrade, Kubernetes reconciliation, external monitoring, OIDC/OAuth, or key rotation. Public verification markers remain unchanged for partial replays.
 
 Release-update review, 2026-10-21: Helm `0.0.16` removes the proxy's incomplete HPA-specific Deployment and uses the clustering-capable Deployment for both autoscaling modes. The four published OCI artifacts were pulled and installed in isolated Minikube namespaces with runtime `1.1.0` and controllers `0.0.4`. Live checks cover the main production-guide path, a three-member cluster and direct cross-pod sessions, HTTPS UI/readiness, both admission replicas, HPA metrics, and MCP backend dispatch. The [dated Kubernetes replay report](replay/2026-10-21-kubernetes-0.0.16.md) records adaptations, digests, failures corrected, and outstanding full-page checks. Public verification remains historical; alternative certificate providers, enforcing CNI policies, and production infrastructure are not qualified by this local replay.
 
@@ -35,7 +39,58 @@ Preflight evidence recorded on 2026-10-19:
 
 Follow-up live replay, 2026-10-20: the published CLI and Docker images `1.1.0` were exercised in a disposable local stack covering Compose, CLI imports and CI automation, MCP, Context Control, scripted Tools, API-key rotation, administration, synchronization recovery, and the Web UI Quick Start. Review on 2026-10-21 retained current public verification only for the three fully replayed pages: Context Control, Artifact selection and API-key protection. Other pages retain their previous complete verification. The [dated replay report](replay/2026-10-20-runtime-1.1.0.md) keeps partial results and the remaining full-page checks privately. This supersedes the no-live-replay statement above only for the executed paths, not Kubernetes, OIDC/OAuth, audit export, or database encryption rotation.
 
+Release-update replay, 2026-11-20: compared all four published `0.0.18` archives with `0.0.17`. The only Kubernetes resource change in the archives is the addition of the Skills CRD, apart from chart version metadata. The ten packaged CRDs match the controllers `0.0.5` tag. The Kubernetes artifact and manifest preflight and the proxy OTLP/ServiceMonitor render passed. No live Kubernetes installation or upgrade was replayed; existing public verification banners remain unchanged.
+
+### Regression replay, 2026-11-20
+
+Used published npm CLI and Compose images `1.2.0`, PostgreSQL 17 and Grafana OTEL LGTM `0.32.1`, plus a separate Minikube `1.33.1` cluster for the `0.0.18` chart and `0.0.5` operator. Tests used disposable accounts and resources. A render, startup check or tagged-source assertion does not count as a complete procedure.
+
+| Page(s) | Result and boundary |
+|---|---|
+| Audit an MCP Endpoint | **Passed.** Audited, API-key-protected Plan and Exposition. Asserted a successful discovery, successful `get_v1_forecast` call with actual weather content, and `401` on an invalid key. Loki received the corresponding discovery, Tool call and authentication-failure records, including `invalid_api_key`. Exposition and Plan deleted. The optional Code Mode audit attributes are supported by the tagged source, not a Loki assertion in this replay. |
+| Protect an MCP Endpoint with an API Key | **Passed.** Missing key rejected; valid key accepted. Rotated with the CLI; the old key stopped working and the new key worked without a proxy restart. |
+| Context Control in Practice | **Passed locally.** Attached the published Tool and filters and exposed all three Plans. Each of the two JSON endpoints listed only `current_weather`. The filtered response contained exactly the five documented fields and shrank from 427 to 312 UTF-8 bytes for this request. The TOON endpoint returned non-JSON weather content (299 bytes). Local requests used the actual mapped proxy port. |
+| Attach and Select reShapr Artifacts | **Passed locally.** Attached the four documented artifacts, inspected the capability metadata, and compared the two Expositions: both listed `current_weather`, only the action exposed `weather_brief`, and only the context exposed `weather-code-note`. The deletion preview named only the action Plan; cancellation retained the Prompt. No stream interruption was observed. |
+| Web UI Quickstart | **Regression confirmed on `1.2.0`; resolved on `1.2.1` for the local Compose path.** On `1.2.0`, browser sign-in passed but Quick Start's same-origin URL form submission returned `403 Cross-site POST form submissions are forbidden` before Service creation. The same authenticated request returned `200` against the `1.1.0` Web UI with the same `1.2.0` control plane. Matching `ORIGIN` did not fix the `1.2.0` image. See the follow-up below for the full browser replay. |
+| Test an MCP Endpoint; MCP Support | **Partial.** Stateless discovery, list and forecast call passed. `2025-11-25` initialization and list passed. API key checked separately; OAuth and the full protocol/version matrix were not replayed. Tagged source parity now includes `skills/list`, `skills/get` and `resources/directory/read`. |
+| Getting Started; CLI Commands | **Partial.** Local login, version/help and info, Open-Meteo import, manual Plan/Exposition/discovery/list/call and all-in-one import with endpoint creation worked. Hosted browser callback and complete CLI command matrix were not replayed. |
+| Import API Artifacts | **Partial.** OpenAPI URL, local GraphQL with Service override and self-contained local Protobuf passed via CLI. Protected URL, cross-file Protobuf and Web UI alternatives were not fully replayed. |
+| Docker Compose; Observe and Audit | **Partial.** Control plane, proxy, PostgreSQL, Web UI and collector ran together; Compose Loki received real audit records and the proxy exposed metrics. CLI-managed Compose lifecycle, Podman, Kubernetes ingestion and external monitor setup were not replayed. |
+| Deploy Kubernetes for Production; First GitOps MCP Endpoint; Manage Resources with GitOps | **Partial.** Four released charts rendered; a live controller chart install without admission established all ten CRDs, including Skills, and the `0.0.5` operator rolled out. The full admission/TLS configuration and reconciliation were not executed: in the disposable cluster cert-manager's cainjector could not route to the Kubernetes API ClusterIP. No changes to the existing Minikube profile. |
+| Deploy Hybrid Gateway | **Preflight only.** Released proxy image verified; real remote control-plane connection and backend call not replayed. |
+| Try reShapr Online | **Not replayed.** Needs an authorized test account and a hosted `1.2.0` version check. |
+| Build a Scripted Custom Tool; Automate with CLI in CI/CD; Features | **Not fully replayed.** The Context Control and artifact-selection runs cover declarative Tool/filter selection, not the script workflow, CI walkthrough or full feature catalogue. |
+| Organizations and Memberships; Organization Quotas | **Not replayed.** Browser login and dashboard visibility do not verify administration workflows. |
+| OAuth; OAuth Client Credentials; Backend Auth and Elicitation; Configure Backend Header Policy; Configure Control Plane OIDC | **Not replayed.** API-key checks do not qualify these workflows; external issuer, credential flow, elicitation client and header-policy variants need their own tests. |
+| Troubleshoot; Rotate Database Encryption Key; Upgrade and Rotate | **Not replayed.** The fresh, partial Kubernetes install does not cover recovery, database rotation, or upgrades from a previous installation. |
+
+### Web UI Quick Start follow-up, 2026-11-20
+
+- **Release:** reShapr `1.2.1` at `8f080562d39186f2f60b36b05b1b4a8153914a90`. The tagged Compose UI addon sets `ORIGIN=http://localhost:3333`; the tagged `web-ui/server.js` supplies that origin to the SvelteKit adapter.
+- **Fixture:** published `1.2.1` Web UI, control plane and proxy with PostgreSQL 17 in Docker Compose. Verification used Chromium at `http://localhost:3333`, loopback ports, and a fresh PostgreSQL data directory under the replay root. A preliminary run inherited the upstream Compose host bind mount; it was stopped and excluded from the verification evidence.
+- **Evidence:** sign-in and the Open-Meteo `1.5.6` URL form succeeded (`200`). The Service was `Open-Meteo Weather Forecast API` version `1.0`, and the URL contract was its sole main Artifact. The wizard skipped supplemental Artifacts, created the unauthenticated `default` Plan with all operations, and published it to the Default Gateway Group. Repeating the flow hit the documented duplicate guard and reopened the same MCP Server. On the exact URL displayed in the detail view, `server/discover`, `tools/list` and `tools/call` passed; `get_v1_forecast` returned numeric `current.temperature_2m` data.
+- **Digests:** Web UI `sha256:8a2a36e988baba6dba4c6fe55a87a0102720963dd4a989a4f6e015a7530e4032`; control plane `sha256:ca3ad1f39f9d1bc4d5d2f20c75f8981448f5bb1d882dce4f25367d287894f9f5`; proxy `sha256:26b3386d4448c7a3ad11b4f38f5f619c8bd9fec570d7589897835e8a782abf75`.
+- **Scope:** `web-ui-quickstart.md` advances to `Verified 1.2.1`. This does not qualify hosted/HTTPS deployments, optional endpoint security, other import workflows, or the remaining protocol and infrastructure scenarios.
+
 Published chart digests for the current baseline:
+
+| Chart 0.0.18 | OCI digest |
+|---|---|
+| control-plane | `sha256:f630a9f4c4adcb3c7ce98a5c5ad7ee6fad5692ceaeff6c777544549cf1b0e76a` |
+| proxy | `sha256:ad1719e3820915c5b453001872fb0b7b1a9279deb256705af2ec3cd11a15f294` |
+| web-ui | `sha256:45db9932afa8012a411b87d9f8e31a31685f7802a161c910d060752686473b40` |
+| controllers | `sha256:fff7ca72e1c84077eff0e8cf166c71a2d09f60f6725496ed5793b69cb47a6b6c` |
+
+Historical published chart digests:
+
+| Chart 0.0.17 | OCI digest |
+|---|---|
+| control-plane | `sha256:0975c7e30ff7eee78bb01f09f85d09425a5c5de752ce223261f6d4d8381975ce` |
+| proxy | `sha256:c3a286514458ed618a9de3e8cdc1c98df28d0b390895da2dc3de7609dd44de00` |
+| web-ui | `sha256:ea8605c7355b6d991e3e645234c5bf7cf874e71b905cf02250e862d25e616516` |
+| controllers | `sha256:5a1a8bd9f4212be696d40c2f0de76a0f8256d6146881fec69b2a3064f198b9e3` |
+
+Historical published chart digests:
 
 | Chart 0.0.16 | OCI digest |
 |---|---|
@@ -95,7 +150,7 @@ Status totals for this baseline are 79 `released`, 5 `partial`, 7 `unsupported`,
 | `CAP-PROTOBUF-GRPC` | released | Import Protobuf 3 definitions and dispatch Tools to gRPC backends. | `reshapr`: `ProtobufImporter`, `GrpcMcpToolConverter`, `GrpcProxyService` | `LIM-PROTOBUF-DEPENDENCY-RESOLUTION` |
 | `CAP-IMPORT-FILE-OR-URL` | released | Import contracts by local file or URL, with name and version overrides. | `reshapr`: `ArtifactResource`, `ReferenceResolver`, CLI import command | `LIM-LOCAL-IMPORT-EXTERNAL-REFS` |
 | `CAP-OPERATION-SELECTION` | released | Include or exclude generated API operations from the client-visible surface of a Configuration Plan. | `reshapr`: `OperationNameFilterPredicate`, `ToolCallExecutor` | `LIM-OPERATION-SELECTION-NOT-AUTHORIZATION` |
-| `CAP-ARTIFACT-ATTACHMENT` | released | Attach Prompts, Resources, Custom Tools, and Tools Output Filters to a Service. | `reshapr`: `ReshaprArtifactBuilder`, `ArtifactType` | none |
+| `CAP-ARTIFACT-ATTACHMENT` | released | Attach Prompts, Resources, Skills, Custom Tools, and Tools Output Filters to a Service. | `reshapr`: `ReshaprArtifactBuilder`, `ArtifactType` | none |
 | `CAP-ARTIFACT-SELECTION` | released | Select attached artifacts per Configuration Plan. | `reshapr`: `ConfigurationPlan.includedArtifacts` | none |
 | `CAP-DECLARATIVE-CUSTOM-TOOLS` | released | Rename, condense, and reshape operations with declarative Custom Tools. | `reshapr`: `ReshaprCustomToolsMcpToolConverter` | none |
 | `CAP-SCRIPTED-CUSTOM-TOOLS` | released | Orchestrate declared Tools with JavaScript, including lower-level operations hidden from the client-visible surface. | `reshapr`: `CustomToolScriptRunner`, `ToolCallExecutor`, associated tests | `LIM-SCRIPT-RUNTIME-BOUNDS`, `LIM-OPERATION-SELECTION-NOT-AUTHORIZATION` |
@@ -113,8 +168,10 @@ Status totals for this baseline are 79 `released`, 5 `partial`, 7 `unsupported`,
 | `CAP-MCP-SESSION-MODE` | released | Initialize and pin a server-issued MCP session for versions before `2026-07-28`. | `reshapr`: `McpController`, `SessionStore` | none |
 | `CAP-MCP-STATELESS-MODE` | released | Use stateless requests and `server/discover` with MCP `2026-07-28`. | `reshapr`: `ModernProtocolDialect`, modern request validation | none |
 | `CAP-MCP-TOOLS` | released | Serve `tools/list` and `tools/call`. | `reshapr`: MCP request handlers and protocol tests | none |
-| `CAP-MCP-PROMPTS` | released | Serve `prompts/list` and `prompts/get` from selected artifacts. | `reshapr`: `ReshaprPromptsMcpPromptBuilder` | `LIM-CRD-PROMPTS-FILTERS-ABSENT` |
+| `CAP-MCP-PROMPTS` | released | Serve `prompts/list` and `prompts/get` from selected artifacts. | `reshapr`: `ReshaprPromptsMcpPromptBuilder` | none |
 | `CAP-MCP-RESOURCES` | released | Serve static and templated Resources through list, template-list, and read methods. | `reshapr`: `ReshaprResourcesMcpResourceBuilder` | none |
+| `CAP-MCP-SKILLS` | released | Serve remote Agent Skill manifests and files to MCP clients. | `reshapr` 1.2.0: `ReshaprSkillsMcpSkillBuilder`, schema and tests | `LIM-MCP-SKILLS-HOSTED-FILES`, `LIM-REMOTE-CONTENT-SECRET-FALLBACK` |
+| `CAP-REMOTE-CONTENT-SECRET` | released | Name a reShapr Secret for remote Resources and Skills HTTP fetches. | `reshapr` 1.2.0: both MCP builders and remote-Secret tests | `LIM-REMOTE-CONTENT-SECRET-FALLBACK` |
 | `CAP-MCP-APPS-REFERENCES` | released | Reference remotely hosted MCP App HTML through UI Resources and associate the UI with native Tools. | `reshapr` 1.1.0: `ReshaprResourcesMcpResourceBuilder`, `ReshaprCustomToolsMcpToolConverter`, tracked `dev/github-api-resources.yaml` and `dev/github-user-mcp-app/` | `LIM-MCP-APPS-HOST` |
 | `CAP-MCP-URL-ELICITATION` | released | Request backend credentials with protocol-specific URL elicitation. | `reshapr`: `ElicitationController`, `ElicitationStore` | `LIM-ELICITATION-IDENTITY-BOUND` |
 | `CAP-MCP-CACHE-HINTS` | released | Return `ttlMs` and `cacheScope` client cache hints. | `reshapr`: `ConfigurationPlan.CachePolicy`, `ModernProtocolDialect` | `LIM-CACHE-HINTS-MODERN-ONLY` |
@@ -128,7 +185,7 @@ Status totals for this baseline are 79 `released`, 5 `partial`, 7 `unsupported`,
 | `CAP-CONFIGURATION-PLANS` | released | Configure backend, timeout, operation and artifact selection, header propagation, audit, and MCP protection. | `reshapr`: `ConfigurationPlan`, REST resource, Web UI editor | none |
 | `CAP-EXPOSITIONS` | released | Bind a Service and Plan to a Gateway Group under a named MCP endpoint. | `reshapr`: `Exposition`, REST resource | none |
 | `CAP-GATEWAY-GROUPS` | released | Select dynamically registered Gateways through labels and Gateway Groups. | `reshapr`: `GatewayGroup`, `GatewayHealthServiceHandler` | none |
-| `CAP-LIVE-CONFIGURATION-PROPAGATION` | released | Stream created, updated, and deleted configuration to connected proxies. | `reshapr`: discovery stream and cluster event broadcaster | `LIM-LIVE-CONFIG-NO-ZERO-DOWNTIME` |
+| `CAP-LIVE-CONFIGURATION-PROPAGATION` | released | Stream created, updated, and deleted configuration to connected proxies. Proxies fail startup by default if initial registration or discovery fails. | `reshapr` 1.2.0: discovery stream, broadcaster, `ReshaprGatewayAppStartupTest` | `LIM-LIVE-CONFIG-NO-ZERO-DOWNTIME` |
 | `CAP-ORGANIZATION-TENANCY` | released | Isolate control-plane data by organization. | `reshapr`: `TenantAwareEntity`, tenant resolver | `LIM-TENANCY-APPLICATION-LEVEL` |
 | `CAP-USER-ORGANIZATION-MEMBERSHIP-ADMIN` | released | Administer users, organizations, owners, and memberships. | `reshapr`: admin REST resources and CLI commands | none |
 | `CAP-USER-AUTHENTICATION` | released | Authenticate internal users or users from a configured OIDC provider. | `reshapr`: `AuthenticationController`, identity providers | `LIM-OIDC-EXTERNAL-PROVIDER`, `LIM-OIDC-LOGIN-VALIDATION-INCOMPLETE`, `LIM-OIDC-WEBUI-PUBLIC-URL-IGNORED` |
@@ -165,21 +222,21 @@ Status totals for this baseline are 79 `released`, 5 `partial`, 7 `unsupported`,
 |---|---|---|---|---|
 | `CAP-CLI-PRODUCT-LIFECYCLE` | released | Manage login, imports, artifacts, Services, Secrets, Plans, Expositions, Gateways, tokens, and quotas with the CLI. | `reshapr`: `cli/src/commands` | none |
 | `CAP-CLI-ADMINISTRATION` | released | Manage users, organizations, memberships, quotas, and service accounts with the admin CLI. | `reshapr`: admin CLI commands | `LIM-CLI-ADMIN-KEY-REQUIRED` |
-| `CAP-CLI-PLAN-EVOLUTION` | released | Create, edit, duplicate, secure, and evolve Configuration Plans with the CLI. | `reshapr`: CLI config command | none |
+| `CAP-CLI-PLAN-EVOLUTION` | released | Create, edit, duplicate, secure, and evolve Configuration Plans with the CLI. Update Plans and Secrets without an editor using JSON merge patches or complete JSON definitions. | `reshapr` 1.2.0: CLI config and secret commands, `update.test.ts` | none |
 | `CAP-CLI-SHELL-COMPLETION` | released | Generate shell completion for reShapr CLI commands without authentication. | `reshapr`: `cli/src/completion.ts`, completion tests | none |
 | `CAP-WEB-UI-ADMINISTRATION` | released | Manage the primary product and organization resources in the Web UI. | `reshapr`: Web UI application routes | none |
 | `CAP-WEB-UI-QUICK-START` | released | Complete the import-to-Exposition journey in the Web UI wizard. | `reshapr`: `QuickStartWizard.svelte` | `LIM-QUICK-START-DEFAULT-GATEWAY-GROUP` |
-| `CAP-LOCAL-DOCKER-RUNTIME` | released | Start, inspect, and stop a local release stack with Docker or Podman. | `reshapr`: CLI run/status/stop commands, release Compose | none |
+| `CAP-LOCAL-DOCKER-RUNTIME` | released | Start, inspect, and stop a local release stack with Docker or Podman. The separate clustered Compose example initializes its shared JCEKS keystore. | `reshapr` 1.2.0: CLI run/status/stop commands and tagged Compose files | none |
 | `CAP-LOCAL-APPLE-CONTAINER-RUNTIME` | released | Start, inspect, and stop a local release stack on macOS with apple/container (`reshapr run --engine apple`), without Compose. | `reshapr` 1.2.0 (reshaprio/reshapr#620, reshaprio/reshapr#642): `cli/src/utils/apple-container.ts`, `cli/src/utils/containers.ts`, `cli/src/commands/run.ts` | `LIM-APPLE-CONTAINER-COMPOSE-SUBSET` |
 
 ### Kubernetes and GitOps
 
 | ID | Status | Capability | Owner and direct evidence | Limit IDs |
 |---|---|---|---|---|
-| `CAP-KUBERNETES-SEVEN-CRDS` | released | Declare eight CRDs: Service, ConfigurationPlan, Exposition, GatewayGroup, SecretSource, CustomTools, Resources, and Prompts. Stable ID retained from the seven-kind baseline. | `reshapr-controllers` 0.0.4: eight `CustomResource` classes and release CRDs | `LIM-CRD-PROMPTS-FILTERS-ABSENT`, `LIM-KUBERNETES-RESOURCES-CRD-MIGRATION` |
-| `CAP-KUBERNETES-RECONCILIATION` | released | Reconcile all eight CRD kinds, including Configuration Plan header policies, Tool exposure mode, Resources, and Prompts. | `reshapr-controllers` 0.0.4: eight reconcilers; prior seven-kind live replay retained as historical evidence, new paths source-reviewed | `LIM-HEADER-POLICY-REQUEST-ONLY`, `LIM-KUBERNETES-RESOURCE-RECONCILIATION-INCOMPATIBLE`, `LIM-KUBERNETES-ARTIFACT-NAME-COLLISION` |
+| `CAP-KUBERNETES-SEVEN-CRDS` | released | Declare ten CRDs: Service, ConfigurationPlan, Exposition, GatewayGroup, SecretSource, CustomTools, Resources, Prompts, Skills, and ToolsOutputFilters. Stable ID retained from the seven-kind baseline. | `reshapr-controllers` 0.0.5: ten release CRDs | `LIM-KUBERNETES-RESOURCES-CRD-MIGRATION`, `LIM-HELM-CONTROLLERS-RELEASE-MISMATCH`; historical: `LIM-CRD-PROMPTS-FILTERS-ABSENT` |
+| `CAP-KUBERNETES-RECONCILIATION` | released | Reconcile all ten kinds; update Plans in place, including backend timeout and existing reShapr Secret selection. | `reshapr-controllers` 0.0.5: Plan and artifact reconciler implementations and tests | `LIM-HEADER-POLICY-REQUEST-ONLY`; historical: `LIM-KUBERNETES-RESOURCE-RECONCILIATION-INCOMPATIBLE`, `LIM-KUBERNETES-ARTIFACT-NAME-COLLISION` |
 | `CAP-KUBERNETES-STATUS-REPORTING` | released | Report observed generation, remote IDs, states, and conditions in CR status. | `reshapr-controllers`: status classes | none |
-| `CAP-KUBERNETES-REMOTE-CLEANUP` | partial | Delete corresponding remote resources when supported CRs are removed. | `reshapr-controllers`: `Cleaner` implementations | `LIM-CRD-ARTIFACT-CLEANUP-INCOMPLETE` |
+| `CAP-KUBERNETES-REMOTE-CLEANUP` | released | Delete corresponding remote resources, including attached artifacts, when supported CRs are removed. Artifact CRs can opt out with `keepOnDelete`. | `reshapr-controllers` 0.0.5: `BaseArtifactReconciler` cleanup and reconciler tests | historical: `LIM-CRD-ARTIFACT-CLEANUP-INCOMPLETE` |
 | `CAP-KUBERNETES-SECRET-SYNC` | released | Synchronize selected Kubernetes Secret values to control-plane Secrets. | `reshapr-controllers`: `SecretSourceReconciler` | `LIM-SECRET-SOURCE-RBAC` |
 | `CAP-KUBERNETES-SIDECAR-INJECTION` | released | Inject a configured reShapr proxy sidecar through the admission webhook. | `reshapr-controllers`: `PodMutator` | `LIM-ADMISSION-FAIL-OPEN` |
 | `CAP-KUBERNETES-SIDECAR-SERVICES` | released | Create headless discovery and optional MCP Services for injected sidecars. | `reshapr-controllers`: `DeploymentProxyReconciler` | `LIM-SIDECAR-DEPLOYMENT-ONLY` |
@@ -187,7 +244,7 @@ Status totals for this baseline are 79 `released`, 5 `partial`, 7 `unsupported`,
 | `CAP-KUBERNETES-WEBHOOK-TLS` | released | Serve the admission webhook over TLS using supported certificate sources. | `reshapr-controllers`: TLS configuration and manifests | none |
 | `CAP-KUBERNETES-SEPARATE-RBAC` | released | Apply distinct operator, Secret-read, and admission permissions. | `reshapr-controllers`: RBAC manifests | none |
 | `CAP-CONTROLLERS-OBSERVABILITY` | unsupported | Export dedicated operator and admission metrics or traces. | `reshapr-controllers`: no metrics dependency; injected proxy OTEL disabled | `LIM-CONTROLLERS-OBSERVABILITY-UNSUPPORTED` |
-| `CAP-KUBERNETES-CRD-REFERENCES` | released | Provide owner documentation for every CRD. | `reshapr-controllers` 0.0.4: eight CRD reference pages, including Prompts | none |
+| `CAP-KUBERNETES-CRD-REFERENCES` | released | Provide owner documentation for every CRD. | `reshapr-controllers` 0.0.5: ten CRD reference pages, including Skills and ToolsOutputFilters | none |
 
 ### Deployment and operations
 
@@ -260,11 +317,13 @@ Limitations remain in this registry after resolution so historical claims stay t
 | `LIM-CLI-ADMIN-KEY-REQUIRED` | active | reShapr 1.1.0 | Administrative CLI operations require a distinct admin API key context. | `CAP-CLI-ADMINISTRATION`, `CAP-ENCRYPTION-KEY-ROTATION` |
 | `LIM-QUICK-START-DEFAULT-GATEWAY-GROUP` | active | reShapr 1.1.0 | The Web UI Quick Start depends on the Default Gateway Group. | `CAP-WEB-UI-QUICK-START` |
 | `LIM-HEADER-POLICY-REQUEST-ONLY` | active | reShapr 1.1.0 / controllers 0.0.4 | Request allow, deny, and rename rules are enforced for HTTP backends and gRPC call metadata; response rules are represented but reserved and not enforced. | `CAP-BACKEND-HEADER-POLICY`, `CAP-KUBERNETES-RECONCILIATION` |
-| `LIM-CRD-PROMPTS-FILTERS-ABSENT` | active | controllers 0.0.4 | Prompts now has a dedicated CRD and reconciler; the remaining boundary is the absence of a ToolsOutputFilters CRD. Keep this ID while narrowing the partially resolved limitation. | `CAP-MCP-PROMPTS`, `CAP-KUBERNETES-SEVEN-CRDS` |
+| `LIM-CRD-PROMPTS-FILTERS-ABSENT` | resolved | controllers 0.0.4 | Resolved in controllers `0.0.5`, which added ToolsOutputFilters after Prompts was added in `0.0.4`. | `CAP-MCP-PROMPTS`, `CAP-KUBERNETES-SEVEN-CRDS` |
 | `LIM-KUBERNETES-RESOURCE-RECONCILIATION-INCOMPATIBLE` | resolved | controllers 0.0.2 / reShapr 1.0.0-rc1; resolved in controllers 0.0.3 | Controllers `0.0.3` use the supported plural `Resources` artifact kind; a replayed Resources CR reached `READY` and its URI was returned by MCP `resources/list`. | `CAP-KUBERNETES-RECONCILIATION` |
-| `LIM-KUBERNETES-ARTIFACT-NAME-COLLISION` | active | controllers 0.0.4 / reShapr 1.1.0 | CustomTools, Resources, and Prompts reconciliation uploads artifacts as `artifact.json`; for one Service, later reconciliation can replace the earlier artifact. | `CAP-KUBERNETES-RECONCILIATION` |
+| `LIM-KUBERNETES-ARTIFACT-NAME-COLLISION` | resolved | controllers 0.0.4 / reShapr 1.1.0 | Resolved for distinct CR names in controllers `0.0.5`, which sends the CR name as the artifact name. | `CAP-KUBERNETES-RECONCILIATION` |
 | `LIM-KUBERNETES-RESOURCES-CRD-MIGRATION` | active | controllers 0.0.4 / charts 0.0.15 | Upgrading from the singular `Resource` CRD requires deleting and recreating `resources.reshapr.io` because Kubernetes makes `spec.names.kind` immutable; deleting the CRD also deletes its custom resources. | `CAP-KUBERNETES-SEVEN-CRDS`, `CAP-HELM-UPGRADE-FOUNDATIONS` |
-| `LIM-CRD-ARTIFACT-CLEANUP-INCOMPLETE` | active | controllers 0.0.4 | Deleting CustomTools, Resources, or Prompts CRs does not delete the corresponding remote artifact. | `CAP-KUBERNETES-REMOTE-CLEANUP` |
+| `LIM-CRD-ARTIFACT-CLEANUP-INCOMPLETE` | resolved | controllers 0.0.4 | Resolved in controllers `0.0.5`: artifact CRs clean up their remote artifact by default, with an explicit `keepOnDelete` opt-out. | `CAP-KUBERNETES-REMOTE-CLEANUP` |
+| `LIM-MCP-SKILLS-HOSTED-FILES` | active | reShapr 1.2.0 | Gateway serves only declared remote skill files and the implicit SKILL.md, with file-count and size bounds. It does not execute them. | `CAP-MCP-SKILLS` |
+| `LIM-REMOTE-CONTENT-SECRET-FALLBACK` | active | reShapr 1.2.0 | Missing or unresolved remoteSecret means a fetch without that credential. The remote content server enforces its own authentication. | `CAP-MCP-SKILLS`, `CAP-REMOTE-CONTENT-SECRET` |
 | `LIM-SECRET-SOURCE-RBAC` | active | controllers 0.0.4 | SecretSource reconciliation requires explicit permission to read referenced Kubernetes Secrets. | `CAP-KUBERNETES-SECRET-SYNC` |
 | `LIM-ADMISSION-FAIL-OPEN` | active | controllers 0.0.4 / charts 0.0.15 | The admission webhook defaults to `failurePolicy: Ignore`; unavailable admission can produce Pods without sidecars. | `CAP-KUBERNETES-SIDECAR-INJECTION` |
 | `LIM-SIDECAR-DEPLOYMENT-ONLY` | active | controllers 0.0.4 | Automatic sidecar Service management is limited to Deployment-owned workloads. | `CAP-KUBERNETES-SIDECAR-SERVICES` |
@@ -276,7 +335,7 @@ Limitations remain in this registry after resolution so historical claims stay t
 | `LIM-HA-INFRASTRUCTURE-DEPENDENT` | active | charts 0.0.15 | Replicas and PDBs do not make the full system highly available without HA PostgreSQL and suitable infrastructure. | `CAP-HELM-REPLICATION-AND-PDB` |
 | `LIM-HPA-PROXY-ONLY` | active | charts 0.0.15 | HPA is provided for the proxy only and scales from CPU and memory metrics. | `CAP-HELM-PROXY-HPA` |
 | `LIM-HELM-NETWORK-POLICY-PARTIAL` | active | charts 0.0.15; reviewed 0.0.16 | The optional policy isolates all proxy Pod ingress but allows only configured clustering ports from same-release peers. HTTP ingress and monitoring require additional allows on an enforcing CNI; runtime clustering ports also need qualification. It adds no egress policy. The production example disables this incomplete policy. | `CAP-HELM-NETWORK-POLICY` |
-| `LIM-HELM-CONTROLLERS-RELEASE-MISMATCH` | active | charts 0.0.15 / controllers 0.0.4 | The controllers chart packages the controllers `0.0.4` CRDs, but defaults image tags to `nightly` while `Chart.yaml` and installation notes report app version `0.0.1`; pin image tags and inspect running images. | `CAP-HELM-FOUR-OCI-CHARTS`, `CAP-HELM-CONTROLLER-TOGGLES` |
+| `LIM-HELM-CONTROLLERS-RELEASE-MISMATCH` | active | charts 0.0.18 / controllers 0.0.5 | The chart still defaults both controller image tags to `nightly`; pin them explicitly. The CRD packaging gap was resolved in `0.0.18`, which includes all ten CRDs. | `CAP-HELM-FOUR-OCI-CHARTS`, `CAP-HELM-CONTROLLER-TOGGLES`, `CAP-KUBERNETES-SEVEN-CRDS` |
 | `LIM-SERVICEMONITOR-PROXY-ONLY` | active | charts 0.0.15 | ServiceMonitor support is optional and limited to proxy metrics. | `CAP-HELM-PROMETHEUS-SCRAPING` |
 | `LIM-PRODUCTION-PROFILES-NOT-CERTIFICATION` | active | charts 0.0.15 | Production values are starting profiles, not environment-specific sizing or security certification. | `CAP-HELM-ENVIRONMENT-PROFILES` |
 | `LIM-UPGRADE-ROLLBACK-MANUAL` | active | reShapr 1.1.0 / charts 0.0.15 | Generic migration hooks, automated rollback, and general credential rotation are not provided. | `CAP-HELM-UPGRADE-FOUNDATIONS` |
@@ -287,6 +346,7 @@ Limitations remain in this registry after resolution so historical claims stay t
 
 | Date | Baseline | Change |
 |---|---|---|
+| 2026-11-20 | reShapr 1.2.1 (Web UI follow-up only) | Replayed the Quick Start in local Docker Compose, confirmed the HTTP URL import fix and published MCP endpoint, and advanced only that tutorial's verification. |
 | 2026-11-19 | reShapr 1.2.0 | Promoted `CAP-LOCAL-APPLE-CONTAINER-RUNTIME` to `released` and set `LIM-APPLE-CONTAINER-COMPOSE-SUBSET` to 1.2.0 after reshaprio/reshapr#620 and reshaprio/reshapr#642 shipped in the 1.2.0 tag, with the `run-on-apple-container` how-to. Replayed on 1.2.0 with apple/container 1.7.1 on macOS 27.2.1: `run --engine apple --ui` (about 47 s including image pulls), `status`, `login`, import, MCP `tools/call`, the "Containers already exist" guard and `stop`, after which no `reshapr-*` containers remained. Interrupted start (1.2.0 source and a live run): the apple engine leaves the containers and `reshapr stop` finds nothing; not reproduced on Docker, where a re-run is idempotent. Also replayed: engine auto-detection with Docker and Podman off the `PATH` (`Detected container engine: apple`) and a start without `--ui`. The page `verification` is advanced to 1.2.0. |
 | 2026-11-14 | reShapr `main` after 1.1.1 (not released) | Added `CAP-LOCAL-APPLE-CONTAINER-RUNTIME` as `main-only` and `LIM-APPLE-CONTAINER-COMPOSE-SUBSET` for `reshapr run --engine apple` (reshaprio/reshapr#620), with the `run-on-apple-container` how-to. Commands were checked on `main`, not replayed against a release. Promote the capability to `released` and replay the page after the first release that includes #620. |
 | 2026-10-19 | reShapr 1.1.0 / controllers 0.0.4 / corrected charts 0.0.15 | Reviewed Code Mode Tool exposure and execution, hardened script limits, backend HTTP payload bounds, MCP Apps references, Prompts reconciliation, all eight published chart CRDs, and admission extraEnv. Added current guides and runtime/logging references; preserved prior replay markers and historical limitations. |

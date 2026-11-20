@@ -2,14 +2,12 @@
 description: Attach Prompts, Resources, Custom Tools, and output filters to a Service, then expose different Artifact selections through separate Plans.
 verification:
   product: reShapr
-  version: 1.1.0
-  date: 2026-10-20
+  version: 1.2.0
+  date: 2026-11-20
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  date: 2026-11-20
+  scope: live CLI attachment, capability listing on both Expositions, and cancellation of the documented deletion preview
 ---
 
 # Attach and Select reShapr Artifacts
@@ -19,7 +17,7 @@ Attach reusable agent-oriented capabilities to one Service, then use `includedAr
 ## Prerequisites
 
 - The Open-Meteo Service from **[Your First MCP Endpoint](../tutorials/getting-started.md)**
-- reShapr CLI `1.1.0`, authenticated against the target environment
+- reShapr CLI `1.2.0`, authenticated against the target environment
 - `curl` and `jq`
 - A running proxy registered as a Gateway in Gateway Group `1`
 
@@ -34,6 +32,8 @@ export RESHAPR_SERVICE_ID
 ```
 
 ## Attach the four Artifact types
+
+This guide uses Custom Tools, Prompts, Resources, and Tools Output Filters. [Skills](../references/skills-specification.md) are another artifact type and are not used in this example.
 
 Attach a Prompt, Resource, declarative Custom Tool, and Tool output filter. Structured output provides the exact Artifact names used by Plan selection.
 
@@ -236,7 +236,7 @@ One Service now has four reusable attached Artifact types and two Configuration 
 
 - Artifact capabilities describe declared names; use MCP list methods to verify what an Exposition serves.
 - Artifact selection is Plan-wide, not conditional per user or per Tool call.
-- Output filters are not an authorization boundary and fail open in reShapr `1.1.0`.
+- Output filters are not an authorization boundary and fail open in reShapr `1.2.0`.
 - The deletion step previews impact and is deliberately cancelled; confirming it changes the action Plan.
 - Re-running the commands with the same Plan or Exposition names requires deleting or renaming the previous resources.
 

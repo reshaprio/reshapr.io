@@ -2,14 +2,12 @@
 description: Enable audit for an MCP endpoint and verify successful-call and authentication-failure records.
 verification:
   product: reShapr
-  version: 1.0.0
-  date: 2026-09-22
+  version: 1.2.0
+  date: 2026-11-20
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  date: 2026-11-20
+  scope: release-tagged implementation and live Compose replay through OTLP to Loki
 ---
 
 # Audit MCP Endpoint Calls
@@ -22,7 +20,7 @@ Audit events are [OpenTelemetry](https://opentelemetry.io/) log records marked w
 
 You need:
 
-- a reShapr proxy and CLI at version `1.1.0`;
+- a reShapr proxy and CLI at version `1.2.0`;
 - proxy OpenTelemetry logs configured with **[Observe the reShapr Proxy](./operations/observe-and-audit.md)**;
 - a telemetry or audit backend where you can search exported records;
 - `reshapr login` completed for the target organization;
@@ -162,6 +160,8 @@ reshapr config delete "${RESHAPR_CONFIG_ID}"
 unset RESHAPR_API_KEY MCP_DISCOVERY_REQUEST
 ```
 
+Confirm the Configuration Plan deletion when prompted.
+
 ## Result
 
 The Configuration Plan enables audit for its Expositions, and the audit sink contains distinct successful-call and authentication-failure records marked with `log.type=audit`.
@@ -172,10 +172,11 @@ The Configuration Plan enables audit for its Expositions, and the audit sink con
 - Audit records are emitted only when OpenTelemetry Logs are available and export succeeds.
 - Optional identity, source, session, target, error, and trace attributes depend on the request and authentication mode.
 - Audit records can contain identifiers and network metadata. Protect their transport, storage, access, retention, and deletion according to your security requirements.
+- Code Mode audit records can also contain `mcp.code.hash` and the submitted source in `mcp.code`. Do not include secrets in code submitted to the Gateway.
 - reShapr does not provide an audit database, SIEM, compliance policy, or immutable retention mechanism.
 
 ## Next step
 
 Use **[Observe the reShapr Proxy](./operations/observe-and-audit.md)** to route records with `log.type=audit` to a dedicated sink. Use **[Security Capabilities and Limits](../explanations/security-model.md)** to review endpoint authentication and audit boundaries.
 
-The release-tagged [audit implementation](https://github.com/reshaprio/reshapr/tree/1.1.0/proxy/src/main/java/io/reshapr/proxy/audit) and [public API contract](https://github.com/reshaprio/reshapr/blob/1.1.0/reshapr-public-openapi-v0.1.yaml) remain the canonical references.
+The release-tagged [audit implementation](https://github.com/reshaprio/reshapr/tree/1.2.0/proxy/src/main/java/io/reshapr/proxy/audit) and [public API contract](https://github.com/reshaprio/reshapr/blob/1.2.0/reshapr-public-openapi.yaml) remain the canonical references.

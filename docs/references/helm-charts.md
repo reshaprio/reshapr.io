@@ -1,16 +1,16 @@
 ---
 description: Choose among the four reShapr Helm charts and continue with their canonical installation and values documentation.
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  controllers: 0.0.5
+  charts: 0.0.18
+  date: 2026-11-20
+  scope: published OCI chart rendering and CRD comparison; no live cluster replay
 ---
 
 # Helm Charts Overview
 
-reShapr components are packaged as four independently versioned Helm charts. This page describes baseline `0.0.15`; the [`reshapr-helm-charts`](https://github.com/reshaprio/reshapr-helm-charts) repository owns installation commands, values, and release artifacts.
+reShapr components are packaged as four independently versioned Helm charts. This page describes chart release `0.0.18`; the [`reshapr-helm-charts`](https://github.com/reshaprio/reshapr-helm-charts) repository owns installation commands, values, and release artifacts.
 
 ## Prerequisites
 
@@ -54,20 +54,20 @@ Each chart directory owns its `values.yaml`, `values-dev.yaml`, and `values-prod
 
 For a reproducible installation, select an immutable version from the [Helm chart releases](https://github.com/reshaprio/reshapr-helm-charts/releases) and use documentation and values from the same tag.
 
-Charts `0.0.15` retain the control-plane `encryptionKey.activeKeyId` and `encryptionKey.keys.<kid>` values required for AES-256-GCM key rotation. They retain `encryptionKey.value` and `encryptionKey.key` only for decrypting legacy AES/ECB values during migration. The Web UI chart sets `BODY_SIZE_LIMIT` to `12M` and allows an explicit override through `extraEnv`.
+Charts `0.0.18` retain the control-plane `encryptionKey.activeKeyId` and `encryptionKey.keys.<kid>` values required for AES-256-GCM key rotation. They retain `encryptionKey.value` and `encryptionKey.key` only for decrypting legacy AES/ECB values during migration. The Web UI chart sets `BODY_SIZE_LIMIT` to `12M` and allows an explicit override through `extraEnv`.
 
-The corrected controllers chart `0.0.15` packages all eight controllers `0.0.4` CRDs, including `Prompts` and ConfigurationPlan `toolExposureMode`. Its default values still select `nightly`, while `Chart.yaml` and installation notes report app version `0.0.1`. Pin both controller image tags to `0.0.4` for the reviewed baseline; do not use chart metadata alone to identify the running version. Explicitly update CRDs when upgrading an existing installation.
+Controllers chart `0.0.18` packages all ten controllers `0.0.5` CRDs, including `Skills` and `ToolsOutputFilters`. Explicitly apply all ten CRDs when [upgrading](../how-to-guides/operations/upgrade-and-rotate.md). Pin both controller image tags to `0.0.5`: the chart defaults still select `nightly`.
 
 ## Runtime tuning and logs
 
 Use [Runtime environment variables](./environment-variables.md) for proxy and control-plane settings, including Code Mode guardrails and backend/discovery payload limits. Use [Logging](./logging.md) for component categories and sensitive-data warnings, and [Troubleshooting](../how-to-guides/operations/troubleshoot.md#enable-debug-logs-temporarily) for rollout commands.
 
-Chart `0.0.15` exposes `extraEnv` (proxy), `ctrl.extraEnv` (control plane), `operator.extraEnv`, and `admissionController.extraEnv`. User-supplied lists replace defaults: preserve existing telemetry entries, especially the proxy's `QUARKUS_OTEL_SDK_DISABLED=true` when telemetry is disabled.
+Chart `0.0.18` exposes `extraEnv` (proxy), `ctrl.extraEnv` (control plane), `operator.extraEnv`, and `admissionController.extraEnv`. User-supplied lists replace defaults: preserve existing telemetry entries, especially the proxy's `QUARKUS_OTEL_SDK_DISABLED=true` when telemetry is disabled.
 
 ## Limits
 
 - Chart versions are not necessarily identical across all four components; verify each selected release.
-- Controllers chart `0.0.15` packages the baseline CRDs but does not select the baseline controller image without explicit overrides.
+- The controllers chart version does not identify the running controller image or the complete set of CRDs.
 - Helm does not remove CRDs when the controllers chart is uninstalled. Deleting CRDs manually also deletes their custom resources across namespaces.
 - This overview does not duplicate the complete values schema or installation commands. Review the selected chart's owner documentation before deployment.
 

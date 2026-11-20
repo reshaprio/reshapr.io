@@ -526,6 +526,11 @@ const sidebars = {
               id: 'references/resources-specification',
               label: 'Resources',
             },
+            {
+              type: 'doc',
+              id: 'references/skills-specification',
+              label: 'Skills',
+            },
           ],
         },
       ],

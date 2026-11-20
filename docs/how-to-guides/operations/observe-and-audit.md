@@ -5,11 +5,11 @@ verification:
   version: 1.0.0 / charts 0.0.14
   date: 2026-09-22
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  controllers: 0.0.5
+  charts: 0.0.18
+  date: 2026-11-20
+  scope: published proxy chart OTLP and ServiceMonitor rendering; no live monitoring replay
 ---
 
 # Observe the reShapr Proxy
@@ -22,7 +22,7 @@ This procedure configures the proxy telemetry pipeline. Enabling audit for a par
 
 You need:
 
-- a reShapr proxy `1.1.0` deployed with the proxy chart `0.0.15`;
+- a reShapr proxy `1.2.0` deployed with the proxy chart `0.0.18`;
 - an OpenTelemetry Collector endpoint reachable from the proxy namespace;
 - a telemetry backend where you can search exported logs and traces;
 - an existing MCP endpoint and an instrumented backend for end-to-end trace verification;
@@ -67,7 +67,7 @@ Apply the values to the existing release:
 ```bash
 helm upgrade "${PROXY_RELEASE}" \
   oci://quay.io/reshapr/reshapr-helm-charts/reshapr-proxy \
-  --version 0.0.15 \
+  --version 0.0.18 \
   --namespace "${PROXY_NAMESPACE}" \
   --reuse-values \
   --values values/proxy-observability.yaml
@@ -210,7 +210,7 @@ The proxy exports traces, metrics, and logs to your Collector, continues distrib
 
 ## Limits
 
-- Release `1.1.0` proves OpenTelemetry behavior for the proxy. It does not establish equivalent coverage for the control plane, Web UI, operator, or admission controller.
+- Release `1.2.0` supports OpenTelemetry behavior for the proxy. It does not establish equivalent coverage for the control plane, Web UI, operator, or admission controller.
 - End-to-end traces require callers and backends to propagate compatible trace context and export their own spans.
 - Telemetry export depends on the OpenTelemetry SDK, Collector connectivity, configured pipelines, sampling, and backend retention.
 - Audit records appear only for Configuration Plans where audit is enabled.
@@ -221,4 +221,4 @@ The proxy exports traces, metrics, and logs to your Collector, continues distrib
 
 Use **[Audit MCP Endpoint Calls](../audit-mcp-endpoint.md)** to enable audit on a Configuration Plan. Use **[Troubleshoot an Exposition or Proxy](./troubleshoot.md)** to choose the relevant signal for a failed request.
 
-The release-tagged [proxy telemetry configuration](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/main/resources/application.properties) and [proxy chart values](https://github.com/reshaprio/reshapr-helm-charts/blob/0.0.15/proxy/values.yaml) remain the canonical configuration references.
+The release-tagged [proxy telemetry configuration](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/main/resources/application.properties) and [proxy chart values](https://github.com/reshaprio/reshapr-helm-charts/blob/0.0.18/proxy/values.yaml) remain the canonical configuration references.

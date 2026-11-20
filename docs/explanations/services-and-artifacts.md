@@ -1,5 +1,9 @@
 ---
 description: Understand how API and reShapr Artifacts define a versioned Service and contribute capabilities to each MCP Exposition.
+release_review:
+  runtime: 1.2.0
+  date: 2026-11-20
+  scope: release-tagged Skills artifact type and Gateway exposure
 ---
 
 # Services and Artifacts
@@ -34,6 +38,7 @@ Attached reShapr Artifacts add capabilities or transformations without changing 
 |---|---|
 | **[Prompts](../references/prompts-specification.md)** | Reusable instructions exposed through MCP Prompts. |
 | **[Resources](../references/resources-specification.md)** | Static or remote context exposed through MCP Resources. |
+| **[Skills](../references/skills-specification.md)** | Remotely hosted Agent Skills published to compatible MCP clients. |
 | **[Custom Tools](../references/custom-tools-specification.md)** | Task-oriented Tools that map to or orchestrate API operations. |
 | **[Tools Output Filters](../references/spec-outtools-filtering.md)** | Response retention, JSON Patch transformations, and optional TOON encoding. |
 

@@ -1,11 +1,11 @@
 ---
 description: Find the canonical reShapr API, CLI, Kubernetes, and Helm interfaces without duplicating their owner documentation.
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  controllers: 0.0.5
+  charts: 0.0.18
+  date: 2026-11-20
+  scope: release-tagged Kubernetes API inventory and published CRD packaging
 ---
 
 # Product Interfaces
@@ -50,7 +50,7 @@ Use `reshapr --help` or `reshapr <command> --help` for the command set installed
 
 ## Kubernetes APIs
 
-- **[Kubernetes APIs and Controllers](./kubernetes-apis.md)** orients readers across the operator, admission webhook, and eight custom resources.
+- **[Kubernetes APIs and Controllers](./kubernetes-apis.md)** orients readers across the operator, admission webhook, and ten custom resources.
 - **[Controllers documentation](https://github.com/reshaprio/reshapr-controllers/tree/main/documentation)** owns installation and per-resource references.
 - **[Generated CRD schemas](https://github.com/reshaprio/reshapr-controllers/tree/main/deploy/crd)** are the current Kubernetes contracts.
 

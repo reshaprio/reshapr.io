@@ -5,11 +5,11 @@ verification:
   version: 1.0.0 / controllers 0.0.3
   date: 2026-09-22
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  controllers: 0.0.5
+  charts: 0.0.18
+  date: 2026-11-20
+  scope: release-tagged runtime, CRD status and chart review; no complete troubleshooting replay
 ---
 
 # Troubleshoot an Exposition or Proxy
@@ -20,7 +20,7 @@ Use this guide when an Exposition has no endpoint, a proxy does not receive a ch
 
 You need:
 
-- reShapr runtime `1.1.0` and, for Kubernetes-managed resources, controllers `0.0.4`;
+- reShapr runtime `1.2.0` and, for Kubernetes-managed resources, controllers `0.0.5`;
 - `reshapr login` completed for the affected organization;
 - access to proxy and operator logs;
 - `curl`, `jq`, and `kubectl` when the workload runs on Kubernetes;
@@ -99,7 +99,7 @@ For `Service`, `GatewayGroup`, `ConfigurationPlan`, `Exposition`, and `SecretSou
 
 Use `status.message` to resolve an `ERROR`. An Exposition in `IN_PROGRESS` commonly waits for its Service, ConfigurationPlan, or GatewayGroup to exist remotely. Correct the named dependency first.
 
-`CustomTools`, `Resources`, and `Prompts` use a different status shape in controllers `0.0.4`:
+`CustomTools`, `Resources`, `Prompts`, `Skills`, and `ToolsOutputFilters` use a different status shape in controllers `0.0.5`. For example, check the following three artifact kinds:
 
 ```bash
 kubectl get customtools.reshapr.io,resources.reshapr.io,prompts.reshapr.io \
@@ -110,7 +110,7 @@ kubectl get customtools.reshapr.io,resources.reshapr.io,prompts.reshapr.io \
     @tsv'
 ```
 
-Controllers chart `0.0.15` packages the controllers `0.0.4` CRDs, but its default image remains `nightly` and its chart metadata still reports app version `0.0.1`. Confirm both the running image and the ConfigurationPlan schema:
+Controllers chart `0.0.18` packages all ten release CRDs and defaults to `nightly`. If any CRD is missing after upgrading, follow the [CRD update steps](./upgrade-and-rotate.md). Confirm both the running image and the ConfigurationPlan schema:
 
 ```bash
 kubectl get deployment/reshapr-controllers-operator \
@@ -123,7 +123,7 @@ kubectl get crd configurationplans.reshapr.io \
       | {includedOperations, headerPolicy}'
 ```
 
-The image must end in `:0.0.4`, and both schema properties must be present. If the image differs, set `operator.image.tag=0.0.4` and restart the operator. If an installation upgraded from an earlier chart still has old schemas, apply the release CRDs explicitly because Helm does not upgrade them automatically. Do not apply `resources.reshapr.io` over controllers `0.0.2`: its kind changed immutably, so follow **[Upgrade reShapr and Rotate Runtime Secrets](./upgrade-and-rotate.md#upgrade-the-web-ui-and-controllers)** for that CRD.
+The image must end in `:0.0.5`, and both schema properties must be present. If the image differs, set `operator.image.tag=0.0.5` and restart the operator. If an installation upgraded from an earlier chart still has old schemas, apply the release CRDs explicitly because Helm does not upgrade them automatically. Do not apply `resources.reshapr.io` over controllers `0.0.2`: its kind changed immutably, so follow **[Upgrade reShapr and Rotate Runtime Secrets](./upgrade-and-rotate.md#upgrade-the-web-ui-and-controllers)** for that CRD.
 
 Controllers `0.0.4` use the plural `Resources` kind. If Kubernetes reports no match for `kind: Resource`, update the manifest to `kind: Resources` and confirm that the `resources.reshapr.io` CRD also reports `spec.names.kind: Resources`. The old `Unsupported artifact kind and version: Resource - reshapr.io/v1alpha1` error identifies a controllers `0.0.2` operator that still emits the singular artifact kind.
 
@@ -277,7 +277,7 @@ Upgrade the existing release with all its current settings, not just this fragme
 ```bash
 helm upgrade '<proxy-release>' \
   oci://quay.io/reshapr/reshapr-helm-charts/reshapr-proxy \
-  --version 0.0.15 --namespace "${PROXY_NAMESPACE}" \
+  --version 0.0.18 --namespace "${PROXY_NAMESPACE}" \
   --values '<complete-proxy-values-with-debug.yaml>'
 kubectl rollout status deployment/reshapr-proxy --namespace "${PROXY_NAMESPACE}"
 kubectl logs deployment/reshapr-proxy --namespace "${PROXY_NAMESPACE}" --since 5m
@@ -289,7 +289,7 @@ Reproduce one failing call, collect restricted logs, then remove the temporary c
 
 ### Docker Compose, including `reshapr run`
 
-The CLI has no arbitrary environment or Compose override flag. For a stack started with `reshapr run --release 1.1.0`, it caches the base file at `~/.reshapr/docker-compose-1.1.0.yml` and passes explicit `-f` arguments: a neighboring `docker-compose.override.yml` is **not** loaded automatically.
+The CLI has no arbitrary environment or Compose override flag. For a stack started with `reshapr run --release 1.2.0`, it caches the base file at `~/.reshapr/docker-compose-1.2.0.yml` and passes explicit `-f` arguments: a neighboring `docker-compose.override.yml` is **not** loaded automatically.
 
 Edit the cached file's existing proxy service (`gateway-01`) and add the category to its `environment` list:
 
@@ -297,7 +297,7 @@ Edit the cached file's existing proxy service (`gateway-01`) and add the categor
 - QUARKUS_LOG_CATEGORY__IO_RESHAPR_PROXY__LEVEL=DEBUG
 ```
 
-For the control-plane service, add `QUARKUS_LOG_CATEGORY__IO_RESHAPR_CTRL__LEVEL=DEBUG` instead. Preserve every other setting. Rerun the same `reshapr run --release 1.1.0` command, including `--ui` if originally used, so Compose recreates the affected container. Then read logs:
+For the control-plane service, add `QUARKUS_LOG_CATEGORY__IO_RESHAPR_CTRL__LEVEL=DEBUG` instead. Preserve every other setting. Rerun the same `reshapr run --release 1.2.0` command, including `--ui` if originally used, so Compose recreates the affected container. Then read logs:
 
 ```bash
 docker logs --since 5m reshapr-gateway-01
@@ -369,4 +369,4 @@ The first failing layer now has an observable recovery check: reconciled desired
 
 Use **[Observe the reShapr Proxy](./observe-and-audit.md)** to export the signals used here. Review **[Control Plane to Proxy Synchronization](../../explanations/control-plane-gateway-synchronization.md)** for the registration, streaming, heartbeat, and recovery model.
 
-The release-tagged [reShapr runtime](https://github.com/reshaprio/reshapr/tree/1.1.0) and [controllers documentation](https://github.com/reshaprio/reshapr-controllers/tree/0.0.4/documentation) remain the canonical behavioral references.
+The release-tagged [reShapr runtime](https://github.com/reshaprio/reshapr/tree/1.1.0) and [controllers documentation](https://github.com/reshaprio/reshapr-controllers/tree/0.0.5/documentation) remain the canonical behavioral references.

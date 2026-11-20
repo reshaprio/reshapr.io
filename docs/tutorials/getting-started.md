@@ -5,11 +5,11 @@ verification:
   version: 1.0.0
   date: 2026-09-22
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  controllers: 0.0.5
+  charts: 0.0.17
+  date: 2026-11-19
+  scope: release-tagged source review and local CLI, MCP discovery and backend smoke replay
 ---
 
 # Your First MCP Endpoint, End to End
@@ -24,7 +24,7 @@ The [43-second Open-Meteo demo](https://youtu.be/EmBNZfUceTI) previews this work
 
 - Node.js 20 or later
 - `curl` and `jq`
-- Access to the **[reShapr Online Try](./try-reshapr-online.md)** or a **[local reShapr 1.1.0 environment](../how-to-guides/docker-compose.md)**
+- Access to the **[reShapr Online Try](./try-reshapr-online.md)** or a **[local reShapr 1.2.0 environment](../how-to-guides/docker-compose.md)**
 - Outbound access to GitHub and `https://api.open-meteo.com`
 
 ## Installation
@@ -34,7 +34,7 @@ The `reshapr` CLI is an NPM package available at **[https://www.npmjs.com/packag
 We recommend installing the CLI with anonymous usage telemetry enabled:
 
 ```bash
-npm install -g @reshapr/reshapr-cli@1.1.0 --allow-scripts=@scarf/scarf
+npm install -g @reshapr/reshapr-cli@1.2.0 --allow-scripts=@scarf/scarf
 ```
 
 The `--allow-scripts=@scarf/scarf` option explicitly authorizes Scarf's installation telemetry script. These anonymous metrics help the community measure adoption and support the project's future donation to the **[Agentic AI Foundation (AAIF)](https://aaif.io/)**.
@@ -44,7 +44,7 @@ Telemetry is optional. **[Learn why we collect these metrics](https://github.com
 To install the CLI without enabling telemetry, use:
 
 ```bash
-npm install -g @reshapr/reshapr-cli@1.1.0
+npm install -g @reshapr/reshapr-cli@1.2.0
 ```
 
 The CLI remains fully functional when telemetry is not enabled.
@@ -112,7 +112,7 @@ Example output (user, organization, paths, and URLs vary):
   Organization: yada
   Server      : https://app.try.reshapr.io
 ℹ️  Server Information
-  Version     : 1.1.0
+  Version     : 1.2.0
   Build time  : <build timestamp>
   Mode        : on-premises
   Internal IDP: undefined

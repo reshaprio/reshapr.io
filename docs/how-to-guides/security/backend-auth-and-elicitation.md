@@ -5,11 +5,9 @@ verification:
   version: 1.0.0
   date: 2026-09-22
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  date: 2026-11-20
+  scope: release-tagged proxy authentication and CLI prerequisites; no live elicitation replay
 ---
 
 # Authenticate Backend Calls and Use Elicitation
@@ -26,7 +24,7 @@ See [token elicitation with GitHub GraphQL](https://youtu.be/y38__Uj5gWo), [OAut
 
 You need:
 
-- the reShapr `1.1.0` CLI, authenticated with `reshapr login`;
+- the reShapr `1.2.0` CLI, authenticated with `reshapr login`;
 - an imported Service for a protected test backend;
 - a Gateway Group and a proxy instance whose runtime configuration you control;
 - a read-only backend operation and its expected successful response;

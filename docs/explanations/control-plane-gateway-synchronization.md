@@ -91,9 +91,9 @@ If the shutdown advertisement cannot be delivered, stale-registration cleanup pr
 
 ## Protocol ownership
 
-The release-tagged [`eds-v1.proto`](https://github.com/reshaprio/reshapr/blob/1.1.0/api/src/main/proto/eds-v1.proto) owns the discovery snapshot and change-event contract. [`ghs-v1.proto`](https://github.com/reshaprio/reshapr/blob/1.1.0/api/src/main/proto/ghs-v1.proto) owns health and shutdown advertisements.
+The release-tagged [`eds-v1.proto`](https://github.com/reshaprio/reshapr/blob/1.2.0/api/src/main/proto/eds-v1.proto) owns the discovery snapshot and change-event contract. [`ghs-v1.proto`](https://github.com/reshaprio/reshapr/blob/1.2.0/api/src/main/proto/ghs-v1.proto) owns health and shutdown advertisements.
 
-The tracked [proxy runtime](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/main/java/io/reshapr/proxy/ReshaprGatewayApp.java), [health advertiser](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/main/java/io/reshapr/proxy/health/HealthAdvertiser.java), and [registration cleaner](https://github.com/reshaprio/reshapr/blob/1.1.0/control-plane/src/main/java/io/reshapr/ctrl/control/GatewayRegistrationCleaner.java) define the `1.1.0` runtime behavior.
+The tracked [proxy runtime](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/main/java/io/reshapr/proxy/ReshaprGatewayApp.java), [health advertiser](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/main/java/io/reshapr/proxy/health/HealthAdvertiser.java), and [registration cleaner](https://github.com/reshaprio/reshapr/blob/1.2.0/control-plane/src/main/java/io/reshapr/ctrl/control/GatewayRegistrationCleaner.java) define the `1.1.0` runtime behavior.
 
 ## Limits
 

@@ -52,6 +52,6 @@ For exported audit events and OTLP collection, see [Observe the reShapr Proxy](.
 
 ## Release sources
 
-- [Proxy logging configuration](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/main/resources/application.properties) and [HTTP backend logging](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/main/java/io/reshapr/proxy/proxy/ProxyService.java)
-- [Control-plane configuration](https://github.com/reshaprio/reshapr/blob/1.1.0/control-plane/src/main/resources/application.properties)
-- [Controllers chart admission environment injection](https://github.com/reshaprio/reshapr-helm-charts/blob/0.0.15/controllers/templates/admission-deployment.yaml)
+- [Proxy logging configuration](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/main/resources/application.properties) and [HTTP backend logging](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/main/java/io/reshapr/proxy/proxy/ProxyService.java)
+- [Control-plane configuration](https://github.com/reshaprio/reshapr/blob/1.2.0/control-plane/src/main/resources/application.properties)
+- [Controllers chart admission environment injection](https://github.com/reshaprio/reshapr-helm-charts/blob/0.0.18/controllers/templates/admission-deployment.yaml)

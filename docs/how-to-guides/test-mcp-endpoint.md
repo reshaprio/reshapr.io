@@ -5,11 +5,9 @@ verification:
   version: 1.0.0
   date: 2026-09-22
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  date: 2026-11-20
+  scope: live stateless discovery, listing and forecast call, legacy initialization and listing, and separate API key checks; OAuth not replayed
 ---
 
 # Test an MCP Endpoint with an MCP Client

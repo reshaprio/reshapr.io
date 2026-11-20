@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-RUNTIME_VERSION="${RUNTIME_VERSION:-1.1.0}"
-CONTROLLERS_VERSION="${CONTROLLERS_VERSION:-0.0.4}"
-CHART_VERSION="${CHART_VERSION:-0.0.16}"
+RUNTIME_VERSION="${RUNTIME_VERSION:-1.2.0}"
+CONTROLLERS_VERSION="${CONTROLLERS_VERSION:-0.0.5}"
+CHART_VERSION="${CHART_VERSION:-0.0.18}"
 KUBE_CONTEXT="${KUBE_CONTEXT:-reshapr-docs-rc1}"
 PLATFORM_NAMESPACE="${PLATFORM_NAMESPACE:-docs-reshapr-system}"
 WORKLOAD_NAMESPACE="${WORKLOAD_NAMESPACE:-docs-replay}"
@@ -29,7 +29,8 @@ for chart in reshapr-control-plane reshapr-proxy reshapr-web-ui reshapr-controll
     --version "$CHART_VERSION" >/dev/null
 done
 
-for crd in configurationplans customtools expositions gatewaygroups prompts resources secretsources services; do
+crds=(configurationplans customtools expositions gatewaygroups prompts resources secretsources services skills toolsoutputfilters)
+for crd in "${crds[@]}"; do
   curl --fail --silent --show-error \
     "https://raw.githubusercontent.com/reshaprio/reshapr-controllers/${CONTROLLERS_VERSION}/deploy/crd/${crd}.reshapr.io-v1.yml" \
     | CRD_NAME="${crd}.reshapr.io" yq -e '.kind == "CustomResourceDefinition" and .metadata.name == strenv(CRD_NAME) and .spec.group == "reshapr.io" and .spec.versions[0].name == "v1alpha1"' >/dev/null
@@ -40,13 +41,14 @@ helm template "$CONTROLLERS_RELEASE" \
   --version "$CHART_VERSION" \
   --namespace "$PLATFORM_NAMESPACE" \
   --set "operator.image.tag=$CONTROLLERS_VERSION" \
-  --set admissionController.enabled=false >/dev/null
+  --set "admissionController.image.tag=$CONTROLLERS_VERSION" >/dev/null
 
 helm template docs-control-plane \
   oci://quay.io/reshapr/reshapr-helm-charts/reshapr-control-plane \
   --version "$CHART_VERSION" \
   --namespace "$PLATFORM_NAMESPACE" \
-  --set "ctrl.image.tag=$RUNTIME_VERSION" >/dev/null
+  --set "ctrl.image.tag=$RUNTIME_VERSION" \
+  --set "reshapr-web-ui.image.tag=$RUNTIME_VERSION" >/dev/null
 helm template docs-proxy \
   oci://quay.io/reshapr/reshapr-helm-charts/reshapr-proxy \
   --version "$CHART_VERSION" \
@@ -78,8 +80,9 @@ done
 [[ "$(kubectl get deployment -n "$PLATFORM_NAMESPACE" \
   -l "app.kubernetes.io/instance=$CONTROLLERS_RELEASE" \
   -o jsonpath='{.items[0].spec.template.spec.containers[0].image}')" == *":$CONTROLLERS_VERSION" ]]
-[[ "$(kubectl get crd resources.reshapr.io -o jsonpath='{.spec.names.kind}')" == Resources ]]
-[[ "$(kubectl get crd -o json | jq '[.items[] | select(.spec.group == "reshapr.io")] | length')" == 8 ]]
+kubectl get crd -o json |
+  jq -e --args '[.items[] | select(.spec.group == "reshapr.io") | .metadata.name] | sort == ($ARGS.positional | map(. + ".reshapr.io") | sort)' \
+    "${crds[@]}" >/dev/null
 
 kubectl wait --for=jsonpath='{.status.state}'=READY resources --all \
   --namespace "$WORKLOAD_NAMESPACE" --timeout=3m

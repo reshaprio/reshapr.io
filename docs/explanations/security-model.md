@@ -74,7 +74,7 @@ Only the client-to-backend request direction is enforced in `1.1.0`. Response ru
 
 Backend Secrets can contain literal values stored by the control plane or references resolved locally by a proxy. The `${env:VARIABLE}` scheme lets a hybrid proxy retrieve a sensitive value from its own environment when preparing a backend call, so the control plane stores and propagates only the reference. A value can contain several placeholders, and literal text can surround them.
 
-The current implementation provides only the `env` resolver. An unknown scheme or missing environment variable fails resolution rather than falling back to a literal credential. The release-tagged [public API contract](https://github.com/reshaprio/reshapr/blob/1.1.0/reshapr-public-openapi-v0.1.yaml) defines the Secret fields, while the [secret resolver](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/main/java/io/reshapr/proxy/secret/SecretReferenceResolver.java) defines `1.1.0` resolution behavior.
+The current implementation provides only the `env` resolver. An unknown scheme or missing environment variable fails resolution rather than falling back to a literal credential. The release-tagged [public API contract](https://github.com/reshaprio/reshapr/blob/1.2.0/reshapr-public-openapi.yaml) defines the Secret fields, while the [secret resolver](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/main/java/io/reshapr/proxy/secret/SecretReferenceResolver.java) defines `1.1.0` resolution behavior.
 
 ## Elicited credentials
 
@@ -112,10 +112,10 @@ When audit is enabled on a Configuration Plan, the proxy emits structured events
 
 ## Canonical sources
 
-- The [`1.1.0` public API contract](https://github.com/reshaprio/reshapr/blob/1.1.0/reshapr-public-openapi-v0.1.yaml) owns Configuration Plan and Secret fields.
-- The [`1.1.0` endpoint security implementation](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/main/java/io/reshapr/proxy/security/SecureEndpointFilter.java) defines API-key and OAuth token validation.
-- The [`1.1.0` HTTP](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/main/java/io/reshapr/proxy/proxy/ProxyService.java) and [gRPC](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/main/java/io/reshapr/proxy/proxy/GrpcProxyService.java) proxy implementations define backend credential handling.
-- The [`1.1.0` encryption implementation](https://github.com/reshaprio/reshapr/blob/1.1.0/control-plane/src/main/java/io/reshapr/ctrl/security/CipherService.java) defines the control-plane encryption behavior.
+- The [`1.1.0` public API contract](https://github.com/reshaprio/reshapr/blob/1.2.0/reshapr-public-openapi.yaml) owns Configuration Plan and Secret fields.
+- The [`1.1.0` endpoint security implementation](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/main/java/io/reshapr/proxy/security/SecureEndpointFilter.java) defines API-key and OAuth token validation.
+- The [`1.1.0` HTTP](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/main/java/io/reshapr/proxy/proxy/ProxyService.java) and [gRPC](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/main/java/io/reshapr/proxy/proxy/GrpcProxyService.java) proxy implementations define backend credential handling.
+- The [`1.1.0` encryption implementation](https://github.com/reshaprio/reshapr/blob/1.2.0/control-plane/src/main/java/io/reshapr/ctrl/security/CipherService.java) defines the control-plane encryption behavior.
 
 ## Next step
 

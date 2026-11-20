@@ -5,11 +5,9 @@ verification:
   version: 1.0.0
   date: 2026-09-22
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  date: 2026-11-20
+  scope: release-tagged Tool selection and Compose paths; no live scripted Tool replay
 ---
 
 # Build a Scripted Custom Tool
@@ -52,7 +50,7 @@ Use this pattern when the sequence represents a reusable business action. Keep o
 
 ## Prerequisites
 
-- reShapr CLI `1.1.0`, authenticated against reShapr Online or a local `1.1.0` environment
+- reShapr CLI `1.2.0`, authenticated against reShapr Online or a local `1.2.0` environment
 - `curl` and `jq`
 - Docker Compose v2 when testing the timeout override on the local stack
 - A running proxy registered as a Gateway in Gateway Group `1`
@@ -167,7 +165,7 @@ export TODOS_MCP_ENDPOINT
 unset SCRIPTED_TOOLS SCRIPTED_ARTIFACTS
 ```
 
-In reShapr `1.1.0`, a scripted Custom Tool can call its declared lower-level Tools even when they are not selected for direct MCP access. The `tools` allow-list permits the internal `get_todos_todoid` call without exposing that primitive on this endpoint. The cross-Service `get_users_userid` Tool is selected on the Users Plan but is not added to the Todos endpoint. Operation selection controls client-visible discovery and calls; it is not backend authorization.
+In reShapr `1.2.0`, a scripted Custom Tool can call its declared lower-level Tools even when they are not selected for direct MCP access. The `tools` allow-list permits the internal `get_todos_todoid` call without exposing that primitive on this endpoint. The cross-Service `get_users_userid` Tool is selected on the Users Plan but is not added to the Todos endpoint. Operation selection controls client-visible discovery and calls; it is not backend authorization.
 
 Set the scheme for your environment. reShapr Online uses `https`; the local Compose proxy uses `http`:
 
@@ -305,7 +303,7 @@ Recreate only the proxy with the one-millisecond test limit:
 
 ```bash
 docker compose \
-  --file "$HOME/.reshapr/docker-compose-1.1.0.yml" \
+  --file "$HOME/.reshapr/docker-compose-1.2.0.yml" \
   --file scripted-timeout.override.yaml \
   up --detach --force-recreate gateway-01
 ```
@@ -316,7 +314,7 @@ Restore the release default and remove the temporary override:
 
 ```bash
 docker compose \
-  --file "$HOME/.reshapr/docker-compose-1.1.0.yml" \
+  --file "$HOME/.reshapr/docker-compose-1.2.0.yml" \
   up --detach --force-recreate gateway-01
 
 rm scripted-timeout.override.yaml

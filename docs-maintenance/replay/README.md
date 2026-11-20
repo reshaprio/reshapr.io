@@ -4,6 +4,7 @@ These private scripts retain the repeatable parts of release verification. They 
 
 ## Replay records
 
+- [2026-11-20 Web UI Quick Start on 1.2.1](../product-baseline.md#web-ui-quick-start-follow-up-2026-11-20): browser replay of the local HTTP import fix through a live MCP forecast call.
 - [2026-10-21 Kubernetes / charts 0.0.16](2026-10-21-kubernetes-0.0.16.md): published-artifact installation, clustered sessions, MCP backend dispatch, TLS/UI/admission, HPA and remaining full-page checks.
 - [2026-10-20 runtime 1.1.0](2026-10-20-runtime-1.1.0.md): scoped live Docker/CLI/API/browser replay, corrected procedure errors, discovery-stream interruption, and outstanding external-infrastructure checks.
 
@@ -11,7 +12,7 @@ These private scripts retain the repeatable parts of release verification. They 
 
 | Script | Default check | Optional live check |
 |---|---|---|
-| `reshapr-kubernetes-replay.sh` | Pull all four Helm charts, validate the eight tagged CRDs, and render the charts with pinned images | With `APPLY=true`, inspect an existing isolated deployment and call MCP `resources/list` |
+| `reshapr-kubernetes-replay.sh` | Pull all four Helm charts, validate the tagged CRDs, and render the charts with pinned images | With `APPLY=true`, inspect an existing isolated deployment and call MCP `resources/list` |
 | `reshapr-hybrid-replay.sh` | Verify the released proxy image exists | With `APPLY=true`, start a temporary proxy, verify readiness, discovery, and `tools/list`, then remove it |
 | `reshapr-observability-replay.sh` | Render the proxy chart with OTLP and ServiceMonitor settings and validate the resulting resources | With `APPLY=true`, inspect a deployed proxy and query a caller-supplied metrics URL |
 
@@ -30,6 +31,7 @@ Override `RUNTIME_VERSION`, `CONTROLLERS_VERSION`, and `CHART_VERSION` to evalua
 ## Safety and evidence
 
 - Use only a disposable or explicitly approved Kubernetes context. The Kubernetes scripts refuse a context different from `KUBE_CONTEXT`.
+- For local Compose replays, inspect the resolved host mounts before starting. A unique Compose project name does not isolate a bind-mounted PostgreSQL data directory.
 - Supply credentials to the shell helpers through environment variables; those helpers neither persist nor print them.
 - The dated production helper instead generates private test credentials, JWT keys and TLS material under `KUBE_REPLAY_ROOT`. The replay root is mode `0700`, credential/key files are mode `0600`, and CLI state uses an isolated HOME. Never publish these files or log their values; remove them only as part of an explicit fixture cleanup.
 - Live hybrid replay refuses to replace an existing container and removes the temporary container on exit.

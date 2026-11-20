@@ -5,16 +5,14 @@ verification:
   version: 1.0.0
   date: 2026-09-22
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  date: 2026-11-20
+  scope: protocol constants and dispatcher assertions against the release tag; not a complete live protocol replay
 ---
 
 # MCP Support Matrix
 
-This reference records the MCP server behavior implemented by the reShapr `1.1.0` Gateway. It distinguishes protocol vocabulary declared in code from methods that the server dispatcher actually handles.
+This reference records the MCP server behavior implemented by the reShapr `1.2.0` Gateway. It distinguishes protocol vocabulary declared in code from methods that the server dispatcher actually handles.
 
 For the reasoning behind the two modes, see **[MCP Compatibility: Session and Stateless Modes](../explanations/mcp-compatibility.md)**. For executable requests, see **[Test an MCP Endpoint](../how-to-guides/test-mcp-endpoint.md)**.
 
@@ -43,8 +41,11 @@ For the reasoning behind the two modes, see **[MCP Compatibility: Session and St
 | Resources | `resources/list` | Yes | Yes | Lists selected static and templated Resources. |
 | Resources | `resources/templates/list` | Yes | Yes | Lists Resource templates. |
 | Resources | `resources/read` | Yes | Yes | Reads a static Resource or resolves a Resource template. |
+| Skills extension | `skills/list` | Yes | Yes | Lists exposed Skills when a Skills artifact is selected. |
+| Skills extension | `skills/get` | Yes | Yes | Returns the manifest for an exposed Skill URI. |
+| Skills extension | `resources/directory/read` | Yes | Yes | Lists children of an exposed Skill directory URI. |
 
-These nine methods are the cases handled by the `McpController` dispatcher. Notifications sent by a client and requests sent by the server are not additional server endpoints in this table.
+The three extension methods require exposed [Skills](./skills-specification.md). Notifications sent by a client and requests sent by the server are not additional server endpoints in this table.
 
 ## Declared but unavailable server methods
 
@@ -62,7 +63,7 @@ For a method removed by the `2026-07-28` revision, the Gateway returns HTTP `404
 
 ## Modern request contract
 
-| Element | Source of truth | Validation in `1.1.0` |
+| Element | Source of truth | Validation in `1.2.0` |
 |---|---|---|
 | Protocol version | `params._meta["io.modelcontextprotocol/protocolVersion"]` | Must name one of the five supported versions when the modern envelope is present. |
 | `MCP-Protocol-Version` | Mirrors the protocol metadata | If present, it must equal the version in the request body. Non-handshake stateless calls require it to select stateless mode. |
@@ -97,14 +98,14 @@ The matrix applies to MCP over Streamable HTTP on all three reShapr endpoint for
 - the organization and Exposition-name endpoint;
 - the historical organization, Service, and version endpoint.
 
-The historical Service endpoint can advertise the deterministic Exposition endpoint through `X-Reshapr-Preferred-Endpoint`. reShapr `1.1.0` does not expose an MCP WebSocket transport.
+The historical Service endpoint can advertise the deterministic Exposition endpoint through `X-Reshapr-Preferred-Endpoint`. reShapr `1.2.0` does not expose an MCP WebSocket transport.
 
 ## Verification sources
 
-- **[McpSchema](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/main/java/io/reshapr/proxy/mcp/McpSchema.java)** declares the supported versions, headers, protocol metadata key, and method vocabulary.
-- **[McpController](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/main/java/io/reshapr/proxy/mcp/McpController.java)** owns endpoint routing, request validation, lifecycle handling, and the method dispatcher.
-- **[LegacyProtocolDialect](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/main/java/io/reshapr/proxy/mcp/LegacyProtocolDialect.java)** and **[ModernProtocolDialect](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/main/java/io/reshapr/proxy/mcp/ModernProtocolDialect.java)** define version-specific result shapes.
-- **[McpProtocolVersionRoutingTest](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/test/java/io/reshapr/proxy/mcp/McpProtocolVersionRoutingTest.java)** verifies session/stateless routing, modern headers, unsupported versions, removed methods, and unimplemented methods.
+- **[McpSchema](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/main/java/io/reshapr/proxy/mcp/McpSchema.java)** declares the supported versions, headers, protocol metadata key, and method vocabulary.
+- **[McpController](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/main/java/io/reshapr/proxy/mcp/McpController.java)** owns endpoint routing, request validation, lifecycle handling, and the method dispatcher.
+- **[LegacyProtocolDialect](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/main/java/io/reshapr/proxy/mcp/LegacyProtocolDialect.java)** and **[ModernProtocolDialect](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/main/java/io/reshapr/proxy/mcp/ModernProtocolDialect.java)** define version-specific result shapes.
+- **[McpProtocolVersionRoutingTest](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/test/java/io/reshapr/proxy/mcp/McpProtocolVersionRoutingTest.java)** verifies session/stateless routing, modern headers, unsupported versions, removed methods, and unimplemented methods.
 - The **[official MCP specification](https://modelcontextprotocol.io/specification/)** owns the protocol semantics beyond reShapr's implementation boundary.
 
 The `1.1.0` matrix is based on the release-tagged sources above. On 2026-10-20, live replay confirmed stateless discovery, Tool calls, Prompt and Resource lists, and session-based initialization and Tool listing. Other version/method combinations were not all replayed live. Recheck the owner code and tests before changing a version, mode, or method classification.

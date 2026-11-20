@@ -1,16 +1,16 @@
 ---
-description: Find the eight reShapr Kubernetes APIs and understand the operator and admission controller boundaries.
+description: Find the ten reShapr Kubernetes APIs and understand the operator and admission controller boundaries.
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  controllers: 0.0.5
+  charts: 0.0.18
+  date: 2026-11-20
+  scope: release-tagged reconcilers, status schemas and published CRD packaging; no live cluster replay
 ---
 
 # Kubernetes APIs and Controllers Overview
 
-The [`reshapr-controllers`](https://github.com/reshaprio/reshapr-controllers) repository provides a Kubernetes operator, eight namespaced custom resources, and an admission webhook for proxy sidecar injection. The [0.0.4 documentation index](https://github.com/reshaprio/reshapr-controllers/tree/0.0.4/documentation) and [generated CRDs](https://github.com/reshaprio/reshapr-controllers/tree/0.0.4/deploy/crd) are the canonical references for this baseline.
+ The [`reshapr-controllers`](https://github.com/reshaprio/reshapr-controllers) repository provides a Kubernetes operator, ten namespaced custom resources, and an admission webhook for proxy sidecar injection. The [0.0.5 documentation index](https://github.com/reshaprio/reshapr-controllers/tree/0.0.5/documentation) and [generated CRDs](https://github.com/reshaprio/reshapr-controllers/tree/0.0.5/deploy/crd) are the canonical references for this baseline.
 
 ## Operator model
 
@@ -24,18 +24,20 @@ The operator ServiceAccount must be registered as a trusted control-plane client
 |---|---|---|---|
 | `Service` | Imports the primary OpenAPI, GraphQL, or Protobuf artifact | Remote Service cleanup is enabled by default; `keepOnDelete` can retain it | [Service CR](https://github.com/reshaprio/reshapr-controllers/blob/main/documentation/service-cr.md) |
 | `GatewayGroup` | Declares the labels used to select Gateways | Remote Gateway Group cleanup is enabled by default; `keepOnDelete` can retain it | [GatewayGroup CR](https://github.com/reshaprio/reshapr-controllers/blob/main/documentation/gatewaygroup-cr.md) |
-| `ConfigurationPlan` | Binds an existing Service to a backend endpoint, operation and artifact selection, cache settings, request-header policy, and security configuration | The reconciler cleans up its remote Configuration Plan | [ConfigurationPlan CR](https://github.com/reshaprio/reshapr-controllers/blob/0.0.4/documentation/configurationplan-cr.md) |
+| `ConfigurationPlan` | Binds an existing Service to a backend endpoint, operation and artifact selection, cache settings, request-header policy, and security configuration | The reconciler cleans up its remote Configuration Plan | [ConfigurationPlan CR](https://github.com/reshaprio/reshapr-controllers/blob/0.0.5/documentation/configurationplan-cr.md) |
 | `Exposition` | Exposes a Service through a ready Configuration Plan and Gateway Group | Remote Exposition cleanup is enabled by default; `keepOnDelete` can retain it | [Exposition CR](https://github.com/reshaprio/reshapr-controllers/blob/main/documentation/exposition-cr.md) |
 | `SecretSource` | Declares control-plane Secrets, optionally sourced from Kubernetes Secrets | Remote Secret cleanup is enabled by default; `keepOnDelete` can retain it | [SecretSource CR](https://github.com/reshaprio/reshapr-controllers/blob/main/documentation/secretsource-cr.md) |
-| `CustomTools` | Attaches declarative or scripted tools to an existing Service | No remote artifact cleanup is implemented when the CR is deleted | [CustomTools CR](https://github.com/reshaprio/reshapr-controllers/blob/main/documentation/customtools-cr.md) |
-| `Resources` | Declares MCP resources and resource templates for an existing Service | No remote artifact cleanup is implemented when the CR is deleted | [Resources CR](https://github.com/reshaprio/reshapr-controllers/blob/0.0.4/documentation/resources-cr.md) |
-| `Prompts` | Attaches MCP Prompts to an existing Service (added in controllers `0.0.4`) | No remote artifact cleanup is implemented when the CR is deleted | [Prompts CR](https://github.com/reshaprio/reshapr-controllers/blob/0.0.4/documentation/prompts-cr.md) |
+| `CustomTools` | Attaches declarative or scripted tools to an existing Service | Deletes the attached artifact unless `keepOnDelete` is set | [CustomTools CR](https://github.com/reshaprio/reshapr-controllers/blob/0.0.5/documentation/customtools-cr.md) |
+| `Resources` | Declares MCP resources and resource templates for an existing Service | Deletes the attached artifact unless `keepOnDelete` is set | [Resources CR](https://github.com/reshaprio/reshapr-controllers/blob/0.0.5/documentation/resources-cr.md) |
+| `Prompts` | Attaches MCP Prompts to an existing Service | Deletes the attached artifact unless `keepOnDelete` is set | [Prompts CR](https://github.com/reshaprio/reshapr-controllers/blob/0.0.5/documentation/prompts-cr.md) |
+| `Skills` | Attaches remotely hosted Agent Skills to an existing Service | Deletes the attached artifact unless `keepOnDelete` is set | [Skills CR](https://github.com/reshaprio/reshapr-controllers/blob/0.0.5/documentation/skills-cr.md) |
+| `ToolsOutputFilters` | Attaches Tool output transformations to an existing Service | Deletes the attached artifact unless `keepOnDelete` is set | [ToolsOutputFilters CR](https://github.com/reshaprio/reshapr-controllers/blob/0.0.5/documentation/toolsoutputfilters-cr.md) |
 
-There is no dedicated `ToolsOutputFilters` CRD. `Prompts`, `CustomTools`, and `Resources` report `status.state`, rather than the other kinds' `status.status` and `observedGeneration` contract.
+The five artifact CRs report `status.state` and do not expose `observedGeneration`. Chart `0.0.18` packages all ten CRDs, including `Skills`. Apply all ten explicitly when [upgrading an existing installation](../how-to-guides/operations/upgrade-and-rotate.md).
 
-Controllers `0.0.4` also reconcile `spec.toolExposureMode` (`TOOLS`, `CODE`, or `HYBRID`) on a ConfigurationPlan. See [Use Code Mode](../how-to-guides/use-code-mode.md). The corrected chart `0.0.15` includes all eight CRDs and this field. For existing installations, explicitly update CRDs from the controllers release before applying manifests that use them; Helm upgrades do not update CRDs.
+Controllers `0.0.5` update the remote Configuration Plan in place on spec changes. They reconcile `spec.toolExposureMode` (`TOOLS`, `CODE`, or `HYBRID`), `spec.backendTimeout` in milliseconds, and `spec.backendSecretRef`, the name of an existing reShapr Secret. `backendSecretRef` is mutually exclusive with the `oauth2` configuration. See the [ConfigurationPlan CR reference](https://github.com/reshaprio/reshapr-controllers/blob/0.0.5/documentation/configurationplan-cr.md).
 
-Controllers `0.0.4` expose `spec.headerPolicy.request` and `spec.headerPolicy.response` with `allow`, `deny`, and `rename` rules. The operator forwards both shapes to the control plane, but runtime `1.1.0` enforces only request rules; response rules are reserved for future use.
+Configuration Plans expose `spec.headerPolicy.request` and `spec.headerPolicy.response` with `allow`, `deny`, and `rename` rules. The operator forwards both to the control plane, but runtime `1.2.0` enforces only request rules.
 
 ## Admission controller
 

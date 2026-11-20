@@ -2,14 +2,12 @@
 description: Protect a reShapr MCP endpoint with an API key, verify access, and rotate the key without restarting the proxy.
 verification:
   product: reShapr
-  version: 1.1.0
-  date: 2026-10-20
+  version: 1.2.0
+  date: 2026-11-20
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  date: 2026-11-20
+  scope: release-tagged CLI and live Compose replay of access checks and key rotation without proxy restart
 ---
 
 # Protect an MCP Endpoint with an API Key
@@ -18,7 +16,7 @@ An API key restricts the client-to-proxy boundary of an MCP endpoint. reShapr st
 
 ## Prerequisites
 
-- reShapr CLI `1.1.0`, authenticated with `reshapr login`
+- reShapr CLI `1.2.0`, authenticated with `reshapr login`
 - A Service ID and its backend endpoint
 - `curl` and `jq`
 

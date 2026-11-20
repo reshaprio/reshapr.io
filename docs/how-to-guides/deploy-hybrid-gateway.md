@@ -5,11 +5,11 @@ verification:
   version: 1.0.0
   date: 2026-09-22
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  controllers: 0.0.5
+  charts: 0.0.17
+  date: 2026-11-19
+  scope: release-tagged source review and proxy image availability; no live hybrid replay
 ---
 
 # Deploy a Hybrid reShapr Proxy
@@ -22,8 +22,8 @@ The proxy initiates the control-plane connection and registers a logical Gateway
 
 You need:
 
-- a reShapr `1.1.0` control plane reachable from the proxy over gRPC;
-- the reShapr `1.1.0` CLI, authenticated with `reshapr login`;
+- a reShapr `1.2.0` control plane reachable from the proxy over gRPC;
+- the reShapr `1.2.0` CLI, authenticated with `reshapr login`;
 - Docker or Podman on the proxy host;
 - `curl` and `jq` for verification;
 - a Service and Configuration Plan for a non-destructive backend operation;
@@ -33,7 +33,7 @@ The examples use Docker. Set `CONTAINER_ENGINE=podman` to use the same commands 
 
 ```bash
 export CONTAINER_ENGINE=docker
-export RESHAPR_IMAGE=registry.reshapr.io/reshapr/reshapr-proxy:1.1.0
+export RESHAPR_IMAGE=registry.reshapr.io/reshapr/reshapr-proxy:1.2.0
 ```
 
 ## 1. Select a Gateway Group
@@ -105,6 +105,8 @@ ${CONTAINER_ENGINE} run --detach \
 ```
 
 Use a unique `RESHAPR_GATEWAY_ID` for each running proxy. This value identifies the logical Gateway registered by that proxy. If the host cannot reach the control plane, check DNS, egress firewall rules, the configured port, and the TLS mode before changing the registration settings.
+
+By default, the proxy exits if initial registration or exposition discovery fails. Restore control-plane connectivity or correct registration credentials before restarting it. This startup check is distinct from the retry behavior of an already established discovery stream.
 
 ## 4. Check readiness
 
@@ -233,7 +235,7 @@ Deleting the token prevents later registration with that credential. A proxy tha
 
 ## Result
 
-You now have a reShapr `1.1.0` proxy running in another trust domain, registered as a logical Gateway with a dedicated credential, selected through Gateway Group labels, and verified through its MCP endpoint.
+You now have a reShapr `1.2.0` proxy running in another trust domain, registered as a logical Gateway with a dedicated credential, selected through Gateway Group labels, and verified through its MCP endpoint.
 
 ## Limits
 

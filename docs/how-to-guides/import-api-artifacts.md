@@ -5,11 +5,9 @@ verification:
   version: 1.0.0
   date: 2026-09-22
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  date: 2026-11-20
+  scope: release-tagged importer review and local OpenAPI smoke replay; GraphQL and Protobuf not replayed on this release
 ---
 
 # Import OpenAPI, GraphQL, or Protobuf Artifacts
@@ -18,14 +16,14 @@ Import an API contract to create or update its reShapr Service and main Artifact
 
 ## Prerequisites
 
-- Access to a reShapr `1.1.0` environment
+- Access to a reShapr `1.2.0` environment
 - Permission to import Artifacts in the current organization
 - For CLI procedures, the `reshapr` CLI authenticated against that environment
 - For remote sources, network access from the control plane to the source URL
 
 ## Choose the format and source
 
-| Contract | Recognition in `1.1.0` | Default Service identity | Recommended source |
+| Contract | Recognition in `1.2.0` | Default Service identity | Recommended source |
 |---|---|---|---|
 | OpenAPI | An `openapi: 3...` field in JSON or YAML | `info.title` and `info.version` | URL when the document has external `$ref` values |
 | GraphQL | A schema, query, mutation, or `# microcksId:` declaration | None; provide name and version | File or URL |
@@ -195,6 +193,6 @@ Use `reshapr service list` and `reshapr service get <service-id>` to inspect the
 
 ## Evidence and limits
 
-The remote OpenAPI and self-contained local GraphQL and Protobuf examples were replayed with reShapr `1.1.0` on 2026-10-20. Protected URLs and dependency-resolution branches were not replayed. Format recognition follows the release-tagged **[Artifact importer factory](https://github.com/reshaprio/reshapr/blob/1.1.0/control-plane/src/main/java/io/reshapr/ctrl/artifacts/ArtifactImporterFactory.java)**. Metadata and dependency behavior follow the **[GraphQL importer](https://github.com/reshaprio/reshapr/blob/1.1.0/control-plane/src/main/java/io/reshapr/ctrl/artifacts/GraphQLImporter.java)**, **[Protobuf importer](https://github.com/reshaprio/reshapr/blob/1.1.0/control-plane/src/main/java/io/reshapr/ctrl/artifacts/ProtobufImporter.java)**, and **[OpenAPI importer](https://github.com/reshaprio/reshapr/blob/1.1.0/control-plane/src/main/java/io/reshapr/ctrl/artifacts/OpenAPIImporter.java)**.
+The remote OpenAPI and self-contained local GraphQL and Protobuf examples were replayed with reShapr `1.1.0` on 2026-10-20. Protected URLs and dependency-resolution branches were not replayed. Format recognition follows the release-tagged **[Artifact importer factory](https://github.com/reshaprio/reshapr/blob/1.2.0/control-plane/src/main/java/io/reshapr/ctrl/artifacts/ArtifactImporterFactory.java)**. Metadata and dependency behavior follow the **[GraphQL importer](https://github.com/reshaprio/reshapr/blob/1.2.0/control-plane/src/main/java/io/reshapr/ctrl/artifacts/GraphQLImporter.java)**, **[Protobuf importer](https://github.com/reshaprio/reshapr/blob/1.2.0/control-plane/src/main/java/io/reshapr/ctrl/artifacts/ProtobufImporter.java)**, and **[OpenAPI importer](https://github.com/reshaprio/reshapr/blob/1.2.0/control-plane/src/main/java/io/reshapr/ctrl/artifacts/OpenAPIImporter.java)**.
 
 Import validates and models a contract; it does not prove that the backend endpoint is reachable or that its runtime behavior matches the contract. Verify those properties after creating a Plan and Exposition.

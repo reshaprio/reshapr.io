@@ -2,14 +2,12 @@
 description: Turn the Open-Meteo endpoint into one agent-oriented action, filter its result, and measure the change using two Configuration Plans.
 verification:
   product: reShapr
-  version: 1.1.0
-  date: 2026-10-20
+  version: 1.2.0
+  date: 2026-11-20
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  date: 2026-11-20
+  scope: live CLI and Open-Meteo replay of Tool selection, unfiltered and filtered JSON, and TOON encoding
 ---
 
 # Context Control in Practice
@@ -22,8 +20,8 @@ See [Context Control applied to GitHub GraphQL](https://youtu.be/OjsSAt0JdOY) an
 
 ## Prerequisites
 
-- The **[first MCP endpoint tutorial](./getting-started.md)** completed against reShapr `1.1.0`
-- reShapr CLI `1.1.0`, authenticated against that environment
+- The **[first MCP endpoint tutorial](./getting-started.md)** completed against reShapr `1.2.0`
+- reShapr CLI `1.2.0`, authenticated against that environment
 - `curl` and `jq`
 - A running proxy registered as a Gateway in Gateway Group `1`
 
@@ -267,7 +265,7 @@ You replaced a broad generated operation with one agent-oriented Tool, selected 
 ## Limits
 
 - This comparison covers one Open-Meteo request and does not predict token usage or model quality for other data.
-- Output filtering is not a security boundary. In reShapr `1.1.0`, a filter failure returns the original Tool response.
+- Output filtering is not a security boundary. In reShapr `1.2.0`, a filter failure returns the original Tool response.
 - The before/after field comparison uses JSON before TOON is enabled so the retained keys remain directly inspectable.
 - Re-running the tutorial with the same Plan or Exposition names requires deleting or renaming the previous resources, including the TOON variants.
 

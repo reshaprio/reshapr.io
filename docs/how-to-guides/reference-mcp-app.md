@@ -1,18 +1,16 @@
 ---
 description: Reference a remotely hosted MCP App from a Resources artifact and associate its UI with an exposed Tool.
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  date: 2026-11-20
+  scope: release-tagged MCP App sample review; no compatible host replay
 ---
 
 # Reference an MCP App
 
 Use a **Resources artifact** to associate an exposed Tool with an MCP App, such as a GitHub user widget. reShapr references the UI and serves its Resource content through MCP; an Apps-capable host renders it. It does not turn an arbitrary web page into an MCP App or provide application hosting.
 
-This guide targets reShapr **1.1.0**. The [released GitHub MCP App sample](https://github.com/reshaprio/reshapr/tree/1.1.0/dev/github-user-mcp-app) contains the frontend and its build configuration. The associated [Custom Tools](https://github.com/reshaprio/reshapr/blob/1.1.0/dev/github-api-custom-tools.yaml) and [Resources](https://github.com/reshaprio/reshapr/blob/1.1.0/dev/github-api-resources.yaml) artifacts are separate files.
+This guide targets reShapr **1.2.0**. The [released GitHub MCP App sample](https://github.com/reshaprio/reshapr/tree/1.2.0/dev/github-user-mcp-app) contains the frontend and its build configuration. The associated [Custom Tools](https://github.com/reshaprio/reshapr/blob/1.2.0/dev/github-api-custom-tools.yaml) and [Resources](https://github.com/reshaprio/reshapr/blob/1.2.0/dev/github-api-resources.yaml) artifacts are separate files.
 
 ## Prerequisites
 

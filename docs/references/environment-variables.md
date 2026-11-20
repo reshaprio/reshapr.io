@@ -84,7 +84,7 @@ See [Use Code Mode](../how-to-guides/use-code-mode.md) and [Build a Scripted Cus
 | `RESHAPR_AUTHENTICATION_IDP_DEFAULT_ORGANIZATION_GROUP_PREFIX` | Unset | Provider group prefix identifying the organization. |
 | `RESHAPR_AUTHENTICATION_IDP_DEFAULT_ORGANIZATION_VALUE` | Unset | Fixed fallback organization; resolution order is claim, group prefix, then value. |
 
-For startup collection/map syntax and existing-data behavior, use the [initialization implementation](https://github.com/reshaprio/reshapr/blob/1.1.0/control-plane/src/main/java/io/reshapr/ctrl/ReshaprCtrlApp.java). Onboarding quota properties have the historical spelling `resharp.ctrl.onboarding-quotas`, not `reshapr`: configure dotted keys such as `resharp.ctrl.onboarding-quotas."exposition.count"` in a properties file. Defaults are 0 Gateways, 0 Gateway Groups, and 10 Expositions. These are resource counts, not request quotas.
+For startup collection/map syntax and existing-data behavior, use the [initialization implementation](https://github.com/reshaprio/reshapr/blob/1.2.0/control-plane/src/main/java/io/reshapr/ctrl/ReshaprCtrlApp.java). Onboarding quota properties have the historical spelling `resharp.ctrl.onboarding-quotas`, not `reshapr`: configure dotted keys such as `resharp.ctrl.onboarding-quotas."exposition.count"` in a properties file. Defaults are 0 Gateways, 0 Gateway Groups, and 10 Expositions. These are resource counts, not request quotas.
 
 See [Configure control-plane OIDC](../how-to-guides/configure-control-plane-oidc.md) for deployment requirements and remaining login-validation limitations. This page does not broaden its security guarantees.
 
@@ -126,14 +126,14 @@ For application/framework configuration not listed here, start with the two rele
 
 [Logging](./logging.md) lists category and handler settings and their sensitivity. Proxy OTLP variables include `QUARKUS_OTEL_SDK_DISABLED`, `QUARKUS_OTEL_EXPORTER_OTLP_ENDPOINT`, `QUARKUS_OTEL_EXPORTER_OTLP_PROTOCOL`, and `QUARKUS_OTEL_EXPORTER_OTLP_HEADERS`. See [Observe and audit](../how-to-guides/operations/observe-and-audit.md) for the supported export workflow; a runtime environment variable cannot restore a telemetry extension omitted at build time.
 
-Infinispan XML reads **JVM system properties**, including `reshapr.infinispan.stack`. Do not assume `RESHAPR_INFINISPAN_STACK` is equivalent. The proxy chart sets the appropriate `-D` options through its JVM configuration; retain those options when adding your own. See [Helm charts](./helm-charts.md) and the [released Infinispan configuration](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/main/resources/infinispan.xml). The container launcher also accepts JVM options such as `JAVA_OPTS_APPEND`; heap sizing must leave room for native memory, buffers, and concurrent sandboxes.
+Infinispan XML reads **JVM system properties**, including `reshapr.infinispan.stack`. Do not assume `RESHAPR_INFINISPAN_STACK` is equivalent. The proxy chart sets the appropriate `-D` options through its JVM configuration; retain those options when adding your own. See [Helm charts](./helm-charts.md) and the [released Infinispan configuration](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/main/resources/infinispan.xml). The container launcher also accepts JVM options such as `JAVA_OPTS_APPEND`; heap sizing must leave room for native memory, buffers, and concurrent sandboxes.
 
 ## Canonical sources
 
-- [Control-plane application properties](https://github.com/reshaprio/reshapr/blob/1.1.0/control-plane/src/main/resources/application.properties)
-- [Proxy application properties](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/main/resources/application.properties)
-- [Script and Code Mode injection defaults](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/main/java/io/reshapr/proxy/mcp/ToolCallExecutor.java)
-- [Identity provider mapping](https://github.com/reshaprio/reshapr/blob/1.1.0/control-plane/src/main/java/io/reshapr/ctrl/config/AuthenticationIdentityProviderConfig.java)
-- [Encryption mapping](https://github.com/reshaprio/reshapr/blob/1.1.0/control-plane/src/main/java/io/reshapr/ctrl/config/EncryptionConfig.java)
+- [Control-plane application properties](https://github.com/reshaprio/reshapr/blob/1.2.0/control-plane/src/main/resources/application.properties)
+- [Proxy application properties](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/main/resources/application.properties)
+- [Script and Code Mode injection defaults](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/main/java/io/reshapr/proxy/mcp/ToolCallExecutor.java)
+- [Identity provider mapping](https://github.com/reshaprio/reshapr/blob/1.2.0/control-plane/src/main/java/io/reshapr/ctrl/config/AuthenticationIdentityProviderConfig.java)
+- [Encryption mapping](https://github.com/reshaprio/reshapr/blob/1.2.0/control-plane/src/main/java/io/reshapr/ctrl/config/EncryptionConfig.java)
 
 These owner contracts remain authoritative; this page provides the bounded deployment lookup rather than copying their full contents.

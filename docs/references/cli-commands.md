@@ -75,7 +75,7 @@ Example output (identity, deployment mode, version, and timestamps vary):
   Organization: my-org
   Server      : https://try.reshapr.io
 ℹ️  Server Information
-  Version     : 0.2.3
+  Version     : 1.0.0
   Build time  : <build timestamp>
   Mode        : saas
   Internal IDP: https://idp.reshapr.io

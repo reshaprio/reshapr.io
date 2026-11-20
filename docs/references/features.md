@@ -5,11 +5,11 @@ verification:
   version: 1.0.0
   date: 2026-09-22
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  controllers: 0.0.5
+  charts: 0.0.18
+  date: 2026-11-20
+  scope: release-tagged Skills and controllers capabilities and published CRD packaging
 ---
 
 # reShapr features
@@ -25,7 +25,7 @@ release_review:
 | Protobuf/gRPC import | Available | Protobuf 3 services become Tools backed by gRPC. Imports are resolves before compilation. | [Services and Artifacts](../explanations/services-and-artifacts.md) |
 | Import by file or URL | Available | Both paths support service name and version overrides. URL imports can resolve external dependencies that are unavailable to a local file import. | [CLI commands](cli-commands.md) |
 | Operation selection | Available | A Configuration Plan can include or exclude API operations; inclusion takes precedence. | [Configuration Plan and Exposition](../explanations/configuration-and-exposition.md) |
-| reShapr artifacts | Available | Prompts, Resources, Custom Tools, and Tools Output Filters can be attached to a Service and selected per Configuration Plan. | [Configuration Plan and Exposition](../explanations/configuration-and-exposition.md) |
+| reShapr artifacts | Available | Prompts, Resources, Skills, Custom Tools, and Tools Output Filters can be attached to a Service and selected per Configuration Plan. | [Configuration Plan and Exposition](../explanations/configuration-and-exposition.md) |
 | Declarative Custom Tools | Available | Rename, condense, or reshape existing operations without creating a new backend. | [Custom Tools specification](custom-tools-specification.md) |
 | Scripted Custom Tools | Available with limits | JavaScript orchestration can call allowed Tools with bounded execution time and depth. This extension is programmable rather than no-code. | [Custom Tools specification](custom-tools-specification.md#scripted-custom-tools) |
 | Code Mode | Available with limits | Since `1.1.0`, select `CODE` or `HYBRID` per Plan to expose `search_tools`, `get_api_types`, and `execute_code`. Client-supplied JavaScript runs under proxy guardrails; completed calls are not rolled back on failure. | [Use Code Mode](../how-to-guides/use-code-mode.md) and [flows and security boundaries](../explanations/code-mode.md) |
@@ -40,6 +40,7 @@ release_review:
 | Session and stateless modes | Available | Versions before `2026-07-28` use a server-issued session ID. `2026-07-28` uses stateless requests and `server/discover`. | [MCP Compatibility](../explanations/mcp-compatibility.md) |
 | Tools | Available | `tools/list` and `tools/call` dispatch to REST, GraphQL, gRPC, or Custom Tools selected by the Plan. | [Custom Tools specification](custom-tools-specification.md) |
 | Prompts | Available | `prompts/list` and `prompts/get` serve Prompts artifacts selected by the Plan. | [Prompts specification](prompts-specification.md) |
+| Agent Skills | Available | The Gateway serves remotely hosted `SKILL.md` and declared supporting files through the MCP Skills extension. | [Skills artifact](skills-specification.md) |
 | Resources | Available | Static and templated Resources support list, template list, and read operations. | [Resources specification](resources-specification.md) |
 | MCP Apps references | Available with limits | UI Resources can reference remotely hosted MCP App HTML and associate it with native Tools. Rendering requires an Apps-capable host; reShapr is not the UI hosting service. | [Reference an MCP App](../how-to-guides/reference-mcp-app.md) |
 | URL elicitation | Available with limits | Backend credentials can be requested through legacy session-bound errors or `2026-07-28` stateless elicitation bound to an authenticated user. | [Backend authentication and elicitation](../how-to-guides/security/backend-auth-and-elicitation.md) |
@@ -77,7 +78,7 @@ Methods such as roots, sampling, and subscriptions are not exposed as server cap
 | Capability | Availability | Scope | Reference |
 |---|---|---|---|
 | Local runtime | Available | The CLI starts and stops a release Docker Compose stack with Docker or Podman, or on apple/container, and can include the Web UI. | [reShapr project](https://github.com/reshaprio/reshapr) |
-| Kubernetes APIs and operator | Available with limits | Eight `v1alpha1` CRDs manage Services, Plans, Expositions, Gateway Groups, Secret sources, Custom Tools, Resources, and Prompts. Artifact CRs have filename-collision and remote-cleanup limits. | [Kubernetes APIs and Controllers](./kubernetes-apis.md) |
+| Kubernetes APIs and operator | Available with limits | Controllers expose ten `v1alpha1` CRDs, all packaged in Helm chart `0.0.18`. | [Kubernetes APIs and Controllers](./kubernetes-apis.md) |
 | Sidecar injection | Available with limits | The admission controller injects Gateway sidecars and creates discovery/MCP Services for supported Deployment-owned workloads. It is fail-open by default. | [Admission controller](https://github.com/reshaprio/reshapr-controllers/blob/main/documentation/admission-controller.md) |
 | Helm packaging | Available | Four OCI charts package the control plane, proxy, Web UI, and controllers. | [Helm charts](https://github.com/reshaprio/reshapr-helm-charts) |
 | PostgreSQL topology | Available with limits | The control-plane chart supports bundled or external PostgreSQL. The bundled development database is not a high-availability setup. | [Control-plane chart](https://github.com/reshaprio/reshapr-helm-charts/tree/main/control-plane) |
@@ -85,4 +86,3 @@ Methods such as roots, sampling, and subscriptions are not exposed as server cap
 | Network and metrics integration | Available with limits | The proxy chart provides optional NetworkPolicy and ServiceMonitor resources. Coverage is not uniform across all four charts. | [Proxy chart](https://github.com/reshaprio/reshapr-helm-charts/tree/main/proxy) |
 | Installation profiles and signatures | Available | All charts provide development and production values; published charts are signed with Cosign. | [Helm chart verification](https://github.com/reshaprio/reshapr-helm-charts#verifying-chart-signatures) |
 | Upgrades | Available with limits | Kubernetes rolling updates, startup database migrations, retained clustering secrets, retained CRDs, and administrator-triggered database key rotation support upgrades. Automated rollback and general credential rotation are not provided. | [Upgrade and rotate runtime secrets](../how-to-guides/operations/upgrade-and-rotate.md) |
-

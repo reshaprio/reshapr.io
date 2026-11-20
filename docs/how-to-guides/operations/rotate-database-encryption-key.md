@@ -5,16 +5,15 @@ verification:
   version: 1.0.0 / charts 0.0.14
   date: 2026-09-22
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  charts: 0.0.18
+  date: 2026-11-20
+  scope: release-tagged key rotation interfaces and chart values; no live rotation replay
 ---
 
 # Rotate the Database Encryption Key
 
-Use this runbook to introduce a new AES-256-GCM key, activate it safely across multiple control-plane replicas, and re-encrypt stored Secret and Configuration Plan values. Key generation, distribution, activation, invocation, retirement, and scheduling are operator-managed in reShapr `1.1.0`.
+Use this runbook to introduce a new AES-256-GCM key, activate it safely across multiple control-plane replicas, and re-encrypt stored Secret and Configuration Plan values. Key generation, distribution, activation, invocation, retirement, and scheduling are operator-managed in reShapr `1.2.0`.
 
 The procedure uses two workload rollouts. The first gives every replica the new key while the old key remains active. The second changes the active key only after every replica can decrypt values written with either key.
 
@@ -22,11 +21,11 @@ The procedure uses two workload rollouts. The first gives every replica the new 
 
 You need:
 
-- reShapr control plane `1.1.0` deployed with Helm chart `0.0.15`;
+- reShapr control plane `1.2.0` deployed with Helm chart `0.0.18`;
 - an externally managed PostgreSQL backup with a tested restore procedure;
 - an external Kubernetes Secret referenced by `encryptionKey.existingSecret`;
 - the current active key and every older key still needed by live data or retained backups;
-- the reShapr `1.1.0` CLI configured with `RESHAPR_ADMIN_API_KEY`;
+- the reShapr `1.2.0` CLI configured with `RESHAPR_ADMIN_API_KEY`;
 - permission to update the Secret and roll out every control-plane replica;
 - one Exposition that uses an encrypted API key or backend Secret for the final check;
 - Helm, `kubectl`, `jq`, and `openssl`.
@@ -122,7 +121,7 @@ Apply the values and wait for every replica:
 ```bash
 helm upgrade "${CONTROL_PLANE_RELEASE}" \
   oci://quay.io/reshapr/reshapr-helm-charts/reshapr-control-plane \
-  --version 0.0.15 \
+  --version 0.0.18 \
   --namespace "${PLATFORM_NAMESPACE}" \
   --values values/control-plane.yaml
 
@@ -153,7 +152,7 @@ Apply a second rollout:
 ```bash
 helm upgrade "${CONTROL_PLANE_RELEASE}" \
   oci://quay.io/reshapr/reshapr-helm-charts/reshapr-control-plane \
-  --version 0.0.15 \
+  --version 0.0.18 \
   --namespace "${PLATFORM_NAMESPACE}" \
   --values values/control-plane.yaml
 
@@ -224,7 +223,7 @@ Every control-plane replica knows the complete transition key set, new writes us
 
 ## Limits
 
-- Rotation is manual; reShapr `1.1.0` does not generate, distribute, schedule, activate, or retire encryption keys.
+- Rotation is manual; reShapr `1.2.0` does not generate, distribute, schedule, activate, or retire encryption keys.
 - Rotation covers the sensitive database fields owned by `KeyRotationService`; it is not a general PostgreSQL encryption facility.
 - The command reports re-encrypted values but does not test database backup restoration.
 - Removing an old key is irreversible unless that key remains available through an approved recovery system.
@@ -234,4 +233,4 @@ Every control-plane replica knows the complete transition key set, new writes us
 
 Use **[Upgrade reShapr and Rotate Runtime Secrets](./upgrade-and-rotate.md)** for the surrounding release upgrade and other credential rotations. Review **[Security Capabilities and Limits](../../explanations/security-model.md)** for the at-rest encryption boundary.
 
-The release-tagged [rotation service](https://github.com/reshaprio/reshapr/blob/1.1.0/control-plane/src/main/java/io/reshapr/ctrl/security/KeyRotationService.java), [cipher service](https://github.com/reshaprio/reshapr/blob/1.1.0/control-plane/src/main/java/io/reshapr/ctrl/security/CipherService.java), [admin CLI](https://github.com/reshaprio/reshapr/blob/1.1.0/cli/src/commands/admin/encryption.ts), and [Helm chart documentation](https://github.com/reshaprio/reshapr-helm-charts/blob/0.0.15/control-plane/README.md) own the behavior described here.
+The release-tagged [rotation service](https://github.com/reshaprio/reshapr/blob/1.2.0/control-plane/src/main/java/io/reshapr/ctrl/security/KeyRotationService.java), [cipher service](https://github.com/reshaprio/reshapr/blob/1.2.0/control-plane/src/main/java/io/reshapr/ctrl/security/CipherService.java), [admin CLI](https://github.com/reshaprio/reshapr/blob/1.2.0/cli/src/commands/admin/encryption.ts), and [Helm chart documentation](https://github.com/reshaprio/reshapr-helm-charts/blob/0.0.18/control-plane/README.md) own the behavior described here.

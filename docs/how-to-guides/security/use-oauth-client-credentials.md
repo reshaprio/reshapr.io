@@ -5,11 +5,9 @@ verification:
   version: 1.0.0
   date: 2026-09-22
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  date: 2026-11-20
+  scope: release-tagged Client Credentials behavior and CLI prerequisites; no live OAuth replay
 ---
 
 # Use OAuth Client Credentials for Backend Calls
@@ -22,7 +20,7 @@ This guide keeps the OAuth client secret out of control-plane storage by resolvi
 
 You need:
 
-- reShapr `1.1.0` and its CLI;
+- reShapr `1.2.0` and its CLI;
 - an imported Service and a read-only backend operation;
 - an OAuth client authorized to call that backend;
 - a token endpoint that supports `grant_type=client_credentials` and `client_secret_basic`;
@@ -170,7 +168,7 @@ The Configuration Plan uses a proxy-local OAuth client secret to obtain and cach
 ## Limits
 
 - Client Credentials represents one shared machine identity, not an MCP user's delegated identity.
-- reShapr `1.1.0` does not use OAuth refresh tokens for this flow.
+- reShapr `1.2.0` does not use OAuth refresh tokens for this flow.
 - Configured scopes apply to the token request, not to per-Tool authorization in reShapr.
 - The token cache is runtime state, not persistent credential storage; a cluster restart causes a new exchange.
 - Environment-backed secret rotation requires the workload platform to replace or restart the consuming proxy processes.
@@ -180,4 +178,4 @@ The Configuration Plan uses a proxy-local OAuth client secret to obtain and cach
 
 Use **[Authenticate Backend Calls and Use Elicitation](./backend-auth-and-elicitation.md)** to compare this shared identity with direct credentials and per-user elicitation. Use **[Security Capabilities and Limits](../../explanations/security-model.md)** to review the complete trust boundary.
 
-The release-tagged [Client Credentials provider](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/main/java/io/reshapr/proxy/secret/ClientCredentialsTokenProvider.java), [token request implementation](https://github.com/reshaprio/reshapr/blob/1.1.0/commons/src/main/java/io/reshapr/security/OidcUtils.java), and [provider tests](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/test/java/io/reshapr/proxy/secret/ClientCredentialsTokenProviderTest.java) own the behavior described here.
+The release-tagged [Client Credentials provider](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/main/java/io/reshapr/proxy/secret/ClientCredentialsTokenProvider.java), [token request implementation](https://github.com/reshaprio/reshapr/blob/1.2.0/commons/src/main/java/io/reshapr/security/OidcUtils.java), and [provider tests](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/test/java/io/reshapr/proxy/secret/ClientCredentialsTokenProviderTest.java) own the behavior described here.

@@ -5,11 +5,9 @@ verification:
   version: 1.0.0
   date: 2026-09-22
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  date: 2026-11-20
+  scope: release-tagged administration contract and CLI prerequisites; no live membership replay
 ---
 
 # Manage Organizations, Owners, and Memberships
@@ -24,10 +22,10 @@ For federated users, first configure **[control-plane OIDC authentication](../co
 
 You need:
 
-- a reShapr `1.1.0` control plane;
+- a reShapr `1.2.0` control plane;
 - the deployment-wide administration API key;
 - at least one existing user to assign as owner or member;
-- reShapr CLI `1.1.0` for the CLI path;
+- reShapr CLI `1.2.0` for the CLI path;
 - a deployed Web UI configured with its server-side administration API key for the Web UI path;
 - `curl` and `jq` for the API path;
 - access to a target user's normal login flow for the final membership check.
@@ -243,4 +241,4 @@ The organization exists with an explicit owner, and each intended user can selec
 
 Use **[Assign and Monitor Organization Quotas](./organization-quotas.md)** to bound the resources the new organization can create. Review **[Multi-tenancy and Administrative Governance](../../explanations/multi-tenancy-administrative-governance.md)** for isolation, identity, and offboarding boundaries.
 
-The release-tagged [administration API contract](https://github.com/reshaprio/reshapr/blob/1.1.0/reshapr-admin-ctrl-openapi-v0.1.yaml), [administrative CLI guide](https://github.com/reshaprio/reshapr/blob/1.1.0/cli/ADMIN_CLI.md), and [Web UI implementation](https://github.com/reshaprio/reshapr/tree/1.1.0/web-ui) remain the canonical interface references.
+The release-tagged [administration API contract](https://github.com/reshaprio/reshapr/blob/1.2.0/reshapr-admin-ctrl-openapi.yaml), [administrative CLI guide](https://github.com/reshaprio/reshapr/blob/1.2.0/cli/ADMIN_CLI.md), and [Web UI implementation](https://github.com/reshaprio/reshapr/tree/1.2.0/web-ui) remain the canonical interface references.

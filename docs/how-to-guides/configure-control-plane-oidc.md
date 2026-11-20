@@ -5,11 +5,10 @@ verification:
   version: 1.0.0 / Helm charts 0.0.14
   date: 2026-09-22
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  charts: 0.0.18
+  date: 2026-11-20
+  scope: release-tagged OIDC configuration and chart values; no live identity provider replay
 ---
 
 # Connect the Control Plane to an OIDC Provider
@@ -28,7 +27,7 @@ Do not treat this flow as suitable for an untrusted, publicly reachable producti
 
 You need:
 
-- reShapr control-plane and Web UI images `1.1.0`, with control-plane chart `0.0.15`;
+- reShapr control-plane and Web UI images `1.2.0`, with control-plane chart `0.0.18`;
 - an OIDC provider reachable from user browsers and the control-plane pods;
 - permission to register an [OAuth 2.0 Authorization Code](https://www.rfc-editor.org/rfc/rfc6749#section-4.1) client at that provider;
 - public HTTPS URLs for the control plane and, when used, the Web UI;
@@ -216,10 +215,10 @@ OIDC is enabled when `/api/config` returns `oidcEnabled: true`, a permitted test
 - OIDC configuration requires a control-plane restart through the deployment rollout.
 - The provider-specific client, consent, claims, group, and session configuration remains owned by your identity provider.
 
-reShapr `1.1.0` and Helm charts `0.0.15` are the first tagged baseline documented here that includes the redirect allow-list and separate Web UI public control-plane URL.
+reShapr `1.2.0` and Helm charts `0.0.18` include the redirect allow-list and separate Web UI public control-plane URL.
 
 ## Next step
 
 Review **[Multi-tenancy and Administrative Governance](../explanations/multi-tenancy-administrative-governance.md)** to decide how federated identities should receive organization access. Use **[Protect an MCP Endpoint with OAuth 2.0](./security/oauth.md)** when the next task is authenticating MCP clients rather than control-plane users.
 
-The release-tagged [OIDC controller flow](https://github.com/reshaprio/reshapr/blob/1.1.0/control-plane/src/main/java/io/reshapr/ctrl/security/AuthenticationController.java), [token claim validation](https://github.com/reshaprio/reshapr/blob/1.1.0/commons/src/main/java/io/reshapr/security/OidcUtils.java), [login state store](https://github.com/reshaprio/reshapr/blob/1.1.0/control-plane/src/main/java/io/reshapr/ctrl/security/OidcLoginStateStore.java), [Web UI URL resolver](https://github.com/reshaprio/reshapr/blob/1.1.0/web-ui/src/lib/server/auth.ts), and [control-plane chart values](https://github.com/reshaprio/reshapr-helm-charts/blob/0.0.15/control-plane/values.yaml) own the behavior described here.
+The release-tagged [OIDC controller flow](https://github.com/reshaprio/reshapr/blob/1.2.0/control-plane/src/main/java/io/reshapr/ctrl/security/AuthenticationController.java), [token claim validation](https://github.com/reshaprio/reshapr/blob/1.2.0/commons/src/main/java/io/reshapr/security/OidcUtils.java), [login state store](https://github.com/reshaprio/reshapr/blob/1.2.0/control-plane/src/main/java/io/reshapr/ctrl/security/OidcLoginStateStore.java), [Web UI URL resolver](https://github.com/reshaprio/reshapr/blob/1.2.0/web-ui/src/lib/server/auth.ts), and [control-plane chart values](https://github.com/reshaprio/reshapr-helm-charts/blob/0.0.18/control-plane/values.yaml) own the behavior described here.

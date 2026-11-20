@@ -4,11 +4,11 @@ verification:
   version: 1.0.0
   date: 2026-09-22
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  controllers: 0.0.5
+  charts: 0.0.17
+  date: 2026-11-19
+  scope: release-tagged Compose review and Linux Docker smoke replay; alternative engines not replayed
 ---
 
 # Docker Compose
@@ -28,7 +28,7 @@ Before you begin, make sure you have the following installed on your machine:
 - The **reShapr CLI** installed globally:
 
 ```bash
-npm install -g @reshapr/reshapr-cli@1.1.0 --allow-scripts=@scarf/scarf
+npm install -g @reshapr/reshapr-cli@1.2.0 --allow-scripts=@scarf/scarf
 ```
 
 ## Quick start with the CLI
@@ -36,10 +36,10 @@ npm install -g @reshapr/reshapr-cli@1.1.0 --allow-scripts=@scarf/scarf
 The simplest way to run reShapr locally is through `reshapr run`. Pin the release so the downloaded Compose file, container images, and this guide use the same version:
 
 ```bash
-reshapr run --release 1.1.0
+reshapr run --release 1.2.0
 ```
 
-The CLI downloads the release-owned [`docker-compose-all-in-one.yml`](https://github.com/reshaprio/reshapr/blob/1.1.0/install/docker-compose-all-in-one.yml), updates its reShapr image tags to `1.1.0`, caches it under `~/.reshapr/`, and starts the stack in the background.
+The CLI downloads the release-owned [`docker-compose-all-in-one.yml`](https://github.com/reshaprio/reshapr/blob/1.2.0/install/docker-compose-all-in-one.yml), updates its reShapr image tags to `1.2.0`, caches it under `~/.reshapr/`, and starts the stack in the background.
 
 Without `--release`, the CLI resolves `latest` through GitHub Releases. Use an explicit release for a reproducible environment. Use `nightly` only when you deliberately want artifacts from the `main` branch:
 
@@ -50,7 +50,7 @@ reshapr run --release nightly
 The CLI auto-detects Docker or Podman. To select one explicitly, use `--engine`:
 
 ```bash
-reshapr run --release 1.1.0 --engine podman
+reshapr run --release 1.2.0 --engine podman
 ```
 
 On a Mac you can also run the stack without Docker or Podman. See [Run on apple/container](./run-on-apple-container.md).
@@ -58,7 +58,7 @@ On a Mac you can also run the stack without Docker or Podman. See [Run on apple/
 Add the optional Web UI with `--ui`:
 
 ```bash
-reshapr run --release 1.1.0 --ui
+reshapr run --release 1.2.0 --ui
 ```
 
 The Web UI addon is downloaded from the same release and becomes available at `http://localhost:3333`. The compose files are cached at `~/.reshapr/docker-compose-<release>.yml` and `~/.reshapr/docker-compose-ui-addon-<release>.yml`.
@@ -118,9 +118,11 @@ This runs the selected engine's Compose `down` command on every saved compose fi
 If you prefer to manage Docker Compose directly, check out the same release used by this guide:
 
 ```bash
-git clone --branch 1.1.0 --depth 1 https://github.com/reshaprio/reshapr.git
+git clone --branch 1.2.0 --depth 1 https://github.com/reshaprio/reshapr.git
 cd reshapr
 ```
+
+The checked-in Compose files reference `nightly` images. Before starting them, replace the `nightly` tags for the control plane and Gateway in `install/docker-compose-all-in-one.yml`, and for the Web UI in `install/docker-compose-ui-addon.yml` if used, with `1.2.0`. Leave the PostgreSQL image unchanged.
 
 Start all services (control plane, proxy, and database) at once:
 
@@ -152,6 +154,7 @@ docker compose -f install/docker-compose-all-in-one.yml down
 ## Limits
 
 - This topology is intended for local development and testing, not production availability or durability.
+- To experiment with replicated Gateway sessions, use the separate [release-owned cluster Compose example](https://github.com/reshaprio/reshapr/blob/1.2.0/install/docker-compose-cluster.yml), not the all-in-one stack. Its `keystore-init` service generates the shared JCEKS file required by the two Gateways. As with the manual setup above, pin the reShapr image tags before starting it.
 - Local credentials and ports in this guide use the release defaults; change them before exposing the stack beyond your machine.
 - Stopping the stack does not remove its named volumes. Manage local data lifecycle with your container engine.
 

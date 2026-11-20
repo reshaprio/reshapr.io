@@ -1,16 +1,15 @@
 ---
 description: Enable Code Mode to let an MCP client discover API operations progressively and execute bounded JavaScript in the proxy.
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  controllers: 0.0.5
+  date: 2026-11-20
+  scope: release-tagged Code Mode Tool definitions and ConfigurationPlan schema; no complete procedure replay
 ---
 
 # Use Code Mode
 
-Use Code Mode in reShapr **1.1.0** when an agent needs to search a large API, chain calls, or reduce results before returning them to the model. Instead of loading every Tool definition, the client discovers just the operations it needs and submits JavaScript to the proxy.
+Use Code Mode in reShapr **1.2.0** when an agent needs to search a large API, chain calls, or reduce results before returning them to the model. Instead of loading every Tool definition, the client discovers just the operations it needs and submits JavaScript to the proxy.
 
 This follows the code-execution-with-MCP pattern described by [Cloudflare](https://blog.cloudflare.com/code-mode/) and [Anthropic](https://www.anthropic.com/engineering/code-execution-with-mcp): present Tools as a code API, compose calls in code, and process intermediate results before returning an answer to the model. In reShapr, execution is **server-side in the proxy**; the client uses the Exposition's MCP Tools rather than installing an agent-side execution SDK or enabling a provider-specific code execution API.
 
@@ -20,10 +19,10 @@ For the discovery and execution flows, sandbox security model, and guardrail bou
 
 ## Prerequisites
 
-- A control plane and proxy running reShapr `1.1.0`.
+- A control plane and proxy running reShapr `1.2.0`.
 - An existing Service, Configuration Plan, and Exposition, with a working read-only Tool call.
 - Permission to edit the Plan and an MCP client that can call Tools and generate JavaScript.
-- For GitOps configuration, controllers `0.0.4` and the matching ConfigurationPlan CRD installed explicitly. Helm does not upgrade existing CRDs.
+- For GitOps configuration, controllers `0.0.5` and the matching ConfigurationPlan CRD installed explicitly. Helm does not upgrade existing CRDs.
 
 ## Choose the Tool exposure mode
 
@@ -107,6 +106,6 @@ These references explain the design pattern, not the reShapr contract. Their exa
 
 ## Source contracts
 
-- [Code Mode Tool definitions, reShapr 1.1.0](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/main/java/io/reshapr/proxy/mcp/code/CodeModeTools.java)
-- [Execution and selected surface](https://github.com/reshaprio/reshapr/blob/1.1.0/proxy/src/main/java/io/reshapr/proxy/mcp/code/CodeModeExecutor.java)
-- [ConfigurationPlan reference, controllers 0.0.4](https://github.com/reshaprio/reshapr-controllers/blob/0.0.4/documentation/configurationplan-cr.md)
+- [Code Mode Tool definitions, reShapr 1.2.0](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/main/java/io/reshapr/proxy/mcp/code/CodeModeTools.java)
+- [Execution and selected surface](https://github.com/reshaprio/reshapr/blob/1.2.0/proxy/src/main/java/io/reshapr/proxy/mcp/code/CodeModeExecutor.java)
+- [ConfigurationPlan reference, controllers 0.0.5](https://github.com/reshaprio/reshapr-controllers/blob/0.0.5/documentation/configurationplan-cr.md)

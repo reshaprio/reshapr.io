@@ -1,11 +1,9 @@
 ---
 description: Define MCP Resources to share contextual data — files, schemas, or application-specific information — with LLMs.
 release_review:
-  runtime: 1.1.0
-  controllers: 0.0.4
-  charts: 0.0.15
-  date: 2026-10-19
-  scope: release-tagged source review; not a live command replay
+  runtime: 1.2.0
+  date: 2026-11-20
+  scope: release-tagged Resources schema and Gateway remoteSecret behavior; no live credential replay
 ---
 
 # Resources
@@ -13,6 +11,10 @@ release_review:
 ## MCP Apps
 
 Resources can also reference **MCP Apps**: declare a `ui://` Resource with `mimeType: text/html;profile=mcp-app`, point `remoteContent` at trusted HTML reachable from the proxy, and associate it with exposed Tools through `tools`. See [Reference an MCP App](../how-to-guides/reference-mcp-app.md) for the released GitHub widget example, metadata, host requirements, and verification steps. reShapr references the UI; an Apps-capable host renders it.
+
+## Authenticate remote content fetches
+
+For a Resource or Resource template fetched over HTTP(S), `remoteSecret` names an existing reShapr Secret. The Gateway resolves it from the artifact's related Secrets and uses it for the fetch, rather than inheriting the Configuration Plan's backend Secret. If the name is absent or unresolved, the Gateway attempts the fetch without that credential. Keep the content server's authentication enabled; `remoteSecret` does not enforce access to the MCP endpoint itself.
 
 ## Context Resources
 
@@ -26,7 +28,7 @@ The key difference with tools is intent and usage pattern:
 reShapr provides **an easy way to design and specify your Resources using a simple YAML description,** called the `Resources` specification. If you want to provide such resources to your reShapr-powered MCP endpoint, you’ll need to write this simple file and `attach` it to your existing Service. Let’s see a simple example of such a file:
 
 :::note
-Controllers `0.0.4` can also create this artifact from a Kubernetes **[`Resources` custom resource](https://github.com/reshaprio/reshapr-controllers/blob/0.0.4/documentation/resources-cr.md)** using the same `apiVersion` and plural `kind`.
+Controllers `0.0.4` can also create this artifact from a Kubernetes **[`Resources` custom resource](https://github.com/reshaprio/reshapr-controllers/blob/0.0.5/documentation/resources-cr.md)** using the same `apiVersion` and plural `kind`.
 :::
 
 ```yaml

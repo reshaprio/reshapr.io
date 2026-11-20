@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {execFileSync, spawnSync} from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
@@ -10,6 +11,8 @@ const supportPage = fs.readFileSync(
   path.join(repositoryRoot, 'docs/references/mcp-support.md'),
   'utf8',
 );
+const ownerRoot = path.resolve(repositoryRoot, '../reshapr');
+const ownerTag = `refs/tags/${matter(supportPage).data.release_review.runtime}`;
 
 const supportedVersions = [
   '2024-11-05',
@@ -29,6 +32,9 @@ const dispatchedMethods = [
   'resources/list',
   'resources/templates/list',
   'resources/read',
+  'resources/directory/read',
+  'skills/list',
+  'skills/get',
 ];
 
 const removedModernMethods = [
@@ -56,10 +62,14 @@ function columnValues(markdownSection, columnIndex) {
 
 function readOwnerSource(relativePath) {
   const configuredRoot = process.env.RESHAPR_SOURCE_DIR;
-  const defaultRoot = path.resolve(repositoryRoot, '../reshapr');
-  const sourceRoot = configuredRoot ? path.resolve(configuredRoot) : defaultRoot;
-  const sourcePath = path.join(sourceRoot, relativePath);
-  return fs.existsSync(sourcePath) ? fs.readFileSync(sourcePath, 'utf8') : null;
+  if (configuredRoot) {
+    return fs.readFileSync(path.resolve(configuredRoot, relativePath), 'utf8');
+  }
+  if (!fs.existsSync(ownerRoot) ||
+      spawnSync('git', ['-C', ownerRoot, 'rev-parse', '--verify', `${ownerTag}^{commit}`]).status !== 0) {
+    return null;
+  }
+  return execFileSync('git', ['-C', ownerRoot, 'show', `${ownerTag}:${relativePath}`], {encoding: 'utf8'});
 }
 
 test('keeps partial replay scope out of public verification metadata and banners', () => {
@@ -75,8 +85,8 @@ test('keeps partial replay scope out of public verification metadata and banners
 test('keeps the Kubernetes production example on the replayed chart configuration', () => {
   const guide = fs.readFileSync(path.join(repositoryRoot, 'docs/how-to-guides/deploy-kubernetes-production.md'), 'utf8');
   const {data} = matter(guide);
-  assert.equal(data.release_review.charts, '0.0.16');
-  assert.deepEqual([...guide.matchAll(/--version (0\.0\.\d+)/g)].map(match => match[1]), Array(4).fill('0.0.16'));
+  assert.equal(data.release_review.charts, '0.0.18');
+  assert.deepEqual([...guide.matchAll(/--version (0\.0\.\d+)/g)].map(match => match[1]), Array(4).fill(data.release_review.charts));
   const values = [...guide.matchAll(/```yaml\n([\s\S]*?)\n```/g)].map(match => matter(`---\n${match[1]}\n---\n`).data);
   const ui = values.find(value => value.publicUrl);
   assert.equal(ui.ingress.annotations['nginx.ingress.kubernetes.io/proxy-buffer-size'], '16k');
@@ -104,7 +114,7 @@ test('keeps scripted sample contract versions separate from the runtime release'
   assert.ok(!selected.includes('GET /todos/{todoId}'));
   const composePaths = [...guide.matchAll(/docker-compose-([\d.]+)\.yml/g)];
   assert.equal(composePaths.length, 2);
-  assert.ok(composePaths.every(match => match[1] === '1.1.0'));
+  assert.ok(composePaths.every(match => match[1] === matter(guide).data.release_review.runtime));
 });
 
 test('retains corrections established by the 1.1.0 administration replay', () => {
@@ -156,7 +166,7 @@ test('explains Code Mode flows and security boundaries with release-scoped evide
   assert.match(section(explanation, 'Audit and Trace Visibility'), /logs submitted source at \*\*INFO\*\*/);
   const ownerLinks = [...explanation.matchAll(/https:\/\/github\.com\/reshaprio\/reshapr\/blob\/([^/]+)\//g)];
   assert.ok(ownerLinks.length >= 4);
-  assert.ok(ownerLinks.every(match => match[1] === '1.1.0'));
+  assert.ok(ownerLinks.every(match => match[1] === '1.2.0'));
   for (const page of ['docs/how-to-guides/use-code-mode.md', 'docs/references/features.md']) {
     assert.ok(fs.readFileSync(path.join(repositoryRoot, page), 'utf8').includes('../explanations/code-mode.md'), `Missing explanation link in ${page}`);
   }
@@ -187,7 +197,7 @@ test('keeps MCP Apps hosting and client requirements visible', () => {
   }
   assert.match(guide, /Apps-capable host/);
   assert.match(guide, /does not .*provide application hosting/);
-  assert.match(guide, /blob\/1\.1\.0\/dev\/github-api-resources\.yaml/);
+  assert.match(guide, /blob\/1\.2\.0\/dev\/github-api-resources\.yaml/);
 });
 
 test('keeps DEBUG deployment instructions and sensitive-data warnings together', () => {
@@ -203,7 +213,7 @@ test('keeps DEBUG deployment instructions and sensitive-data warnings together',
   assert.ok(debugSection.includes('../../references/logging.md'));
 });
 
-test('publishes the exact reShapr 1.1.0 protocol versions and modes', () => {
+test('publishes the exact supported protocol versions and modes', () => {
   const versionSection = section(supportPage, 'Protocol versions and modes');
   assert.deepEqual(columnValues(versionSection, 0), supportedVersions);
   assert.match(versionSection, /\| `2026-07-28` \| Stateless \| `server\/discover` \|/);
@@ -237,17 +247,17 @@ test('documents both response dialects and release-tagged evidence', () => {
 
   const ownerLinks = [...supportPage.matchAll(/https:\/\/github\.com\/reshaprio\/reshapr\/blob\/([^/]+)\//g)];
   assert.ok(ownerLinks.length >= 5);
-  assert.ok(ownerLinks.every((match) => match[1] === '1.1.0'));
+  assert.ok(ownerLinks.every((match) => match[1] === matter(supportPage).data.release_review.runtime));
 });
 
-test('matches McpSchema and McpController when the owner checkout is available', (context) => {
+test('matches McpSchema and McpController at the documented owner release', (context) => {
   const schema = readOwnerSource('proxy/src/main/java/io/reshapr/proxy/mcp/McpSchema.java');
   const controller = readOwnerSource('proxy/src/main/java/io/reshapr/proxy/mcp/McpController.java');
   const legacyDialect = readOwnerSource('proxy/src/main/java/io/reshapr/proxy/mcp/LegacyProtocolDialect.java');
   const modernDialect = readOwnerSource('proxy/src/main/java/io/reshapr/proxy/mcp/ModernProtocolDialect.java');
 
   if (!schema || !controller || !legacyDialect || !modernDialect) {
-    context.skip('Set RESHAPR_SOURCE_DIR to compare the matrix with an owner checkout');
+    context.skip('Fetch the owner release tag or set RESHAPR_SOURCE_DIR to a release snapshot');
     return;
   }
 
