@@ -13,7 +13,7 @@ import ThemedImage from '@theme/ThemedImage';
 
 {/* markdownlint-disable MD001 MD026 MD030 MD045 */}
 
-{/* Tested on 18 Nov 2026 with reShapr 1.2.0 and CLI 1.2.0, from the tag skills-demo-1.2.0 (tag of reshapr-demos#13). */}
+{/* Tested on 21 Nov 2026 with reShapr 1.2.1 and CLI 1.2.1, Claude Code 2.1.323, from the tag skills-demo-1.2.0 (tag of reshapr-demos#13). */}
 
 <figure style={{textAlign: 'center', margin: '1.5rem 0'}}>
 
@@ -31,7 +31,7 @@ An agent with the right tools can still do the wrong thing. It knows **what it c
 
 reShapr 1.2 serves it from the same place as the tools. **Skills over MCP** lets you attach an [Agent Skill](https://agentskills.io/specification) to a Service, and the reShapr runtime exposes it through the official [`io.modelcontextprotocol/skills` extension](https://modelcontextprotocol.io/extensions/skills/overview) ([SEP-2640](https://modelcontextprotocol.io/seps/2640-skills-extension)). The feature was tracked in [reshaprio/reshapr#121](https://github.com/reshaprio/reshapr/issues/121).
 
-> **TL;DR** A new **Skills** artifact points to a skill directory (`SKILL.md` and its reference files) hosted on any HTTP server. reShapr fetches and caches it, then serves it as **`skill://` resources** next to your tools. Agents list skills cheaply and read the full instructions only when they need them. We tried it with Claude Code on the Petstore API: **without the skill it listed every dog it found (6 in our run), with the skill it offered 3 and waited for a confirmation**. Today Claude Code reads a skill when you give it the URI, it does not discover it by itself.
+> **TL;DR** A new **Skills** artifact points to a skill directory (`SKILL.md` and its reference files) hosted on any HTTP server. reShapr fetches and caches it, then serves it as **`skill://` resources** next to your tools. Agents list skills cheaply and read the full instructions only when they need them. We tried it with Claude Code on the Petstore API: **without the skill it listed every dog it found (12 in our run), with the skill it offered 3 and waited for a confirmation**. Today Claude Code reads a skill when you give it the URI, it does not discover it by itself.
 
 {/* truncate */}
 
@@ -104,10 +104,10 @@ A skill **guides** the agent, it does not enforce anything. To make an operation
 
 ## Try it yourself
 
-Example, simplified. You need **reShapr 1.2.0 and its CLI 1.2.0**, and Docker. The commands use the default local credentials, which you should never reuse outside a demo. The demo is also scripted as [Demo 10 in reshapr-demos](https://github.com/reshaprio/reshapr-demos/tree/main/demos/10-petstore-skills).
+Example, simplified. You need **reShapr 1.2.1 and its CLI 1.2.1**, and Docker. The commands use the default local credentials, which you should never reuse outside a demo. The demo is also scripted as [Demo 10 in reshapr-demos](https://github.com/reshaprio/reshapr-demos/tree/main/demos/10-petstore-skills).
 
 ```bash
-reshapr run --release 1.2.0
+reshapr run --release 1.2.1
 reshapr login -u admin -p password -s http://localhost:5555
 
 reshapr import -u https://petstore3.swagger.io/api/v3/openapi.json \
@@ -131,14 +131,14 @@ We got `Verified 1 skill and 3 files: no conformance errors.` **The check ran fr
 
 - **Discovery.** `skills/list` returns the skill name, its description, and the URI, digest and size of its three files. `resources/list` stays empty: skills are discovered through `skills/list`.
 - **Retrieval.** `resources/read` on `skill://petstore-adoption-desk/SKILL.md` returns the file as `text/markdown`.
-- **Integrity.** When we edited `SKILL.md` on a local file server, the Inspector reported a mismatch between the cached 927 bytes and the 937 bytes now served. Re-running `reshapr attach` refreshed the skill and the check passed again. With a tag URL the content does not change under the runtime.
+- **Integrity.** When we edited `ADOPTION-RULES.md` on a local file server, the Inspector reported a mismatch: the manifest declared 356 bytes and the fetched file had 401. About 30 seconds later the check passed again, with no action on our side: the gateway caches skill files for 30 seconds and fetches them again when the cache expires. With a tag URL the content does not change under the runtime.
 - **Tools unchanged.** The same endpoint still serves the 19 Petstore tools.
 
 To edit the Skill and test your changes without a commit or a tag, see [Edit and iterate on the Skill](https://github.com/reshaprio/reshapr-demos/tree/main/demos/10-petstore-skills#edit-and-iterate-on-the-skill) in the demo.
 
 ## See it with Claude
 
-We ran **Claude Code 2.1.311** headless against the endpoint, with the same MCP configuration both times (the Petstore server over HTTP). Both runs are real, and the data comes from the public Petstore, so names and IDs are examples. We stopped each run at the confirmation step: no order was placed.
+We ran **Claude Code 2.1.323** headless against the endpoint, with the same MCP configuration both times (the Petstore server over HTTP). Both runs are real, and the data comes from the public Petstore, so names and IDs are examples. We allowed only the read tools, so no order could be placed.
 
 **Run 1: the prompt does not mention the skill.**
 
@@ -146,7 +146,7 @@ We ran **Claude Code 2.1.311** headless against the endpoint, with the same MCP 
 I'd like to adopt a dog. Please handle my request.
 ```
 
-Claude connected, listed the 19 tools and called `get_pet_findbystatus`. It **never fetched the skill**. It answered with a table of **6 dogs** and asked which one to order. We repeated the run on a second machine: it listed 5 rows, picked a favourite for us and again did not read the skill. The exact pets differ because the public Petstore data changes.
+Claude connected, found the Petstore tools and called `get_pet_findbystatus`. It **never fetched the skill**. It answered with a table of **12 dogs** and asked which one to order, suggesting a favourite. The exact pets differ from run to run because the public Petstore data changes.
 
 **Run 2: the prompt gives the skill URI.**
 
@@ -161,19 +161,19 @@ The sequence, from the tool calls in the run:
 1. `ReadMcpResourceTool` on `skill://petstore-adoption-desk/SKILL.md`
 2. `ReadMcpResourceTool` on `references/ADOPTION-RULES.md`, then on `references/ORDER-TEMPLATE.md`
 3. `get_pet_findbystatus` with `status=available`
-4. A reply with **3 dogs** (Max, Buddy and Rex in our run, with their `id`), a request to confirm by `id`, and no order yet
+4. A reply with **3 dogs** (Buddy, Max and Charlie in our run, with their `id`), a request to confirm by `id`, and no order yet
 
-That is the procedure: the desk rules cap the offer at 3 pets and stop before the order. Claude Code read the skill and its two reference files through `resources/read`, and followed them. The second machine gave the same result: 3 dogs and a confirmation question.
+That is the procedure: the desk rules cap the offer at 3 pets and stop before the order. Claude Code read the skill and its two reference files through `resources/read`, and followed them.
 
-**What this tells us.** The endpoint serves the skill correctly and Claude can use it, but **Claude Code 2.1.311 did not discover it on its own** from `skills/list`. For now, name the `skill://` URI in your project instructions or in the prompt. Other clients may behave differently, and newer Claude Code versions may too: test yours.
+**What this tells us.** The endpoint serves the skill correctly and Claude can use it, but **Claude Code 2.1.323 did not discover it on its own** from `skills/list`. For now, name the `skill://` URI in your project instructions or in the prompt. Other clients may behave differently, and newer Claude Code versions may too: test yours.
 
 ## Limits to know before you start
 
 - **Alpha API.** The kind is `Skills` with `apiVersion: reshapr.io/v1alpha1`. It can change.
 - **Remote content only.** Each skill is a directory hosted on an HTTP server. reShapr fetches and caches it, and does not manage its storage. This is convenient with a **versioned URL**, such as a Git tag: the content is pinned and needs no server of your own. For a private repository, use the `remoteSecret` option.
 - **List the files.** `SKILL.md` is implicit, but supporting files must be declared in `files`.
-- **Re-attach after an edit.** reShapr caches the files and their digests. After you change a skill, attach the manifest again.
-- **Client support is partial.** Whether an agent uses `skills/list` depends on the client. In our test, Claude Code 2.1.311 read the skill only when given its URI. Check the [MCP extension support matrix](https://modelcontextprotocol.io/extensions/client-matrix) for your client.
+- **Edits show up after the cache expires.** The gateway caches the files and their digests for 30 seconds by default (the cache policy of the Configuration Plan can change it). A file you edit appears after that delay, with no action. If you change the manifest, for example to add a file, attach it again: it shows after the same delay.
+- **Client support is partial.** Whether an agent uses `skills/list` depends on the client. In our test, Claude Code 2.1.323 read the skill only when given its URI. Check the [MCP extension support matrix](https://modelcontextprotocol.io/extensions/client-matrix) for your client.
 - **Guidance, not enforcement.** Keep the Configuration Plan as the control on what an agent can do.
 
 ## What changed
