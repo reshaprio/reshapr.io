@@ -148,6 +148,26 @@ To edit the Skill and test your changes without a commit or a tag, see [Edit and
 
 ## See it with Claude
 
+**Step 0: connect Claude Code.** First complete [Try it yourself](#try-it-yourself): reShapr runs and the skill is attached. Then start Claude Code in an empty folder:
+
+```bash
+claude
+```
+
+In the Claude Code prompt, add the endpoint as a server named `petstore` (the `!` runs a shell command):
+
+```text
+! claude mcp add --transport http petstore http://localhost:7777/mcp/reshapr/swagger-petstore-openapi-3-0-1-0-27-default
+```
+
+Then check it:
+
+```text
+/mcp
+```
+
+`petstore` should show as connected. Use that name: the Run 2 prompt refers to it. Claude asks before each tool call; decline `post_store_order` if you do not want to place a test order on the public Petstore.
+
 We ran **Claude Code 2.1.323** headless against the endpoint, with the same MCP configuration both times (the Petstore server over HTTP). Both runs are real, and the data comes from the public Petstore, so names and IDs are examples. We allowed only the read tools, so no order could be placed.
 
 **Run 1: the prompt does not mention the skill.**
