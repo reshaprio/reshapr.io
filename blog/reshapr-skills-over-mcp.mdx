@@ -104,7 +104,17 @@ A skill **guides** the agent, it does not enforce anything. To make an operation
 
 ## Try it yourself
 
-Example, simplified. You need **reShapr 1.2.1 and its CLI 1.2.1**, and Docker. The commands use the default local credentials, which you should never reuse outside a demo. The demo is also scripted as [Demo 10 in reshapr-demos](https://github.com/reshaprio/reshapr-demos/tree/main/demos/10-petstore-skills).
+You need **reShapr 1.2.1 and its CLI 1.2.1**, and a container engine: Docker, Podman or [apple/container](/blog/reshapr-on-apple-container). `reshapr run` uses the first one it finds, or pick one with `--engine docker|podman|apple`. The commands use the default local credentials, which you should never reuse outside a demo.
+
+The quickest way is [Demo 10 in reshapr-demos](https://github.com/reshaprio/reshapr-demos/tree/main/demos/10-petstore-skills). It runs the login, import, attach and Inspector steps below with the manifest shown above, and pauses between steps (press Enter):
+
+```bash
+git clone https://github.com/reshaprio/reshapr-demos.git && cd reshapr-demos
+reshapr run --release 1.2.1
+npm run demo:10
+```
+
+Or run the steps yourself (example, simplified):
 
 ```bash
 reshapr run --release 1.2.1
@@ -117,10 +127,10 @@ reshapr import -u https://petstore3.swagger.io/api/v3/openapi.json \
 reshapr attach -f petstore-skills.yaml
 ```
 
-Check that the endpoint serves the skill correctly with the MCP Inspector:
+Wait a few seconds after `reshapr attach`, then check that the endpoint serves the skill correctly with the MCP Inspector:
 
 ```bash
-npx @modelcontextprotocol/inspector@latest --cli \
+npx -y @modelcontextprotocol/inspector@latest --cli \
   http://localhost:7777/mcp/reshapr/swagger-petstore-openapi-3-0-1-0-27-default \
   --transport http --method skills/list --verify
 ```
@@ -131,7 +141,7 @@ We got `Verified 1 skill and 3 files: no conformance errors.` **The check ran fr
 
 - **Discovery.** `skills/list` returns the skill name, its description, and the URI, digest and size of its three files. `resources/list` stays empty: skills are discovered through `skills/list`.
 - **Retrieval.** `resources/read` on `skill://petstore-adoption-desk/SKILL.md` returns the file as `text/markdown`.
-- **Integrity.** When we edited `ADOPTION-RULES.md` on a local file server, the Inspector reported a mismatch: the manifest declared 356 bytes and the fetched file had 401. About 30 seconds later the check passed again, with no action on our side: the gateway caches skill files for 30 seconds and fetches them again when the cache expires. With a tag URL the content does not change under the runtime.
+- **Integrity.** When we edited `ADOPTION-RULES.md` on a local file server, the Inspector reported a mismatch: the manifest declared 356 bytes and the fetched file had 401. About 30 seconds later the check passed again, with no action on our side: the runtime caches skill files for 30 seconds and fetches them again when the cache expires. With a tag URL the content does not change under the runtime.
 - **Tools unchanged.** The same endpoint still serves the 19 Petstore tools.
 
 To edit the Skill and test your changes without a commit or a tag, see [Edit and iterate on the Skill](https://github.com/reshaprio/reshapr-demos/tree/main/demos/10-petstore-skills#edit-and-iterate-on-the-skill) in the demo.
@@ -172,7 +182,7 @@ That is the procedure: the desk rules cap the offer at 3 pets and stop before th
 - **Alpha API.** The kind is `Skills` with `apiVersion: reshapr.io/v1alpha1`. It can change.
 - **Remote content only.** Each skill is a directory hosted on an HTTP server. reShapr fetches and caches it, and does not manage its storage. This is convenient with a **versioned URL**, such as a Git tag: the content is pinned and needs no server of your own. For a private repository, use the `remoteSecret` option.
 - **List the files.** `SKILL.md` is implicit, but supporting files must be declared in `files`.
-- **Edits show up after the cache expires.** The gateway caches the files and their digests for 30 seconds by default (the cache policy of the Configuration Plan can change it). A file you edit appears after that delay, with no action. If you change the manifest, for example to add a file, attach it again: it shows after the same delay.
+- **Edits show up after the cache expires.** The runtime caches the files and their digests for 30 seconds by default (the cache policy of the Configuration Plan can change it). A file you edit appears after that delay, with no action. If you change the manifest, for example to add a file, attach it again: it shows after the same delay.
 - **Client support is partial.** Whether an agent uses `skills/list` depends on the client. In our test, Claude Code 2.1.323 read the skill only when given its URI. Check the [MCP extension support matrix](https://modelcontextprotocol.io/extensions/client-matrix) for your client.
 - **Guidance, not enforcement.** Keep the Configuration Plan as the control on what an agent can do.
 
