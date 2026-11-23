@@ -1,0 +1,228 @@
+---
+title: "Skills over MCP in reShapr 1.2: Teach Agents How to Use Your APIs"
+date: 2026-11-23
+authors:
+  - yacine
+description: "reShapr 1.2 serves Agent Skills over MCP. Attach a Skills manifest to a Service and agents discover and read a step-by-step procedure next to the tools, from one governed endpoint."
+image: /img/blog/skills-over-mcp-hero-light.png
+imageDark: /img/blog/skills-over-mcp-hero-dark.png
+tags: [MCP, Skills, AI Agents, API, Governance, AI-native, Anthropic]
+---
+
+import ThemedImage from '@theme/ThemedImage';
+
+{/* markdownlint-disable MD001 MD026 MD030 MD045 */}
+
+{/* Tested on 21 Nov 2026 with reShapr 1.2.1 and CLI 1.2.1, Claude Code 2.1.323, from the tag skills-demo-1.2.0 (tag of reshapr-demos#13). */}
+
+<figure style={{textAlign: 'center', margin: '1.5rem 0'}}>
+
+<ThemedImage
+  alt="An AI agent calls one reShapr MCP endpoint. Inside reShapr, Tools call the backend API over HTTP, Skills are fetched and cached from an HTTP skill host, and the Configuration Plan decides what the agent can see. The agent lists skills, then reads the one it needs on demand"
+  sources={{
+    light: '/img/blog/skills-over-mcp-hero-light.png',
+    dark: '/img/blog/skills-over-mcp-hero-dark.png',
+  }}
+/>
+
+</figure>
+
+An agent with the right tools can still do the wrong thing. It knows **what it can call**, but not **how your team wants the calls used**: which operations first, which rules to apply, when to stop and ask. That knowledge usually lives in a wiki, or in a prompt copied from agent to agent.
+
+reShapr 1.2 serves it from the same place as the tools. **Skills over MCP** lets you attach an [Agent Skill](https://agentskills.io/specification) to a Service, and the reShapr runtime exposes it through the official [`io.modelcontextprotocol/skills` extension](https://modelcontextprotocol.io/extensions/skills/overview) ([SEP-2640](https://modelcontextprotocol.io/seps/2640-skills-extension)). The feature was tracked in [reshaprio/reshapr#121](https://github.com/reshaprio/reshapr/issues/121).
+
+> **TL;DR** A new **Skills** artifact points to a skill directory (`SKILL.md` and its reference files) hosted on any HTTP server. reShapr fetches and caches it, then serves it as **`skill://` resources** next to your tools. Agents list skills cheaply and read the full instructions only when they need them. We tried it with Claude Code on the Petstore API: **without the skill it listed every dog it found (12 in our run), with the skill it offered 3 and waited for a confirmation**. Today Claude Code reads a skill when you give it the URI, it does not discover it by itself.
+
+{/* truncate */}
+
+## Tools say what, skills say how
+
+| | Tools | Skills |
+|---|---|---|
+| Answer | What can I call? | How should I use these calls to get the job done? |
+| Content | Operations and their schemas | A `SKILL.md` procedure and reference files |
+| Cost for the agent | Listed at connection time | Only the name and description until the skill is read |
+| In reShapr | Generated from your API | Attached to the same Service |
+
+Keeping the procedure next to the API has a practical effect: it is **versioned with the Service in the control plane**, and every agent connected to the endpoint gets the same instructions.
+
+## How it works
+
+You write a `Skills` manifest and attach it to a Service. Each skill points to a directory on an HTTP server and lists its supporting files:
+
+```yaml
+apiVersion: reshapr.io/v1alpha1
+kind: Skills
+service:
+  name: Swagger Petstore - OpenAPI 3.0
+  version: 1.0.27
+skills:
+  petstore-adoption-desk:
+    remoteContent: https://raw.githubusercontent.com/reshaprio/reshapr-demos/skills-demo-1.2.0/demos/10-petstore-skills/skills/petstore-adoption-desk
+    files:
+      - references/ADOPTION-RULES.md
+      - references/ORDER-TEMPLATE.md
+```
+
+Example, simplified. The skill name must match the `name` in the `SKILL.md` frontmatter. The URL points to the Git tag `skills-demo-1.2.0` of the [reshapr-demos](https://github.com/reshaprio/reshapr-demos/tree/skills-demo-1.2.0/demos/10-petstore-skills) repository, so no file server is needed.
+
+Then:
+
+- the runtime **fetches the files** and caches them, with a SHA-256 digest and size for each;
+- **`skills/list`** returns only the name and short description of each skill, so listing stays light;
+- the agent calls **`resources/read`** on `skill://<name>/SKILL.md` when the task matches, then on the reference files it needs.
+
+The skill is text. reShapr serves it and does not interpret it: the agent reads it and follows it with the tools you already expose.
+
+## A use case: an adoption desk on the Petstore API
+
+The Petstore API exposes **19 operations** as MCP tools, among them `delete_pet_petid` and `put_pet`. A model that sees them all will make its own choices. A real team has a procedure.
+
+We wrote the procedure as a skill, `petstore-adoption-desk`: one `SKILL.md` and two reference files. This is the main file (shortened):
+
+```markdown
+---
+name: petstore-adoption-desk
+description: Handle a pet adoption request on the Petstore API. Find available
+  pets, apply the desk rules, ask the customer to confirm, then place exactly
+  one order. Use when someone wants to adopt, reserve or order a pet.
+---
+
+1. Read references/ADOPTION-RULES.md.
+2. Call `get_pet_findbystatus` with `status=available`.
+3. Keep at most 3 pets that match the request and show them with their `id`.
+4. Ask the customer to confirm one pet by `id`. Stop here until they answer.
+5. Place the order with `post_store_order`, using references/ORDER-TEMPLATE.md.
+6. Reply with the order `id`, the pet and the order `status`.
+```
+
+`ADOPTION-RULES.md` holds the rules (one pet per order, `quantity` always `1`, never delete or update a pet from this desk), and `ORDER-TEMPLATE.md` holds the order body.
+
+Two things make this more than a long prompt. The agent loads the reference files **only when a step points to them**, so the context stays small. And the same endpoint gives every agent the same desk rules.
+
+A skill **guides** the agent, it does not enforce anything. To make an operation unavailable, exclude it in the [Configuration Plan](/docs/explanations/configuration-and-exposition), for example with `--excludedOperations` when you import the API. Use both: the plan for what is possible, the skill for what is right.
+
+## Try it yourself
+
+You need **reShapr 1.2.0 or later and its CLI** (we tested with 1.2.1), and a container engine: Docker, Podman or [apple/container](/blog/reshapr-on-apple-container). `reshapr run` uses the first one it finds, or pick one with `--engine docker|podman|apple`. The commands use the default local credentials, which you should never reuse outside a demo.
+
+The quickest way is [Demo 10 in reshapr-demos](https://github.com/reshaprio/reshapr-demos/tree/main/demos/10-petstore-skills). It runs the login, import, attach and Inspector steps below with the manifest shown above, and pauses between steps (press Enter):
+
+```bash
+git clone https://github.com/reshaprio/reshapr-demos.git && cd reshapr-demos
+reshapr run --release 1.2.1
+npm run demo:10
+```
+
+Or run the steps yourself (example, simplified):
+
+```bash
+reshapr run --release 1.2.1
+reshapr login -u admin -p password -s http://localhost:5555
+
+reshapr import -u https://petstore3.swagger.io/api/v3/openapi.json \
+  --backendEndpoint https://petstore3.swagger.io/api/v3
+
+# attach the manifest shown above, straight from reshapr-demos
+reshapr attach -u https://raw.githubusercontent.com/reshaprio/reshapr-demos/main/demos/10-petstore-skills/resources/skills.remote.yaml
+```
+
+Wait a few seconds after `reshapr attach`, then check that the endpoint serves the skill correctly with the MCP Inspector:
+
+```bash
+npx -y @modelcontextprotocol/inspector@latest --cli \
+  http://localhost:7777/mcp/reshapr/swagger-petstore-openapi-3-0-1-0-27-default \
+  --transport http --method skills/list --verify
+```
+
+We got `Verified 1 skill and 3 files: no conformance errors.` **The check ran from the tag URL**, with no local file server running and the runtime restarted. It covers the extension conformance, the SHA-256 digest of every file and the match between the `SKILL.md` frontmatter and the listing.
+
+## What we verified
+
+- **Discovery.** `skills/list` returns the skill name, its description, and the URI, digest and size of its three files. `resources/list` stays empty: skills are discovered through `skills/list`.
+- **Retrieval.** `resources/read` on `skill://petstore-adoption-desk/SKILL.md` returns the file as `text/markdown`.
+- **Integrity.** When we edited `ADOPTION-RULES.md` on a local file server, the Inspector reported a mismatch: the manifest declared 356 bytes and the fetched file had 401. About 30 seconds later the check passed again, with no action on our side: the runtime caches skill files for 30 seconds and fetches them again when the cache expires. With a tag URL the content does not change under the runtime.
+- **Tools unchanged.** The same endpoint still serves the 19 Petstore tools.
+
+To edit the Skill and test your changes without a commit or a tag, see [Edit and iterate on the Skill](https://github.com/reshaprio/reshapr-demos/tree/main/demos/10-petstore-skills#edit-and-iterate-on-the-skill) in the demo.
+
+## See it with Claude
+
+**Step 0: connect Claude Code.** First complete [Try it yourself](#try-it-yourself): reShapr runs and the skill is attached. Then start Claude Code in an empty folder:
+
+```bash
+claude
+```
+
+In the Claude Code prompt, add the endpoint as a server named `petstore` (the `!` runs a shell command):
+
+```text
+! claude mcp add --transport http petstore http://localhost:7777/mcp/reshapr/swagger-petstore-openapi-3-0-1-0-27-default
+```
+
+Then check it:
+
+```text
+/mcp
+```
+
+`petstore` should show as connected. Use that name: the Run 2 prompt refers to it. Claude asks before each tool call; decline `post_store_order` if you do not want to place a test order on the public Petstore.
+
+We ran **Claude Code 2.1.323** headless against the endpoint, with the same MCP configuration both times (the Petstore server over HTTP). Both runs are real, and the data comes from the public Petstore, so names and IDs are examples. We allowed only the read tools, so no order could be placed.
+
+**Run 1: the prompt does not mention the skill.**
+
+```text
+I'd like to adopt a dog. Please handle my request.
+```
+
+Claude connected, found the Petstore tools and called `get_pet_findbystatus`. It **never fetched the skill**. It answered with a table of **12 dogs** and asked which one to order, suggesting a favourite. The exact pets differ from run to run because the public Petstore data changes.
+
+**Run 2: the prompt gives the skill URI.**
+
+```text
+On the MCP server petstore, read the resource skill://petstore-adoption-desk/SKILL.md,
+follow its instructions (including the files it links), and handle this request:
+I'd like to adopt a dog.
+```
+
+The sequence, from the tool calls in the run:
+
+1. `ReadMcpResourceTool` on `skill://petstore-adoption-desk/SKILL.md`
+2. `ReadMcpResourceTool` on `references/ADOPTION-RULES.md`, then on `references/ORDER-TEMPLATE.md`
+3. `get_pet_findbystatus` with `status=available`
+4. A reply with **3 dogs** (Buddy, Max and Charlie in our run, with their `id`), a request to confirm by `id`, and no order yet
+
+That is the procedure: the desk rules cap the offer at 3 pets and stop before the order. Claude Code read the skill and its two reference files through `resources/read`, and followed them.
+
+**What this tells us.** The endpoint serves the skill correctly and Claude can use it, but **Claude Code 2.1.323 did not discover it on its own** from `skills/list`. For now, name the `skill://` URI in your project instructions or in the prompt. Other clients may behave differently, and newer Claude Code versions may too: test yours.
+
+## Limits to know before you start
+
+- **Alpha API.** The kind is `Skills` with `apiVersion: reshapr.io/v1alpha1`. It can change.
+- **Remote content only.** Each skill is a directory hosted on an HTTP server. reShapr fetches and caches it, and does not manage its storage. This is convenient with a **versioned URL**, such as a Git tag: the content is pinned and needs no server of your own. For a private repository, use the `remoteSecret` option.
+- **List the files.** `SKILL.md` is implicit, but supporting files must be declared in `files`.
+- **Edits show up after the cache expires.** The runtime caches the files and their digests for 30 seconds by default (the cache policy of the Configuration Plan can change it). A file you edit appears after that delay, with no action. If you change the manifest, for example to add a file, attach it again: it shows after the same delay.
+- **Client support is partial.** Whether an agent uses `skills/list` depends on the client. In our test, Claude Code 2.1.323 read the skill only when given its URI. Check the [MCP extension support matrix](https://modelcontextprotocol.io/extensions/client-matrix) for your client.
+- **Guidance, not enforcement.** Keep the Configuration Plan as the control on what an agent can do.
+
+## What changed
+
+- **One endpoint serves the tools and the procedure.** Before, the procedure lived in prompts and wikis.
+- **The procedure is versioned with the Service.** One attached manifest, the same text for every agent.
+- **The context stays small.** Agents see a name and a description until they read the skill.
+
+## What is next
+
+reShapr also has **skills of its own**. The [`reshapr-builder` skill](https://github.com/reshaprio/reshapr-agent-skills) helps a coding agent such as Claude Code or GitHub Copilot create and check reShapr MCP servers.
+
+We are thinking about the next use case: an agent that **writes the `Skills` manifest and checks that the skill is conformant**, with the same `skills/list --verify` check you saw above. It is an idea, not a commitment. If you author skills for your APIs, tell us what you would want from it, on [Discord](https://discord.gg/KyDUdam34h) or in [reshaprio/reshapr#121](https://github.com/reshaprio/reshapr/issues/121).
+
+## If you are about to build the same
+
+- Start from a procedure your team already follows, and write it as numbered steps that name the tools.
+- Keep `SKILL.md` short and move the rules and templates to reference files.
+- Name tools exactly as reShapr exposes them, for example `get_pet_findbystatus`, not the OpenAPI operation id.
+- Exclude the operations the procedure must never call, in the Configuration Plan.
+
+To explore the pieces, see the [Skills over MCP overview](https://modelcontextprotocol.io/extensions/skills/overview), the [Agent Skills specification](https://agentskills.io/specification), and the reShapr [import guide](/docs/how-to-guides/import-api-artifacts). For the context side, read [From Context Overload to Context Control](/blog/from-context-overload-to-context-control).

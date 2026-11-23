@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1672 941" width="1672" height="941" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrFlow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="{{flow}}"/></marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="{{shadow}}" flood-opacity="{{shadowOpacity}}"/></filter>
+  </defs>
+  <rect width="1672" height="941" fill="{{bg}}"/>
+
+  <g filter="url(#shadow)">
+    <rect x="60" y="150" width="340" height="370" rx="12" fill="{{card}}" stroke="{{cardActiveBorder}}"/>
+  </g>
+  <text x="88" y="198" font-size="26" font-weight="700" fill="{{text}}">AI agent</text>
+  <rect x="258" y="172" width="114" height="36" rx="18" fill="{{badgeBg}}"/>
+  <text x="315" y="196" font-size="16" text-anchor="middle" font-family="'JetBrains Mono', Menlo, Monaco, monospace" fill="{{badgeText}}">claude</text>
+  <text x="88" y="250" font-size="18" font-family="'JetBrains Mono', Menlo, Monaco, monospace" fill="{{muted}}">tools/call</text>
+  <text x="88" y="290" font-size="18" font-family="'JetBrains Mono', Menlo, Monaco, monospace" fill="{{muted}}">skills/list</text>
+  <text x="88" y="330" font-size="18" font-family="'JetBrains Mono', Menlo, Monaco, monospace" fill="{{muted}}">resources/read</text>
+  <text x="88" y="392" font-size="18" fill="{{muted}}">Lists the skills, then reads</text>
+  <text x="88" y="418" font-size="18" fill="{{muted}}">the one it needs, on demand</text>
+
+  <rect x="560" y="70" width="500" height="720" rx="16" fill="{{boundaryFill}}" stroke="{{boundary}}" stroke-width="1.5" stroke-dasharray="8,6"/>
+  <image x="588" y="80" width="44" height="44" href="data:image/png;base64,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"/>
+  <text x="646" y="116" font-size="24" font-weight="700" fill="{{text}}">reShapr</text>
+  <text x="756" y="116" font-size="16" letter-spacing="1.5" fill="{{muted}}">MCP SERVER</text>
+
+  <g filter="url(#shadow)">
+    <rect x="590" y="150" width="440" height="150" rx="12" fill="{{card}}" stroke="{{cardBorder}}"/>
+  </g>
+  <text x="618" y="198" font-size="26" font-weight="700" fill="{{text}}">Tools</text>
+  <rect x="866" y="172" width="142" height="36" rx="18" fill="{{badgeBg}}"/>
+  <text x="937" y="196" font-size="16" text-anchor="middle" font-family="'JetBrains Mono', Menlo, Monaco, monospace" fill="{{badgeText}}">OpenAPI</text>
+  <text x="618" y="240" font-size="18" font-family="'JetBrains Mono', Menlo, Monaco, monospace" fill="{{muted}}">post_store_order</text>
+  <text x="618" y="272" font-size="18" fill="{{muted}}">What the agent can call</text>
+
+  <g filter="url(#shadow)">
+    <rect x="590" y="370" width="440" height="150" rx="12" fill="{{card}}" stroke="{{cardActiveBorder}}"/>
+  </g>
+  <text x="618" y="418" font-size="26" font-weight="700" fill="{{text}}">Skills</text>
+  <rect x="846" y="392" width="162" height="36" rx="18" fill="{{badgeBg}}"/>
+  <text x="927" y="416" font-size="16" text-anchor="middle" font-family="'JetBrains Mono', Menlo, Monaco, monospace" fill="{{badgeText}}">kind: Skills</text>
+  <text x="618" y="460" font-size="18" font-family="'JetBrains Mono', Menlo, Monaco, monospace" fill="{{muted}}">skill://petstore-adoption-desk</text>
+  <text x="618" y="492" font-size="18" fill="{{muted}}">How to use them, step by step</text>
+
+  <g filter="url(#shadow)">
+    <rect x="590" y="590" width="440" height="150" rx="12" fill="{{card}}" stroke="{{cardBorder}}"/>
+  </g>
+  <text x="618" y="638" font-size="26" font-weight="700" fill="{{text}}">Configuration Plan</text>
+  <rect x="888" y="612" width="120" height="36" rx="18" fill="{{badgeBg}}"/>
+  <text x="948" y="636" font-size="16" text-anchor="middle" font-family="'JetBrains Mono', Menlo, Monaco, monospace" fill="{{badgeText}}">governs</text>
+  <text x="618" y="680" font-size="18" font-family="'JetBrains Mono', Menlo, Monaco, monospace" fill="{{muted}}">include · exclude</text>
+  <text x="618" y="712" font-size="18" fill="{{muted}}">What is visible to the agent</text>
+
+  <g filter="url(#shadow)">
+    <rect x="1190" y="150" width="420" height="150" rx="12" fill="{{card}}" stroke="{{cardBorder}}"/>
+  </g>
+  <text x="1218" y="198" font-size="26" font-weight="700" fill="{{text}}">Backend API</text>
+  <text x="1218" y="240" font-size="18" fill="{{muted}}">example: Petstore</text>
+  <text x="1218" y="272" font-size="18" fill="{{muted}}">public demo API</text>
+
+  <g filter="url(#shadow)">
+    <rect x="1190" y="370" width="420" height="150" rx="12" fill="{{card}}" stroke="{{cardActiveBorder}}"/>
+  </g>
+  <text x="1218" y="418" font-size="26" font-weight="700" fill="{{text}}">Skill host</text>
+  <text x="1218" y="460" font-size="18" font-family="'JetBrains Mono', Menlo, Monaco, monospace" fill="{{muted}}">SKILL.md + references/</text>
+  <text x="1218" y="492" font-size="18" fill="{{muted}}">Any HTTP server</text>
+
+  <path d="M400,225 L584,225" stroke="{{flow}}" stroke-width="2.5" fill="none" marker-end="url(#arrFlow)"/>
+  <text x="492" y="203" font-size="18" text-anchor="middle" fill="{{muted}}">tools/call</text>
+  <path d="M400,445 L584,445" stroke="{{flow}}" stroke-width="2.5" fill="none" marker-end="url(#arrFlow)"/>
+  <text x="492" y="423" font-size="18" text-anchor="middle" fill="{{muted}}">skills/list</text>
+  <text x="492" y="478" font-size="16" text-anchor="middle" fill="{{muted}}">resources/read</text>
+
+  <path d="M1030,225 L1180,225" stroke="{{flow}}" stroke-width="2.5" fill="none" marker-end="url(#arrFlow)"/>
+  <text x="1105" y="203" font-size="18" text-anchor="middle" fill="{{muted}}">HTTP</text>
+  <path d="M1180,445 L1036,445" stroke="{{flow}}" stroke-width="2.5" stroke-dasharray="7,6" fill="none" marker-end="url(#arrFlow)"/>
+  <text x="1125" y="423" font-size="16" text-anchor="middle" fill="{{muted}}">fetch + cache</text>
+
+  <text x="836" y="850" font-size="24" text-anchor="middle" fill="{{muted}}">Tools say what to call, skills say how: one governed MCP endpoint serves both</text>
+</svg>
