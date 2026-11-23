@@ -123,8 +123,8 @@ reshapr login -u admin -p password -s http://localhost:5555
 reshapr import -u https://petstore3.swagger.io/api/v3/openapi.json \
   --backendEndpoint https://petstore3.swagger.io/api/v3
 
-# save the manifest shown above as petstore-skills.yaml, then attach it
-reshapr attach -f petstore-skills.yaml
+# attach the manifest shown above, straight from reshapr-demos
+reshapr attach -u https://raw.githubusercontent.com/reshaprio/reshapr-demos/main/demos/10-petstore-skills/resources/skills.remote.yaml
 ```
 
 Wait a few seconds after `reshapr attach`, then check that the endpoint serves the skill correctly with the MCP Inspector:
