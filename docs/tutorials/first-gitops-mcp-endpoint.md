@@ -5,11 +5,11 @@ verification:
   version: 1.0.0 / controllers 0.0.3 / charts 0.0.14
   date: 2026-09-22
 release_review:
-  runtime: 1.2.0
+  runtime: 1.2.1
   controllers: 0.0.5
   charts: 0.0.18
-  date: 2026-11-20
-  scope: release-tagged CRDs, published OCI chart and rendered manifests; no live reconciliation replay
+  date: 2026-11-23
+  scope: live CRD installation, controller reconciliation, and forecast Tool call; GitOps engine sync and pruning not replayed
 ---
 
 # Your First GitOps-managed MCP Endpoint

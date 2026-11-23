@@ -5,9 +5,9 @@ verification:
   version: 1.0.0
   date: 2026-09-22
 release_review:
-  runtime: 1.2.0
-  date: 2026-11-20
-  scope: release-tagged OAuth configuration and CLI prerequisites; no live identity provider replay
+  runtime: 1.2.1
+  date: 2026-11-23
+  scope: live loopback HTTP protected-resource metadata, signed tokens, five rejection cases, and rollback; HTTPS not replayed
 ---
 
 # Protect an MCP Endpoint with OAuth 2.0
@@ -54,7 +54,7 @@ export OAUTH_ISSUER='https://idp.example.com/realms/mcp'
 export OAUTH_JWKS_URI='https://idp.example.com/realms/mcp/protocol/openid-connect/certs'
 ```
 
-Read the four test tokens without adding them to shell history:
+Read the five test tokens without adding them to shell history:
 
 ```bash
 read -r -s -p 'Valid access token: ' VALID_ACCESS_TOKEN; printf '\n'
@@ -95,7 +95,7 @@ export EXPOSITION_ID="$(
     --gateway-group "${GATEWAY_GROUP_ID}" \
     --name oauth-protected \
     --output json \
-    | jq -er '.id'
+    | jq -er '.exposition.id'
 )"
 ```
 

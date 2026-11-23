@@ -5,9 +5,9 @@ verification:
   version: 1.0.0
   date: 2026-09-22
 release_review:
-  runtime: 1.2.0
-  date: 2026-11-20
-  scope: release-tagged importer review and local OpenAPI smoke replay; GraphQL and Protobuf not replayed on this release
+  runtime: 1.2.1
+  date: 2026-11-23
+  scope: live CLI file imports, an OpenAPI relative reference, remote GraphQL and ARTIFACT Secret; remote Protobuf dependency and both Web UI paths not verified
 ---
 
 # Import OpenAPI, GraphQL, or Protobuf Artifacts

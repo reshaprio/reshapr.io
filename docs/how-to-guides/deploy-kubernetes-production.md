@@ -5,11 +5,11 @@ verification:
   version: 1.0.0 / controllers 0.0.3 / charts 0.0.14
   date: 2026-09-22
 release_review:
-  runtime: 1.2.0
+  runtime: 1.2.1
   controllers: 0.0.5
   charts: 0.0.18
-  date: 2026-11-20
-  scope: release-tagged CRDs and published chart rendering; no live cluster replay
+  date: 2026-11-23
+  scope: live replica readiness, admission, disruption budgets, autoscaler metrics, and cross-pod MCP session; external ingress and failover not replayed
 ---
 
 # Deploy reShapr on Kubernetes for Production

@@ -2,12 +2,12 @@
 description: Validate a reShapr MCP endpoint by negotiating a protocol mode, listing Tools, calling one Tool, and interpreting common errors.
 verification:
   product: reShapr
-  version: 1.0.0
-  date: 2026-09-22
+  version: 1.2.1
+  date: 2026-11-23
 release_review:
-  runtime: 1.2.0
-  date: 2026-11-20
-  scope: live stateless discovery, listing and forecast call, legacy initialization and listing, and separate API key checks; OAuth not replayed
+  runtime: 1.2.1
+  date: 2026-11-23
+  scope: live stateless and session-based Tool calls, API-key and signed OAuth discovery, and HTTP failure diagnostics on local endpoints
 ---
 
 # Test an MCP Endpoint with an MCP Client
@@ -135,8 +135,8 @@ These headers protect access to the MCP endpoint. Backend authentication is conf
 | Symptom | Likely cause | Check |
 |---|---|---|
 | HTTP `400` | Invalid JSON-RPC request, unsupported version, or modern mirror-header mismatch | Compare the method, target name, protocol header, and `_meta` values |
-| HTTP `401` | Missing or invalid endpoint credentials | Add the configured API key or bearer token |
-| HTTP `403` | Authenticated token lacks an accepted issuer or required Exposition scope | Inspect the OAuth configuration and token claims |
+| HTTP `401` | Missing or invalid endpoint credentials, including a token from an unaccepted issuer | Check the configured API key or bearer token and its issuer |
+| HTTP `403` | OAuth token lacks an accepted audience or a required Exposition scope | Inspect the OAuth configuration and token claims |
 | HTTP `404` | Unknown Exposition or method unavailable in the selected protocol | Check the endpoint URL and protocol mode |
 | JSON-RPC `error` | The MCP request reached the server but could not be processed | Read `error.code`, `error.message`, and `error.data` |
 | `result.isError: true` | The Tool ran but the backend or Tool execution failed | Inspect `result.content` and proxy logs |

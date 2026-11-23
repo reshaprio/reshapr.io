@@ -5,9 +5,9 @@ verification:
   version: 1.0.0
   date: 2026-09-22
 release_review:
-  runtime: 1.2.0
-  date: 2026-11-20
-  scope: release-tagged Client Credentials behavior and CLI prerequisites; no live OAuth replay
+  runtime: 1.2.1
+  date: 2026-11-23
+  scope: live Compose token exchange, cache reuse, failed exchange, and Secret rotation; Kubernetes injection not replayed
 ---
 
 # Use OAuth Client Credentials for Backend Calls

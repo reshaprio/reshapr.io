@@ -5,10 +5,10 @@ verification:
   version: 1.0.0 / charts 0.0.14
   date: 2026-09-22
 release_review:
-  runtime: 1.2.0
+  runtime: 1.2.1
   charts: 0.0.18
-  date: 2026-11-20
-  scope: release-tagged key rotation interfaces and chart values; no live rotation replay
+  date: 2026-11-23
+  scope: live two-stage key deployment, Secret migration, idempotent retry, database restore to a separate database, and Tool call; old-key retirement and rollback not replayed
 ---
 
 # Rotate the Database Encryption Key

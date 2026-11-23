@@ -5,10 +5,10 @@ verification:
   version: 1.0.0 / Helm charts 0.0.14
   date: 2026-09-22
 release_review:
-  runtime: 1.2.0
+  runtime: 1.2.1
   charts: 0.0.18
-  date: 2026-11-20
-  scope: release-tagged OIDC configuration and chart values; no live identity provider replay
+  date: 2026-11-23
+  scope: live CLI login, group guard, and fixed organization with Keycloak; cross-origin Web UI sign-in failed on loopback HTTP
 ---
 
 # Connect the Control Plane to an OIDC Provider
@@ -142,6 +142,10 @@ https://app.reshapr.example.com/api/auth/callback/oidc
 ```
 
 Open `https://app.reshapr.example.com/login`, select the OIDC login action, and authenticate with a test account. A known user is redirected to the application. A first-time user follows the onboarding behavior described below.
+
+:::warning reShapr 1.2.1 Web UI
+In a local replay with the Web UI and control plane on separate origins, **Login with SSO** returned HTTP `500` before reaching the identity provider. The Web UI logged `kit/redirect_external_not_allowed`. CLI OIDC login worked against the same control plane and identity provider. The HTTPS deployment was not replayed.
+:::
 
 ## Restrict who can sign in
 

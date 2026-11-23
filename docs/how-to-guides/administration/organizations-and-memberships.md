@@ -5,9 +5,9 @@ verification:
   version: 1.0.0
   date: 2026-09-22
 release_review:
-  runtime: 1.2.0
-  date: 2026-11-20
-  scope: release-tagged administration contract and CLI prerequisites; no live membership replay
+  runtime: 1.2.1
+  date: 2026-11-23
+  scope: live local organization, owner and membership workflows in the Web UI, CLI and administration API; federated user workflow not replayed
 ---
 
 # Manage Organizations, Owners, and Memberships
@@ -217,7 +217,7 @@ reshapr switch-org "${RESHAPR_ORGANIZATION}"
 reshapr info
 ```
 
-`switch-org` exits non-zero with `403` when the authenticated user is not a member. A successful switch produces a new user token scoped to the target organization; `reshapr info` confirms the active context.
+`switch-org` exits non-zero and reports that the user is not a member when access is denied. A successful switch produces a new user token scoped to the target organization; `reshapr info` confirms the active context.
 
 Repeat this check for the owner and every member whose access is required. It catches unknown organization names that the `1.1.0` membership replacement endpoint can otherwise omit from persistence while echoing the submitted list.
 

@@ -2,12 +2,12 @@
 description: Assign, adjust, disable, and verify reShapr organization quotas through the Web UI, CLI, or administration API.
 verification:
   product: reShapr
-  version: 1.0.0
-  date: 2026-09-22
+  version: 1.2.1
+  date: 2026-11-23
 release_review:
-  runtime: 1.2.0
-  date: 2026-11-20
-  scope: release-tagged administration contract and CLI prerequisites; no live quota replay
+  runtime: 1.2.1
+  date: 2026-11-23
+  scope: live Web UI, CLI and administration API quota assignment, tenant read-back, enforcement and capacity recovery for all three metrics
 ---
 
 # Assign and Monitor Organization Quotas
@@ -20,9 +20,9 @@ Quotas restrict resource counts. They do not rate-limit MCP requests or reserve 
 
 You need:
 
-- a reShapr `1.2.0` control plane and the name of an existing organization;
+- a reShapr `1.2.1` control plane and the name of an existing organization;
 - the deployment-wide administration API key;
-- reShapr CLI `1.2.0` for the CLI path;
+- reShapr CLI `1.2.1` for the CLI path;
 - a deployed Web UI configured with its server-side administration API key for the Web UI path;
 - `curl` and `jq` for the API path;
 - a normal user session with membership in the target organization to perform the tenant-side verification.
@@ -240,7 +240,7 @@ jq -e '
 
 The target organization has explicit limits for Expositions, Gateway Groups, and Gateway registrations. Administrators can read and change them, while organization members can inspect their current limits and remaining capacity with `reshapr quotas` or the Web UI dashboard.
 
-When an enabled quota reaches zero remaining, the corresponding create or first-registration operation is rejected. Deleting an Exposition or Gateway Group releases its unit; Gateway shutdown or stale-registration cleanup releases a Gateway unit.
+When an enabled quota reaches zero remaining, the corresponding create or first-registration operation is rejected. Deleting an Exposition or Gateway Group releases its unit. Stopping a Gateway does not necessarily free capacity immediately: if its registration remains, the scheduled stale-registration cleanup releases the unit.
 
 ## Limits
 
@@ -255,4 +255,4 @@ When an enabled quota reaches zero remaining, the corresponding create or first-
 
 Use **[Automate reShapr with the CLI in CI/CD](../automate-with-cli-in-cicd.md)** to place quota checks around resource automation. Review **[Product Interfaces](../../references/interfaces.md)** to choose the canonical API or CLI reference for a deeper integration.
 
-The release-tagged [administration API contract](https://github.com/reshaprio/reshapr/blob/1.2.0/reshapr-admin-ctrl-openapi.yaml), [administrative CLI guide](https://github.com/reshaprio/reshapr/blob/1.2.0/cli/ADMIN_CLI.md), and [Web UI implementation](https://github.com/reshaprio/reshapr/tree/1.2.0/web-ui) remain the canonical interface references.
+The release-tagged [administration API contract](https://github.com/reshaprio/reshapr/blob/1.2.1/reshapr-admin-ctrl-openapi.yaml), [administrative CLI guide](https://github.com/reshaprio/reshapr/blob/1.2.1/cli/ADMIN_CLI.md), and [Web UI implementation](https://github.com/reshaprio/reshapr/tree/1.2.1/web-ui) remain the canonical interface references.

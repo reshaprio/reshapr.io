@@ -2,12 +2,12 @@
 description: Build and verify a Scripted Custom Tool that combines same-Service and cross-Service calls behind one MCP action.
 verification:
   product: reShapr
-  version: 1.0.0
-  date: 2026-09-22
+  version: 1.2.1
+  date: 2026-11-23
 release_review:
-  runtime: 1.2.0
-  date: 2026-11-20
-  scope: release-tagged Tool selection and Compose paths; no live scripted Tool replay
+  runtime: 1.2.1
+  date: 2026-11-23
+  scope: live Compose replay of cross-Service calls, partial and terminal failures, all four guardrails, and restoration of the default timeout
 ---
 
 # Build a Scripted Custom Tool
@@ -50,7 +50,7 @@ Use this pattern when the sequence represents a reusable business action. Keep o
 
 ## Prerequisites
 
-- reShapr CLI `1.2.0`, authenticated against reShapr Online or a local `1.2.0` environment
+- reShapr CLI `1.2.1`, authenticated against reShapr Online or a local `1.2.1` environment
 - `curl` and `jq`
 - Docker Compose v2 when testing the timeout override on the local stack
 - A running proxy registered as a Gateway in Gateway Group `1`
@@ -165,7 +165,7 @@ export TODOS_MCP_ENDPOINT
 unset SCRIPTED_TOOLS SCRIPTED_ARTIFACTS
 ```
 
-In reShapr `1.2.0`, a scripted Custom Tool can call its declared lower-level Tools even when they are not selected for direct MCP access. The `tools` allow-list permits the internal `get_todos_todoid` call without exposing that primitive on this endpoint. The cross-Service `get_users_userid` Tool is selected on the Users Plan but is not added to the Todos endpoint. Operation selection controls client-visible discovery and calls; it is not backend authorization.
+In reShapr `1.2.1`, a scripted Custom Tool can call its declared lower-level Tools even when they are not selected for direct MCP access. The `tools` allow-list permits the internal `get_todos_todoid` call without exposing that primitive on this endpoint. The cross-Service `get_users_userid` Tool is selected on the Users Plan but is not added to the Todos endpoint. Operation selection controls client-visible discovery and calls; it is not backend authorization.
 
 Set the scheme for your environment. reShapr Online uses `https`; the local Compose proxy uses `http`:
 
@@ -268,7 +268,7 @@ The returned object has `blocked: true` and an invalid-parameters error naming t
 
 ### Maximum Tool calls
 
-The `1.1.0` default permits 10 underlying Tool calls per script execution. The diagnostic Tool attempts 11:
+The default permits 10 underlying Tool calls per script execution. The diagnostic Tool attempts 11:
 
 ```bash
 call_tool 'exceed_call_limit' '{}' \
@@ -303,7 +303,7 @@ Recreate only the proxy with the one-millisecond test limit:
 
 ```bash
 docker compose \
-  --file "$HOME/.reshapr/docker-compose-1.2.0.yml" \
+  --file "$HOME/.reshapr/docker-compose-1.2.1.yml" \
   --file scripted-timeout.override.yaml \
   up --detach --force-recreate gateway-01
 ```
@@ -314,7 +314,7 @@ Restore the release default and remove the temporary override:
 
 ```bash
 docker compose \
-  --file "$HOME/.reshapr/docker-compose-1.2.0.yml" \
+  --file "$HOME/.reshapr/docker-compose-1.2.1.yml" \
   up --detach --force-recreate gateway-01
 
 rm scripted-timeout.override.yaml

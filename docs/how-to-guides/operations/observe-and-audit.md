@@ -5,11 +5,11 @@ verification:
   version: 1.0.0 / charts 0.0.14
   date: 2026-09-22
 release_review:
-  runtime: 1.2.0
+  runtime: 1.2.1
   controllers: 0.0.5
   charts: 0.0.18
-  date: 2026-11-20
-  scope: published proxy chart OTLP and ServiceMonitor rendering; no live monitoring replay
+  date: 2026-11-23
+  scope: live Tempo spans, Loki audit records, metrics endpoint, and ServiceMonitor configuration; operator scrape and backend spans not replayed
 ---
 
 # Observe the reShapr Proxy

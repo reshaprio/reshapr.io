@@ -2,14 +2,12 @@
 description: Build a repeatable CI/CD workflow with the reShapr CLI, structured output, explicit checks, and controlled deletion.
 verification:
   product: reShapr CLI
-  version: 1.0.0
-  date: 2026-09-22
+  version: 1.2.1
+  date: 2026-11-23
 release_review:
-  runtime: 1.2.0
-  controllers: 0.0.5
-  charts: 0.0.17
-  date: 2026-11-19
-  scope: release-tagged CLI review and local Plan merge patch replay; no complete CI job replay
+  runtime: 1.2.1
+  date: 2026-11-23
+  scope: live Bash create and update runs with a dedicated identity, stable IDs, Plan patch, MCP call, deletion guard and session cleanup
 ---
 
 # Automate reShapr with the CLI in CI/CD
@@ -22,8 +20,8 @@ reShapr provides scriptable CLI and API operations. It does not provide a native
 
 You need:
 
-- Node.js 20 or later and reShapr CLI `1.2.0` installed in the job image;
-- a reShapr `1.2.0` control plane and a running proxy registered as a Gateway in the default Gateway Group;
+- Node.js 20 or later and reShapr CLI `1.2.1` installed in the job image;
+- a reShapr `1.2.1` control plane and a running proxy registered as a Gateway in the default Gateway Group;
 - a dedicated automation identity restricted to the target organization;
 - the identity password stored as a masked CI secret;
 - an OpenAPI 3, GraphQL, or Protobuf source tracked by the build;
@@ -202,7 +200,7 @@ unset EXPOSITION EXISTING_SERVICE_ID
 printf 'Verified active MCP endpoint: %s\n' "${MCP_URL}"
 ```
 
-Finish with **[Test an MCP Endpoint](./test-mcp-endpoint.md)**. A real read-only `tools/call` validates the Gateway route and backend behavior that control-plane resource checks cannot prove.
+Finish with **[Test an MCP Endpoint](./test-mcp-endpoint.md)**. If the returned endpoint is a host and path without a scheme, prepend the scheme configured for that Gateway (`http://` for the local Compose example, `https://` for a TLS endpoint). A real read-only `tools/call` validates the Gateway route and backend behavior that control-plane resource checks cannot prove.
 
 ## Control destructive changes
 
@@ -267,4 +265,4 @@ The job authenticates without a password argument, observes existing state, impo
 
 Use **[Manage reShapr Resources with GitOps](./manage-resources-with-gitops.md)** when Kubernetes controllers should own desired state. Review **[Product Interfaces](../references/interfaces.md)** to choose between the CLI, public APIs, Web UI, and Kubernetes controllers.
 
-The release-tagged [CLI implementation](https://github.com/reshaprio/reshapr/tree/1.2.0/cli) and [public API contract](https://github.com/reshaprio/reshapr/blob/1.2.0/reshapr-public-openapi.yaml) remain the canonical interface references.
+The release-tagged [CLI implementation](https://github.com/reshaprio/reshapr/tree/1.2.1/cli) and [public API contract](https://github.com/reshaprio/reshapr/blob/1.2.1/reshapr-public-openapi.yaml) remain the canonical interface references.

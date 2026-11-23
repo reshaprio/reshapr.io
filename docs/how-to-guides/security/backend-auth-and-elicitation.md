@@ -5,9 +5,9 @@ verification:
   version: 1.0.0
   date: 2026-09-22
 release_review:
-  runtime: 1.2.0
-  date: 2026-11-20
-  scope: release-tagged proxy authentication and CLI prerequisites; no live elicitation replay
+  runtime: 1.2.1
+  date: 2026-11-23
+  scope: live Compose bearer environment reference, missing and rejected credentials, and restoration; elicitation not replayed
 ---
 
 # Authenticate Backend Calls and Use Elicitation

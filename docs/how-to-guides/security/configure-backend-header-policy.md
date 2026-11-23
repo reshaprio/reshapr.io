@@ -5,10 +5,10 @@ verification:
   version: 1.0.0 / controllers 0.0.3
   date: 2026-09-22
 release_review:
-  runtime: 1.2.0
+  runtime: 1.2.1
   controllers: 0.0.5
-  date: 2026-11-20
-  scope: release-tagged request header behavior and ConfigurationPlan schema; no live policy replay
+  date: 2026-11-23
+  scope: live CLI filtering, rename, and Authorization passthrough against an echo backend; Kubernetes schema review only
 ---
 
 # Configure Backend Request Header Policy
@@ -42,9 +42,9 @@ export JWKS_URI='https://idp.example.com/.well-known/jwks.json'
 
 Request rules are case-insensitive and have three roles:
 
-- `allow` explicitly forwards a named header and can re-enable the normally protected `Authorization` or `Cookie` header;
+- When `allow` is nonempty, only listed headers survive filtering. An explicit entry can re-enable the normally protected `Authorization` or `Cookie` header;
 - `deny` removes additional headers;
-- `rename` moves a forwarded source header to another name after filtering.
+- `rename` moves a forwarded source header to another name after filtering. With a nonempty `allow` list, include the source name in that list.
 
 The proxy always removes transport and internal headers before applying these rules:
 
@@ -70,7 +70,7 @@ export CONFIGURATION_PLAN_ID="$(
     --oauth2AuthorizationServers "[\"${AUTHORIZATION_SERVER}\"]" \
     --oauth2jwksUri "${JWKS_URI}" \
     --requestHeaderPolicy '{
-      "allow": ["X-Trace-Id"],
+      "allow": ["X-Trace-Id", "X-Backend-Authorization"],
       "deny": ["X-Internal-Only"],
       "rename": ["X-Backend-Authorization:Authorization"]
     }' \
@@ -90,7 +90,7 @@ Inspect the resulting Plan:
 ```bash
 reshapr config get "${CONFIGURATION_PLAN_ID}" --output json \
   | jq -e '
-      .headerPolicy.request.allow == ["X-Trace-Id"]
+      .headerPolicy.request.allow == ["X-Trace-Id", "X-Backend-Authorization"]
       and .headerPolicy.request.deny == ["X-Internal-Only"]
       and .headerPolicy.request.rename == [
         {"from":"X-Backend-Authorization","to":"Authorization"}
@@ -111,6 +111,7 @@ spec:
     request:
       allow:
         - X-Trace-Id
+        - X-Backend-Authorization
       deny:
         - X-Internal-Only
       rename:

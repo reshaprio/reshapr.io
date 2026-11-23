@@ -5,11 +5,11 @@ verification:
   version: 1.0.0 / controllers 0.0.3 / charts 0.0.14
   date: 2026-09-22
 release_review:
-  runtime: 1.2.0
+  runtime: 1.2.1
   controllers: 0.0.5
   charts: 0.0.18
-  date: 2026-11-20
-  scope: release-tagged CRD and chart review; no live upgrade or rotation replay
+  date: 2026-11-23
+  scope: same-version Helm rollout, keystore persistence, database restore and encryption key rotation; version upgrade and runtime token rotation not replayed
 ---
 
 # Upgrade reShapr and Rotate Runtime Secrets
