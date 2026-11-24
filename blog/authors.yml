@@ -28,3 +28,10 @@ guillaume:
   page: true
   socials:
     github: GuillaumeExia
+
+avora:
+  name: Avora
+  title: Visual backend builder
+  url: https://avora.dev/
+  image_url: /img/authors/avora.svg
+  page: true

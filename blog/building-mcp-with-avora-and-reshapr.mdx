@@ -1,0 +1,136 @@
+---
+title: "Build APIs with Avora, Expose Them as MCP Tools with reShapr"
+date: 2026-12-01
+# Provisional future date: replace with the agreed publication date.
+slug: building-mcp-with-avora-and-reshapr
+draft: true
+authors:
+  - avora
+description: "Avora generates an OpenAPI definition and a running backend; reShapr turns the selected operations into MCP tools. Three ways to connect them: managed in Avora, the reShapr CLI, or the reShapr web interface."
+image: /img/blog/avora-reshapr-cover.webp
+tags: [Use Cases, MCP, API, Integrations]
+---
+
+<figure style={{textAlign: 'center', margin: '1.5rem 0'}}>
+  <img
+    src="/img/blog/avora-reshapr-cover.webp"
+    alt="Build your backend APIs with Avora, turn them into MCP tools with reShapr"
+    width="1672"
+    height="941"
+    style={{width: '100%', height: 'auto'}}
+  />
+</figure>
+
+[Avora](https://avora.dev/) lets you build backend APIs visually, generate their code, and deploy them. With [reShapr](https://reshapr.io/), an open source MCP runtime, those APIs can also become tools that an MCP-compatible client can discover and call.
+
+The connection starts with something Avora already generates: an OpenAPI definition. reShapr reads that definition, uses the deployed backend as its target, and exposes the selected operations through the Model Context Protocol (MCP). Your backend continues to handle the requests and data.
+
+This integration grew out of discussions with the reShapr team at a [Paris JUG event hosted by eXalt](https://www.linkedin.com/posts/ahmed-douss-601712250_java-opensource-mcp-ugcPost-7516402472085778434-GyV1/). The result is a connection built on reShapr’s existing interfaces, with no changes required to reShapr’s source code.
+
+{/* truncate */}
+
+## From a task API to an MCP endpoint
+
+The walkthrough below uses a small task backend: create tasks, list them, mark them as completed, and delete them. It follows the process from defining the backend in Avora to deploying it and generating MCP connection details.
+
+<figure style={{textAlign: 'center', margin: '1.75rem 0'}}>
+  <video
+    controls
+    playsInline
+    preload="metadata"
+    poster="/img/blog/avora-reshapr-walkthrough-poster.jpg"
+    width="1014"
+    height="626"
+    aria-label="Walkthrough: create and deploy a task backend in Avora, then generate MCP connection details with reShapr"
+    style={{width: '100%', height: 'auto', borderRadius: '12px'}}>
+    <source src="/img/blog/avora-reshapr-walkthrough.mp4" type="video/mp4" />
+    <a href="/img/blog/avora-reshapr-walkthrough.mp4">Watch the Avora and reShapr walkthrough.</a>
+  </video>
+  <figcaption style={{fontSize: '0.9rem', color: 'var(--ifm-color-emphasis-700)', marginTop: '0.75rem'}}>
+    Watch the 30-second walkthrough, from an Avora backend to MCP connection details.
+    The clip also shows where to find the UI and CLI sharing options.
+  </figcaption>
+</figure>
+
+Once the preview is ready, Avora provides two URLs:
+
+| URL | Its role in the integration |
+| --- | --- |
+| **OpenAPI URL** | Describes the API operations, parameters, and response schemas. |
+| **Backend URL** | Points to the running API that reShapr calls when a tool is invoked. |
+
+During setup, reShapr imports the definition and configures the endpoint. During use, requests follow this path:
+
+```text
+MCP client → reShapr runtime → Avora backend → backend data
+```
+
+The same API handlers serve both REST requests and MCP tool calls. A tool that creates or updates a task changes the data through that existing backend logic.
+
+## Choose how to use reShapr
+
+Avora provides three workflows, depending on where you want to configure and run reShapr.
+
+### 1. Create MCP directly in Avora
+
+The managed workflow brings MCP setup into Avora’s deployment window. For workspace owners with MCP access:
+
+1. Deploy the workspace and wait for the preview to be ready.
+2. Expand **Turn it into MCP**, choose whether to require an API key, and select **Create MCP**.
+3. Copy the MCP URL and, for a protected endpoint, its API key.
+
+Avora calls reShapr’s administration API to import the supported public operations, configure the backend endpoint, and create the Exposition that publishes the MCP service through a gateway. reShapr runs as a separate service, and Avora presents the connection details in the workspace.
+
+The Avora team is evaluating this hosting option with a small group of users. Its long-term availability depends on hosting costs, maintenance, and the demands of operating a shared service as usage grows. The CLI and web-interface options remain available for users who want to manage their own reShapr instance.
+
+### 2. Use the reShapr CLI
+
+For a running reShapr installation, open **Share → Use in reShapr → reShapr CLI** in Avora. The dialog provides an import command with your OpenAPI and backend URLs already filled in.
+
+Sign in to your own reShapr control plane, then run the import command. The example below shows its structure; replace these illustrative addresses with your own:
+
+```bash
+reshapr login --server 'https://control.example.com'
+
+reshapr import \
+  --url 'https://your-api.example.com/openapi.json' \
+  --backendEndpoint 'https://your-api.example.com' \
+  --apiKey
+```
+
+The backend endpoint option asks the CLI to configure and expose the imported Service. The `--apiKey` option requests a protected MCP endpoint. Save the returned URL and key for your MCP client.
+
+A registered gateway must be running and reachable by that client. If you reimport an existing Service, review its current Plan and security settings, which may be reused. See the [reShapr CLI reference](/docs/references/cli-commands/) for details.
+
+### 3. Configure your own reShapr instance through the web interface
+
+If you prefer a visual setup, open **Share → Use in reShapr → reShapr UI** in Avora and copy the two URLs into your instance’s Quick Start wizard:
+
+1. **Import:** select the remote URL option and paste the OpenAPI URL.
+2. **Artifacts:** continue without extra artifacts for this basic example.
+3. **Plan:** set the backend URL and review the operations to expose.
+4. **Expose:** choose endpoint security, complete setup, and copy the MCP URL from MCP Servers.
+
+The backend stays hosted by Avora. You manage the MCP configuration in your reShapr instance and can return to refine the exposed tools.
+
+For local testing, use the address and published port of that instance’s gateway. The web interface and the reShapr gateway component that serves MCP use different endpoints. The [Web UI Quickstart](/docs/tutorials/web-ui-quickstart/) covers the full workflow, and the [Docker Compose guide](/docs/how-to-guides/docker-compose/) covers installation.
+
+## Connect a client and test a tool
+
+Open MCP Inspector, select **Streamable HTTP**, and enter the generated MCP URL. If the endpoint requires an API key, add it in the `x-reshapr-key` header.
+
+Connect and list the available tools. For the task example, create a sample task, list tasks to find it, mark it as completed using the returned identifier, and read it again. You can then delete the sample task to test the final operation and clean up. This checks that tool discovery and the underlying API work together. Follow reShapr’s [MCP endpoint testing guide](/docs/how-to-guides/test-mcp-endpoint/) for the client setup.
+
+Use sample data for the test: MCP tools can perform the same writes as their API operations. Keep API keys private and share access only with clients you trust. MCP endpoint protection does not change the original API’s authentication.
+
+The Avora preview must stay running. If it expires or stops, calls to its backend stop working. After changing the API or deployment, refresh the corresponding MCP setup before testing again.
+
+## Build your own backend and try the integration
+
+Start with a small API in [Avora](https://app.avora.dev/), deploy it, and choose the reShapr workflow that fits your setup. You can use your own instance through the CLI or web interface, or join the managed trial when MCP access is enabled for your workspace.
+
+- **Follow the walkthrough:** [Build MCP with Avora](https://docs.avora.dev/build-mcp).
+- **Watch the three demos:** [Avora and reShapr playlist](https://www.youtube.com/playlist?list=PLYPjM_K5R2y0).
+- **Explore the runtime:** [reShapr documentation](/docs/).
+
+For a related approach to shaping existing APIs into focused tools, read [From API Sprawl to Agent Actions](/blog/from-api-sprawl-to-agent-actions).
