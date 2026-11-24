@@ -67,6 +67,8 @@ MCP client → reShapr runtime → Avora backend → backend data
 
 The same API handlers serve both REST requests and MCP tool calls. A tool that creates or updates a task changes the data through that existing backend logic.
 
+You can build and edit the logic behind these MCP tools visually in [Avora’s Logic Flow Builder](https://docs.avora.dev/logic-flow-builder). Connect actions for validation, data transformations, and database operations, then redeploy the backend. reShapr calls that API logic; refresh its configuration when the OpenAPI definition or backend URL changes.
+
 ## Choose how to use reShapr
 
 Avora provides three workflows, depending on where you want to configure and run reShapr.

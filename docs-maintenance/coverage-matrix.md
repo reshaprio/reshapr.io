@@ -273,7 +273,7 @@ Every blog file is `historical-only`, including posts that remain factually accu
 
 ### Avora blog review — 2026-11-24
 
-The Avora integration blog remains an editorial draft with a provisional future date; replace it with the agreed publication date. The three existing workflows and illustrative CLI command were retained, rather than advancing a release verification banner. Review updates cover runtime terminology, third-person hosting ownership, the Avora author entry, media dimensions, related reading, and description metadata.
+The Avora integration blog remains an editorial draft with a provisional future date; replace it with the agreed publication date. The three existing workflows and illustrative CLI command were retained, rather than advancing a release verification banner. Review updates cover runtime terminology, third-person hosting ownership, the Avora author entry, media dimensions, related reading, and description metadata. Visual editing refers to the backend logic called by MCP tools, as described in Avora’s public Logic Flow Builder documentation; it is not a claim of industry-first visual MCP support or editing reShapr-specific configuration in Avora.
 
 The demo preview OpenAPI returned HTTP 503 with `Preview is not ready or has expired.` The shown managed MCP URL returned HTTP 403 to an unauthenticated initialize request. These observations establish current inaccessibility, not deletion of the MCP record or invalidation of any previously issued credential. The recording's backend and MCP address fields are redacted; its API key remains masked. Recheck retirement with the Avora operator before publication if confirmation of deletion is required.
 
