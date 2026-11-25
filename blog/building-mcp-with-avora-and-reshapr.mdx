@@ -1,9 +1,7 @@
 ---
 title: "Build APIs with Avora, Expose Them as MCP Tools with reShapr"
-date: 2026-12-01
-# Provisional future date: replace with the agreed publication date.
+date: 2026-12-08
 slug: building-mcp-with-avora-and-reshapr
-draft: true
 authors:
   - avora
 description: "Avora generates an OpenAPI definition and a running backend; reShapr turns the selected operations into MCP tools. Three ways to connect them: managed in Avora, the reShapr CLI, or the reShapr web interface."
@@ -67,7 +65,7 @@ MCP client → reShapr runtime → Avora backend → backend data
 
 The same API handlers serve both REST requests and MCP tool calls. A tool that creates or updates a task changes the data through that existing backend logic.
 
-You can build and edit the logic behind these MCP tools visually in [Avora’s Logic Flow Builder](https://docs.avora.dev/logic-flow-builder). Connect actions for validation, data transformations, and database operations, then redeploy the backend. reShapr calls that API logic; refresh its configuration when the OpenAPI definition or backend URL changes.
+You can build and edit the logic behind these MCP tools visually in [Avora’s Logic Flow Builder](https://docs.avora.dev/logic-flow-builder). Connect actions for conditions and checks, data transformations, and database operations, then redeploy the backend. reShapr calls that API logic; refresh its configuration when the OpenAPI definition or backend URL changes.
 
 ## Choose how to use reShapr
 
