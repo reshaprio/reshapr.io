@@ -13,7 +13,7 @@ import ThemedImage from '@theme/ThemedImage';
 
 {/* markdownlint-disable MD001 MD026 MD030 MD045 */}
 
-{/* Tested on 21 Nov 2026 with reShapr 1.2.1 and CLI 1.2.1, Claude Code 2.1.323, from the tag skills-demo-1.2.0 (tag of reshapr-demos#13). */}
+{/* Tested on 21 Nov 2026 with reShapr 1.2.1 and CLI 1.2.1, Claude Code 2.1.323, from the tag skills-demo-1.2.0 (tag of reshapr-demos#13). Retested on 25 Nov 2026 with reShapr 1.2.1 and Claude Code 2.1.332, interactive. */}
 
 <figure style={{textAlign: 'center', margin: '1.5rem 0'}}>
 
@@ -31,7 +31,7 @@ An agent with the right tools can still do the wrong thing. It knows **what it c
 
 reShapr 1.2 serves it from the same place as the tools. **Skills over MCP** lets you attach an [Agent Skill](https://agentskills.io/specification) to a Service, and the reShapr runtime exposes it through the official [`io.modelcontextprotocol/skills` extension](https://modelcontextprotocol.io/extensions/skills/overview) ([SEP-2640](https://modelcontextprotocol.io/seps/2640-skills-extension)). The feature was tracked in [reshaprio/reshapr#121](https://github.com/reshaprio/reshapr/issues/121).
 
-> **TL;DR** A new **Skills** artifact points to a skill directory (`SKILL.md` and its reference files) hosted on any HTTP server. reShapr fetches and caches it, then serves it as **`skill://` resources** next to your tools. Agents list skills cheaply and read the full instructions only when they need them. We tried it with Claude Code on the Petstore API: **without the skill it listed every dog it found (12 in our run), with the skill it offered 3 and waited for a confirmation**. Today Claude Code reads a skill when you give it the URI, it does not discover it by itself.
+> **TL;DR** A new **Skills** artifact points to a skill directory (`SKILL.md` and its reference files) hosted on any HTTP server. reShapr fetches and caches it, then serves it as **`skill://` resources** next to your tools. Agents list skills cheaply and read the full instructions only when they need them. We tried it with Claude Code on the Petstore API: **without the skill it listed every dog it found (12 in our run), with the skill it offered 3 and waited for a confirmation**. **Update, 25 Nov 2026:** Claude Code 2.1.332 now discovers the skill by itself, with no hint in the prompt. See Run 3 in [See it with Claude](/blog/reshapr-skills-over-mcp#see-it-with-claude).
 
 {/* truncate */}
 
@@ -148,27 +148,23 @@ To edit the Skill and test your changes without a commit or a tag, see [Edit and
 
 ## See it with Claude
 
-**Step 0: connect Claude Code.** First complete [Try it yourself](#try-it-yourself): reShapr runs and the skill is attached. Then start Claude Code in an empty folder:
+**Step 0: connect Claude Code.** First complete [Try it yourself](#try-it-yourself): reShapr runs and the skill is attached. Skills from MCP servers need **Claude Code 2.1.331 or later** in an interactive session, signed in with /login on a Pro, Max or Ultra plan (Team and Enterprise need an admin to turn them on; see [Use skills from MCP servers](https://code.claude.com/docs/en/mcp#use-skills-from-mcp-servers)). We used 2.1.332. In an empty folder, add the endpoint as a server named `petstore`, then start Claude Code:
 
 ```bash
+claude mcp add --transport http petstore http://localhost:7777/mcp/reshapr/swagger-petstore-openapi-3-0-1-0-27-default
 claude
 ```
 
-In the Claude Code prompt, add the endpoint as a server named `petstore` (the `!` runs a shell command):
-
-```text
-! claude mcp add --transport http petstore http://localhost:7777/mcp/reshapr/swagger-petstore-openapi-3-0-1-0-27-default
-```
-
-Then check it:
+Add the server before you start Claude Code: in our test, a session that was already running did not load it (restart Claude Code if you add the server from the prompt). Then check it:
 
 ```text
 /mcp
+/skills
 ```
 
-`petstore` should show as connected. Use that name: the Run 2 prompt refers to it. Claude asks before each tool call; decline `post_store_order` if you do not want to place a test order on the public Petstore.
+`petstore` should show as connected with its 19 tools, and `/skills` should list `petstore:petstore-adoption-desk` as an MCP skill. Use the server name `petstore`: the Run 2 prompt refers to it. Depending on your permission mode, Claude asks before tool calls; decline `post_store_order` if you do not want to place a test order on the public Petstore.
 
-We ran **Claude Code 2.1.323** headless against the endpoint, with the same MCP configuration both times (the Petstore server over HTTP). Both runs are real, and the data comes from the public Petstore, so names and IDs are examples. We allowed only the read tools, so no order could be placed.
+For Runs 1 and 2, on 21 November, we ran **Claude Code 2.1.323** headless against the endpoint, with the same MCP configuration both times (the Petstore server over HTTP). Both runs are real, and the data comes from the public Petstore, so names and IDs are examples. We allowed only the read tools, so no order could be placed.
 
 **Run 1: the prompt does not mention the skill.**
 
@@ -195,7 +191,24 @@ The sequence, from the tool calls in the run:
 
 That is the procedure: the desk rules cap the offer at 3 pets and stop before the order. Claude Code read the skill and its two reference files through `resources/read`, and followed them.
 
-**What this tells us.** The endpoint serves the skill correctly and Claude can use it, but **Claude Code 2.1.323 did not discover it on its own** from `skills/list`. For now, name the `skill://` URI in your project instructions or in the prompt. Other clients may behave differently, and newer Claude Code versions may too: test yours.
+**What this told us on 21 November.** The endpoint served the skill correctly and Claude could use it, but **Claude Code 2.1.323 did not discover it on its own** from `skills/list`.
+
+**Run 3: Claude Code 2.1.332 finds the skill by itself.**
+
+On 24 November, Anthropic put [Skills over MCP in public beta](https://claude.com/resources/articles/skills-over-mcp-tasks-and-more) in Claude and Claude Code. On 25 November we ran the Run 1 prompt again, unchanged, in an interactive Claude Code 2.1.332 session (auto mode), against the same reShapr 1.2.1 endpoint:
+
+```text
+I'd like to adopt a dog. Please handle my request.
+```
+
+`/skills` listed `petstore:petstore-adoption-desk` as an MCP skill of about 80 tokens. The sequence:
+
+1. `Skill(petstore:petstore-adoption-desk)`: the skill loaded first, with no hint in the prompt
+2. `readMcpResource` on `references/ADOPTION-RULES.md`, then on `references/ORDER-TEMPLATE.md`
+3. A Petstore call for the available pets (35 dogs in our run), then a shell command to filter them
+4. A reply with **3 dogs** and their `id`, a request to confirm by `id`, no order yet, and a reminder of the one-pet-per-order rule
+
+Same prompt, same endpoint, newer Claude Code in an interactive session: the agent now finds the procedure by itself and follows it. Other clients may behave differently: check yours.
 
 ## Limits to know before you start
 
@@ -203,7 +216,7 @@ That is the procedure: the desk rules cap the offer at 3 pets and stop before th
 - **Remote content only.** Each skill is a directory hosted on an HTTP server. reShapr fetches and caches it, and does not manage its storage. This is convenient with a **versioned URL**, such as a Git tag: the content is pinned and needs no server of your own. For a private repository, use the `remoteSecret` option.
 - **List the files.** `SKILL.md` is implicit, but supporting files must be declared in `files`.
 - **Edits show up after the cache expires.** The runtime caches the files and their digests for 30 seconds by default (the cache policy of the Configuration Plan can change it). A file you edit appears after that delay, with no action. If you change the manifest, for example to add a file, attach it again: it shows after the same delay.
-- **Client support is partial.** Whether an agent uses `skills/list` depends on the client. In our test, Claude Code 2.1.323 read the skill only when given its URI. Check the [MCP extension support matrix](https://modelcontextprotocol.io/extensions/client-matrix) for your client.
+- **Client support varies.** Whether an agent uses `skills/list` depends on the client and its version. Claude Code 2.1.323 read the skill only when given its URI; Claude Code 2.1.332 found it by itself (Skills over MCP is in beta there, interactive sessions only). Check the [MCP extension support matrix](https://modelcontextprotocol.io/extensions/client-matrix) for your client.
 - **Guidance, not enforcement.** Keep the Configuration Plan as the control on what an agent can do.
 
 ## What changed
