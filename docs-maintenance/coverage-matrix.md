@@ -268,14 +268,7 @@ Every blog file is `historical-only`, including posts that remain factually accu
 | `blog/reshapr-1.0.0-release.mdx` | published snapshot | historical-only |
 | `blog/reshapr-skills-over-mcp.mdx` | published snapshot | historical-only |
 | `blog/_draft-secure-mcp-deployment-with-reshapr.md` | draft snapshot | historical-only |
-| `blog/building-mcp-with-avora-and-reshapr.mdx` | publication planned for 2026-12-08; review and merge pending | historical-only |
 | `blog/reshapr-on-apple-container.mdx` | published snapshot | historical-only |
-
-### Avora blog review — 2026-11-24
-
-The Avora integration blog is prepared for publication on 2026-12-08, with review and merge planned by Yacine on that date. Its publication draft flag is removed so it can render in the production build after merge. The three existing workflows and illustrative CLI command were retained, rather than advancing a release verification banner. Review updates cover runtime terminology, third-person hosting ownership, the Avora author entry, media dimensions, related reading, and description metadata. Visual editing refers to the backend logic called by MCP tools, as described in Avora’s public Logic Flow Builder documentation; it is not a claim of industry-first visual MCP support or editing reShapr-specific configuration in Avora.
-
-The demo preview OpenAPI returned HTTP 503 with `Preview is not ready or has expired.` The shown managed MCP URL returned HTTP 403 to an unauthenticated initialize request. These observations establish current inaccessibility, not deletion of the MCP record or invalidation of any previously issued credential. On 2026-11-24, the Avora author confirmed that the demo URLs have expired and requested restoring the original recording. The video therefore retains the original URL fields, without added masking overlays; its API key remains masked in the original recording. HTTP inaccessibility does not establish deletion of the MCP record.
 
 ## Automated coverage
 
