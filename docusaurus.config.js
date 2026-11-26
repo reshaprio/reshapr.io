@@ -191,7 +191,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Replace with your project's social card
-      image: 'img/reShapr-logo-light.png',
+      image: 'img/reshapr-social-card-1200x630.png',
       announcementBar: announcement.enable
         ? {
             id: announcement.id,
