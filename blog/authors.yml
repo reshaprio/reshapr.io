@@ -11,13 +11,16 @@ laurent:
 
 yacine:
   name: Yacine Kheddache
-  title: Co-founder of Microcks & reShapr | Postman team member
-  url: https://www.linkedin.com/in/yacinekheddache/
-  image_url: /img/founders/yacine-kheddache.png
+  title: Co-founder of reShapr & Microcks | CNCF Ambassador
+  url: https://kheddache.me
+  image_url: /img/founders/yacine-kheddache.jpg
   page: true
   socials:
+    website: https://kheddache.me
     linkedin: https://www.linkedin.com/in/yacinekheddache/
     bluesky: https://bsky.app/profile/kheddache.me
+    x: https://x.com/YadaYac
+    mastodon: https://hachyderm.io/@YadaYac
     github: yada
 
 guillaume:
