@@ -75,7 +75,7 @@ const founders = [
       </>
     ),
     affiliation: 'Postman team member',
-    image: '/img/founders/yacine-kheddache.png',
+    image: '/img/founders/yacine-kheddache.jpg',
     socials: [
       {name: 'LinkedIn', link: 'https://www.linkedin.com/in/yacinekheddache/'},
       {name: 'Bluesky', link: 'https://bsky.app/profile/kheddache.me'},
