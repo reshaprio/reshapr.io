@@ -21,7 +21,9 @@ export default function BlogPostItemHeaderAuthors() {
       {authors.map((author, idx) => {
         const imageUrl = assets.authorsImageUrls[idx] ?? author.imageURL;
         const name = author.name;
-        const url = author.url;
+        // Link to the author page when the author has one (authors.yml `page: true`),
+        // like Docusaurus' default byline; otherwise fall back to the author's `url`.
+        const url = author.page?.permalink ?? author.url;
         return (
           <React.Fragment key={idx}>
             {idx > 0 && <span className={styles.separator}>&amp;</span>}
